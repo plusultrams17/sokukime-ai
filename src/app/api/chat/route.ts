@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」AIです。
 ユーザーが営業マンとして商談の練習をしています。以下のルールに従ってリアルなお客さんを演じてください。
@@ -28,6 +29,12 @@ const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { messages, industry, product, difficulty, scene, customerType, isFirstMessage } =
       await request.json();
 

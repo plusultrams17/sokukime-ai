@@ -6,6 +6,8 @@ import type { ScoreResult } from "./page";
 interface ScoreCardProps {
   score: ScoreResult;
   onRetry: () => void;
+  plan?: "free" | "pro";
+  onUpgrade?: () => void;
 }
 
 function getScoreColor(score: number) {
@@ -31,7 +33,10 @@ function getGrade(score: number) {
   return "E";
 }
 
-export function ScoreCard({ score, onRetry }: ScoreCardProps) {
+export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
+  const shareText = `即キメAIでスコア${score.overall}点（ランク${getGrade(score.overall)}）を獲得しました！ #即キメAI #営業ロープレ`;
+  const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+
   return (
     <div className="flex flex-1 items-start justify-center overflow-y-auto px-4 py-12">
       <div className="w-full max-w-2xl animate-fade-in-up">
@@ -115,6 +120,14 @@ export function ScoreCard({ score, onRetry }: ScoreCardProps) {
           >
             🔄 もう一度ロープレする
           </button>
+          <a
+            href={shareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-12 flex-1 items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:text-foreground"
+          >
+            𝕏 でシェアする
+          </a>
           <Link
             href="/"
             className="flex h-12 flex-1 items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:text-foreground"
@@ -122,6 +135,17 @@ export function ScoreCard({ score, onRetry }: ScoreCardProps) {
             トップに戻る
           </Link>
         </div>
+
+        {/* Upgrade nudge for free users */}
+        {plan === "free" && (
+          <div className="mt-6 rounded-2xl border border-accent/30 bg-accent/5 p-6 text-center">
+            <p className="mb-2 text-sm font-bold">スコアを上げたい？ 練習量がカギです。</p>
+            <p className="mb-4 text-xs text-muted">Proプランなら無制限でロープレ。毎日練習して、スコア90を目指しましょう。</p>
+            <button onClick={onUpgrade} className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover">
+              Proプランを見る
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

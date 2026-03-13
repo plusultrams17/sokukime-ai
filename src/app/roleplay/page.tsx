@@ -1,9 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ChatUI } from "./chat-ui";
 import { ScoreCard } from "./score-card";
+import { UserMenu } from "@/components/user-menu";
+import { UpgradeModal } from "@/components/upgrade-modal";
+import { WelcomeModal } from "@/components/welcome-modal";
+import type { UsageStatus } from "@/lib/usage";
 
 export type RoleplayPhase = "setup" | "chat" | "score";
 
@@ -17,6 +22,39 @@ export interface ScoreResult {
   summary: string;
   strengths: string[];
   improvements: string[];
+}
+
+function UpgradeToast() {
+  const searchParams = useSearchParams();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("upgraded") === "true") {
+      setShow(true);
+      const timer = setTimeout(() => setShow(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
+
+  if (!show) return null;
+
+  return (
+    <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 animate-fade-in-up">
+      <div className="rounded-xl border border-green-500/30 bg-green-500/10 px-6 py-3 text-sm font-medium text-green-400 shadow-xl">
+        🎉 Proプランにアップグレードしました！無制限でロープレを楽しめます
+      </div>
+    </div>
+  );
+}
+
+function WelcomeCheck({ onWelcome }: { onWelcome: () => void }) {
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get("welcome") === "true") {
+      onWelcome();
+    }
+  }, [searchParams, onWelcome]);
+  return null;
 }
 
 const customerTypes = [
@@ -47,12 +85,65 @@ export default function RoleplayPage() {
   const [difficulty, setDifficulty] = useState("normal");
   const [score, setScore] = useState<ScoreResult | null>(null);
 
-  // industry is now derived from customer settings for API compatibility
+  const [usage, setUsage] = useState<UsageStatus | null>(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [isCheckingUsage, setIsCheckingUsage] = useState(false);
+
+  const productSuggestions = ["外壁塗装", "法人向けクラウドサービス", "学習塾の入会", "生命保険", "太陽光パネル"];
+
+  const handleWelcome = useCallback(() => {
+    setShowWelcome(true);
+  }, []);
+
   const industry = customerIndustry || customerType;
   const canStart = product.trim();
 
+  // Fetch usage on mount
+  useEffect(() => {
+    fetch("/api/usage")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.error) setUsage(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  async function handleStartRoleplay() {
+    if (!canStart) return;
+    setIsCheckingUsage(true);
+
+    try {
+      const res = await fetch("/api/usage/record", { method: "POST" });
+      const data = await res.json();
+
+      if (res.status === 403) {
+        setUsage(data);
+        setShowUpgradeModal(true);
+        setIsCheckingUsage(false);
+        return;
+      }
+
+      setUsage(data);
+      setPhase("chat");
+    } catch {
+      // Allow to proceed on network error
+      setPhase("chat");
+    }
+    setIsCheckingUsage(false);
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      {/* Upgrade success toast & welcome check */}
+      <Suspense>
+        <UpgradeToast />
+        <WelcomeCheck onWelcome={handleWelcome} />
+      </Suspense>
+
+      {/* Welcome Modal */}
+      <WelcomeModal open={showWelcome} onComplete={() => setShowWelcome(false)} />
+
       {/* Header */}
       <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
@@ -60,14 +151,45 @@ export default function RoleplayPage() {
             <span className="text-xl">🔥</span>
             <span className="font-bold">即キメAI</span>
           </Link>
-          {phase === "chat" && (
-            <button
-              onClick={() => setPhase("setup")}
-              className="rounded-lg border border-card-border px-3 py-1.5 text-xs text-muted transition hover:text-foreground"
-            >
-              やり直す
-            </button>
-          )}
+          <div className="flex items-center gap-3">
+            {/* Usage indicator */}
+            {usage && usage.plan === "free" && phase === "setup" && (
+              <div className="flex items-center gap-2 rounded-full border border-card-border px-3 py-1 text-xs">
+                <span className="text-muted">残り:</span>
+                <span
+                  className={
+                    usage.canStart
+                      ? "font-bold text-accent"
+                      : "font-bold text-red-400"
+                  }
+                >
+                  {Math.max(0, usage.limit - usage.used)}/{usage.limit}回
+                </span>
+              </div>
+            )}
+            {usage && usage.plan === "pro" && (
+              <div className="flex items-center gap-2">
+                {phase === "setup" && usage.totalSessions !== undefined && (
+                  <div className="text-[11px] text-muted">
+                    累計 {usage.totalSessions || 0} 回ロープレ実施
+                  </div>
+                )}
+                <div className="rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
+                  Pro
+                </div>
+              </div>
+            )}
+
+            {phase === "chat" && (
+              <button
+                onClick={() => setPhase("setup")}
+                className="rounded-lg border border-card-border px-3 py-1.5 text-xs text-muted transition hover:text-foreground"
+              >
+                やり直す
+              </button>
+            )}
+            <UserMenu initialPlan={usage?.plan} />
+          </div>
         </div>
       </header>
 
@@ -82,7 +204,7 @@ export default function RoleplayPage() {
               </p>
             </div>
 
-            {/* ===== あなた（営業マン）側 ===== */}
+            {/* あなた（営業マン）側 */}
             <div className="rounded-2xl border border-accent/30 bg-accent/5 p-5">
               <div className="mb-4 flex items-center gap-2">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-accent/20 text-sm">🔥</span>
@@ -100,6 +222,20 @@ export default function RoleplayPage() {
                   placeholder="例：外壁塗装、法人向けクラウド、学習塾の入会..."
                   className="w-full rounded-lg border border-card-border bg-card px-4 py-3 text-sm outline-none placeholder:text-muted/50 focus:border-accent"
                 />
+                {!product && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {productSuggestions.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setProduct(s)}
+                        className="rounded-full border border-card-border px-3 py-1 text-xs text-muted transition hover:border-accent/50 hover:text-accent"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>
@@ -125,7 +261,7 @@ export default function RoleplayPage() {
               </div>
             </div>
 
-            {/* ===== 相手（お客さん）側 ===== */}
+            {/* 相手（お客さん）側 */}
             <div className="rounded-2xl border border-blue-500/30 bg-blue-500/5 p-5">
               <div className="mb-4 flex items-center gap-2">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500/20 text-sm">👤</span>
@@ -190,11 +326,11 @@ export default function RoleplayPage() {
             </div>
 
             <button
-              onClick={() => canStart && setPhase("chat")}
-              disabled={!canStart}
+              onClick={handleStartRoleplay}
+              disabled={!canStart || isCheckingUsage}
               className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-40 disabled:hover:bg-accent"
             >
-              🎯 ロープレを開始する
+              {isCheckingUsage ? "確認中..." : "🎯 ロープレを開始する"}
             </button>
           </div>
         </div>
@@ -219,12 +355,27 @@ export default function RoleplayPage() {
       {phase === "score" && score && (
         <ScoreCard
           score={score}
+          plan={usage?.plan}
+          onUpgrade={() => setShowUpgradeModal(true)}
           onRetry={() => {
             setScore(null);
             setPhase("setup");
+            // Refresh usage
+            fetch("/api/usage")
+              .then((r) => r.json())
+              .then((data) => {
+                if (!data.error) setUsage(data);
+              })
+              .catch(() => {});
           }}
         />
       )}
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        open={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+      />
     </div>
   );
 }
