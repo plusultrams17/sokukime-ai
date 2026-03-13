@@ -32,7 +32,7 @@ export function Header({ user }: HeaderProps) {
               <Link href="/login" className="text-sm text-muted transition hover:text-foreground">
                 ログイン
               </Link>
-              <Link href="/signup" className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover">
+              <Link href="/roleplay" className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover">
                 無料で試す
               </Link>
             </>

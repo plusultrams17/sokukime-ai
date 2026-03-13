@@ -124,7 +124,7 @@ export default async function Home() {
   } = await supabase.auth.getUser();
   const isLoggedIn = !!user;
 
-  const ctaHref = isLoggedIn ? "/roleplay" : "/signup";
+  const ctaHref = "/roleplay";
 
   const jsonLdData = {
     "@context": "https://schema.org",

@@ -6,9 +6,22 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const redirect = searchParams.get("redirect") || "/roleplay";
 
-  if (code) {
+  if (!code) {
+    // No code provided - redirect to login with error
+    return NextResponse.redirect(
+      `${origin}/login?error=${encodeURIComponent("認証コードが見つかりません。もう一度お試しください。")}`
+    );
+  }
+
+  try {
     const supabase = await createClient();
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (error) {
+      return NextResponse.redirect(
+        `${origin}/login?error=${encodeURIComponent("認証に失敗しました。もう一度お試しください。")}`
+      );
+    }
 
     // Check if first-time user
     const {
@@ -25,6 +38,10 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(`${origin}/roleplay?welcome=true`);
       }
     }
+  } catch {
+    return NextResponse.redirect(
+      `${origin}/login?error=${encodeURIComponent("認証処理中にエラーが発生しました。もう一度お試しください。")}`
+    );
   }
 
   return NextResponse.redirect(`${origin}${redirect}`);

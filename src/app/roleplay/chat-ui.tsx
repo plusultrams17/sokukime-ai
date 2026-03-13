@@ -27,6 +27,8 @@ interface ChatUIProps {
   scene: string;
   customerType: string;
   onFinish: (score: ScoreResult) => void;
+  isGuest?: boolean;
+  onAuthGate?: (messages: Message[]) => void;
 }
 
 const STEPS = [
@@ -43,7 +45,7 @@ const sceneLabels: Record<string, string> = {
   inbound: "📩 問い合わせ対応",
 };
 
-export function ChatUI({ industry, product, difficulty, scene, customerType, onFinish }: ChatUIProps) {
+export function ChatUI({ industry, product, difficulty, scene, customerType, onFinish, isGuest, onAuthGate }: ChatUIProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -108,7 +110,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
       const res = await fetch("/api/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: allMessages }),
+        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene }),
       });
       const data = await res.json();
       setCoach(data);
@@ -161,12 +163,16 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
   }
 
   async function finishAndScore() {
+    if (isGuest && onAuthGate) {
+      onAuthGate(messages);
+      return;
+    }
     setIsScoring(true);
     try {
       const res = await fetch("/api/score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages, industry, product, difficulty }),
+        body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType }),
       });
       const data = await res.json();
       onFinish(data);
@@ -405,7 +411,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
 
       {/* Coach Panel (right sidebar) */}
       {showCoach && coach && (
-        <div className="hidden w-80 flex-shrink-0 overflow-y-auto border-l border-card-border bg-card/50 p-4 md:block">
+        <div className="hidden w-80 flex-shrink-0 self-start sticky top-14 max-h-[calc(100vh-3.5rem)] overflow-y-auto border-l border-card-border bg-card/50 p-4 md:block">
           <div className="space-y-4">
             {/* Current Step */}
             <div className="rounded-xl border border-accent/30 bg-accent/5 p-4">

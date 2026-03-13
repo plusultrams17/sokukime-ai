@@ -8,9 +8,10 @@ import { ScoreCard } from "./score-card";
 import { UserMenu } from "@/components/user-menu";
 import { UpgradeModal } from "@/components/upgrade-modal";
 import { WelcomeModal } from "@/components/welcome-modal";
+import { createClient } from "@/lib/supabase/client";
 import type { UsageStatus } from "@/lib/usage";
 
-export type RoleplayPhase = "setup" | "chat" | "score";
+export type RoleplayPhase = "setup" | "chat" | "auth-gate" | "score";
 
 export interface ScoreResult {
   overall: number;
@@ -23,6 +24,19 @@ export interface ScoreResult {
   strengths: string[];
   improvements: string[];
 }
+
+interface PendingScore {
+  messages: { role: string; content: string }[];
+  industry: string;
+  product: string;
+  difficulty: string;
+  scene: string;
+  customerType: string;
+  timestamp: number;
+}
+
+const PENDING_SCORE_KEY = "sokukime-pending-score";
+const PENDING_SCORE_TTL = 60 * 60 * 1000; // 1 hour
 
 function UpgradeToast() {
   const searchParams = useSearchParams();
@@ -57,6 +71,16 @@ function WelcomeCheck({ onWelcome }: { onWelcome: () => void }) {
   return null;
 }
 
+function ShowScoreCheck({ onShowScore }: { onShowScore: () => void }) {
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get("showScore") === "true") {
+      onShowScore();
+    }
+  }, [searchParams, onShowScore]);
+  return null;
+}
+
 const customerTypes = [
   { value: "individual", label: "個人のお客さん" },
   { value: "owner", label: "会社オーナー・社長" },
@@ -86,9 +110,12 @@ export default function RoleplayPage() {
   const [score, setScore] = useState<ScoreResult | null>(null);
 
   const [usage, setUsage] = useState<UsageStatus | null>(null);
+  const [isGuest, setIsGuest] = useState(true);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [isCheckingUsage, setIsCheckingUsage] = useState(false);
+  const [isAutoScoring, setIsAutoScoring] = useState(false);
+  const [pendingTurnCount, setPendingTurnCount] = useState(0);
 
   const productSuggestions = ["外壁塗装", "法人向けクラウドサービス", "学習塾の入会", "生命保険", "太陽光パネル"];
 
@@ -99,18 +126,91 @@ export default function RoleplayPage() {
   const industry = customerIndustry || customerType;
   const canStart = product.trim();
 
-  // Fetch usage on mount
+  // Check auth state and fetch usage on mount
   useEffect(() => {
-    fetch("/api/usage")
-      .then((r) => r.json())
-      .then((data) => {
-        if (!data.error) setUsage(data);
-      })
-      .catch(() => {});
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        setIsGuest(false);
+        // Fetch usage for logged-in users
+        fetch("/api/usage")
+          .then((r) => r.json())
+          .then((data) => {
+            if (!data.error) setUsage(data);
+          })
+          .catch(() => {});
+      } else {
+        setIsGuest(true);
+      }
+    });
   }, []);
+
+  // Handle returning from login with showScore param
+  const handleShowScore = useCallback(async () => {
+    const raw = localStorage.getItem(PENDING_SCORE_KEY);
+    if (!raw) return;
+
+    try {
+      const pending: PendingScore = JSON.parse(raw);
+      // Check TTL
+      if (Date.now() - pending.timestamp > PENDING_SCORE_TTL) {
+        localStorage.removeItem(PENDING_SCORE_KEY);
+        return;
+      }
+
+      setIsAutoScoring(true);
+      const res = await fetch("/api/score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: pending.messages,
+          industry: pending.industry,
+          product: pending.product,
+          difficulty: pending.difficulty,
+          scene: pending.scene,
+          customerType: pending.customerType,
+        }),
+      });
+      const data = await res.json();
+      if (!data.error) {
+        setScore(data);
+        setPhase("score");
+        // Restore scenario data for usage display
+        setProduct(pending.product);
+        setDifficulty(pending.difficulty);
+      }
+      localStorage.removeItem(PENDING_SCORE_KEY);
+    } catch {
+      localStorage.removeItem(PENDING_SCORE_KEY);
+    }
+    setIsAutoScoring(false);
+  }, []);
+
+  // Handle guest finishing roleplay → save to localStorage and show auth gate
+  function handleAuthGate(messages: { role: string; content: string }[]) {
+    const pending: PendingScore = {
+      messages,
+      industry,
+      product,
+      difficulty,
+      scene,
+      customerType,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(PENDING_SCORE_KEY, JSON.stringify(pending));
+    setPendingTurnCount(messages.filter((m) => m.role === "user").length);
+    setPhase("auth-gate");
+  }
 
   async function handleStartRoleplay() {
     if (!canStart) return;
+
+    // Guest: skip usage check, go directly to chat
+    if (isGuest) {
+      setPhase("chat");
+      return;
+    }
+
     setIsCheckingUsage(true);
 
     try {
@@ -133,12 +233,26 @@ export default function RoleplayPage() {
     setIsCheckingUsage(false);
   }
 
+  // Auto-scoring loading screen
+  if (isAutoScoring) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+        <div className="animate-fade-in-up text-center">
+          <div className="mb-4 text-4xl">📊</div>
+          <div className="mb-2 text-lg font-bold">診断結果を作成中...</div>
+          <p className="text-sm text-muted">ロープレの内容を分析しています</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/* Upgrade success toast & welcome check */}
+      {/* Upgrade success toast & welcome check & showScore check */}
       <Suspense>
         <UpgradeToast />
         <WelcomeCheck onWelcome={handleWelcome} />
+        <ShowScoreCheck onShowScore={handleShowScore} />
       </Suspense>
 
       {/* Welcome Modal */}
@@ -344,11 +458,61 @@ export default function RoleplayPage() {
           difficulty={difficulty}
           scene={scene}
           customerType={customerType}
+          isGuest={isGuest}
+          onAuthGate={handleAuthGate}
           onFinish={(result) => {
             setScore(result);
             setPhase("score");
           }}
         />
+      )}
+
+      {/* Auth Gate Phase */}
+      {phase === "auth-gate" && (
+        <div className="flex flex-1 items-center justify-center px-4 py-12">
+          <div className="w-full max-w-md animate-fade-in-up text-center">
+            <div className="mb-6 rounded-2xl border border-card-border bg-card p-8">
+              <div className="mb-4 text-5xl">📊</div>
+              <h2 className="mb-2 text-xl font-bold">
+                ロープレお疲れさまでした！
+              </h2>
+              <p className="mb-6 text-sm text-muted">
+                診断結果を見るには、無料アカウントの登録が必要です
+              </p>
+
+              {pendingTurnCount > 0 && (
+                <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3">
+                  <div className="text-sm text-muted">
+                    あなたの営業トーク <span className="font-bold text-accent">{pendingTurnCount}ターン</span> を
+                    AIが分析中...
+                  </div>
+                  <div className="mt-1 text-xs text-muted">
+                    ログイン後すぐに結果をお見せします
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <Link
+                  href={`/signup?redirect=${encodeURIComponent("/roleplay?showScore=true")}`}
+                  className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover"
+                >
+                  無料アカウントを作成して結果を見る
+                </Link>
+                <Link
+                  href={`/login?redirect=${encodeURIComponent("/roleplay?showScore=true")}`}
+                  className="flex h-12 w-full items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:text-foreground"
+                >
+                  アカウントをお持ちの方はログイン
+                </Link>
+              </div>
+            </div>
+
+            <p className="text-xs text-muted">
+              アカウント登録は無料です。メールアドレスだけで完了します。
+            </p>
+          </div>
+        </div>
       )}
 
       {/* Score Phase */}
@@ -360,13 +524,15 @@ export default function RoleplayPage() {
           onRetry={() => {
             setScore(null);
             setPhase("setup");
-            // Refresh usage
-            fetch("/api/usage")
-              .then((r) => r.json())
-              .then((data) => {
-                if (!data.error) setUsage(data);
-              })
-              .catch(() => {});
+            // Refresh usage if logged in
+            if (!isGuest) {
+              fetch("/api/usage")
+                .then((r) => r.json())
+                .then((data) => {
+                  if (!data.error) setUsage(data);
+                })
+                .catch(() => {});
+            }
           }}
         />
       )}

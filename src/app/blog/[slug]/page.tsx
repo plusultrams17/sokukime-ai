@@ -176,7 +176,7 @@ export default async function BlogPostPage({ params }: Props) {
               記事で学んだテクニックを実践して、本番で即キメできる営業力を身につけましょう。
             </p>
             <Link
-              href="/signup"
+              href="/roleplay"
               className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
             >
               無料でロープレを始める

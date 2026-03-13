@@ -146,7 +146,7 @@ export default function PricingPage() {
             </div>
 
             <Link
-              href="/signup"
+              href="/roleplay"
               className="flex h-12 w-full items-center justify-center rounded-xl border border-card-border text-base font-bold text-muted transition hover:border-accent hover:text-foreground"
             >
               無料で始める
@@ -317,7 +317,7 @@ export default function PricingPage() {
             🔥 500+ 人の営業マンが利用中
           </p>
           <Link
-            href="/signup"
+            href="/roleplay"
             className="text-sm text-accent hover:underline"
           >
             まずは無料で試してみる →

@@ -165,7 +165,7 @@ export default function UseCasesPage() {
             無料で1日1回試せます。
           </p>
           <Link
-            href="/signup"
+            href="/roleplay"
             className="inline-flex h-14 items-center justify-center rounded-xl bg-accent px-10 text-lg font-bold text-white transition hover:bg-accent-hover"
           >
             無料で始める

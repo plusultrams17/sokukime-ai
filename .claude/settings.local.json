@@ -6,7 +6,10 @@
       "Bash(npx next build)",
       "Bash(npm run build:*)",
       "Bash(ls:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(test:*)"
     ]
   }
 }

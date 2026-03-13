@@ -12,8 +12,9 @@ function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(searchParams.get("error") || "");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -65,15 +66,24 @@ function LoginForm() {
           <label className="mb-1.5 block text-xs font-medium text-muted">
             パスワード
           </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            placeholder="6文字以上"
-            className="w-full rounded-lg border border-card-border bg-background px-4 py-3 text-sm outline-none placeholder:text-muted/50 focus:border-accent"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              placeholder="6文字以上"
+              className="w-full rounded-lg border border-card-border bg-background px-4 py-3 pr-12 text-sm outline-none placeholder:text-muted/50 focus:border-accent"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded px-1.5 py-1 text-xs font-medium text-muted transition hover:text-foreground"
+            >
+              {showPassword ? "隠す" : "表示"}
+            </button>
+          </div>
         </div>
 
         <button

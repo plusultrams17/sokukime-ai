@@ -65,7 +65,16 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
     }
   }
 
-  if (!email) return null;
+  if (!email) {
+    return (
+      <Link
+        href="/login"
+        className="rounded-lg border border-card-border px-3 py-1.5 text-xs text-muted transition hover:border-accent/50 hover:text-foreground"
+      >
+        ログイン
+      </Link>
+    );
+  }
 
   return (
     <>

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 
 const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」AIです。
 ユーザーが営業マンとして商談の練習をしています。以下のルールに従ってリアルなお客さんを演じてください。
@@ -29,12 +28,6 @@ const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { messages, industry, product, difficulty, scene, customerType, isFirstMessage } =
       await request.json();
 
@@ -65,7 +58,21 @@ export async function POST(request: NextRequest) {
       staff: "担当者・一般社員（上に確認が必要）",
     };
 
+    const isBusiness = customerType === "owner" || customerType === "manager" || customerType === "staff";
+    const hasCustomIndustry = industry && industry !== customerType;
+    const isB2B = isBusiness && hasCustomIndustry;
+
+    const b2bContext = isB2B ? `
+## 重要：B2B（法人対法人）シナリオ
+- あなたは「${industry}」の事業を運営しているプロの経営者・担当者です
+- 営業マンは「${product}」をあなたの事業向けに提案しています
+- あなたは「個人として商品を買う」のではなく、「自分の事業のために導入を検討」しています
+- あなたの関心事：コスト削減、品質向上、納期、アフターサポート、取引実績、自社ビジネスへのインパクト
+- 業界のプロとして専門的な質問をしてください（素人ではありません）
+- 「うちの事業に合うか」「利益が出るか」「他社製品と比べてどうか」が判断基準です` : "";
+
     const systemContent = `${SYSTEM_PROMPT}
+${b2bContext}
 
 ## 今回のシナリオ
 - お客さんの属性: ${customerTypeMap[customerType] || "個人のお客さん"}
@@ -73,7 +80,8 @@ export async function POST(request: NextRequest) {
 - 営業シーン: ${sceneMap[scene] || sceneMap.visit}
 - 営業マンの商材: ${product}
 - 難易度: ${difficultyMap[difficulty] || difficultyMap.normal}
-${isFirstMessage ? `\nまずはお客さんとして最初の場面を始めてください。営業シーンは「${sceneMap[scene] || "訪問"}」です。そのシーンに合った自然な第一声をしてください。` : ""}`;
+${isB2B ? `- 取引タイプ: B2B（法人取引）─ 営業マンの「${product}」を、あなたの「${industry}」事業に導入するかの商談` : `- 取引タイプ: B2C（個人取引）─ 営業マンの「${product}」を個人のお客さんに提案`}
+${isFirstMessage ? `\nまずはお客さんとして最初の場面を始めてください。営業シーンは「${sceneMap[scene] || "訪問"}」です。そのシーンに合った自然な第一声をしてください。${isB2B ? `あなたは「${industry}」の事業者として、業界のプロの立場で対応してください。` : ""}` : ""}`;
 
     const openaiMessages = [
       { role: "system", content: systemContent },

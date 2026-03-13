@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { messages, industry, product, difficulty } = await request.json();
+    const { messages, industry, product, difficulty, scene, customerType } = await request.json();
 
     const apiKey = process.env.OPENAI_API_KEY;
 
@@ -79,6 +79,22 @@ export async function POST(request: NextRequest) {
     if (!apiKey) {
       return NextResponse.json(generateFallbackScore());
     }
+
+    const customerTypeLabels: Record<string, string> = {
+      individual: "個人のお客さん",
+      owner: "会社オーナー・社長",
+      manager: "部長・課長クラス",
+      staff: "担当者・一般社員",
+    };
+
+    const sceneLabels: Record<string, string> = {
+      phone: "電話営業",
+      visit: "訪問営業",
+      inbound: "問い合わせ対応",
+    };
+
+    const isBusiness = customerType === "owner" || customerType === "manager" || customerType === "staff";
+    const isB2B = isBusiness && industry && industry !== customerType;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -95,9 +111,13 @@ export async function POST(request: NextRequest) {
             role: "user",
             content: `以下の営業ロープレ会話を採点してください。
 
+【シナリオ情報】
 業種: ${industry}
 商材: ${product}
 難易度: ${difficulty}
+お客さんの属性: ${customerTypeLabels[customerType] || "個人"}
+営業シーン: ${sceneLabels[scene] || "訪問営業"}
+${isB2B ? `取引タイプ: B2B（法人取引）─ 「${product}」を「${industry}」事業者に提案\n※ B2B営業の観点も含めて採点してください（事業課題の把握、ROI訴求、同業他社事例の活用など）` : ""}
 
 --- 会話内容 ---
 ${conversationText}
