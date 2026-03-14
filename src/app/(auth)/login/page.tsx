@@ -22,6 +22,11 @@ function LoginForm() {
     setIsLoading(true);
 
     const supabase = createClient();
+    if (!supabase) {
+      setError("サービスが一時的に利用できません");
+      setIsLoading(false);
+      return;
+    }
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,

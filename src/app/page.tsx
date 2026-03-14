@@ -137,7 +137,8 @@ export default async function Home() {
     // Supabase unavailable — render as guest
   }
 
-  const ctaHref = "/roleplay";
+  const roleplayHref = "/roleplay";
+  const worksheetHref = "/worksheet";
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -200,19 +201,23 @@ export default async function Home() {
             24時間いつでも、何度でも。
           </p>
 
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center" data-hero-cta>
             <Link
-              href={ctaHref}
-              data-hero-cta
-              className="flex h-14 w-full items-center justify-center rounded-2xl bg-accent px-10 text-lg font-bold text-white shadow-lg shadow-accent/20 transition hover:bg-accent-hover hover:shadow-xl sm:w-auto"
+              href={roleplayHref}
+              className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-accent px-10 text-lg font-bold text-white shadow-lg shadow-accent/20 transition hover:bg-accent-hover hover:shadow-xl sm:w-auto"
             >
-              {isLoggedIn ? "ロープレを始める" : "無料でロープレを始める"}
+              🎯 ロープレする
+            </Link>
+            <Link
+              href={worksheetHref}
+              className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl border-2 border-accent bg-white px-10 text-lg font-bold text-accent shadow-lg shadow-accent/10 transition hover:bg-accent/5 hover:shadow-xl sm:w-auto"
+            >
+              📋 分析を行う
             </Link>
           </div>
 
           <p className="mt-4 text-xs text-muted">
-            &#10003; クレジットカード不要 &#10003; 30秒で登録完了 &#10003;
-            1日1回無料
+            &#10003; 無料で体験可能 &#10003; 登録不要で今すぐ試せる
           </p>
 
           {/* Stats */}
@@ -480,16 +485,24 @@ export default async function Home() {
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href={ctaHref}
-              className="inline-flex h-14 items-center justify-center rounded-2xl bg-accent px-10 text-lg font-bold text-white shadow-lg shadow-accent/20 transition hover:bg-accent-hover hover:shadow-xl"
+              href={roleplayHref}
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-accent px-10 text-lg font-bold text-white shadow-lg shadow-accent/20 transition hover:bg-accent-hover hover:shadow-xl"
             >
-              {isLoggedIn ? "ロープレを始める" : "無料で始める"}
+              🎯 ロープレする
             </Link>
             <Link
-              href="/pricing"
-              className="inline-flex h-14 items-center justify-center rounded-2xl border-2 border-card-border px-10 text-lg font-medium text-foreground transition hover:border-accent hover:text-accent"
+              href={worksheetHref}
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border-2 border-accent bg-white px-10 text-lg font-bold text-accent shadow-lg shadow-accent/10 transition hover:bg-accent/5 hover:shadow-xl"
             >
-              料金プランを見る
+              📋 分析を行う
+            </Link>
+          </div>
+          <div className="mt-4">
+            <Link
+              href="/pricing"
+              className="text-sm text-muted transition hover:text-accent hover:underline"
+            >
+              料金プランを見る →
             </Link>
           </div>
         </div>
@@ -499,7 +512,7 @@ export default async function Home() {
       <Footer />
 
       {/* Sticky CTA (client component) */}
-      <StickyCTA href={ctaHref} />
+      <StickyCTA />
     </div>
   );
 }

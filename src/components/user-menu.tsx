@@ -20,6 +20,7 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
 
   useEffect(() => {
     const supabase = createClient();
+    if (!supabase) return;
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
         setEmail(user.email || null);
@@ -48,7 +49,9 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
 
   async function handleLogout() {
     const supabase = createClient();
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     router.push("/");
     router.refresh();
   }

@@ -129,6 +129,10 @@ export default function RoleplayPage() {
   // Check auth state and fetch usage on mount
   useEffect(() => {
     const supabase = createClient();
+    if (!supabase) {
+      setIsGuest(true);
+      return;
+    }
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
         setIsGuest(false);
