@@ -2,14 +2,14 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t border-card-border bg-background px-6 py-12">
+    <footer className="border-t border-card-border bg-white px-6 py-12">
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-xl">🔥</span>
-              <span className="font-bold">即キメAI</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">SK</span>
+              <span className="font-bold text-foreground">即キメAI</span>
             </div>
             <p className="text-sm text-muted leading-relaxed">
               AI × 即決営業メソッドで<br />営業力を鍛える
@@ -17,7 +17,7 @@ export function Footer() {
           </div>
           {/* Product */}
           <div>
-            <h4 className="mb-3 text-sm font-semibold">プロダクト</h4>
+            <h4 className="mb-3 text-sm font-semibold text-foreground">プロダクト</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted">
               <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
               <Link href="/features" className="transition hover:text-foreground">機能紹介</Link>
@@ -28,14 +28,14 @@ export function Footer() {
           </div>
           {/* Company */}
           <div>
-            <h4 className="mb-3 text-sm font-semibold">会社情報</h4>
+            <h4 className="mb-3 text-sm font-semibold text-foreground">会社情報</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted">
               <Link href="/about" className="transition hover:text-foreground">即キメAIについて</Link>
             </nav>
           </div>
           {/* Legal */}
           <div>
-            <h4 className="mb-3 text-sm font-semibold">法的情報</h4>
+            <h4 className="mb-3 text-sm font-semibold text-foreground">法的情報</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted">
               <Link href="/legal/terms" className="transition hover:text-foreground">利用規約</Link>
               <Link href="/legal/privacy" className="transition hover:text-foreground">プライバシーポリシー</Link>

@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --accent: #f97316;
-  --accent-hover: #ea580c;
-  --card: #18181b;
-  --card-border: #27272a;
-  --muted: #a1a1aa;
+  --background: #FBF8F3;
+  --foreground: #1E293B;
+  --accent: #1B6B5A;
+  --accent-hover: #155A4A;
+  --card: #FFFFFF;
+  --card-border: #E5DFD6;
+  --muted: #64748B;
+  --blob-teal: #E0F2ED;
+  --blob-cream: #FDF0D5;
+  --blob-pink: #FCE8E8;
 }
 
 @theme inline {
@@ -18,6 +21,9 @@
   --color-card: var(--card);
   --color-card-border: var(--card-border);
   --color-muted: var(--muted);
+  --color-blob-teal: var(--blob-teal);
+  --color-blob-cream: var(--blob-cream);
+  --color-blob-pink: var(--blob-pink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -35,7 +41,7 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: #CBD5E1;
   border-radius: 3px;
 }
 
@@ -67,6 +73,26 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Decorative blobs */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob-teal {
+  background: var(--blob-teal);
+}
+.blob-cream {
+  background: var(--blob-cream);
+}
+.blob-pink {
+  background: var(--blob-pink);
 }
 
 /* Blog article typography */

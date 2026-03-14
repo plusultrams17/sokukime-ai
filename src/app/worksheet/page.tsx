@@ -20,7 +20,7 @@ const INDUSTRY_PRESETS = [
   "美容・ダイエット",
 ];
 
-type WorksheetTypeId = "needs" | "strengths" | "competitors" | "objections";
+type WorksheetTypeId = "needs" | "strengths" | "competitors" | "objections" | "deepening";
 
 const WORKSHEET_TYPES: {
   id: WorksheetTypeId;
@@ -62,7 +62,48 @@ const WORKSHEET_TYPES: {
     description: "よくある断り文句を事前に把握しているか",
     gridLabel: "よくある反論・断り文句",
   },
+  {
+    id: "deepening",
+    number: "05",
+    icon: "🔍",
+    title: "具体化シート（限定質問）",
+    description: "お客さんの問題を深掘りできているか",
+    gridLabel: "深掘り質問",
+  },
 ];
+
+const DEEPENING_CATEGORIES = [
+  {
+    key: "cause",
+    label: "原因",
+    example: "「何が原因ですか？」",
+    tip: "まず原因を特定する。お客さん自身に語らせることが重要。",
+  },
+  {
+    key: "since",
+    label: "いつから",
+    example: "「いつからですか？」",
+    tip: "時間軸を入れると問題の深刻度が伝わりやすくなる。",
+  },
+  {
+    key: "concrete",
+    label: "具体的に",
+    example: "「そのままだと具体的にどうなりますか？」「具体的にどんな（状況・痛み・不具合）ですか？」",
+    tip: "問題を視覚化させる。未来の痛みと現在の痛みの両面を引き出す。",
+  },
+  {
+    key: "awareness",
+    label: "問題認識",
+    example: "「それって気分どうですかね？」",
+    tip: "感情を引き出す問いかけ。論理ではなく感情を動かす。",
+  },
+  {
+    key: "why",
+    label: "なぜ？",
+    example: "「なぜ今まで解決しなかったんですか？」",
+    tip: "解決を先送りにした理由を理解することで反論の先取りができる。",
+  },
+] as const;
 
 /* ─── Types ────────────────────────────────────── */
 
@@ -83,8 +124,15 @@ export default function WorksheetPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
 
+  // Deepening-specific state
+  const [deepeningRows, setDeepeningRows] = useState<string[]>(Array(5).fill(""));
+  const [showTheoryPanel, setShowTheoryPanel] = useState(false);
+  const [expandedTips, setExpandedTips] = useState<Record<string, boolean>>({});
+
   const filledCount = grid.filter((v) => v.trim()).length;
+  const deepeningFilledCount = deepeningRows.filter((v) => v.trim()).length;
   const currentWs = WORKSHEET_TYPES.find((w) => w.id === wsType);
+  const isDeepening = wsType === "deepening";
 
   /* ─── Handlers ─────────────────────────────── */
 
@@ -109,12 +157,21 @@ export default function WorksheetPage() {
       setAiResult(data);
 
       if (mode === "ai") {
-        setGrid(
-          data.items
-            .slice(0, 12)
-            .concat(Array(12).fill(""))
-            .slice(0, 12),
-        );
+        if (wsType === "deepening") {
+          setDeepeningRows(
+            data.items
+              .slice(0, 5)
+              .concat(Array(5).fill(""))
+              .slice(0, 5),
+          );
+        } else {
+          setGrid(
+            data.items
+              .slice(0, 12)
+              .concat(Array(12).fill(""))
+              .slice(0, 12),
+          );
+        }
         if (data.phraseKeyword) setPhraseKeyword(data.phraseKeyword);
       } else {
         setShowComparison(true);
@@ -128,9 +185,12 @@ export default function WorksheetPage() {
 
   const handleReset = () => {
     setGrid(Array(12).fill(""));
+    setDeepeningRows(Array(5).fill(""));
     setPhraseKeyword("");
     setAiResult(null);
     setShowComparison(false);
+    setShowTheoryPanel(false);
+    setExpandedTips({});
   };
 
   const handleModeSelect = (m: "self" | "ai") => {
@@ -151,6 +211,16 @@ export default function WorksheetPage() {
     if (filledCount >= 3) return { grade: "C", color: "text-orange-400", msg: "まだ理解が浅い状態です。AIの提案を参考に、もっとリサーチしましょう。" };
     return { grade: "D", color: "text-red-400", msg: "業界・商材のリサーチが必要です。AIの提案をヒントに知識をインプットしましょう。" };
   };
+
+  const getDeepeningGrade = () => {
+    if (deepeningFilledCount >= 5) return { grade: "S", color: "text-green-400", msg: "すべてのカテゴリに独自の深掘り質問を持っています。実践力が高い状態です。" };
+    if (deepeningFilledCount >= 4) return { grade: "A", color: "text-green-400", msg: "ほぼ網羅できています。AIの提案と比較してさらに磨きましょう。" };
+    if (deepeningFilledCount >= 3) return { grade: "B", color: "text-yellow-400", msg: "半数以上記入できています。残りのカテゴリも練習しておきましょう。" };
+    if (deepeningFilledCount >= 2) return { grade: "C", color: "text-orange-400", msg: "まだ準備が不十分です。AIの質問例を参考にしてみてください。" };
+    return { grade: "D", color: "text-red-400", msg: "深掘り質問の準備が必要です。AIの提案からスタートしましょう。" };
+  };
+
+  const activeFilledCount = isDeepening ? deepeningFilledCount : filledCount;
 
   /* ─── Render ───────────────────────────────── */
 
@@ -211,7 +281,7 @@ export default function WorksheetPage() {
             <label className="mb-3 block text-sm font-bold">
               2. ワークシートを選択
             </label>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {WORKSHEET_TYPES.map((w) => (
                 <button
                   key={w.id}
@@ -229,6 +299,11 @@ export default function WorksheetPage() {
                   <p className="mt-1 text-[10px] text-muted leading-tight">
                     {w.description}
                   </p>
+                  {w.id === "deepening" && (
+                    <div className="mt-1.5 inline-block rounded-full bg-accent/20 px-2 py-0.5 text-[9px] font-bold text-accent">
+                      深掘り
+                    </div>
+                  )}
                 </button>
               ))}
             </div>
@@ -275,8 +350,8 @@ export default function WorksheetPage() {
         </section>
       )}
 
-      {/* Worksheet Grid */}
-      {mode && currentWs && (
+      {/* ═══ Standard Worksheet Grid (non-deepening types) ═══ */}
+      {mode && currentWs && !isDeepening && (
         <section className="px-6 pb-8">
           <div className="mx-auto max-w-3xl">
             {/* Template Header */}
@@ -414,8 +489,8 @@ export default function WorksheetPage() {
         </section>
       )}
 
-      {/* Comparison Result (self mode) */}
-      {showComparison && aiResult && (
+      {/* ═══ Standard Comparison Result (non-deepening) ═══ */}
+      {showComparison && aiResult && !isDeepening && (
         <section className="px-6 pb-8">
           <div className="mx-auto max-w-3xl">
             <div className="rounded-2xl border border-accent/30 bg-accent/5 p-6">
@@ -502,6 +577,328 @@ export default function WorksheetPage() {
                 <p className="mt-3 text-[11px] text-muted">
                   ✓ はあなたの回答と一致・類似した項目です
                 </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══ Deepening Sheet ═══ */}
+      {mode && currentWs && isDeepening && (
+        <section className="px-6 pb-8">
+          <div className="mx-auto max-w-3xl">
+            {/* Template Header */}
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{currentWs.icon}</span>
+                <div>
+                  <div className="text-sm font-bold">{currentWs.title}</div>
+                  <div className="text-[10px] text-muted">
+                    即決営業テンプレート {currentWs.number}
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
+                {industry}
+              </div>
+            </div>
+
+            {/* Phrase Template (same as needs) */}
+            <div className="mb-4 rounded-xl border border-card-border bg-card p-5">
+              <div className="mb-2 text-xs font-bold text-accent">
+                引き出しフレーズ
+              </div>
+              <div className="flex flex-wrap items-center gap-1 text-sm">
+                <span className="text-muted">「</span>
+                {mode === "self" ? (
+                  <input
+                    value={phraseKeyword}
+                    onChange={(e) => setPhraseKeyword(e.target.value)}
+                    placeholder="キーワード"
+                    className="w-32 border-b border-accent/30 bg-transparent px-1 py-0.5 text-center text-accent outline-none transition focus:border-accent"
+                  />
+                ) : (
+                  <span className="min-w-[80px] border-b border-accent/30 px-2 py-0.5 text-center text-accent">
+                    {phraseKeyword || "___"}
+                  </span>
+                )}
+                <span className="text-muted">
+                  で悩んでいる人が多いですが、
+                </span>
+              </div>
+              <div className="mt-1 flex flex-wrap items-center gap-1 text-sm">
+                <span className="text-muted">○○さんは</span>
+                <span className="min-w-[80px] border-b border-card-border px-2 py-0.5 text-center text-muted">
+                  {phraseKeyword || "___"}
+                </span>
+                <span className="text-muted">
+                  でのお悩みなどはないですか？」
+                </span>
+              </div>
+            </div>
+
+            {/* Educational Panel: 第三者話法 */}
+            <div className="mb-6">
+              <button
+                onClick={() => setShowTheoryPanel(!showTheoryPanel)}
+                className="flex w-full items-center justify-between rounded-xl border border-card-border bg-card px-5 py-3 text-left transition hover:border-accent/50"
+              >
+                <span className="text-sm font-bold">
+                  引き出しフレーズの作り方（第三者話法）
+                </span>
+                <svg
+                  className={`h-4 w-4 text-muted transition-transform ${showTheoryPanel ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {showTheoryPanel && (
+                <div className="mt-2 space-y-4 rounded-xl border border-card-border bg-card p-5">
+                  {/* Section 1: Structure */}
+                  <div className="border-l-2 border-accent/40 pl-4">
+                    <h4 className="mb-2 text-sm font-bold">第三者話法の構造</h4>
+                    <div className="space-y-2 text-xs text-muted leading-relaxed">
+                      <div>
+                        <span className="font-bold text-foreground">1行目: 第三者 + 口語調</span>
+                        <br />
+                        例: 「最近、○○で悩んでいる方が多くて...」
+                        <br />
+                        <span className="text-accent">→ 第三者の話として切り出すことで、お客さんが答えやすくなる</span>
+                      </div>
+                      <div>
+                        <span className="font-bold text-foreground">2行目: ○○さん自身への質問 + 書き言葉</span>
+                        <br />
+                        例: 「○○さんはそういったお悩みなどはないですか？」
+                        <br />
+                        <span className="text-accent">→ 丁寧語に切り替えることで押し付けがましくなくなる</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 2: Why it works */}
+                  <div className="border-l-2 border-accent/40 pl-4">
+                    <h4 className="mb-2 text-sm font-bold">なぜ効くのか？</h4>
+                    <ul className="space-y-1 text-xs text-muted leading-relaxed">
+                      <li>・人は自分の悩みを直接聞かれると答えにくい → 第三者の話として聞くと答えやすい</li>
+                      <li>・「あなたはどうですか？」より「よくあるんですが...」の方が圧力を感じない</li>
+                    </ul>
+                  </div>
+
+                  {/* Section 3: Handling NO */}
+                  <div className="border-l-2 border-accent/40 pl-4">
+                    <h4 className="mb-2 text-sm font-bold">NOと言われたら</h4>
+                    <div className="text-xs text-muted leading-relaxed">
+                      <p className="mb-1">
+                        まず: <span className="font-bold text-foreground">「あーそうなんですね、ありがとうございます」</span>
+                      </p>
+                      <p className="mb-1">諦めずに、以下で再挑戦:</p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-accent">「他には」</span>
+                        <span className="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-accent">「そんな中で」</span>
+                        <span className="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-accent">「そしたらですね」</span>
+                      </div>
+                      <p className="mt-1 text-[10px] text-muted">※ 1回で諦めない。3回まで試みる。</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 5-Row Deepening Grid */}
+            <div className="mb-4">
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className="text-sm font-bold">深掘り質問カテゴリ</h2>
+                {mode === "self" && (
+                  <span className="text-xs text-muted">
+                    {deepeningFilledCount}/5 記入済み
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-col gap-3">
+                {DEEPENING_CATEGORIES.map((cat, i) => (
+                  <div key={cat.key} className="rounded-xl border border-card-border bg-card p-4">
+                    {/* Row header */}
+                    <div className="mb-2 flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <span className="mt-0.5 min-w-[56px] text-sm font-bold text-accent">
+                          {cat.label}
+                        </span>
+                        <span className="text-xs text-muted italic leading-snug">
+                          {cat.example}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setExpandedTips((prev) => ({ ...prev, [cat.key]: !prev[cat.key] }))}
+                        className="flex-shrink-0 rounded-full border border-card-border px-2 py-0.5 text-[10px] text-muted transition hover:border-accent hover:text-accent"
+                        title={cat.tip}
+                      >
+                        ?
+                      </button>
+                    </div>
+                    {/* Inline tip */}
+                    {expandedTips[cat.key] && (
+                      <div className="mb-2 rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-400">
+                        {cat.tip}
+                      </div>
+                    )}
+                    {/* Input or read-only */}
+                    {mode === "self" ? (
+                      <input
+                        value={deepeningRows[i]}
+                        onChange={(e) => {
+                          const next = [...deepeningRows];
+                          next[i] = e.target.value;
+                          setDeepeningRows(next);
+                        }}
+                        placeholder={`${industry}向けの「${cat.label}」質問を記入...`}
+                        className="w-full rounded-lg border border-card-border bg-background/50 px-3 py-2.5 text-sm outline-none transition focus:border-accent placeholder:text-muted/30"
+                      />
+                    ) : (
+                      <div className="min-h-[40px] rounded-lg border border-card-border bg-background/50 px-3 py-2.5 text-sm">
+                        {deepeningRows[i] || (
+                          <span className="text-muted/30">{i + 1}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-wrap gap-3">
+              {mode === "self" && !showComparison && (
+                <button
+                  onClick={handleGenerate}
+                  disabled={isGenerating || deepeningFilledCount === 0}
+                  className="inline-flex h-11 items-center justify-center rounded-xl bg-accent px-6 font-bold text-white transition hover:bg-accent-hover disabled:opacity-50"
+                >
+                  {isGenerating ? (
+                    <>
+                      <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      分析中...
+                    </>
+                  ) : (
+                    "AIと答え合わせ"
+                  )}
+                </button>
+              )}
+              {mode === "ai" && !aiResult && (
+                <button
+                  onClick={handleGenerate}
+                  disabled={isGenerating}
+                  className="inline-flex h-11 items-center justify-center rounded-xl bg-accent px-6 font-bold text-white transition hover:bg-accent-hover disabled:opacity-50"
+                >
+                  {isGenerating ? (
+                    <>
+                      <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      生成中...
+                    </>
+                  ) : (
+                    "AIで生成する"
+                  )}
+                </button>
+              )}
+              {(deepeningFilledCount > 0 || aiResult) && (
+                <button
+                  onClick={handleReset}
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-card-border px-6 text-sm text-muted transition hover:border-accent hover:text-foreground"
+                >
+                  リセット
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══ Deepening Comparison Result ═══ */}
+      {showComparison && aiResult && isDeepening && (
+        <section className="px-6 pb-8">
+          <div className="mx-auto max-w-3xl">
+            <div className="rounded-2xl border border-accent/30 bg-accent/5 p-6">
+              <h3 className="mb-5 text-lg font-bold">深掘り質問チェック結果</h3>
+
+              {/* Score */}
+              <div className="mb-6 grid grid-cols-3 gap-4 text-center">
+                <div className="rounded-xl bg-background/50 p-4">
+                  <div className="text-3xl font-black text-accent">
+                    {deepeningFilledCount}
+                    <span className="text-base font-normal text-muted">/5</span>
+                  </div>
+                  <div className="mt-1 text-xs text-muted">記入数</div>
+                </div>
+                <div className="rounded-xl bg-background/50 p-4">
+                  <div className={`text-3xl font-black ${getDeepeningGrade().color}`}>
+                    {getDeepeningGrade().grade}
+                  </div>
+                  <div className="mt-1 text-xs text-muted">理解度</div>
+                </div>
+                <div className="rounded-xl bg-background/50 p-4">
+                  <div className="text-3xl font-black text-accent">
+                    {Math.round((deepeningFilledCount / 5) * 100)}
+                    <span className="text-base font-normal text-muted">%</span>
+                  </div>
+                  <div className="mt-1 text-xs text-muted">カバー率</div>
+                </div>
+              </div>
+
+              {/* Feedback */}
+              <p className="mb-6 rounded-lg bg-background/50 p-4 text-sm text-muted leading-relaxed">
+                {getDeepeningGrade().msg}
+              </p>
+
+              {/* AI phrase keyword */}
+              {aiResult.phraseKeyword && (
+                <div className="mb-6">
+                  <div className="mb-2 text-xs font-bold text-accent">
+                    AIの提案キーワード
+                  </div>
+                  <div className="rounded-lg bg-background/50 px-4 py-2 text-sm">
+                    「
+                    <span className="font-bold text-accent">
+                      {aiResult.phraseKeyword}
+                    </span>
+                    で悩んでいる人が多いですが...」
+                  </div>
+                </div>
+              )}
+
+              {/* Per-category comparison */}
+              <div>
+                <div className="mb-3 text-xs font-bold text-accent">
+                  カテゴリ別の比較：
+                </div>
+                <div className="space-y-3">
+                  {DEEPENING_CATEGORIES.map((cat, i) => (
+                    <div key={cat.key} className="rounded-lg border border-card-border bg-background/50 p-4">
+                      <div className="mb-2 text-xs font-bold text-accent">{cat.label}</div>
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        <div className={`rounded-lg border px-3 py-2 text-sm ${
+                          deepeningRows[i]?.trim()
+                            ? "border-green-500/30 bg-green-500/5"
+                            : "border-card-border"
+                        }`}>
+                          <div className="mb-1 text-[10px] font-bold text-muted">あなたの回答</div>
+                          {deepeningRows[i]?.trim() ? (
+                            <span className="text-green-400">{deepeningRows[i]}</span>
+                          ) : (
+                            <span className="text-muted/30">未記入</span>
+                          )}
+                        </div>
+                        <div className="rounded-lg border border-accent/30 bg-accent/5 px-3 py-2 text-sm">
+                          <div className="mb-1 text-[10px] font-bold text-muted">AIの提案</div>
+                          <span>{aiResult.items[i] || "-"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

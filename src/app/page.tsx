@@ -72,6 +72,14 @@ const steps = [
   },
 ];
 
+const serviceCategories = [
+  { icon: "🎯", title: "ロープレ", desc: "AIと営業ロープレ" },
+  { icon: "📋", title: "ワークシート", desc: "営業準備シート" },
+  { icon: "🧠", title: "コーチング", desc: "リアルタイム指導" },
+  { icon: "📊", title: "スコアリング", desc: "即決営業で採点" },
+  { icon: "🔍", title: "分析", desc: "弱点を可視化" },
+];
+
 const methods = [
   { name: "アプローチ", desc: "褒める→先回り→心の扉を開く", level: "初級" },
   {
@@ -164,14 +172,18 @@ export default async function Home() {
       <Header user={{ isLoggedIn }} />
 
       {/* Hero */}
-      <section className="relative flex min-h-screen items-center justify-center px-6 pt-16">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(249,115,22,0.08),transparent_60%)]" />
+      <section className="relative overflow-hidden px-6 pt-28 pb-20 sm:pt-36 sm:pb-28">
+        {/* Decorative blobs */}
+        <div className="blob blob-cream" style={{ width: 400, height: 400, top: -80, right: -100 }} />
+        <div className="blob blob-teal" style={{ width: 350, height: 350, bottom: -60, left: -80 }} />
+        <div className="blob blob-pink" style={{ width: 200, height: 200, top: '40%', left: '60%' }} />
+
         <div className="relative z-10 mx-auto max-w-4xl text-center">
-          <div className="mb-6 inline-block rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-sm text-accent">
+          <div className="mb-6 inline-block rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent">
             即決営業メソッド搭載 | 500+人が利用中
           </div>
 
-          <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+          <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-6xl">
             AIとロープレして
             <br />
             <span className="text-accent">成約率を上げろ。</span>
@@ -187,21 +199,21 @@ export default async function Home() {
             <Link
               href={ctaHref}
               data-hero-cta
-              className="flex h-14 w-full items-center justify-center rounded-xl bg-accent px-8 text-lg font-bold text-white transition hover:bg-accent-hover sm:w-auto"
+              className="flex h-14 w-full items-center justify-center rounded-2xl bg-accent px-10 text-lg font-bold text-white shadow-lg shadow-accent/20 transition hover:bg-accent-hover hover:shadow-xl sm:w-auto"
             >
               {isLoggedIn ? "ロープレを始める" : "無料でロープレを始める"}
             </Link>
           </div>
 
-          <p className="mt-3 text-xs text-muted">
+          <p className="mt-4 text-xs text-muted">
             &#10003; クレジットカード不要 &#10003; 30秒で登録完了 &#10003;
             1日1回無料
           </p>
 
           {/* Stats */}
-          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {stats.map((s) => (
-              <div key={s.label}>
+              <div key={s.label} className="rounded-2xl bg-white p-6 shadow-sm">
                 <div className="text-3xl font-bold text-accent">{s.value}</div>
                 <div className="mt-1 text-sm text-muted">{s.label}</div>
               </div>
@@ -210,10 +222,36 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="border-t border-card-border px-6 py-24">
+      {/* Service Categories */}
+      <section className="px-6 py-20">
         <div className="mx-auto max-w-5xl">
-          <h2 className="mb-4 text-center text-3xl font-bold">
+          <h2 className="mb-12 text-center text-2xl font-bold text-foreground">
+            サービスカテゴリ
+          </h2>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+            {serviceCategories.map((cat) => (
+              <div
+                key={cat.title}
+                className="flex flex-col items-center gap-3 rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blob-teal text-2xl">
+                  {cat.icon}
+                </div>
+                <div className="text-sm font-bold text-foreground">{cat.title}</div>
+                <div className="text-xs text-muted">{cat.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof */}
+      <section className="relative overflow-hidden px-6 py-24">
+        <div className="blob blob-cream" style={{ width: 300, height: 300, top: 40, left: -80 }} />
+        <div className="blob blob-teal" style={{ width: 250, height: 250, bottom: 20, right: -60 }} />
+
+        <div className="relative z-10 mx-auto max-w-5xl">
+          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
             営業マンに選ばれています
           </h2>
           <p className="mb-12 text-center text-muted">
@@ -225,7 +263,7 @@ export default async function Home() {
             {socialProofNumbers.map((n) => (
               <div
                 key={n.label}
-                className="rounded-xl border border-card-border bg-card p-6 text-center"
+                className="rounded-2xl bg-white p-6 text-center shadow-sm"
               >
                 <div className="text-3xl font-bold text-accent">{n.value}</div>
                 <div className="mt-1 text-sm text-muted">{n.label}</div>
@@ -238,17 +276,17 @@ export default async function Home() {
             {testimonials.map((t) => (
               <div
                 key={t.name}
-                className="relative rounded-2xl border border-card-border bg-card p-6"
+                className="relative rounded-2xl bg-white p-6 shadow-sm"
               >
                 {/* Score badge */}
-                <div className="absolute -top-3 right-4 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white">
+                <div className="absolute -top-3 right-4 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white shadow-sm">
                   スコア {t.score}
                 </div>
                 <p className="mb-4 text-sm leading-relaxed text-muted">
                   &ldquo;{t.text}&rdquo;
                 </p>
                 <div className="border-t border-card-border pt-4">
-                  <div className="text-sm font-semibold">{t.name}</div>
+                  <div className="text-sm font-semibold text-foreground">{t.name}</div>
                   <div className="text-xs text-muted">{t.role}</div>
                 </div>
               </div>
@@ -258,9 +296,9 @@ export default async function Home() {
       </section>
 
       {/* Before / After */}
-      <section className="border-t border-card-border px-6 py-24">
+      <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
-          <h2 className="mb-4 text-center text-3xl font-bold">
+          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
             即キメAIで変わること
           </h2>
           <p className="mb-12 text-center text-muted">
@@ -269,9 +307,9 @@ export default async function Home() {
 
           <div className="grid gap-6 md:grid-cols-2">
             {/* Before */}
-            <div className="rounded-2xl border border-card-border bg-card p-8">
+            <div className="rounded-2xl bg-white p-8 shadow-sm">
               <div className="mb-6 text-center">
-                <span className="inline-block rounded-full bg-card-border px-4 py-1.5 text-sm font-semibold text-muted">
+                <span className="inline-block rounded-full bg-gray-100 px-4 py-1.5 text-sm font-semibold text-muted">
                   Before
                 </span>
               </div>
@@ -291,7 +329,7 @@ export default async function Home() {
             </div>
 
             {/* After */}
-            <div className="rounded-2xl border border-accent/30 bg-accent/5 p-8 shadow-[0_0_40px_-12px_rgba(249,115,22,0.15)]">
+            <div className="rounded-2xl border-2 border-accent/20 bg-accent/5 p-8 shadow-sm">
               <div className="mb-6 text-center">
                 <span className="inline-block rounded-full bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent">
                   After
@@ -301,7 +339,7 @@ export default async function Home() {
                 {afterItems.map((item) => (
                   <li
                     key={item.text}
-                    className="flex items-start gap-3 text-sm"
+                    className="flex items-start gap-3 text-sm text-foreground"
                   >
                     <span className="mt-0.5 text-lg leading-none">
                       {item.icon}
@@ -316,9 +354,11 @@ export default async function Home() {
       </section>
 
       {/* How it works */}
-      <section className="border-t border-card-border px-6 py-24">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="mb-4 text-center text-3xl font-bold">
+      <section className="relative overflow-hidden px-6 py-24">
+        <div className="blob blob-pink" style={{ width: 300, height: 300, top: -40, right: -60 }} />
+
+        <div className="relative z-10 mx-auto max-w-5xl">
+          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
             使い方は3ステップ
           </h2>
           <p className="mb-16 text-center text-muted">
@@ -328,12 +368,12 @@ export default async function Home() {
             {steps.map((step) => (
               <div
                 key={step.num}
-                className="rounded-2xl border border-card-border bg-card p-8"
+                className="rounded-2xl bg-white p-8 shadow-sm"
               >
-                <div className="mb-4 text-4xl font-black text-accent/30">
+                <div className="mb-4 text-4xl font-black text-accent/20">
                   {step.num}
                 </div>
-                <h3 className="mb-2 text-xl font-bold">{step.title}</h3>
+                <h3 className="mb-2 text-xl font-bold text-foreground">{step.title}</h3>
                 <p className="text-sm leading-relaxed text-muted">
                   {step.desc}
                 </p>
@@ -344,9 +384,9 @@ export default async function Home() {
       </section>
 
       {/* Method */}
-      <section className="border-t border-card-border px-6 py-24">
+      <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
-          <h2 className="mb-4 text-center text-3xl font-bold">
+          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
             即決営業 5ステップメソッド
           </h2>
           <p className="mb-16 text-center text-muted">
@@ -356,15 +396,15 @@ export default async function Home() {
             {methods.map((m, i) => (
               <div
                 key={m.name}
-                className="flex items-center gap-6 rounded-xl border border-card-border bg-card p-6"
+                className="flex items-center gap-6 rounded-2xl bg-white p-6 shadow-sm"
               >
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-lg font-bold text-accent">
                   {i + 1}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-bold">{m.name}</h3>
-                    <span className="rounded-full bg-card-border px-2.5 py-0.5 text-xs text-muted">
+                    <h3 className="text-lg font-bold text-foreground">{m.name}</h3>
+                    <span className="rounded-full bg-blob-teal px-2.5 py-0.5 text-xs font-medium text-accent">
                       {m.level}
                     </span>
                   </div>
@@ -377,9 +417,11 @@ export default async function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="border-t border-card-border px-6 py-24">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="mb-4 text-center text-3xl font-bold">
+      <section className="relative overflow-hidden px-6 py-24">
+        <div className="blob blob-cream" style={{ width: 250, height: 250, bottom: -40, left: -60 }} />
+
+        <div className="relative z-10 mx-auto max-w-3xl">
+          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
             よくある質問
           </h2>
           <p className="mb-12 text-center text-muted">
@@ -389,9 +431,9 @@ export default async function Home() {
             {faqs.map((faq) => (
               <details
                 key={faq.q}
-                className="group rounded-xl border border-card-border bg-card"
+                className="group rounded-2xl bg-white shadow-sm"
               >
-                <summary className="flex cursor-pointer items-center justify-between px-6 py-5 text-sm font-semibold [&::-webkit-details-marker]:hidden list-none">
+                <summary className="flex cursor-pointer items-center justify-between px-6 py-5 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden list-none">
                   <span>{faq.q}</span>
                   <svg
                     className="h-4 w-4 flex-shrink-0 text-muted transition-transform duration-200 group-open:rotate-180"
@@ -417,9 +459,11 @@ export default async function Home() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-card-border px-6 py-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="mb-4 text-3xl font-bold">
+      <section className="relative overflow-hidden px-6 py-24">
+        <div className="blob blob-teal" style={{ width: 400, height: 400, top: -100, left: '30%' }} />
+
+        <div className="relative z-10 mx-auto max-w-3xl text-center">
+          <h2 className="mb-4 text-3xl font-bold text-foreground">
             今すぐ営業力を鍛えよう
           </h2>
           <p className="mb-4 text-muted">
@@ -432,13 +476,13 @@ export default async function Home() {
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
               href={ctaHref}
-              className="inline-flex h-14 items-center justify-center rounded-xl bg-accent px-10 text-lg font-bold text-white transition hover:bg-accent-hover"
+              className="inline-flex h-14 items-center justify-center rounded-2xl bg-accent px-10 text-lg font-bold text-white shadow-lg shadow-accent/20 transition hover:bg-accent-hover hover:shadow-xl"
             >
               {isLoggedIn ? "ロープレを始める" : "無料で始める"}
             </Link>
             <Link
               href="/pricing"
-              className="inline-flex h-14 items-center justify-center rounded-xl border border-card-border px-10 text-lg font-medium text-muted transition hover:border-accent hover:text-foreground"
+              className="inline-flex h-14 items-center justify-center rounded-2xl border-2 border-card-border px-10 text-lg font-medium text-foreground transition hover:border-accent hover:text-accent"
             >
               料金プランを見る
             </Link>

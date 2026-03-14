@@ -7,13 +7,13 @@ interface HeaderProps {
 export function Header({ user }: HeaderProps) {
   const isLoggedIn = user?.isLoggedIn ?? false;
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-card-border bg-background/80 backdrop-blur-md">
+    <header className="fixed top-0 z-50 w-full border-b border-card-border bg-background/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-2xl">🔥</span>
-          <span className="text-lg font-bold">即キメAI</span>
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white">SK</span>
+          <span className="text-lg font-bold text-foreground">即キメAI</span>
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-5">
           <Link href="/worksheet" className="hidden text-sm text-muted transition hover:text-foreground sm:block">
             ワークシート
           </Link>
@@ -24,15 +24,15 @@ export function Header({ user }: HeaderProps) {
             料金プラン
           </Link>
           {isLoggedIn ? (
-            <Link href="/roleplay" className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover">
+            <Link href="/roleplay" className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-hover">
               ロープレを始める
             </Link>
           ) : (
             <>
-              <Link href="/login" className="text-sm text-muted transition hover:text-foreground">
+              <Link href="/login" className="rounded-xl border border-card-border px-4 py-2 text-sm font-medium text-foreground transition hover:border-accent">
                 ログイン
               </Link>
-              <Link href="/roleplay" className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover">
+              <Link href="/roleplay" className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-hover">
                 無料で試す
               </Link>
             </>

@@ -11,15 +11,15 @@ interface ScoreCardProps {
 }
 
 function getScoreColor(score: number) {
-  if (score >= 80) return "text-green-400";
-  if (score >= 60) return "text-yellow-400";
-  if (score >= 40) return "text-orange-400";
-  return "text-red-400";
+  if (score >= 80) return "text-green-600";
+  if (score >= 60) return "text-yellow-600";
+  if (score >= 40) return "text-orange-500";
+  return "text-red-500";
 }
 
 function getScoreBarColor(score: number) {
-  if (score >= 80) return "bg-green-400";
-  if (score >= 60) return "bg-yellow-400";
+  if (score >= 80) return "bg-green-500";
+  if (score >= 60) return "bg-yellow-500";
   if (score >= 40) return "bg-orange-400";
   return "bg-red-400";
 }
@@ -91,7 +91,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
         {/* Strengths & Improvements */}
         <div className="mb-8 grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-card-border bg-card p-6">
-            <h3 className="mb-3 text-sm font-medium text-green-400">💪 良かった点</h3>
+            <h3 className="mb-3 text-sm font-medium text-green-600">💪 良かった点</h3>
             <ul className="space-y-2">
               {score.strengths.map((s, i) => (
                 <li key={i} className="text-sm leading-relaxed text-muted">

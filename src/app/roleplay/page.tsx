@@ -259,11 +259,11 @@ export default function RoleplayPage() {
       <WelcomeModal open={showWelcome} onComplete={() => setShowWelcome(false)} />
 
       {/* Header */}
-      <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
+      <header className="border-b border-card-border bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl">🔥</span>
-            <span className="font-bold">即キメAI</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">SK</span>
+            <span className="font-bold text-foreground">即キメAI</span>
           </Link>
           <div className="flex items-center gap-3">
             {/* Usage indicator */}
@@ -274,7 +274,7 @@ export default function RoleplayPage() {
                   className={
                     usage.canStart
                       ? "font-bold text-accent"
-                      : "font-bold text-red-400"
+                      : "font-bold text-red-500"
                   }
                 >
                   {Math.max(0, usage.limit - usage.used)}/{usage.limit}回
