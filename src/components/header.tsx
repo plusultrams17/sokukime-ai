@@ -17,6 +17,9 @@ export function Header({ user }: HeaderProps) {
           <Link href="/worksheet" className="hidden text-sm text-muted transition hover:text-foreground sm:block">
             ワークシート
           </Link>
+          <Link href="/learn" className="hidden text-sm text-muted transition hover:text-foreground sm:block">
+            学習
+          </Link>
           <Link href="/blog" className="hidden text-sm text-muted transition hover:text-foreground sm:block">
             ブログ
           </Link>

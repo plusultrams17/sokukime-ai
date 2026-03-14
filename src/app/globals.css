@@ -154,3 +154,40 @@ body {
 .blog-content a:hover {
   opacity: 0.8;
 }
+
+/* Expandable panels (details/summary) */
+.blog-content details {
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.blog-content summary {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--foreground);
+  background: #FAFAF8;
+  list-style: none;
+}
+
+.blog-content summary::-webkit-details-marker {
+  display: none;
+}
+
+.blog-content summary::before {
+  content: "\25B6";
+  display: inline-block;
+  margin-right: 0.5rem;
+  transition: transform 0.2s;
+  font-size: 0.75rem;
+}
+
+.blog-content details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.blog-content details > :not(summary) {
+  padding: 0 1rem 0.75rem;
+}
