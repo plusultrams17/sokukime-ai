@@ -4,6 +4,9 @@ import { getUsageStatus, recordUsage } from "@/lib/usage";
 
 export async function POST() {
   const supabase = await createClient();
+  if (!supabase) {
+    return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+  }
   const {
     data: { user },
   } = await supabase.auth.getUser();

@@ -126,11 +126,16 @@ const faqs = [
 /* ─── Page ─── */
 
 export default async function Home() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const isLoggedIn = !!user;
+  let isLoggedIn = false;
+  try {
+    const supabase = await createClient();
+    if (supabase) {
+      const { data: { user } } = await supabase.auth.getUser();
+      isLoggedIn = !!user;
+    }
+  } catch {
+    // Supabase unavailable — render as guest
+  }
 
   const ctaHref = "/roleplay";
 
