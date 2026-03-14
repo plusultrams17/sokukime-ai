@@ -130,7 +130,7 @@ export default function SignupPage() {
 
         <div className="rounded-xl border border-card-border bg-card/50 p-4 space-y-2">
           <div className="text-xs font-medium text-muted mb-2">無料アカウントに含まれるもの:</div>
-          {["AIロープレ（1日1回）", "即決営業5ステップ採点", "リアルタイムAIコーチ", "クレジットカード不要"].map(item => (
+          {["AIロープレ（1日1回）", "成約5ステップ採点", "リアルタイムAIコーチ", "クレジットカード不要"].map(item => (
             <div key={item} className="flex items-center gap-2 text-xs text-muted">
               <span className="text-accent">✓</span> {item}
             </div>

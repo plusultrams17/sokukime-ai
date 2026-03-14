@@ -4,9 +4,9 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
-  title: "即キメAIについて",
+  title: "成約コーチ AIについて",
   description:
-    "即キメAIは即決営業メソッドに基づくAI営業ロープレコーチングサービスです。営業マンが24時間いつでも練習できる環境を提供します。",
+    "成約コーチ AIは営業心理学に基づくAI営業ロープレコーチングサービスです。営業マンが24時間いつでも練習できる環境を提供します。",
   alternates: { canonical: "/about" },
 };
 
@@ -42,7 +42,7 @@ export default function AboutPage() {
             <span className="text-accent">もっと身近に。</span>
           </h1>
           <p className="text-lg text-muted leading-relaxed">
-            即キメAIは、AI × 即決営業メソッドで営業マンの練習環境を変えるサービスです。
+            成約コーチ AIは、AI × 営業心理学で営業マンの練習環境を変えるサービスです。
             <br />
             先輩に頼まなくても、24時間いつでも、何度でも営業ロープレができる世界を目指しています。
           </p>
@@ -78,8 +78,8 @@ export default function AboutPage() {
               </div>
             </div>
             <p>
-              即キメAIは、これらの課題をAIの力で解決します。
-              即決営業メソッドという体系化された営業手法をAIに搭載し、
+              成約コーチ AIは、これらの課題をAIの力で解決します。
+              営業心理学に基づいた体系的な営業手法をAIに搭載し、
               いつでもどこでも質の高いロープレ練習ができる環境を提供します。
             </p>
           </div>
@@ -89,9 +89,9 @@ export default function AboutPage() {
       {/* Method */}
       <section className="border-t border-card-border px-6 py-20">
         <div className="mx-auto max-w-3xl">
-          <h2 className="mb-4 text-2xl font-bold">即決営業メソッドとは</h2>
+          <h2 className="mb-4 text-2xl font-bold">成約5ステップメソッドとは</h2>
           <p className="mb-8 text-sm text-muted leading-relaxed">
-            即決営業メソッドは、契約率60%超の実績を持つ体系的な営業手法です。
+            成約5ステップメソッドは、営業心理学に基づく体系的な営業手法です。
             アプローチからクロージング、反論処理までの5ステップで構成されています。
           </p>
           <div className="space-y-3">
@@ -99,7 +99,7 @@ export default function AboutPage() {
               {
                 step: "1",
                 name: "アプローチ",
-                desc: "褒める→先回り→心の扉を開く。お客さんとの信頼関係を構築する最初のステップ。",
+                desc: "信頼構築→前提設定→心理的安全の確保。お客さんとの信頼関係を構築する最初のステップ。",
               },
               {
                 step: "2",
@@ -109,17 +109,17 @@ export default function AboutPage() {
               {
                 step: "3",
                 name: "プレゼン",
-                desc: "理屈ではなく感動で動かす。お客さんの未来を描き、商品の価値を実感してもらう。",
+                desc: "特徴ではなく価値（ベネフィット）で伝える。お客さんの未来を描き、商品の価値を実感してもらう。",
               },
               {
                 step: "4",
                 name: "クロージング",
-                desc: "過半数・一貫性通し・カギカッコ・ポジティブトリプルで、自然な流れで契約へ。",
+                desc: "社会的証明・一貫性の活用・お客様の声・段階的訴求で、自然な流れで契約へ。",
               },
               {
                 step: "5",
                 name: "反論処理",
-                desc: "共感→フック→AREA話法→訴求で、「考えます」を「お願いします」に変える。",
+                desc: "共感→確認→根拠提示→行動促進の4ステップで、「考えます」を「お願いします」に変える。",
               },
             ].map((item) => (
               <div
@@ -165,7 +165,7 @@ export default function AboutPage() {
             営業力を鍛える、新しい方法を試してみませんか？
           </h2>
           <p className="mb-8 text-sm text-muted">
-            無料アカウントで1日1回ロープレできます。クレジットカード不要。
+            無料で体験できます。登録不要で今すぐお試しください。
           </p>
           <Link
             href="/roleplay"

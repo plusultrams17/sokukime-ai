@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "特定商取引法に基づく表記 | 即キメAI",
+  title: "特定商取引法に基づく表記 | 成約コーチ AI",
   description:
-    "即キメAIの特定商取引法に基づく表記です。事業者情報・販売条件をご確認ください。",
+    "成約コーチ AIの特定商取引法に基づく表記です。事業者情報・販売条件をご確認ください。",
 };
 
 export default function TokushohoPage() {
@@ -15,7 +15,7 @@ export default function TokushohoPage() {
       <div className="overflow-hidden rounded-2xl border border-card-border">
         <table className="w-full">
           <tbody>
-            <Row label="販売事業者" value="即キメAI" />
+            <Row label="販売事業者" value="成約コーチ AI" />
             <Row
               label="代表者"
               value="※ご請求いただければ遅滞なく開示いたします"
@@ -30,11 +30,11 @@ export default function TokushohoPage() {
             />
             <Row
               label="メールアドレス"
-              value="support@sokukime.ai"
+              value="support@seiyaku-coach.vercel.app"
             />
             <Row
               label="販売URL"
-              value="https://sokukime.ai"
+              value="https://seiyaku-coach.vercel.app"
             />
             <Row
               label="販売価格"
@@ -106,7 +106,7 @@ export default function TokushohoPage() {
         </p>
         <p>
           個人事業主のため、住所・電話番号・代表者名は、ご請求いただければ遅滞なく開示いたします。
-          開示をご希望の方は、support@sokukime.ai までメールでご連絡ください。
+          開示をご希望の方は、support@seiyaku-coach.vercel.app までメールでご連絡ください。
         </p>
       </div>
     </article>

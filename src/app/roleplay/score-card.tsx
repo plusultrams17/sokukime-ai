@@ -34,7 +34,7 @@ function getGrade(score: number) {
 }
 
 export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
-  const shareText = `即キメAIでスコア${score.overall}点（ランク${getGrade(score.overall)}）を獲得しました！ #即キメAI #営業ロープレ`;
+  const shareText = `成約コーチ AIでスコア${score.overall}点（ランク${getGrade(score.overall)}）を獲得しました！ #成約コーチAI #営業ロープレ`;
   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
 
   return (
@@ -42,7 +42,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
       <div className="w-full max-w-2xl animate-fade-in-up">
         {/* Overall Score */}
         <div className="mb-8 rounded-2xl border border-card-border bg-card p-8 text-center">
-          <div className="mb-2 text-sm text-muted">即決営業スコア</div>
+          <div className="mb-2 text-sm text-muted">営業スコア</div>
           <div className="flex items-center justify-center gap-4">
             <span className={`text-7xl font-black ${getScoreColor(score.overall)}`}>
               {score.overall}

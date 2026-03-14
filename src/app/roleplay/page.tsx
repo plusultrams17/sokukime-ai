@@ -35,7 +35,7 @@ interface PendingScore {
   timestamp: number;
 }
 
-const PENDING_SCORE_KEY = "sokukime-pending-score";
+const PENDING_SCORE_KEY = "seiyaku-pending-score";
 const PENDING_SCORE_TTL = 60 * 60 * 1000; // 1 hour
 
 function UpgradeToast() {
@@ -266,8 +266,8 @@ export default function RoleplayPage() {
       <header className="border-b border-card-border bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">SK</span>
-            <span className="font-bold text-foreground">即キメAI</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">SC</span>
+            <span className="font-bold text-foreground">成約コーチ AI</span>
           </Link>
           <div className="flex items-center gap-3">
             {/* Usage indicator */}

@@ -7,7 +7,7 @@ import { getAllBlogPosts } from "@/lib/blog";
 export const metadata: Metadata = {
   title: "営業ノウハウブログ",
   description:
-    "即決営業メソッド、AIロープレ活用法、クロージングテクニックなど、営業力を鍛えるための実践的なノウハウを発信。",
+    "成約メソッド、AIロープレ活用法、クロージングテクニックなど、営業力を鍛えるための実践的なノウハウを発信。",
   alternates: { canonical: "/blog" },
 };
 
@@ -25,7 +25,7 @@ export default function BlogPage() {
             営業ノウハウブログ
           </h1>
           <p className="text-lg text-muted">
-            即決営業メソッドやAI活用法など、営業力を鍛えるための実践的なノウハウを発信しています。
+            成約メソッドやAI活用法など、営業力を鍛えるための実践的なノウハウを発信しています。
           </p>
         </div>
       </section>
@@ -83,7 +83,7 @@ export default function BlogPage() {
       <section className="border-t border-card-border px-6 py-24">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold">
-            即キメAIで営業力を鍛えよう
+            成約コーチ AIで営業力を鍛えよう
           </h2>
           <p className="mb-8 text-muted">
             記事で学んだテクニックを、AIロープレで実践練習。

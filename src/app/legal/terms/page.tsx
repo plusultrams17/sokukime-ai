@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "利用規約 | 即キメAI",
-  description: "即キメAIの利用規約です。サービスのご利用条件をご確認ください。",
+  title: "利用規約 | 成約コーチ AI",
+  description: "成約コーチ AIの利用規約です。サービスのご利用条件をご確認ください。",
 };
 
 export default function TermsPage() {
@@ -12,13 +12,13 @@ export default function TermsPage() {
       <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月1日</p>
 
       <p className="mb-6 text-sm leading-relaxed text-muted">
-        この利用規約（以下「本規約」）は、即キメAI（以下「当サービス」）の利用条件を定めるものです。
+        この利用規約（以下「本規約」）は、成約コーチ AI（以下「当サービス」）の利用条件を定めるものです。
         ユーザーの皆さま（以下「ユーザー」）には、本規約に同意いただいた上で当サービスをご利用いただきます。
       </p>
 
       <Section title="第1条（サービスの内容）">
         <p>
-          当サービスは、AI（人工知能）を活用した営業ロールプレイング練習および即決営業メソッドに基づくコーチング・スコアリング機能を提供するWebアプリケーションです。
+          当サービスは、AI（人工知能）を活用した営業ロールプレイング練習および成約メソッドに基づくコーチング・スコアリング機能を提供するWebアプリケーションです。
         </p>
       </Section>
 
@@ -142,7 +142,7 @@ export default function TermsPage() {
       </Section>
 
       <div className="mt-12 rounded-xl border border-card-border bg-card p-6 text-sm text-muted">
-        <p>お問い合わせ: support@sokukime.ai</p>
+        <p>お問い合わせ: support@seiyaku-coach.vercel.app</p>
       </div>
     </article>
   );

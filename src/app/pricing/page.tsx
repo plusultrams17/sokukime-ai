@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer";
 
 const features = [
   { name: "AIロープレ", free: "1日1回", pro: "無制限" },
-  { name: "即決営業スコア採点", free: "✓", pro: "✓" },
+  { name: "成約スコア採点", free: "✓", pro: "✓" },
   { name: "リアルタイムコーチ", free: "✓", pro: "✓" },
   { name: "5ステップ分析", free: "✓", pro: "✓" },
   { name: "営業シーン選択", free: "✓", pro: "✓" },
@@ -18,7 +18,7 @@ const comparisons = [
   { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", icon: "🏢" },
   { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", icon: "👔" },
   { name: "先輩にロープレ依頼", cost: "時給換算 ¥3,000〜", frequency: "週1回（相手の都合次第）", icon: "👥" },
-  { name: "即キメAI Pro", cost: "¥2,980", frequency: "毎日・無制限・24時間", icon: "🔥", highlight: true },
+  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "毎日・無制限・24時間", icon: "🔥", highlight: true },
 ];
 
 const testimonials = [
@@ -110,7 +110,7 @@ export default function PricingPage() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">🔥</span>
-            <span className="text-lg font-bold">即キメAI</span>
+            <span className="text-lg font-bold">成約コーチ AI</span>
           </Link>
           <Link
             href="/roleplay"

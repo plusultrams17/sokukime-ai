@@ -11,10 +11,10 @@ export default function AuthLayout({
         <div className="mb-8 text-center">
           <Link href="/" className="inline-block">
             <span className="text-3xl">🔥</span>
-            <h1 className="mt-2 text-2xl font-bold">即キメAI</h1>
+            <h1 className="mt-2 text-2xl font-bold">成約コーチ AI</h1>
           </Link>
           <p className="mt-2 text-sm text-muted">
-            AI即決営業ロープレコーチ
+            AI営業ロープレコーチ
           </p>
           <p className="mt-3 text-xs text-muted">
             <span className="text-accent font-medium">500+</span> 人の営業マンが利用中

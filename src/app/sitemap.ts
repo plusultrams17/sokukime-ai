@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllBlogPosts } from "@/lib/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime.ai";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const staticPages: MetadataRoute.Sitemap = [
     {

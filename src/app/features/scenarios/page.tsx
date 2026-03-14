@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer";
 export const metadata: Metadata = {
   title: "シナリオカスタマイズ機能",
   description:
-    "即キメAIのシナリオカスタマイズ機能。営業シーン、お客さんのタイプ、難易度を自由に設定して、リアルな営業ロープレを練習できます。",
+    "成約コーチ AIのシナリオカスタマイズ機能。営業シーン、お客さんのタイプ、難易度を自由に設定して、リアルな営業ロープレを練習できます。",
   alternates: { canonical: "/features/scenarios" },
 };
 
@@ -68,7 +68,7 @@ const difficulties = [
   {
     level: "🔴 手強いお客さん",
     desc: "反論が多く、簡単には首を縦に振らないタイプ。反論処理の実践練習に。上級者向け。",
-    techniques: "AREA話法、共感→フック→訴求、複数回のクロージングアプローチ",
+    techniques: "根拠提示、共感→確認→行動促進、複数回のクロージングアプローチ",
   },
 ];
 

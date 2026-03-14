@@ -8,11 +8,11 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">SK</span>
-              <span className="font-bold text-foreground">即キメAI</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">SC</span>
+              <span className="font-bold text-foreground">成約コーチ AI</span>
             </div>
             <p className="text-sm text-muted leading-relaxed">
-              AI × 即決営業メソッドで<br />営業力を鍛える
+              AI × 成約メソッドで<br />営業力を鍛える
             </p>
           </div>
           {/* Product */}
@@ -30,7 +30,7 @@ export function Footer() {
           <div>
             <h4 className="mb-3 text-sm font-semibold text-foreground">会社情報</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted">
-              <Link href="/about" className="transition hover:text-foreground">即キメAIについて</Link>
+              <Link href="/about" className="transition hover:text-foreground">成約コーチ AIについて</Link>
             </nav>
           </div>
           {/* Legal */}
@@ -44,7 +44,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-card-border pt-6 text-center text-sm text-muted">
-          &copy; {new Date().getFullYear()} 即キメAI. All rights reserved.
+          &copy; {new Date().getFullYear()} 成約コーチ AI. All rights reserved.
         </div>
       </div>
     </footer>

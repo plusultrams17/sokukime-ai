@@ -9,8 +9,8 @@ interface WelcomeModalProps {
 const steps = [
   {
     icon: "🎉",
-    title: "即キメAIへようこそ！",
-    body: "AIとロープレして、即決営業メソッドの型を体に叩き込みましょう。",
+    title: "成約コーチ AIへようこそ！",
+    body: "AIとロープレして、営業メソッドの型を体に叩き込みましょう。",
   },
   {
     icon: "🎯",

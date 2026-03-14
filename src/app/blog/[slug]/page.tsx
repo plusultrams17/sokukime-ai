@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://sokukime.ai";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return {
     title: post.title,
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       modifiedTime: post.updatedAt,
       tags: post.tags,
       locale: "ja_JP",
-      siteName: "即キメAI",
+      siteName: "成約コーチ AI",
     },
     twitter: {
       card: "summary_large_image",
@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: Props) {
     .slice(0, 2);
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://sokukime.ai";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -75,12 +75,12 @@ export default async function BlogPostPage({ params }: Props) {
     dateModified: post.updatedAt || post.publishedAt,
     author: {
       "@type": "Organization",
-      name: "即キメAI",
+      name: "成約コーチ AI",
       url: siteUrl,
     },
     publisher: {
       "@type": "Organization",
-      name: "即キメAI",
+      name: "成約コーチ AI",
       url: siteUrl,
     },
     mainEntityOfPage: {
@@ -132,7 +132,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="mb-10 flex flex-wrap items-center gap-4 border-b border-card-border pb-6 text-sm text-muted">
             <div className="flex items-center gap-2">
               <span className="text-base">🔥</span>
-              <span className="font-medium text-foreground">即キメAI</span>
+              <span className="font-medium text-foreground">成約コーチ AI</span>
             </div>
             <time dateTime={post.publishedAt}>
               {new Date(post.publishedAt).toLocaleDateString("ja-JP", {
@@ -171,9 +171,9 @@ export default async function BlogPostPage({ params }: Props) {
               この営業テクニックをAIで練習する
             </h2>
             <p className="mb-6 text-muted">
-              即キメAIなら、即決営業メソッドに基づいたAIロープレが無料で体験できます。
+              成約コーチ AIなら、成約メソッドに基づいたAIロープレが無料で体験できます。
               <br className="hidden sm:block" />
-              記事で学んだテクニックを実践して、本番で即キメできる営業力を身につけましょう。
+              記事で学んだテクニックを実践して、本番で成約できる営業力を身につけましょう。
             </p>
             <Link
               href="/roleplay"

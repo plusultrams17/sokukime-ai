@@ -4,14 +4,14 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
-  title: "即決営業スコアリング機能",
+  title: "成約スコアリング機能",
   description:
-    "即キメAIのスコアリング機能。5ステップそれぞれを20点満点で採点し、営業力を100点満点で可視化します。",
+    "成約コーチ AIのスコアリング機能。5ステップそれぞれを20点満点で採点し、営業力を100点満点で可視化します。",
   alternates: { canonical: "/features/scoring" },
 };
 
 const grades = [
-  { grade: "S", range: "90-100", color: "text-green-400", desc: "即決営業マスター。即キメできる実力です。" },
+  { grade: "S", range: "90-100", color: "text-green-400", desc: "成約メソッドマスター。確実に成約できる実力です。" },
   { grade: "A", range: "80-89", color: "text-green-400", desc: "高い営業力。あと少しでマスターレベル。" },
   { grade: "B", range: "60-79", color: "text-yellow-400", desc: "基本は身についている。応用力を磨きましょう。" },
   { grade: "C", range: "40-59", color: "text-orange-400", desc: "伸びしろ大。特定のステップを重点練習。" },
@@ -24,8 +24,8 @@ const categories = [
     name: "アプローチ",
     points: "20点",
     criteria: [
-      "褒めることで心の扉を開けたか",
-      "先回りトークで不安を解消したか",
+      "褒めることで信頼構築ができたか",
+      "前提設定トークで不安を解消したか",
       "自然な会話で信頼を構築したか",
     ],
   },
@@ -51,9 +51,9 @@ const categories = [
     name: "クロージング",
     points: "20点",
     criteria: [
-      "過半数クロージングを使えたか",
-      "一貫性通しで自然に導けたか",
-      "ポジティブトリプルで後押しできたか",
+      "社会的証明クロージングを使えたか",
+      "一貫性の活用で自然に導けたか",
+      "段階的訴求で後押しできたか",
     ],
   },
   {
@@ -61,7 +61,7 @@ const categories = [
     points: "20点",
     criteria: [
       "共感でお客さんの気持ちを受け止めたか",
-      "AREA話法で論理的に切り返せたか",
+      "根拠提示で論理的に切り返せたか",
       "再度クロージングに持っていけたか",
     ],
   },
@@ -75,7 +75,7 @@ export default function ScoringFeaturePage() {
       <section className="px-6 pt-32 pb-16">
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-4 text-5xl">📊</div>
-          <h1 className="mb-4 text-4xl font-bold">即決営業スコアリング</h1>
+          <h1 className="mb-4 text-4xl font-bold">成約スコアリング</h1>
           <p className="text-lg text-muted">
             5ステップ × 20点の100点満点で
             <br />

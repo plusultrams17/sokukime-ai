@@ -2,14 +2,14 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "即キメAI - AI即決営業ロープレコーチ",
-    short_name: "即キメAI",
+    name: "成約コーチ AI - AI営業ロープレコーチ",
+    short_name: "成約コーチ AI",
     description:
-      "AIとロープレして即決営業スキルを磨こう。リアルな商談シミュレーションで成約率アップ。",
+      "AIとロープレして営業スキルを磨こう。リアルな商談シミュレーションで成約率アップ。",
     start_url: "/",
     display: "standalone",
-    theme_color: "#f97316",
-    background_color: "#0a0a0a",
+    theme_color: "#1B6B5A",
+    background_color: "#FBF8F3",
     icons: [
       {
         src: "/pwa-icon/192",

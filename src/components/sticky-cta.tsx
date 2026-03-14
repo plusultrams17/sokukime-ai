@@ -23,7 +23,7 @@ export function StickyCTA() {
     <div className="fixed bottom-0 z-40 w-full border-t border-card-border bg-white/95 backdrop-blur-md px-6 py-3 animate-fade-in-up shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
         <div className="hidden sm:block">
-          <span className="text-sm font-bold text-foreground">即キメAI</span>
+          <span className="text-sm font-bold text-foreground">成約コーチ AI</span>
           <span className="ml-2 text-xs text-muted">
             無料で体験できます
           </span>

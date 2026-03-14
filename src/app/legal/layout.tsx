@@ -11,7 +11,7 @@ export default function LegalLayout({
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">🔥</span>
-            <span className="text-lg font-bold">即キメAI</span>
+            <span className="text-lg font-bold">成約コーチ AI</span>
           </Link>
           <Link
             href="/pricing"
@@ -28,7 +28,7 @@ export default function LegalLayout({
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
             <div className="text-sm text-muted">
-              &copy; {new Date().getFullYear()} 即キメAI. All rights reserved.
+              &copy; {new Date().getFullYear()} 成約コーチ AI. All rights reserved.
             </div>
             <nav className="flex gap-6 text-sm text-muted">
               <Link

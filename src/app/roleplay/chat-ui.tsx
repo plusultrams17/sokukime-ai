@@ -90,7 +90,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
         currentStep: "アプローチ",
         stepNumber: 1,
         detectedTechniques: [],
-        nextTip: "まずは相手を褒めて心の扉を開きましょう。2度褒めが理想。その後「先回り」でYESを取ります",
+        nextTip: "まずは相手を褒めて心理的安全の確保をしましょう。2度褒めが理想。その後「前提設定」でYESを取ります",
         examplePhrase: "素敵な会社ですね！今まで○社伺いましたがダントツです。ところで、もしお話聞いて気に入らなかったら断ってくださいね。気に入ったらぜひスタートしてください！",
       });
     } catch {
@@ -488,7 +488,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
             {/* 5 Step Reference */}
             <div className="rounded-xl border border-card-border p-4">
               <div className="mb-2 text-xs font-medium text-muted">
-                📖 即決営業5ステップ
+                📖 営業5ステップ
               </div>
               <div className="space-y-1 text-[11px]">
                 {STEPS.map((s) => (

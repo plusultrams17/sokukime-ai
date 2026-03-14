@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer";
 export const metadata: Metadata = {
   title: "リアルタイムAIコーチ機能",
   description:
-    "即キメAIのリアルタイムコーチ機能。ロープレ中にAIが即決営業テクニックを分析し、リアルタイムでアドバイスします。",
+    "成約コーチ AIのリアルタイムコーチ機能。ロープレ中にAIが成約メソッドのテクニックを分析し、リアルタイムでアドバイスします。",
   alternates: { canonical: "/features/coach" },
 };
 
@@ -19,7 +19,7 @@ const coachFeatures = [
   {
     icon: "✅",
     title: "テクニック検出",
-    desc: "あなたの発言から使用したテクニックを自動検出。「先回りトーク」「共感フレーズ」「AREA話法」など、即決営業の型が使えているかリアルタイムで確認できます。",
+    desc: "あなたの発言から使用したテクニックを自動検出。「前提設定トーク」「共感フレーズ」「根拠提示」など、成約メソッドの型が使えているかリアルタイムで確認できます。",
   },
   {
     icon: "💡",
@@ -89,7 +89,7 @@ export default function CoachFeaturePage() {
                 step: "2",
                 text: "AIがテクニックを瞬時に分析",
                 detail:
-                  "即決営業メソッドの型に照らし合わせ、使用したテクニックを検出",
+                  "成約メソッドの型に照らし合わせ、使用したテクニックを検出",
               },
               {
                 step: "3",

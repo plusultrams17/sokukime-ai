@@ -34,7 +34,7 @@ const WORKSHEET_TYPES: {
     id: "needs",
     number: "04",
     icon: "🎯",
-    title: "引き出しシート（限定質問）",
+    title: "ニーズ発掘シート",
     description: "お客さんのニーズ・お悩みを把握できているか",
     gridLabel: "ニーズ（お悩み・問題）",
   },
@@ -66,7 +66,7 @@ const WORKSHEET_TYPES: {
     id: "deepening",
     number: "05",
     icon: "🔍",
-    title: "具体化シート（限定質問）",
+    title: "課題深掘りシート",
     description: "お客さんの問題を深掘りできているか",
     gridLabel: "深掘り質問",
   },
@@ -361,7 +361,7 @@ export default function WorksheetPage() {
                 <div>
                   <div className="text-sm font-bold">{currentWs.title}</div>
                   <div className="text-[10px] text-muted">
-                    即決営業テンプレート {currentWs.number}
+                    営業テンプレート {currentWs.number}
                   </div>
                 </div>
               </div>
@@ -594,7 +594,7 @@ export default function WorksheetPage() {
                 <div>
                   <div className="text-sm font-bold">{currentWs.title}</div>
                   <div className="text-[10px] text-muted">
-                    即決営業テンプレート {currentWs.number}
+                    営業テンプレート {currentWs.number}
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "即キメAI - AI即決営業ロープレコーチ";
+export const alt = "成約コーチ AI - AI営業ロープレコーチ";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -17,12 +17,12 @@ export default function OgImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#0a0a0a",
+          backgroundColor: "#FBF8F3",
           position: "relative",
           overflow: "hidden",
         }}
       >
-        {/* Orange radial gradient circle */}
+        {/* Teal radial gradient circle */}
         <div
           style={{
             position: "absolute",
@@ -30,7 +30,7 @@ export default function OgImage() {
             height: "600px",
             borderRadius: "50%",
             background:
-              "radial-gradient(circle, rgba(249,115,22,0.3) 0%, rgba(249,115,22,0.05) 50%, transparent 70%)",
+              "radial-gradient(circle, rgba(27,107,90,0.2) 0%, rgba(27,107,90,0.05) 50%, transparent 70%)",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
@@ -47,20 +47,32 @@ export default function OgImage() {
             zIndex: 1,
           }}
         >
-          {/* Fire emoji */}
-          <div style={{ fontSize: "72px", marginBottom: "16px" }}>🔥</div>
+          {/* Logo badge */}
+          <div
+            style={{
+              fontSize: "36px",
+              fontWeight: 800,
+              color: "#ffffff",
+              backgroundColor: "#1B6B5A",
+              borderRadius: "16px",
+              padding: "12px 24px",
+              marginBottom: "24px",
+            }}
+          >
+            SC
+          </div>
 
           {/* Main title */}
           <div
             style={{
               fontSize: "72px",
               fontWeight: 800,
-              color: "#ffffff",
+              color: "#1E293B",
               marginBottom: "16px",
               letterSpacing: "-0.02em",
             }}
           >
-            即キメAI
+            成約コーチ AI
           </div>
 
           {/* Tagline */}
@@ -68,7 +80,7 @@ export default function OgImage() {
             style={{
               fontSize: "32px",
               fontWeight: 600,
-              color: "#f97316",
+              color: "#1B6B5A",
               marginBottom: "16px",
             }}
           >
@@ -79,10 +91,10 @@ export default function OgImage() {
           <div
             style={{
               fontSize: "20px",
-              color: "#9ca3af",
+              color: "#64748B",
             }}
           >
-            AI × 即決営業メソッド | 無料で始められる
+            営業心理学ベースのAIコーチング | 無料で始められる
           </div>
         </div>
       </div>

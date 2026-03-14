@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer";
 export const metadata: Metadata = {
   title: "機能紹介",
   description:
-    "即キメAIの主要機能。AIロープレ、リアルタイムコーチ、即決営業スコアリングなど、営業力を鍛える機能を詳しく紹介します。",
+    "成約コーチ AIの主要機能。AIロープレ、リアルタイムコーチ、成約スコアリングなど、営業力を鍛える機能を詳しく紹介します。",
   alternates: { canonical: "/features" },
 };
 
@@ -25,7 +25,7 @@ const features = [
   {
     icon: "🧠",
     title: "リアルタイムAIコーチ",
-    desc: "会話中にリアルタイムで即決営業テクニックを分析。今何をすべきかをコーチがアドバイスします。",
+    desc: "会話中にリアルタイムで成約メソッドのテクニックを分析。今何をすべきかをコーチがアドバイスします。",
     href: "/features/coach",
     highlights: [
       "会話ごとにテクニック検出",
@@ -35,7 +35,7 @@ const features = [
   },
   {
     icon: "📊",
-    title: "即決営業スコアリング",
+    title: "成約スコアリング",
     desc: "5ステップそれぞれを20点満点で採点。総合スコアとランク（S〜E）で実力を可視化します。",
     href: "/features/scoring",
     highlights: [
@@ -55,7 +55,7 @@ export default function FeaturesPage() {
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="mb-4 text-4xl font-bold">機能紹介</h1>
           <p className="text-lg text-muted">
-            AI × 即決営業メソッドで、効率的に営業力を鍛える
+            AI × 成約メソッドで、効率的に営業力を鍛える
           </p>
         </div>
       </section>
@@ -115,7 +115,7 @@ export default function FeaturesPage() {
                     従来のロープレ
                   </th>
                   <th className="px-6 py-4 text-center font-bold text-accent">
-                    即キメAI
+                    成約コーチ AI
                   </th>
                 </tr>
               </thead>

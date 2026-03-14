@@ -8,36 +8,9 @@ import { StickyCTA } from "@/components/sticky-cta";
 /* ─── Data ─── */
 
 const stats = [
-  { value: "60%超", label: "契約率" },
-  { value: "4.5年", label: "新規営業経験" },
-  { value: "5ステップ", label: "即決営業メソッド" },
-];
-
-const socialProofNumbers = [
-  { value: "500+", label: "登録ユーザー" },
-  { value: "3,000+", label: "ロープレ実施回数" },
-  { value: "4.7/5.0", label: "ユーザー満足度" },
-];
-
-const testimonials = [
-  {
-    name: "T.S.",
-    role: "不動産営業 / 入社2年目",
-    text: "先輩に何度も頼まなくても、AIと何度でも練習できるのが最高。クロージングの型が身について、月の契約数が1.5倍になりました。",
-    score: "78",
-  },
-  {
-    name: "M.K.",
-    role: "保険営業 / マネージャー",
-    text: "チームの新人教育に導入。ロープレの回数が圧倒的に増えて、新人の独り立ちまでの期間が半分になった。",
-    score: "85",
-  },
-  {
-    name: "Y.A.",
-    role: "SaaS営業 / 3年目",
-    text: "即決営業メソッドの切り返し話法が実践で使えるレベルまで鍛えられる。コーチ機能が本当に優秀。",
-    score: "92",
-  },
+  { value: "5ステップ", label: "成約メソッド" },
+  { value: "24時間", label: "いつでも練習可能" },
+  { value: "無料", label: "登録不要で体験" },
 ];
 
 const beforeItems = [
@@ -50,7 +23,7 @@ const beforeItems = [
 const afterItems = [
   { text: "24時間いつでもAIとロープレ", icon: "🔥" },
   { text: "場数を踏んで自信がつく", icon: "💪" },
-  { text: "即決営業の型が体に染みつく", icon: "🎯" },
+  { text: "営業の型が体に染みつく", icon: "🎯" },
   { text: "AIスコアで弱点を可視化", icon: "📊" },
 ];
 
@@ -67,8 +40,8 @@ const steps = [
   },
   {
     num: "03",
-    title: "即決営業スコアで採点",
-    desc: "先回り・ヒアリング・クロージング・切り返しを即決営業メソッドで分析",
+    title: "成約スコアで採点",
+    desc: "アプローチ・ヒアリング・クロージング・反論処理を成約メソッドで分析",
   },
 ];
 
@@ -76,26 +49,26 @@ const serviceCategories = [
   { icon: "🎯", title: "ロープレ", desc: "AIと営業ロープレ" },
   { icon: "📋", title: "ワークシート", desc: "営業準備シート" },
   { icon: "🧠", title: "コーチング", desc: "リアルタイム指導" },
-  { icon: "📊", title: "スコアリング", desc: "即決営業で採点" },
+  { icon: "📊", title: "スコアリング", desc: "成約メソッドで採点" },
   { icon: "🔍", title: "分析", desc: "弱点を可視化" },
 ];
 
 const methods = [
-  { name: "アプローチ", desc: "褒める→先回り→心の扉を開く", level: "初級" },
+  { name: "アプローチ", desc: "信頼構築→前提設定→心理的安全の確保", level: "初級" },
   {
     name: "ヒアリング",
     desc: "質問でニーズを引き出し、問題を深掘り",
     level: "初級",
   },
-  { name: "プレゼン", desc: "理屈ではなく感動で動かす", level: "初級" },
+  { name: "プレゼン", desc: "特徴ではなく価値（ベネフィット）で伝える", level: "初級" },
   {
     name: "クロージング",
-    desc: "過半数・一貫性通し・カギカッコ・ポジティブトリプル",
+    desc: "社会的証明・一貫性の活用・お客様の声・段階的訴求",
     level: "中級",
   },
   {
     name: "反論処理",
-    desc: "共感→フック→AREA話法→訴求の型で切り返し",
+    desc: "共感→確認→根拠提示→行動促進の4ステップ",
     level: "上級",
   },
 ];
@@ -103,15 +76,15 @@ const methods = [
 const faqs = [
   {
     q: "本当に無料で使えますか？",
-    a: "はい。無料アカウントで1日1回AIロープレができます。クレジットカードの登録も不要です。",
+    a: "はい。登録不要でロープレ・分析を体験できます。無料アカウントで1日1回AIロープレが可能です。",
   },
   {
     q: "どんな業種・商材でも使えますか？",
     a: "はい。あなたの業種・商材を入力すると、AIがそのシーンに合ったお客さん役を演じます。不動産、保険、SaaS、教育など幅広くご利用いただけます。",
   },
   {
-    q: "即決営業メソッドとは？",
-    a: "即決営業メソッドは、アプローチ→ヒアリング→プレゼン→クロージング→反論処理の5ステップで構成された、体系的な営業手法です。契約率60%超の実績を持つメソッドをAIが正確に評価します。",
+    q: "成約コーチ AIのメソッドとは？",
+    a: "成約5ステップメソッドは、アプローチ→ヒアリング→プレゼン→クロージング→反論処理の5段階で構成された、営業心理学に基づく体系的な営業手法です。各ステップをAIが評価し、改善ポイントを提示します。",
   },
   {
     q: "Proプランはいつでも解約できますか？",
@@ -143,11 +116,11 @@ export default async function Home() {
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "即キメAI",
+    name: "成約コーチ AI",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     description:
-      "AI × 即決営業メソッドで営業ロープレを何度でも練習。即決営業の5ステップを身につけて成約率を上げる。",
+      "AI × 成約メソッドで営業ロープレを何度でも練習。成約5ステップを身につけて成約率を上げる。",
     offers: [
       {
         "@type": "Offer",
@@ -162,12 +135,6 @@ export default async function Home() {
         description: "Proプラン（無制限）",
       },
     ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.7",
-      ratingCount: "500",
-      bestRating: "5",
-    },
   };
 
   return (
@@ -186,7 +153,7 @@ export default async function Home() {
 
         <div className="relative z-10 mx-auto max-w-4xl text-center">
           <div className="mb-6 inline-block rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent">
-            即決営業メソッド搭載 | 500+人が利用中
+            営業心理学ベースのAIコーチング
           </div>
 
           <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-6xl">
@@ -255,52 +222,35 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Social Proof */}
+      {/* Beta Test CTA */}
       <section className="relative overflow-hidden px-6 py-24">
         <div className="blob blob-cream" style={{ width: 300, height: 300, top: 40, left: -80 }} />
         <div className="blob blob-teal" style={{ width: 250, height: 250, bottom: 20, right: -60 }} />
 
-        <div className="relative z-10 mx-auto max-w-5xl">
-          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
-            営業マンに選ばれています
+        <div className="relative z-10 mx-auto max-w-3xl text-center">
+          <h2 className="mb-4 text-3xl font-bold text-foreground">
+            現在ベータテスト中
           </h2>
-          <p className="mb-12 text-center text-muted">
-            実際に即キメAIを使って成果を出しているユーザーの声
+          <p className="mb-8 text-muted">
+            成約コーチ AIは現在ベータ版として公開中です。<br />
+            テストユーザーとしてお試しいただき、フィードバックをお聞かせください。
           </p>
-
-          {/* Numbers */}
-          <div className="mb-16 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {socialProofNumbers.map((n) => (
-              <div
-                key={n.label}
-                className="rounded-2xl bg-white p-6 text-center shadow-sm"
-              >
-                <div className="text-3xl font-bold text-accent">{n.value}</div>
-                <div className="mt-1 text-sm text-muted">{n.label}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Testimonials */}
-          <div className="grid gap-6 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <div
-                key={t.name}
-                className="relative rounded-2xl bg-white p-6 shadow-sm"
-              >
-                {/* Score badge */}
-                <div className="absolute -top-3 right-4 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white shadow-sm">
-                  スコア {t.score}
-                </div>
-                <p className="mb-4 text-sm leading-relaxed text-muted">
-                  &ldquo;{t.text}&rdquo;
-                </p>
-                <div className="border-t border-card-border pt-4">
-                  <div className="text-sm font-semibold text-foreground">{t.name}</div>
-                  <div className="text-xs text-muted">{t.role}</div>
-                </div>
-              </div>
-            ))}
+          <div className="grid gap-6 sm:grid-cols-3">
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <div className="mb-2 text-2xl">🎯</div>
+              <div className="text-sm font-bold text-foreground">AIロープレ</div>
+              <div className="mt-1 text-xs text-muted">リアルな商談練習</div>
+            </div>
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <div className="mb-2 text-2xl">📋</div>
+              <div className="text-sm font-bold text-foreground">営業分析シート</div>
+              <div className="mt-1 text-xs text-muted">AI生成の営業準備ツール</div>
+            </div>
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <div className="mb-2 text-2xl">📊</div>
+              <div className="text-sm font-bold text-foreground">成約スコア</div>
+              <div className="mt-1 text-xs text-muted">5ステップで定量評価</div>
+            </div>
           </div>
         </div>
       </section>
@@ -309,7 +259,7 @@ export default async function Home() {
       <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
-            即キメAIで変わること
+            成約コーチ AIで変わること
           </h2>
           <p className="mb-12 text-center text-muted">
             練習環境の悩みを解消し、営業力を飛躍させる
@@ -397,7 +347,7 @@ export default async function Home() {
       <section className="px-6 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
-            即決営業 5ステップメソッド
+            成約コーチ 5ステップメソッド
           </h2>
           <p className="mb-16 text-center text-muted">
             体系化された営業の「型」をAIが正確に評価します
@@ -435,7 +385,7 @@ export default async function Home() {
             よくある質問
           </h2>
           <p className="mb-12 text-center text-muted">
-            即キメAIについてのよくある質問にお答えします
+            成約コーチ AIについてのよくある質問にお答えします
           </p>
           <div className="space-y-3">
             {faqs.map((faq) => (

@@ -10,8 +10,8 @@ export function Header({ user }: HeaderProps) {
     <header className="fixed top-0 z-50 w-full border-b border-card-border bg-background/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white">SK</span>
-          <span className="text-lg font-bold text-foreground">即キメAI</span>
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white">SC</span>
+          <span className="text-lg font-bold text-foreground">成約コーチ AI</span>
         </Link>
         <nav className="flex items-center gap-5">
           <Link href="/worksheet" className="hidden text-sm text-muted transition hover:text-foreground sm:block">

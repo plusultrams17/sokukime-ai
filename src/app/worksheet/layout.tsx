@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "営業準備ワークシート",
   description:
-    "即キメAIの営業準備ワークシート。業界理解・自社理解・競合分析・反論処理の知識を自己チェック。AIによる自動生成も可能。",
+    "成約コーチ AIの営業準備ワークシート。業界理解・自社理解・競合分析・反論処理の知識を自己チェック。AIによる自動生成も可能。",
   alternates: { canonical: "/worksheet" },
 };
 

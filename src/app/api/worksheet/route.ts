@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 
 const PROMPTS: Record<string, string> = {
   needs:
@@ -11,22 +10,11 @@ const PROMPTS: Record<string, string> = {
   objections:
     "この業種・商材の営業において、お客さんからよくある反論・断り文句・懸念事項を12個挙げてください。実際の商談で頻出するリアルな表現にしてください。",
   deepening:
-    "この業種・商材の営業において、お客さんの問題を深掘りする「具体化シート」用の質問を5個生成してください。以下の5カテゴリに対応した質問を、この業界に特有の表現で作成してください：①原因（何が原因か）、②いつから（時間軸）、③具体的に（状況・痛みの視覚化）、④問題認識（感情的な気づき）、⑤なぜ（解決しなかった理由）。また、引き出しフレーズの空欄キーワードも提案してください。",
+    "この業種・商材の営業において、お客さんの問題を深掘りする「課題深掘りシート」用の質問を5個生成してください。以下の5カテゴリに対応した質問を、この業界に特有の表現で作成してください：①原因（何が原因か）、②いつから（時間軸）、③具体的に（状況・痛みの視覚化）、④問題認識（感情的な気づき）、⑤なぜ（解決しなかった理由）。また、引き出しフレーズの空欄キーワードも提案してください。",
 };
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    if (!supabase) {
-      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
-    }
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { industry, type } = await request.json();
 
     if (!industry || !type || !PROMPTS[type]) {
@@ -50,7 +38,7 @@ export async function POST(request: NextRequest) {
       ? "各項目は自然な会話調の質問文で（30文字程度）"
       : "各項目は短く簡潔に（15文字以内が理想）";
 
-    const systemPrompt = `あなたは即決営業のプロフェッショナルであり、業界分析の専門家です。
+    const systemPrompt = `あなたは営業のプロフェッショナルであり、業界分析の専門家です。
 営業マンが事前準備として使う「ワークシート」の内容を生成してください。
 
 回答ルール:

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "プライバシーポリシー | 即キメAI",
+  title: "プライバシーポリシー | 成約コーチ AI",
   description:
-    "即キメAIのプライバシーポリシーです。個人情報の取り扱いについてご確認ください。",
+    "成約コーチ AIのプライバシーポリシーです。個人情報の取り扱いについてご確認ください。",
 };
 
 export default function PrivacyPage() {
@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月1日</p>
 
       <p className="mb-6 text-sm leading-relaxed text-muted">
-        即キメAI（以下「当サービス」）は、ユーザーの個人情報の保護を重要視しています。
+        成約コーチ AI（以下「当サービス」）は、ユーザーの個人情報の保護を重要視しています。
         本プライバシーポリシーは、当サービスにおける個人情報の収集、利用、管理について定めるものです。
         当サービスは、個人情報の保護に関する法律（個人情報保護法）を遵守します。
       </p>
@@ -189,8 +189,8 @@ export default function PrivacyPage() {
       </Section>
 
       <div className="mt-12 rounded-xl border border-card-border bg-card p-6 text-sm text-muted">
-        <p>即キメAI 個人情報保護担当</p>
-        <p>メール: privacy@sokukime.ai</p>
+        <p>成約コーチ AI 個人情報保護担当</p>
+        <p>メール: privacy@seiyaku-coach.vercel.app</p>
       </div>
     </article>
   );

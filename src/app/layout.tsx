@@ -14,40 +14,40 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "即キメAI | AI即決営業ロープレコーチ",
-    template: "%s | 即キメAI",
+    default: "成約コーチ AI | AI営業ロープレコーチ",
+    template: "%s | 成約コーチ AI",
   },
   description:
-    "AIがお客さん役になって営業ロープレ。即決営業メソッドに基づくリアルタイムフィードバックで、あなたの成約率を劇的に上げる。",
+    "AIがお客さん役になって営業ロープレ。営業心理学に基づくリアルタイムフィードバックで、あなたの成約率を劇的に上げる。",
   keywords: [
-    "即決営業",
     "営業ロープレ",
     "AIコーチ",
     "営業トレーニング",
     "セールス練習",
-    "即キメAI",
+    "成約コーチ AI",
     "営業力向上",
     "成約率アップ",
+    "営業心理学",
   ],
   openGraph: {
     type: "website",
     locale: "ja_JP",
     url: SITE_URL,
-    siteName: "即キメAI",
-    title: "即キメAI | AI即決営業ロープレコーチ",
+    siteName: "成約コーチ AI",
+    title: "成約コーチ AI | AI営業ロープレコーチ",
     description:
-      "AIがお客さん役になって営業ロープレ。即決営業メソッドに基づくリアルタイムフィードバックで、あなたの成約率を劇的に上げる。",
+      "AIがお客さん役になって営業ロープレ。営業心理学に基づくリアルタイムフィードバックで、あなたの成約率を劇的に上げる。",
   },
   twitter: {
     card: "summary_large_image",
-    title: "即キメAI | AI即決営業ロープレコーチ",
+    title: "成約コーチ AI | AI営業ロープレコーチ",
     description:
-      "AIがお客さん役になって営業ロープレ。即決営業メソッドに基づくリアルタイムフィードバックで、あなたの成約率を劇的に上げる。",
+      "AIがお客さん役になって営業ロープレ。営業心理学に基づくリアルタイムフィードバックで、あなたの成約率を劇的に上げる。",
   },
   robots: {
     index: true,
@@ -80,22 +80,22 @@ export default function RootLayout({
           data={{
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "即キメAI",
+            name: "成約コーチ AI",
             url: SITE_URL,
             description:
-              "AI × 即決営業メソッドで営業力を鍛えるロープレコーチングサービス",
+              "AI × 成約メソッドで営業力を鍛えるロープレコーチングサービス",
           }}
         />
         <JsonLd
           data={{
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            name: "即キメAI",
+            name: "成約コーチ AI",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
             url: SITE_URL,
             description:
-              "AIがお客さん役になって営業ロープレ。即決営業メソッドに基づくリアルタイムフィードバックで、あなたの成約率を劇的に上げる。",
+              "AIがお客さん役になって営業ロープレ。営業心理学に基づくリアルタイムフィードバックで、あなたの成約率を劇的に上げる。",
             offers: {
               "@type": "Offer",
               price: "2980",
