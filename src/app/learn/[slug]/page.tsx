@@ -7,18 +7,74 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getLessonBySlug, getAdjacentLessons } from "@/lib/lessons";
 import type { QuizQuestion } from "@/lib/lessons";
+import { LessonDiagram, getSectionDiagram } from "@/components/lesson-diagrams";
+import { LessonScene } from "@/components/lesson-scenes";
+import { PdfExportButton } from "@/components/pdf/PdfExportButton";
+import LessonPdfContent from "@/components/pdf/LessonPdfContent";
 
-const TABS = [
-  { name: "理論", icon: "\u{1F4D6}" },
-  { name: "トーク例", icon: "\u{1F4AC}" },
-  { name: "確認クイズ", icon: "\u2705" },
-  { name: "実践練習", icon: "\u{1F3AF}" },
-];
+const TABS = ["理論", "トーク例", "確認クイズ", "実践練習"];
 
-const LEVEL_COLORS: Record<string, { color: string; bgColor: string }> = {
-  beginner: { color: "#0F6E56", bgColor: "#E0F2ED" },
-  intermediate: { color: "#993C1D", bgColor: "#FDF0D5" },
-  advanced: { color: "#A32D2D", bgColor: "#FCE8E8" },
+/**
+ * Process examples HTML to wrap consecutive dialogue lines
+ * (lines starting with 営業：/お客様：/顧客：) in .dialogue containers.
+ */
+function processExamplesHtml(html: string): string {
+  const lines = html.split("\n");
+  const result: string[] = [];
+  let inDialogue = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    // Dialogue starter: lines with role labels
+    const isDialogueStart =
+      /^<p>(?:営業|お客様|顧客|相手|客)：/.test(line);
+    // Stage directions only continue an existing dialogue
+    const isStageDirection =
+      /^<p><em>[^<]*<\/em><\/p>$/.test(line);
+
+    const canContinue = isDialogueStart || (inDialogue && isStageDirection);
+
+    // Skip if already wrapped
+    if (line.includes('class="dialogue"') || line.includes('class="example-')) {
+      if (inDialogue) {
+        result.push("</div>");
+        inDialogue = false;
+      }
+      result.push(lines[i]);
+      continue;
+    }
+
+    if (isDialogueStart && !inDialogue) {
+      inDialogue = true;
+      result.push('<div class="dialogue">');
+      result.push(lines[i]);
+    } else if (canContinue && inDialogue) {
+      result.push(lines[i]);
+    } else if (!canContinue && inDialogue) {
+      if (line === "") {
+        result.push(lines[i]);
+      } else {
+        result.push("</div>");
+        inDialogue = false;
+        result.push(lines[i]);
+      }
+    } else {
+      result.push(lines[i]);
+    }
+  }
+
+  if (inDialogue) {
+    result.push("</div>");
+  }
+
+  return result.join("\n");
+}
+
+const LEVEL_COLORS: Record<string, string> = {
+  beginner: "#0F6E56",
+  intermediate: "#2563EB",
+  advanced: "#7C3AED",
 };
 
 interface Progress {
@@ -27,7 +83,8 @@ interface Progress {
 }
 
 function getProgress(): Progress {
-  if (typeof window === "undefined") return { completedLessons: [], quizScores: {} };
+  if (typeof window === "undefined")
+    return { completedLessons: [], quizScores: {} };
   try {
     const raw = localStorage.getItem("seiyaku-learn-progress");
     if (raw) return JSON.parse(raw);
@@ -78,13 +135,13 @@ export default function LessonPage() {
 
   if (!lesson) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-white">
         <Header />
         <div className="pt-32 px-6 text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">
             レッスンが見つかりません
           </h1>
-          <Link href="/learn" className="text-accent hover:underline">
+          <Link href="/learn" className="text-accent hover:underline text-sm">
             学習コースに戻る
           </Link>
         </div>
@@ -93,7 +150,7 @@ export default function LessonPage() {
     );
   }
 
-  const colors = LEVEL_COLORS[lesson.level];
+  const color = LEVEL_COLORS[lesson.level];
 
   function handleSelect(optionIndex: number) {
     if (submitted) return;
@@ -120,120 +177,127 @@ export default function LessonPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Header />
 
       <div className="pt-24 px-6 pb-20">
         <div className="mx-auto max-w-3xl">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-muted mb-6">
-            <Link href="/learn" className="hover:text-foreground transition">
+          <nav className="flex items-center gap-2 text-sm text-muted mb-8">
+            <Link
+              href="/learn"
+              className="hover:text-foreground hover:underline transition"
+            >
               学習コース
             </Link>
-            <span>/</span>
-            <span
-              className="font-medium px-2 py-0.5 rounded-full text-xs"
-              style={{ backgroundColor: colors.bgColor, color: colors.color }}
-            >
+            <span className="text-gray-300">/</span>
+            <span style={{ color }} className="font-medium">
               {lesson.levelLabel}
             </span>
-            <span>/</span>
-            <span className="text-foreground truncate">Lesson {lesson.order}</span>
+            <span className="text-gray-300">/</span>
+            <span className="text-foreground">Lesson {lesson.order}</span>
           </nav>
 
-          {/* Lesson Header */}
-          <div className="mb-6">
-            <div className="flex items-center gap-3 mb-2">
-              <span
-                className="flex h-10 w-10 items-center justify-center rounded-xl text-white text-sm font-bold"
-                style={{ backgroundColor: colors.color }}
+          {/* Scene Banner */}
+          <div className="mb-8 rounded-2xl overflow-hidden border border-card-border">
+            <div className="w-full">
+              <LessonScene slug={slug} />
+            </div>
+            <div className="p-5 sm:p-6">
+              <p
+                className="text-xs font-bold tracking-widest uppercase mb-2"
+                style={{ color }}
               >
-                {lesson.order}
-              </span>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">
-                  {lesson.title}
-                </h1>
-                <p className="text-sm text-muted mt-0.5">{lesson.description}</p>
-              </div>
+                Lesson {lesson.order}
+              </p>
+              <h1 className="text-2xl font-bold text-foreground sm:text-3xl mb-2">
+                {lesson.title}
+              </h1>
+              <p className="text-base text-muted">{lesson.description}</p>
             </div>
           </div>
 
           {/* Learning Objectives */}
           {lesson.objectives && lesson.objectives.length > 0 && (
             <div
-              className="mb-8 rounded-xl border bg-white p-5 sm:p-6"
-              style={{ borderLeftWidth: 4, borderLeftColor: colors.color }}
+              className="mb-10 border-l-4 pl-5 py-1"
+              style={{ borderColor: color }}
             >
-              <p className="text-sm font-semibold text-foreground mb-3">
-                このレッスンを修了すると、以下ができるようになります：
+              <p className="text-sm font-bold text-foreground mb-3">
+                このレッスンの学習目標
               </p>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5">
                 {lesson.objectives.map((obj, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted">
-                    <svg
-                      className="w-4 h-4 mt-0.5 shrink-0"
-                      style={{ color: colors.color }}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    <span>{obj}</span>
+                  <li
+                    key={i}
+                    className="text-sm text-muted leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[9px] before:w-1.5 before:h-1.5 before:rounded-full"
+                    style={
+                      {
+                        "--tw-before-bg": color,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <span
+                      className="absolute left-0 top-[9px] w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: color }}
+                    />
+                    {obj}
                   </li>
                 ))}
               </ul>
             </div>
           )}
 
+          {/* PDF Export */}
+          <div className="mb-6 flex justify-end">
+            <PdfExportButton
+              filename={`レッスン${lesson.order}_${lesson.title}.pdf`}
+              renderContent={(ref) => (
+                <LessonPdfContent
+                  ref={ref}
+                  lesson={lesson}
+                  slug={slug}
+                  quizScore={getProgress().quizScores[slug]}
+                />
+              )}
+            >
+              レッスンをPDFで保存
+            </PdfExportButton>
+          </div>
+
           {/* Tab Bar */}
-          <div className="sticky top-16 z-40 bg-background border-b border-card-border mb-8">
+          <div className="sticky top-16 z-40 bg-white border-b border-gray-200 mb-10">
             <div className="flex">
               {TABS.map((tab, i) => (
                 <button
-                  key={tab.name}
+                  key={tab}
                   onClick={() => setActiveTab(i)}
-                  className={`flex-1 py-3 text-center text-sm font-medium transition relative ${
+                  className={`flex-1 py-3.5 text-center text-sm transition relative ${
                     activeTab === i
-                      ? "text-foreground"
-                      : "text-muted hover:text-foreground"
+                      ? "font-bold text-foreground"
+                      : "font-medium text-muted hover:text-foreground"
                   }`}
                 >
-                  <span className="hidden sm:inline mr-1">{tab.icon}</span>
-                  {tab.name}
+                  {tab}
                   {activeTab === i && (
                     <div
-                      className="absolute bottom-0 left-0 right-0 h-0.5"
-                      style={{ backgroundColor: colors.color }}
+                      className="absolute bottom-0 left-0 right-0 h-[3px]"
+                      style={{ backgroundColor: color }}
                     />
                   )}
                 </button>
               ))}
             </div>
-            {/* Step progress */}
-            <div className="h-1 bg-gray-100 -mb-px">
-              <div
-                className="h-full transition-all duration-300"
-                style={{
-                  width: `${((activeTab + 1) / TABS.length) * 100}%`,
-                  backgroundColor: colors.color,
-                }}
-              />
-            </div>
           </div>
 
           {/* Tab Content */}
-          <div className="animate-fade-in-up">
+          <div>
             {/* Theory Tab */}
             {activeTab === 0 && (
-              <div
-                className="blog-content"
-                dangerouslySetInnerHTML={{ __html: lesson.theory }}
-              />
+              <div>
+                <LessonDiagram slug={slug} />
+                <TheoryContent slug={slug} theory={lesson.theory} />
+              </div>
             )}
 
             {/* Examples Tab */}
@@ -241,9 +305,9 @@ export default function LessonPage() {
               <div>
                 <div
                   className="blog-content"
-                  dangerouslySetInnerHTML={{ __html: lesson.examples }}
+                  dangerouslySetInnerHTML={{ __html: processExamplesHtml(lesson.examples) }}
                 />
-                <div className="mt-8 p-4 rounded-xl bg-gray-50 border border-card-border">
+                <div className="mt-8 border-l-4 border-gray-300 pl-5 py-2">
                   <p className="text-sm text-muted">
                     <strong className="text-foreground">ポイント：</strong>
                     トーク例はそのまま暗記するのではなく、自分の言葉でアレンジして使いましょう。
@@ -272,62 +336,69 @@ export default function LessonPage() {
                   setScore(0);
                   setQuizCompleted(false);
                 }}
-                colors={colors}
+                color={color}
               />
             )}
 
             {/* Practice Tab */}
             {activeTab === 3 && (
-              <div className="space-y-6">
-                <div className="rounded-2xl border border-card-border bg-white p-6 sm:p-8">
-                  <h2 className="text-lg font-bold text-foreground mb-3">
-                    実践練習のテーマ
-                  </h2>
-                  <p className="text-muted leading-relaxed">
-                    {lesson.practicePrompt}
-                  </p>
-                </div>
+              <div>
+                <h2 className="text-lg font-bold text-foreground mb-3">
+                  実践練習のテーマ
+                </h2>
+                <p className="text-muted leading-relaxed mb-8 text-base">
+                  {lesson.practicePrompt}
+                </p>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="border-t border-gray-200 pt-6 space-y-4">
                   <Link
                     href="/roleplay"
-                    className="flex flex-col items-center gap-3 rounded-2xl border border-card-border bg-white p-6 transition hover:border-accent hover:shadow-sm group"
+                    className="flex items-center justify-between py-3 border-b border-gray-100 group"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                      </svg>
-                    </div>
-                    <div className="text-center">
-                      <p className="font-semibold text-foreground group-hover:text-accent transition">
+                    <div>
+                      <p className="text-sm font-bold text-foreground group-hover:underline">
                         AIロープレで練習する
                       </p>
-                      <p className="text-xs text-muted mt-1">
+                      <p className="text-xs text-muted mt-0.5">
                         学んだ技術をAI相手に実践
                       </p>
                     </div>
+                    <svg
+                      className="w-4 h-4 text-gray-300 group-hover:text-foreground transition shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
                   </Link>
 
                   <Link
                     href="/worksheet"
-                    className="flex flex-col items-center gap-3 rounded-2xl border border-card-border bg-white p-6 transition hover:border-accent hover:shadow-sm group"
+                    className="flex items-center justify-between py-3 border-b border-gray-100 group"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                        <line x1="16" y1="13" x2="8" y2="13" />
-                        <line x1="16" y1="17" x2="8" y2="17" />
-                      </svg>
-                    </div>
-                    <div className="text-center">
-                      <p className="font-semibold text-foreground group-hover:text-accent transition">
+                    <div>
+                      <p className="text-sm font-bold text-foreground group-hover:underline">
                         ワークシートで準備する
                       </p>
-                      <p className="text-xs text-muted mt-1">
+                      <p className="text-xs text-muted mt-0.5">
                         商談準備を体系的に行う
                       </p>
                     </div>
+                    <svg
+                      className="w-4 h-4 text-gray-300 group-hover:text-foreground transition shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
                   </Link>
                 </div>
               </div>
@@ -335,19 +406,16 @@ export default function LessonPage() {
           </div>
 
           {/* Prev / Next Navigation */}
-          <div className="mt-12 flex items-center justify-between border-t border-card-border pt-6">
+          <div className="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
             {prev ? (
               <Link
                 href={`/learn/${prev.slug}`}
-                className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition group"
+                className="group"
               >
-                <svg className="w-4 h-4 transition group-hover:-translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-                <div className="text-right">
-                  <p className="text-xs text-muted">前のレッスン</p>
-                  <p className="font-medium text-foreground">{prev.title}</p>
-                </div>
+                <p className="text-xs text-muted mb-0.5">前のレッスン</p>
+                <p className="text-sm font-bold text-foreground group-hover:underline">
+                  {prev.title}
+                </p>
               </Link>
             ) : (
               <div />
@@ -355,20 +423,17 @@ export default function LessonPage() {
             {next ? (
               <Link
                 href={`/learn/${next.slug}`}
-                className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition group text-right"
+                className="text-right group"
               >
-                <div>
-                  <p className="text-xs text-muted">次のレッスン</p>
-                  <p className="font-medium text-foreground">{next.title}</p>
-                </div>
-                <svg className="w-4 h-4 transition group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
+                <p className="text-xs text-muted mb-0.5">次のレッスン</p>
+                <p className="text-sm font-bold text-foreground group-hover:underline">
+                  {next.title}
+                </p>
               </Link>
             ) : (
               <Link
                 href="/learn"
-                className="flex items-center gap-2 text-sm font-medium text-accent hover:underline"
+                className="text-sm font-semibold text-accent hover:underline"
               >
                 コース一覧に戻る
               </Link>
@@ -382,7 +447,40 @@ export default function LessonPage() {
   );
 }
 
-/* ── Quiz Component (Google Skillshop style) ─────── */
+/* ── Theory with inline diagrams ─────────────────── */
+
+function TheoryContent({ slug, theory }: { slug: string; theory: string }) {
+  const parts = theory.split(/<!-- DIAGRAM:([\w-]+) -->/);
+
+  if (parts.length === 1) {
+    return (
+      <div
+        className="blog-content"
+        dangerouslySetInnerHTML={{ __html: theory }}
+      />
+    );
+  }
+
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (i % 2 === 0) {
+          return part.trim() ? (
+            <div
+              key={i}
+              className="blog-content"
+              dangerouslySetInnerHTML={{ __html: part }}
+            />
+          ) : null;
+        }
+        const Comp = getSectionDiagram(slug, part);
+        return Comp ? <Comp key={`d-${i}`} /> : null;
+      })}
+    </>
+  );
+}
+
+/* ── Quiz Component ─────────────────────────────── */
 
 function QuizSection({
   quiz,
@@ -395,7 +493,7 @@ function QuizSection({
   onSubmit,
   onNext,
   onRetry,
-  colors,
+  color,
 }: {
   quiz: QuizQuestion[];
   currentQ: number;
@@ -407,11 +505,10 @@ function QuizSection({
   onSubmit: () => void;
   onNext: () => void;
   onRetry: () => void;
-  colors: { color: string; bgColor: string };
+  color: string;
 }) {
   const [showExplanation, setShowExplanation] = useState(false);
 
-  // Reset explanation toggle when question changes
   useEffect(() => {
     setShowExplanation(false);
   }, [currentQ]);
@@ -419,29 +516,26 @@ function QuizSection({
   if (quizCompleted) {
     const perfect = score === quiz.length;
     return (
-      <div className="text-center py-8">
-        <div
-          className="inline-flex h-20 w-20 items-center justify-center rounded-full text-3xl mb-4"
-          style={{ backgroundColor: colors.bgColor }}
+      <div className="py-8">
+        <p
+          className="text-5xl font-bold mb-3"
+          style={{ color }}
         >
-          {perfect ? "\u{1F389}" : "\u{1F4AA}"}
-        </div>
-        <h2 className="text-xl font-bold text-foreground mb-2">
-          クイズ完了！
-        </h2>
-        <p className="text-3xl font-bold mb-2" style={{ color: colors.color }}>
-          {score} / {quiz.length}
+          {score}/{quiz.length}
         </p>
-        <p className="text-muted mb-6">
+        <h2 className="text-xl font-bold text-foreground mb-2">
+          {perfect ? "全問正解" : "クイズ完了"}
+        </h2>
+        <p className="text-muted mb-6 text-sm">
           {perfect
-            ? "全問正解！素晴らしいです！"
+            ? "素晴らしい結果です。次のレッスンに進みましょう。"
             : score >= 2
-              ? "よくできました！復習して満点を目指しましょう。"
-              : "もう一度理論を復習してからチャレンジしてみましょう。"}
+              ? "よくできました。復習して満点を目指しましょう。"
+              : "もう一度理論を確認してからチャレンジしてみましょう。"}
         </p>
         <button
           onClick={onRetry}
-          className="rounded-xl border border-card-border px-6 py-2.5 text-sm font-medium text-foreground transition hover:border-accent"
+          className="text-sm font-semibold text-accent hover:underline"
         >
           もう一度挑戦する
         </button>
@@ -454,63 +548,70 @@ function QuizSection({
 
   return (
     <div>
-      {/* Progress */}
-      <div className="flex items-center justify-between mb-6">
-        <span className="text-sm font-medium text-foreground">
+      {/* Progress indicator */}
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-xs text-muted uppercase tracking-wide font-medium">
           知識の確認
-        </span>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted">
-            {currentQ + 1} / {quiz.length}
-          </span>
-          <div className="flex gap-1.5">
-            {quiz.map((_, i) => (
-              <div
-                key={i}
-                className="h-2 w-8 rounded-full transition-colors"
-                style={{
-                  backgroundColor:
-                    i < currentQ
-                      ? colors.color
-                      : i === currentQ
-                        ? colors.color + "80"
-                        : "#E5E7EB",
-                }}
-              />
-            ))}
-          </div>
-        </div>
+        </p>
+        <p className="text-xs text-muted">
+          {currentQ + 1} / {quiz.length}
+        </p>
+      </div>
+
+      {/* Progress dots */}
+      <div className="flex gap-1.5 mb-8">
+        {quiz.map((_, i) => (
+          <div
+            key={i}
+            className="h-1 flex-1"
+            style={{
+              backgroundColor:
+                i < currentQ ? color : i === currentQ ? color + "60" : "#E5E7EB",
+            }}
+          />
+        ))}
       </div>
 
       {/* Question */}
-      <div className="rounded-2xl border border-card-border bg-white p-6 sm:p-8 mb-4">
-        <p className="text-xs text-muted mb-2 uppercase tracking-wide">
+      <div className="mb-8">
+        <p className="text-xs text-muted mb-4">
           レッスンを完了するには、この設問に正解する必要があります。
         </p>
-        <h3 className="text-lg font-bold text-foreground mb-6">{q.question}</h3>
+        <h3 className="text-lg font-bold text-foreground mb-6 leading-relaxed">
+          {q.question}
+        </h3>
 
-        <p className="text-xs text-muted mb-3">適切なものを選択してください。</p>
-        <div className="space-y-3">
+        <p className="text-xs text-muted mb-3 font-medium">
+          適切なものを選択してください。
+        </p>
+        <div className="space-y-2">
           {q.options.map((option, i) => {
-            let borderColor = "border-card-border";
-            let bgColor = "bg-white";
-            let textColor = "text-foreground";
+            let borderStyle = "border-gray-200";
+            let bgStyle = "";
+            let textStyle = "text-foreground";
+            let indicatorStyle =
+              "border-gray-300 text-gray-400 bg-white";
 
             if (submitted) {
               if (i === q.answer) {
-                borderColor = "border-green-500";
-                bgColor = "bg-green-50";
-                textColor = "text-green-800";
+                borderStyle = "border-green-600";
+                bgStyle = "bg-green-50";
+                textStyle = "text-green-900";
+                indicatorStyle =
+                  "border-green-600 bg-green-600 text-white";
               } else if (i === selected && i !== q.answer) {
-                borderColor = "border-red-400";
-                bgColor = "bg-red-50";
-                textColor = "text-red-800";
+                borderStyle = "border-red-500";
+                bgStyle = "bg-red-50";
+                textStyle = "text-red-900";
+                indicatorStyle =
+                  "border-red-500 bg-red-500 text-white";
               } else {
-                textColor = "text-muted";
+                textStyle = "text-muted";
               }
             } else if (i === selected) {
-              borderColor = "border-accent";
-              bgColor = "bg-accent/5";
+              borderStyle = "border-foreground";
+              indicatorStyle =
+                "border-foreground bg-foreground text-white";
             }
 
             return (
@@ -518,28 +619,38 @@ function QuizSection({
                 key={i}
                 onClick={() => onSelect(i)}
                 disabled={submitted}
-                className={`w-full text-left rounded-xl border-2 ${borderColor} ${bgColor} p-4 transition ${
-                  !submitted ? "hover:border-accent cursor-pointer" : ""
+                className={`w-full text-left border-2 ${borderStyle} ${bgStyle} p-4 transition ${
+                  !submitted ? "hover:border-gray-400 cursor-pointer" : ""
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold ${
-                      submitted && i === q.answer
-                        ? "border-green-500 bg-green-500 text-white"
-                        : submitted && i === selected && i !== q.answer
-                          ? "border-red-400 bg-red-400 text-white"
-                          : i === selected && !submitted
-                            ? "border-accent bg-accent text-white"
-                            : "border-gray-300 text-gray-400"
-                    }`}
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold ${indicatorStyle}`}
                   >
                     {submitted && i === q.answer ? (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     ) : submitted && i === selected && i !== q.answer ? (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <line x1="18" y1="6" x2="6" y2="18" />
                         <line x1="6" y1="6" x2="18" y2="18" />
                       </svg>
@@ -547,7 +658,7 @@ function QuizSection({
                       String.fromCharCode(65 + i)
                     )}
                   </div>
-                  <span className={`text-sm ${textColor}`}>{option}</span>
+                  <span className={`text-sm ${textStyle}`}>{option}</span>
                 </div>
               </button>
             );
@@ -556,88 +667,78 @@ function QuizSection({
       </div>
 
       {/* Submit / Feedback / Next */}
-      <div className="space-y-4">
-        {/* Submit Button */}
-        {!submitted && (
-          <div className="text-center">
-            <button
-              onClick={onSubmit}
-              disabled={selected === null}
-              className={`rounded-xl px-8 py-3 text-sm font-semibold text-white transition ${
-                selected === null
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "hover:opacity-90"
+      {!submitted && (
+        <div>
+          <button
+            onClick={onSubmit}
+            disabled={selected === null}
+            className={`px-8 py-3 text-sm font-bold text-white transition ${
+              selected === null
+                ? "bg-gray-200 cursor-not-allowed text-gray-400"
+                : "bg-foreground hover:bg-foreground/90"
+            }`}
+            style={
+              selected !== null ? { backgroundColor: color } : undefined
+            }
+          >
+            送信
+          </button>
+        </div>
+      )}
+
+      {submitted && (
+        <div>
+          {/* Result banner */}
+          <div
+            className={`border-l-4 px-4 py-3 mb-4 ${
+              isCorrect
+                ? "border-green-600 bg-green-50"
+                : "border-red-500 bg-red-50"
+            }`}
+          >
+            <p
+              className={`text-sm font-bold ${
+                isCorrect ? "text-green-800" : "text-red-700"
               }`}
-              style={selected !== null ? { backgroundColor: colors.color } : undefined}
             >
-              送信
-            </button>
+              {isCorrect ? "正解" : "不正解"}
+            </p>
           </div>
-        )}
 
-        {/* Result feedback */}
-        {submitted && (
-          <div className="animate-fade-in-up">
-            {/* Correct/Incorrect banner */}
-            <div
-              className={`rounded-xl p-4 mb-4 ${
-                isCorrect
-                  ? "bg-green-50 border border-green-200"
-                  : "bg-red-50 border border-red-200"
+          {/* Toggle explanation */}
+          <button
+            onClick={() => setShowExplanation(!showExplanation)}
+            className="flex items-center gap-1.5 text-sm font-medium text-muted hover:text-foreground mb-4"
+          >
+            <svg
+              className={`w-3 h-3 transition-transform ${
+                showExplanation ? "rotate-90" : ""
               }`}
+              viewBox="0 0 24 24"
+              fill="currentColor"
             >
-              <div className="flex items-center gap-2 mb-1">
-                {isCorrect ? (
-                  <svg className="w-5 h-5 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="15" y1="9" x2="9" y2="15" />
-                    <line x1="9" y1="9" x2="15" y2="15" />
-                  </svg>
-                )}
-                <span className={`font-bold text-sm ${isCorrect ? "text-green-700" : "text-red-600"}`}>
-                  {isCorrect ? "正解！" : "不正解"}
-                </span>
-              </div>
+              <polygon points="6 3 20 12 6 21" />
+            </svg>
+            フィードバックを表示
+          </button>
+          {showExplanation && (
+            <div className="border-l-4 border-gray-200 pl-4 mb-6">
+              <p className="text-sm text-muted leading-relaxed">
+                {q.explanation}
+              </p>
             </div>
+          )}
 
-            {/* Toggle explanation */}
-            <button
-              onClick={() => setShowExplanation(!showExplanation)}
-              className="flex items-center gap-1.5 text-sm text-accent font-medium hover:underline mb-4"
-            >
-              <svg
-                className={`w-3 h-3 transition-transform ${showExplanation ? "rotate-90" : ""}`}
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <polygon points="6 3 20 12 6 21" />
-              </svg>
-              フィードバックを表示
-            </button>
-            {showExplanation && (
-              <div className="p-4 rounded-xl bg-gray-50 border border-card-border mb-4 animate-fade-in-up">
-                <p className="text-sm text-muted leading-relaxed">{q.explanation}</p>
-              </div>
-            )}
-
-            {/* Next button */}
-            <div className="text-center">
-              <button
-                onClick={onNext}
-                className="rounded-xl px-8 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-                style={{ backgroundColor: colors.color }}
-              >
-                {currentQ < quiz.length - 1 ? "次の問題" : "結果を見る"}
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+          {/* Next button */}
+          <button
+            onClick={onNext}
+            className="px-8 py-3 text-sm font-bold text-white transition hover:opacity-90"
+            style={{ backgroundColor: color }}
+          >
+            {currentQ < quiz.length - 1 ? "次の問題" : "結果を見る"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

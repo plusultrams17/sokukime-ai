@@ -14,6 +14,7 @@ export const intermediateLessons: Lesson[] = [
 <p>クロージングとは、お客様の<strong>決断を後押しする行為</strong>です。「売り込み」ではなく「背中を押すこと」と捉えてください。</p>
 <p>お客様が商品やサービスの説明を聞いて悩むのは<strong>当然のこと</strong>です。人は大きな決断をするとき、必ず迷います。だからこそ、営業パーソンによるクロージングが必要なのです。</p>
 
+<!-- DIAGRAM:closing-formula -->
 <h3>クロージングの基本公式</h3>
 <p>効果的なクロージングは、次の3つの要素で構成されます。</p>
 <ul>
@@ -22,6 +23,7 @@ export const intermediateLessons: Lesson[] = [
   <li><strong>沈黙</strong> — 言い切った後、相手の反応を待つ</li>
 </ul>
 
+<!-- DIAGRAM:ng-words -->
 <h3>絶対に使ってはいけないNGワード</h3>
 <p>以下のフレーズは成約率を大きく下げます。</p>
 <ul>
@@ -31,6 +33,7 @@ export const intermediateLessons: Lesson[] = [
 </ul>
 <p>代わりに<strong>「始めましょう」「やりましょう」「一緒に進めましょう」</strong>と言い切ってください。</p>
 
+<!-- DIAGRAM:closing-count -->
 <h3>クロージング回数と成約率の関係</h3>
 <p>データが示す事実があります。</p>
 <ul>
@@ -46,19 +49,25 @@ export const intermediateLessons: Lesson[] = [
     examples: `
 <h2>NGワードとGoodワードの比較</h2>
 
+<div class="example-ng">
 <h3>NG例</h3>
 <p>営業：「以上がサービスのご説明です。<strong>どうしますか？</strong>」</p>
 <p>営業：「一度お持ち帰りいただいて、<strong>ご検討ください。</strong>」</p>
 <p><em>→ お客様は「考えます」と言って去り、二度と戻ってこない</em></p>
+</div>
 
+<div class="example-ok">
 <h3>Good例</h3>
 <p>営業：「○○様のお悩みを解決するにはこのプランが最適です。<strong>始めましょう。</strong>」</p>
 <p><em>（そして沈黙。相手の反応を待つ）</em></p>
+</div>
 
 <h3>クロージング公式の実践例</h3>
+<div class="dialogue">
 <p>営業：「今月中にスタートされると初月の特典がつきます（<strong>理由</strong>）。○○様、一緒に始めましょう（<strong>訴求</strong>）。」</p>
 <p><em>（3秒間の沈黙 — <strong>沈黙</strong>）</em></p>
 <p>お客様：「……そうですね、やってみます。」</p>
+</div>
 `,
     quiz: [
       {
@@ -121,10 +130,12 @@ export const intermediateLessons: Lesson[] = [
 <p>人間には<strong>「多数派に従いたい」</strong>という根源的な心理があります。これを<strong>社会的証明</strong>と呼びます。</p>
 <p>例えば、行列のできているラーメン屋を見ると「美味しいに違いない」と感じますよね。レビューサイトで★4.5の評価を見ると安心して購入できます。この心理をクロージングに活用するのです。</p>
 
+<!-- DIAGRAM:minasan-emphasis -->
 <h3>「みなさん」の強調法</h3>
 <p>社会的証明のキーワードは<strong>「みなさん」</strong>です。ただし、普通に「皆さん選ばれています」と言うだけでは弱い。</p>
 <p>効果的な伝え方は、<strong>「みなっっっさん」</strong>と少し伸ばして強調することです。この一工夫で、お客様の中に「自分もそうすべきだ」という気持ちが芽生えます。</p>
 
+<!-- DIAGRAM:review-psychology -->
 <h3>レビュー心理の活用</h3>
 <p>★4.5の商品と★3.0の商品、どちらを買いますか？ 答えは明白です。</p>
 <ul>
@@ -132,6 +143,7 @@ export const intermediateLessons: Lesson[] = [
   <li>「○○人が利用中」という数字 → <strong>信頼感</strong> → 決断の後押し</li>
 </ul>
 
+<!-- DIAGRAM:repetition-effect -->
 <h3>繰り返し効果</h3>
 <p>社会的証明は<strong>1回言うだけでは足りません</strong>。トークの中で何度も「みなさん選ばれています」「多くの方がスタートされています」と挟むことで、効果が蓄積されていきます。</p>
 
@@ -211,6 +223,7 @@ export const intermediateLessons: Lesson[] = [
 <p>人間には<strong>「自分の発言や行動に一貫していたい」</strong>という強い心理欲求があります。一度「はい」と言ったことを覆すのは、心理的に非常に抵抗があるのです。</p>
 <p>例えば「健康は大切ですよね？」と聞かれて「はい」と答えた人は、その後に健康食品を勧められると断りにくくなります。これが<strong>一貫性の法則</strong>です。</p>
 
+<!-- DIAGRAM:premise-closing-link -->
 <h3>前提設定とクロージングの連動</h3>
 <p>一貫性の法則を活用するには、<strong>商談の序盤で前提を設定</strong>しておくことが重要です。</p>
 <ul>
@@ -219,9 +232,11 @@ export const intermediateLessons: Lesson[] = [
 </ul>
 <p>お客様は序盤で「はい」と言った自分に一貫していたいため、断りにくくなります。</p>
 
+<!-- DIAGRAM:no-lie-design -->
 <h3>嘘をつかせない設計</h3>
 <p>一貫性の法則の本質は、<strong>お客様に嘘をつかせないこと</strong>です。序盤で「良ければやります」と言った人が、終盤で「やっぱりいいです」と言うのは、自分自身に嘘をつくことになります。この心理的負担が決断を後押しするのです。</p>
 
+<!-- DIAGRAM:silence-ally -->
 <h3>「。」で言い切り、「間」を取る</h3>
 <p>一貫性を活用したクロージングでは、訴求を<strong>「。」で言い切る</strong>ことが重要です。</p>
 <p>「始めましょう。」と言い切った後、<strong>沈黙</strong>してください。この「間」がお客様に考える時間を与え、一貫性の心理が働く余地を作ります。</p>
@@ -302,6 +317,7 @@ export const intermediateLessons: Lesson[] = [
 <h2>カギカッコ技術とは</h2>
 <p><strong>カギカッコ技術</strong>とは、過去のお客様の声を<strong>そのまま引用して伝える</strong>第三者話法のことです。営業パーソン自身の言葉ではなく、第三者の言葉として伝えることで、信頼性と説得力が大幅に向上します。</p>
 
+<!-- DIAGRAM:third-party-vs -->
 <h3>なぜ第三者の声が効くのか</h3>
 <p>人は営業パーソンの言葉を「セールストーク」として警戒します。しかし、<strong>他のお客様の生の声</strong>は利害関係がないため、素直に受け入れやすいのです。</p>
 <ul>
@@ -309,6 +325,7 @@ export const intermediateLessons: Lesson[] = [
   <li>「お客様から『もっと早くやればよかった』と言われました」→ <em>「そうなんだ、それなら安心かも」</em></li>
 </ul>
 
+<!-- DIAGRAM:quote-phrases -->
 <h3>定番カギカッコフレーズ</h3>
 <p>以下は特に効果的なフレーズです。</p>
 <ul>
@@ -321,6 +338,7 @@ export const intermediateLessons: Lesson[] = [
 <h3>間の取り方</h3>
 <p>カギカッコを使う際は、<strong>引用の前に一拍置く</strong>ことが重要です。「先日のお客様が……」と少し間を置いてから引用することで、臨場感が生まれ、お客様がその場面を想像しやすくなります。</p>
 
+<!-- DIAGRAM:three-techniques-combo -->
 <h3>基本3技術の組み合わせ</h3>
 <p>最も強力なクロージングは、<strong>社会的証明＋一貫性＋カギカッコ</strong>の3つを組み合わせることです。この3つを一つのクロージングトークに織り込めるようになれば、成約率は飛躍的に向上します。</p>
 `,
@@ -394,6 +412,7 @@ export const intermediateLessons: Lesson[] = [
 <h2>ポジティブクロージングとは</h2>
 <p>ポジティブクロージングとは、商品・サービスを使った<strong>明るい未来（天国）</strong>をお客様にイメージさせて決断を促す技法です。「シングル」と「トリプル」の2種類があります。</p>
 
+<!-- DIAGRAM:positive-single-flow -->
 <h3>ポジティブシングル</h3>
 <p>ポジティブシングルの流れは以下の通りです。</p>
 <ul>
@@ -405,6 +424,7 @@ export const intermediateLessons: Lesson[] = [
 </ul>
 <p>この一連の流れの中で、<strong>リアクションは通常の3倍</strong>にしてください。「えっ、すごいですね！」「なるほど！」と大きくリアクションすることで、お客様のテンションも上がります。また、お客様の言葉を<strong>オウム返し</strong>して共感を示すことも重要です。</p>
 
+<!-- DIAGRAM:positive-triple -->
 <h3>ポジティブトリプル</h3>
 <p>ポジティブトリプルは、ポジティブな訴求を<strong>3連発</strong>で畳みかけるリズム技法です。</p>
 <ul>
@@ -414,6 +434,7 @@ export const intermediateLessons: Lesson[] = [
 </ul>
 <p>3つのベネフィットは<strong>コンパクトに、長さを揃える</strong>ことが重要です。リズムよく畳みかけることで、お客様の気持ちが高まります。</p>
 
+<!-- DIAGRAM:pyramid-structure -->
 <h3>ピラミッドストラクチャー</h3>
 <p>トリプルは<strong>ピラミッドストラクチャー</strong>を意識してください。最も強いベネフィットを最後に持ってくることで、クライマックスに向かって盛り上がる構成になります。</p>
 `,
@@ -486,6 +507,7 @@ export const intermediateLessons: Lesson[] = [
 <h2>ネガティブクロージングとは</h2>
 <p>ネガティブクロージングとは、商品・サービスを<strong>使わなかった場合の暗い未来（地獄）</strong>をお客様にイメージさせて決断を促す技法です。ポジティブとは逆のアプローチですが、<strong>心理的インパクトはネガティブの方が強い</strong>とされています。</p>
 
+<!-- DIAGRAM:negative-single-flow -->
 <h3>ネガティブシングル</h3>
 <p>ネガティブシングルの流れは以下の通りです。</p>
 <ul>
@@ -497,11 +519,13 @@ export const intermediateLessons: Lesson[] = [
 <h3>ネガティブトリプル</h3>
 <p>ネガティブシングルを<strong>3連発</strong>で畳みかける技法です。「しかも」「さらに」をつなぎ言葉にして、ゆさぶりを重ねていきます。</p>
 
+<!-- DIAGRAM:respect-first -->
 <h3>必ず敬意を先に示す</h3>
 <p>ネガティブクロージングで<strong>最も重要なルール</strong>があります。それは、ネガティブな話をする前に<strong>必ず敬意を示す</strong>ことです。</p>
 <p>例：「<strong>○○様に限って当てはまらないと思いますが</strong>……」</p>
 <p>この前置きなしにいきなりネガティブな話をすると、お客様は攻撃されたと感じてしまいます。</p>
 
+<!-- DIAGRAM:denial-guidance -->
 <h3>否定誘導と補正</h3>
 <p>強力なテクニックとして<strong>否定誘導</strong>があります。</p>
 <ul>
@@ -511,6 +535,7 @@ export const intermediateLessons: Lesson[] = [
 </ul>
 <p>例：「まさか、この状況を放置するようなお考えではないですよね？」→ お客様は「もちろん違います」と答え、行動する方向に自分を誘導するのです。</p>
 
+<!-- DIAGRAM:negative-impact -->
 <h3>ネガティブの心理的インパクト</h3>
 <p>心理学研究により、人は<strong>「得する喜び」よりも「損する痛み」の方を強く感じる</strong>ことがわかっています。だからこそ、ネガティブクロージングは非常に効果的なのです。</p>
 `,
@@ -586,6 +611,7 @@ export const intermediateLessons: Lesson[] = [
 <h2>2つの欲求パターン</h2>
 <p>人間の欲求は大きく<strong>2つのパターン</strong>に分けられます。クロージングではこの両方を使い分けることが重要です。</p>
 
+<!-- DIAGRAM:desire-comparison -->
 <h3>積極的欲求（ポジティブ欲求）</h3>
 <p>積極的欲求とは、<strong>「○○したい」「○○になりたい」</strong>というポジティブな動機です。</p>
 <ul>
@@ -603,13 +629,16 @@ export const intermediateLessons: Lesson[] = [
 </ul>
 <p>実は、<strong>消極的欲求の方が行動を起こす力が強い</strong>のです。</p>
 
+<!-- DIAGRAM:prospect-theory -->
 <h3>プロスペクト理論（損失回避バイアス）</h3>
 <p>行動経済学のプロスペクト理論によると、人は<strong>「得する喜び」よりも「損する痛み」を約2倍強く感じる</strong>ことがわかっています。これを<strong>損失回避バイアス</strong>と呼びます。</p>
 <p>例えば、1万円を拾った喜びよりも、1万円を落とした悲しみの方がはるかに大きいのです。</p>
 
+<!-- DIAGRAM:freud-principle -->
 <h3>フロイトの快楽原則</h3>
 <p>フロイトの快楽原則も同様のことを示しています。人間は<strong>「快楽を求める」よりも「苦痛を避ける」方に強く動機づけられる</strong>のです。この原理はセールスにおいても大きな武器になります。</p>
 
+<!-- DIAGRAM:ideal-ratio -->
 <h3>理想的な配分</h3>
 <p>ポジティブとネガティブの理想的な配分は<strong>ネガティブ80%：ポジティブ20%</strong>です。</p>
 <p>ただし、ネガティブだけでは暗い印象で終わってしまうため、最後はポジティブで締めくくることが重要です。</p>

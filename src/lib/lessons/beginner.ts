@@ -14,6 +14,7 @@ export const beginnerLessons: Lesson[] = [
 <h2>営業マインドセットとは</h2>
 <p>営業の成果を左右する最大の要因は、テクニックではなく<strong>マインドセット（考え方の土台）</strong>です。正しいマインドセットを持つことで、テクニックが初めて活きてきます。</p>
 
+<!-- DIAGRAM:effect-oriented -->
 <h3>効果本位の考え方</h3>
 <p>「頑張ったかどうか」ではなく、<strong>「結果がどうだったか」に責任を持つ</strong>考え方を効果本位と呼びます。プロセスを言い訳にせず、常に結果から逆算して行動を設計しましょう。</p>
 <ul>
@@ -22,6 +23,7 @@ export const beginnerLessons: Lesson[] = [
   <li>「やったけどダメでした」を禁句にする</li>
 </ul>
 
+<!-- DIAGRAM:confidence-formula -->
 <h3>自信の正体</h3>
 <p>自信は生まれつきの性格ではありません。<strong>知識 × 経験 × フィードバック</strong> の3要素で構成されます。</p>
 <ul>
@@ -31,6 +33,7 @@ export const beginnerLessons: Lesson[] = [
 </ul>
 <p>この3つを意識的に増やすことで、自信は後天的に身につきます。</p>
 
+<!-- DIAGRAM:four-categories -->
 <h3>営業の4つのカテゴリー</h3>
 <p>自信と知識の掛け合わせで、営業パーソンは4つに分類されます。</p>
 <ul>
@@ -40,6 +43,7 @@ export const beginnerLessons: Lesson[] = [
   <li><strong>④ 自信あり × 知識あり → 「トップセールス」</strong>：適切な提案を堂々と行える</li>
 </ul>
 
+<!-- DIAGRAM:buying-mindset -->
 <h3>「買ってもらう」という発想</h3>
 <p>営業は「売る」のではなく<strong>「買ってもらう」</strong>行為です。お客様の課題を解決する手段として商品を提示し、お客様自身が「これが必要だ」と判断して購入に至る。その手助けをするのが営業の本質です。</p>
 
@@ -50,15 +54,24 @@ export const beginnerLessons: Lesson[] = [
 <h2>実践トーク例</h2>
 
 <h3>初回訪問時の自己紹介トーク</h3>
-<p><strong>NG例（自信なし）：</strong></p>
+<div class="example-ng">
+<h3>NG例（自信なし）</h3>
 <p>「あ、すみません…○○会社の田中と申しますが…お忙しいところ恐れ入ります…えっと、今日は少しお時間いただければと思いまして…」</p>
-
-<p><strong>OK例（堂々とした態度）：</strong></p>
+</div>
+<div class="example-ok">
+<h3>OK例（堂々とした態度）</h3>
 <p>「はじめまして！○○会社の田中と申します。本日は御社の○○についてお役に立てる情報をお持ちしました。10分ほどお時間いただけますでしょうか。」</p>
+</div>
 
 <h3>断られた時の対応</h3>
-<p><strong>NG例：</strong>「そうですか…わかりました…（落ち込む）」</p>
-<p><strong>OK例：</strong>「率直にお聞かせいただきありがとうございます。差し支えなければ、どのあたりが気になられましたか？今後の参考にさせていただきたく。」</p>
+<div class="example-ng">
+<h3>NG例</h3>
+<p>「そうですか…わかりました…（落ち込む）」</p>
+</div>
+<div class="example-ok">
+<h3>OK例</h3>
+<p>「率直にお聞かせいただきありがとうございます。差し支えなければ、どのあたりが気になられましたか？今後の参考にさせていただきたく。」</p>
+</div>
 `,
     quiz: [
       {
@@ -118,6 +131,7 @@ export const beginnerLessons: Lesson[] = [
 <h2>なぜ褒めるのか</h2>
 <p>褒める目的は、お世辞を言うことではありません。<strong>お客様の心を開かせ、本音を引き出しやすい関係を築く</strong>ためです。人は自分を認めてくれる相手に対して心理的な壁を下げます。</p>
 
+<!-- DIAGRAM:comparison-praise -->
 <h3>比較対象を使う褒め方</h3>
 <p>ただ「すごいですね」と言うだけでは、お世辞に聞こえてしまいます。<strong>比較対象を入れる</strong>ことで、褒め言葉にリアリティが生まれます。</p>
 <ul>
@@ -126,6 +140,7 @@ export const beginnerLessons: Lesson[] = [
   <li>具体的な数字や経験を入れると信憑性が増す</li>
 </ul>
 
+<!-- DIAGRAM:double-praise -->
 <h3>2度褒めの技術</h3>
 <p>1回褒めただけでは、社交辞令だと思われることがあります。<strong>2度褒め</strong>のテクニックを使いましょう。</p>
 <ul>
@@ -142,6 +157,7 @@ export const beginnerLessons: Lesson[] = [
   <li><strong>実績・評判</strong>：業績、口コミ、受賞歴、メディア掲載など</li>
 </ul>
 
+<!-- DIAGRAM:open-signals -->
 <h3>心が開くシグナル</h3>
 <p>褒めが効いているかどうかは、以下のシグナルで判断できます。</p>
 <ul>
@@ -223,6 +239,7 @@ export const beginnerLessons: Lesson[] = [
 <h2>前提設定とは</h2>
 <p>前提設定とは、<strong>商談の冒頭でゴールと判断基準を共有する</strong>テクニックです。これにより、商談終了時に「検討します」と言われることを未然に防ぎます。</p>
 
+<!-- DIAGRAM:four-steps -->
 <h3>前提設定の4ステップ</h3>
 <p>以下の4つを順番に伝えます。</p>
 <ul>
@@ -232,6 +249,7 @@ export const beginnerLessons: Lesson[] = [
   <li><strong>ステップ④</strong>：「それでよろしいですか？」 — 合意を取る（イエスセット）</li>
 </ul>
 
+<!-- DIAGRAM:twice-timing -->
 <h3>なぜ前提設定を2回行うのか</h3>
 <p>前提設定は<strong>商談の最初と、プレゼン前の2回</strong>行うのが効果的です。</p>
 <ul>
@@ -240,6 +258,7 @@ export const beginnerLessons: Lesson[] = [
 </ul>
 <p>2回伝えることで、お客様の記憶に定着し、「検討します」という逃げ道を封じる効果が倍増します。</p>
 
+<!-- DIAGRAM:cocktail-party -->
 <h3>カクテルパーティー効果の活用</h3>
 <p>人は膨大な情報の中から<strong>自分に関係のある情報だけを選択的に注意する</strong>性質を持っています（選択的注意）。前提設定で「今日決めてくださいね」と事前に伝えておくと、プレゼン中もお客様は無意識に「決める前提」で話を聞くようになります。</p>
 
@@ -321,6 +340,7 @@ export const beginnerLessons: Lesson[] = [
 </ul>
 <p>つまり、<strong>「何を言うか」よりも「どう言うか」が9割以上</strong>を占めています。</p>
 
+<!-- DIAGRAM:mehrabian-ratio -->
 <h3>所作の一致</h3>
 <p>最も重要なのは、<strong>言葉と態度が一致している</strong>ことです。「御社の未来に貢献します！」と言いながら目が泳いでいたら、お客様は言葉ではなく態度を信じます。</p>
 <ul>
@@ -329,6 +349,7 @@ export const beginnerLessons: Lesson[] = [
   <li>共感を示す場面 → うなずき・やや前傾姿勢で</li>
 </ul>
 
+<!-- DIAGRAM:gesture-match -->
 <h3>声のトーン・スピード・間の取り方</h3>
 <ul>
   <li><strong>トーン</strong>：重要なポイントでは声を低く、ゆっくりに。雑談では明るく高めに</li>
@@ -344,6 +365,7 @@ export const beginnerLessons: Lesson[] = [
   <li>重要ポイントでは手のひらを上に向けて強調する</li>
 </ul>
 
+<!-- DIAGRAM:first-impression -->
 <h3>第一印象の重要性</h3>
 <p>人の第一印象は<strong>最初の7秒</strong>で決まると言われています。最初の7秒で好印象を与えるためのチェックポイント：</p>
 <ul>
@@ -426,6 +448,7 @@ export const beginnerLessons: Lesson[] = [
 <h2>引き出しフレーズとは</h2>
 <p>引き出しフレーズとは、<strong>お客様自身にニーズを語らせる</strong>ための質問テクニックです。直接的に「困っていることはありますか？」と聞いても、警戒されて本音は出てきません。</p>
 
+<!-- DIAGRAM:third-person-method -->
 <h3>第三者話法</h3>
 <p>第三者話法とは、<strong>「他の方もこう言っている」という形で話題を振る</strong>テクニックです。</p>
 <ul>
@@ -443,6 +466,7 @@ export const beginnerLessons: Lesson[] = [
 </ul>
 <p>口語→文語の切り替えにより、<strong>リアリティと丁寧さが両立</strong>します。</p>
 
+<!-- DIAGRAM:colloquial-formal -->
 <h3>想定ニーズの3つの方向性</h3>
 <p>事前に準備する引き出しフレーズは、以下の3方向から考えます。</p>
 <ul>
@@ -451,6 +475,7 @@ export const beginnerLessons: Lesson[] = [
   <li><strong>品質</strong>：「品質を上げたい」「顧客満足度を高めたい」</li>
 </ul>
 
+<!-- DIAGRAM:three-needs-direction -->
 <h3>お客様自身に語らせる重要性</h3>
 <p>営業が「こういう課題がありますよね？」と決めつけるのではなく、<strong>お客様自身の口から課題を言ってもらう</strong>ことが重要です。自分で言った言葉は自分自身を説得する力を持ちます。これを心理学では<strong>一貫性の原理</strong>と呼びます。</p>
 `,
@@ -526,11 +551,13 @@ export const beginnerLessons: Lesson[] = [
 <h2>深掘りの技術とは</h2>
 <p>引き出しフレーズでニーズの入口を見つけたら、次は<strong>深掘り質問</strong>でそのニーズを具体化・深刻化させます。表面的なヒアリングで終わると、お客様は「まあ、なんとかなっている」と感じ、購買意欲が高まりません。</p>
 
+<!-- DIAGRAM:shallow-to-deep -->
 <h3>浅い質問→深い質問への転換</h3>
 <p><strong>浅い質問</strong>：「何かお困りですか？」→ 「特にないです」で終わる</p>
 <p><strong>深い質問</strong>：「具体的にどんな場面で感じますか？」→ 具体的なエピソードが出てくる</p>
 <p>ポイントは<strong>「具体的に」を2〜4回繰り返す</strong>ことです。</p>
 
+<!-- DIAGRAM:question-chain -->
 <h3>深掘り質問チェーン（5段階）</h3>
 <p>以下の5つの質問を順番に投げかけることで、ニーズを深く掘り下げます。</p>
 <ul>
@@ -541,6 +568,7 @@ export const beginnerLessons: Lesson[] = [
   <li><strong>⑤ 感情</strong>：「それについて、今どんなお気持ちですか？」 — 感情に訴える</li>
 </ul>
 
+<!-- DIAGRAM:time-cost-calc -->
 <h3>「いつから」で時間軸と金額換算</h3>
 <p>「いつからですか？」と聞くことで、<strong>問題の累積コスト</strong>を計算できます。</p>
 <ul>
@@ -627,6 +655,7 @@ export const beginnerLessons: Lesson[] = [
 <h2>利点話法とは</h2>
 <p>利点話法とは、<strong>商品のセールスポイント（SP）をお客様にとっての具体的なメリット（ベネフィット）に変換して伝える</strong>技術です。</p>
 
+<!-- DIAGRAM:sp-benefit-difference -->
 <h3>SPとベネフィットの違い</h3>
 <ul>
   <li><strong>SP（セールスポイント）</strong>：商品の機能・特徴・スペック<br>例：「24時間365日対応のサポート体制」</li>
@@ -642,6 +671,7 @@ export const beginnerLessons: Lesson[] = [
   <li>ベネフィット：「面倒なソフト更新作業が不要で、常に最新の状態で使えます」</li>
 </ul>
 
+<!-- DIAGRAM:three-benefit-sets -->
 <h3>3組のSP→ベネフィットを準備する</h3>
 <p>プレゼンでは、<strong>最低3組のSP→ベネフィット変換</strong>を用意しましょう。</p>
 <ul>
@@ -651,6 +681,7 @@ export const beginnerLessons: Lesson[] = [
 </ul>
 <p>3組あれば、お客様のどの反応にも対応できます。</p>
 
+<!-- DIAGRAM:customer-perspective -->
 <h3>お客様目線の言い換え</h3>
 <p>ベネフィットを語る際は、<strong>主語を「当社の商品は」から「お客様は」に変える</strong>ことを意識しましょう。</p>
 <ul>
@@ -737,6 +768,7 @@ export const beginnerLessons: Lesson[] = [
 <h2>比較話法とは</h2>
 <p>比較話法とは、<strong>他社の弱みと自社の強みを対比させ、その差がお客様のメリットにつながることを伝える</strong>テクニックです。</p>
 
+<!-- DIAGRAM:comparison-three-steps -->
 <h3>比較話法の3ステップ</h3>
 <ul>
   <li><strong>ステップ①</strong>：他社の弱み（一般論として）<br>「一般的に、この業界では○○という課題がよくあります」</li>
@@ -748,6 +780,7 @@ export const beginnerLessons: Lesson[] = [
 <h2>IF活用とは</h2>
 <p>IF活用とは、<strong>「もし〜だったら」と想像させることで、感情を動かす</strong>テクニックです。人間の脳は、<strong>現実に起きていることと想像していることを完全には区別できない</strong>という認知心理学の原理を活用します。</p>
 
+<!-- DIAGRAM:heaven-hell-if -->
 <h3>天国IF（ポジティブ想像）</h3>
 <p>「もし○○が実現したら、どんな気分ですか？」とポジティブな未来を想像させます。</p>
 <ul>
@@ -763,10 +796,12 @@ export const beginnerLessons: Lesson[] = [
   <li>「もし競合他社が先にこの対策を取ったら、どうなりそうですか？」</li>
 </ul>
 
+<!-- DIAGRAM:loss-aversion -->
 <h3>地獄IFは天国IFの2倍の訴求力</h3>
 <p>心理学の研究で、<strong>人は「得をする喜び」よりも「損をする恐怖」の方が2倍強く感じる</strong>ことがわかっています（損失回避性）。つまり地獄IFは天国IFの約2倍の効果があります。</p>
 <p>ただし、<strong>地獄IFの使いすぎは逆効果</strong>です。不安を煽りすぎるとお客様は引いてしまいます。天国IF → 地獄IF → 天国IFの順で使い、最後はポジティブな未来で締めくくるのが理想です。</p>
 
+<!-- DIAGRAM:brain-imagination -->
 <h3>脳は現実と想像を区別できない</h3>
 <p>レモンを想像すると唾液が出るように、<strong>脳は鮮明な想像を現実と同じように処理</strong>します。IFで未来を想像させると、お客様の脳は「すでにそれを体験した」かのように反応し、感情が動きます。</p>
 `,

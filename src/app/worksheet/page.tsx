@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import type { ProductInfo } from "@/types/worksheet";
+import { PdfExportButton } from "@/components/pdf/PdfExportButton";
+import WorksheetPdfContent from "@/components/pdf/WorksheetPdfContent";
 
 /* ─── Constants ────────────────────────────────── */
 
@@ -17,8 +19,8 @@ const PHASES = [
   { num: "Step 1", name: "アプローチ", sub: "信頼構築", color: "#0F6E56" },
   { num: "Step 2", name: "ヒアリング", sub: "課題発掘", color: "#185FA5" },
   { num: "Step 3", name: "プレゼン", sub: "価値提案", color: "#534AB7" },
-  { num: "Step 4", name: "クロージング", sub: "決断促進", color: "#993C1D" },
-  { num: "Step 5", name: "反論処理", sub: "切り返し", color: "#A32D2D" },
+  { num: "Step 4", name: "クロージング", sub: "決断促進", color: "#2563EB" },
+  { num: "Step 5", name: "反論処理", sub: "切り返し", color: "#7C3AED" },
 ];
 
 /* ─── Sub Components ──────────────────────────── */
@@ -644,7 +646,43 @@ export default function WorksheetPage() {
             {activePhase === 4 && (
               <div className="animate-fadeIn mt-6 rounded-2xl border border-card-border bg-card p-6 shadow-sm sm:p-8">
                 <h3 className="mb-1 text-lg font-bold">反論処理シート</h3>
-                <p className="mb-6 text-sm text-muted">「考えます」と言われた時の切り返し5技法。3〜5回繰り返すと80%以上が成約する</p>
+                <p className="mb-6 text-sm text-muted">「考えます」と言われた時の切り返しパターンを事前準備する</p>
+
+                {/* 4大パターン */}
+                <SectionLabel color={pc}>想定される反論（4大パターン）</SectionLabel>
+                <p className="mb-3 text-xs text-muted">お客様の「考えます」の裏にある本音を4パターンに分類し、それぞれの切り返しを準備する</p>
+                <div className="space-y-4">
+                  {[
+                    { num: "1", title: "意思決定の壁", color: "#0F6E56", scriptLabel: "想定セリフ", scriptPlaceholder: "例：上司に相談しないと…", scriptHint: "上司・家族など、自分だけでは決められないケース", rebuttalPlaceholder: "例：そうですよね、大きな決断ですから当然です。ちなみに、○○さんご自身は良いと思ってくださっていますか？もしそうでしたら、上司の方にご説明しやすい資料を一緒に作りましょう。" },
+                    { num: "2", title: "比較検討", color: "#185FA5", scriptLabel: "想定セリフ", scriptPlaceholder: "例：他社も見てから決めたい", scriptHint: "他社と比較・もう少し調べたいケース", rebuttalPlaceholder: "例：もちろんです、比較検討は大事ですよね。ただ実は、他も見たいとおっしゃる方の多くは「迷っているだけ」なんです。○○さんが重視されるポイントでは、弊社が一番お力になれると確信しています。" },
+                    { num: "3", title: "予算の壁", color: "#2563EB", scriptLabel: "想定セリフ", scriptPlaceholder: "例：ちょっと高いかな…", scriptHint: "価格が高い・予算がないケース", rebuttalPlaceholder: "例：高く感じさせてしまって申し訳ございません。私の伝え方が足りなかっただけなんです。みなっさん「安いよね」とおっしゃってくださる理由は、○○だから○○、しかも○○だから○○なんです。" },
+                    { num: "4", title: "タイミングの壁", color: "#7C3AED", scriptLabel: "想定セリフ", scriptPlaceholder: "例：今はまだいいかな", scriptHint: "今じゃなくてもいい・来月以降でケース", rebuttalPlaceholder: "例：いつかはやりたいとお思いですよね？実は「今じゃない」とおっしゃった方の多くが、半年後に「あの時やっておけば…」とおっしゃるんです。問題は先送りするほど大きくなります。" },
+                  ].map((pattern) => (
+                    <div key={pattern.num} className="rounded-xl border border-card-border bg-background p-4">
+                      <div className="mb-3 flex items-center gap-2">
+                        <span
+                          className="inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                          style={{ background: pattern.color }}
+                        >
+                          {pattern.num}
+                        </span>
+                        <span className="text-sm font-bold">{pattern.title}</span>
+                      </div>
+                      <InputField
+                        label={pattern.scriptLabel}
+                        placeholder={pattern.scriptPlaceholder}
+                        hint={pattern.scriptHint}
+                        value={f(`obj${pattern.num}Script`)} onChange={(v) => setF(`obj${pattern.num}Script`, v)}
+                      />
+                      <InputField
+                        label="あなたの切り返し"
+                        placeholder={pattern.rebuttalPlaceholder}
+                        multiline
+                        value={f(`obj${pattern.num}Rebuttal`)} onChange={(v) => setF(`obj${pattern.num}Rebuttal`, v)}
+                      />
+                    </div>
+                  ))}
+                </div>
 
                 {/* 共通の型 */}
                 <SectionLabel color={pc}>切り返しの型（全技法共通の冒頭）</SectionLabel>
@@ -716,7 +754,7 @@ export default function WorksheetPage() {
                   </TechniqueCard>
 
                   <TechniqueCard
-                    number="4" title="すり替え" color="#993C1D"
+                    number="4" title="すり替え" color="#2563EB"
                     description="他社比較・他者相談・今じゃなくてもいいに有効。相手の主張を別の角度から指摘する"
                   >
                     <InputField
@@ -783,6 +821,24 @@ export default function WorksheetPage() {
               >
                 次のステップ →
               </button>
+            </div>
+
+            {/* PDF Export */}
+            <div className="mt-4 text-center">
+              <PdfExportButton
+                filename={`営業準備ワークシート_${industry}_${new Date().toISOString().slice(0, 10)}.pdf`}
+                renderContent={(ref) => (
+                  <WorksheetPdfContent
+                    ref={ref}
+                    industry={industry}
+                    productInfo={productInfo}
+                    phaseData={phaseData}
+                    previews={previews}
+                  />
+                )}
+              >
+                全ステップをPDFで保存
+              </PdfExportButton>
             </div>
           </div>
         </section>

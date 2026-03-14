@@ -41,6 +41,12 @@ export function StickyCTA() {
           >
             📋 分析
           </Link>
+          <Link
+            href="/learn"
+            className="flex h-10 flex-1 items-center justify-center rounded-xl border-2 border-accent px-5 text-sm font-bold text-accent transition hover:bg-accent/5 sm:flex-none"
+          >
+            📖 学習
+          </Link>
         </div>
       </div>
     </div>
