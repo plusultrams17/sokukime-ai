@@ -9,7 +9,6 @@ interface HeaderProps {
 }
 
 const navLinks = [
-  { href: "/worksheet", label: "ワークシート" },
   { href: "/learn", label: "学習" },
   { href: "/blog", label: "ブログ" },
   { href: "/pricing", label: "料金プラン" },

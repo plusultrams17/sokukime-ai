@@ -155,7 +155,7 @@ const PHASE_MAX_TOKENS: Record<number, number> = {
 
 export async function POST(request: NextRequest) {
   try {
-    const { industry, phase, productInfo } = await request.json();
+    const { industry, phase, productInfo, targetInfo } = await request.json();
 
     if (!industry || phase === undefined || !PHASE_PROMPTS[phase]) {
       return NextResponse.json(
@@ -173,7 +173,11 @@ export async function POST(request: NextRequest) {
     }
 
     const detailContext = productInfo
-      ? `\n【詳細情報】\n商材名: ${productInfo.productName || "不明"}\nターゲット層: ${productInfo.targetAudience || "不明"}\n主な特徴: ${productInfo.keyFeatures || "不明"}\n価格帯: ${productInfo.priceRange || "不明"}\n競合優位性: ${productInfo.advantages || "不明"}\n課題: ${productInfo.challenges || "不明"}`
+      ? `\n【自社・商材情報】\n商材名: ${productInfo.productName || "不明"}\nターゲット層: ${productInfo.targetAudience || "不明"}\n主な特徴: ${productInfo.keyFeatures || "不明"}\n価格帯: ${productInfo.priceRange || "不明"}\n競合優位性: ${productInfo.advantages || "不明"}\n課題: ${productInfo.challenges || "不明"}`
+      : "";
+
+    const targetContext = targetInfo
+      ? `\n【ターゲット（営業先）情報】\n企業名: ${targetInfo.targetCompanyName || "不明"}\n業種: ${targetInfo.targetIndustry || "不明"}\n担当者役職: ${targetInfo.targetPosition || "不明"}\n企業規模: ${targetInfo.targetScale || "不明"}\n想定ニーズ: ${targetInfo.targetNeeds || "不明"}\n想定予算: ${targetInfo.targetBudget || "不明"}\n導入時期: ${targetInfo.targetTimeline || "不明"}`
       : "";
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -192,13 +196,14 @@ export async function POST(request: NextRequest) {
             content: `あなたは営業のプロフェッショナルです。営業準備ワークシートの内容を生成してください。
 - 各項目は具体的でリアルな内容にしてください
 - その業種ならではの表現を使ってください
+- ターゲット情報がある場合は、そのターゲット企業・担当者に合わせた具体的な内容にしてください
 - previewはそのまま商談で使えるトーク例にしてください
 - 必ず指定されたJSON形式で返してください
 - JSON以外のテキストは出力しないでください`,
           },
           {
             role: "user",
-            content: `業種・商材: ${industry}${detailContext}\n\n${PHASE_PROMPTS[phase]}`,
+            content: `業種・商材: ${industry}${detailContext}${targetContext}\n\n${PHASE_PROMPTS[phase]}`,
           },
         ],
       }),

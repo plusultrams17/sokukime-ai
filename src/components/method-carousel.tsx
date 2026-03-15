@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback, useState } from "react";
+import { useRef, useEffect, useCallback } from "react";
 
 interface MethodCarouselProps {
   children: React.ReactNode;
@@ -8,10 +8,8 @@ interface MethodCarouselProps {
 
 export function MethodCarousel({ children }: MethodCarouselProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
-  const [paused, setPaused] = useState(false);
-  const pauseTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  // Auto-scroll via JS requestAnimationFrame
+  // Auto-scroll — never stops
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
@@ -20,7 +18,7 @@ export function MethodCarousel({ children }: MethodCarouselProps) {
     const speed = 0.5; // px per frame (~30px/s at 60fps)
 
     const tick = (ts: number) => {
-      if (last && !paused) {
+      if (last) {
         viewport.scrollLeft += speed;
         // loop: when scrolled past halfway (duplicated content), jump back
         const half = viewport.scrollWidth / 2;
@@ -33,32 +31,20 @@ export function MethodCarousel({ children }: MethodCarouselProps) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [paused]);
+  }, []);
 
   const scroll = useCallback((dir: "left" | "right") => {
     const viewport = viewportRef.current;
     if (!viewport) return;
-    // Pause auto-scroll temporarily
-    setPaused(true);
-    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
-    pauseTimerRef.current = setTimeout(() => setPaused(false), 3000);
-
     const cardWidth = 312; // ~18em + gap
     viewport.scrollBy({ left: dir === "left" ? -cardWidth : cardWidth, behavior: "smooth" });
   }, []);
 
   return (
-    <div
-      className="method-carousel"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => {
-        if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
-        setPaused(false);
-      }}
-    >
+    <div className="method-carousel">
       <button
         type="button"
-        className="method-carousel__btn"
+        className="method-carousel__btn method-carousel__btn--left"
         onClick={() => scroll("left")}
         aria-label="前へ"
       >
@@ -76,7 +62,7 @@ export function MethodCarousel({ children }: MethodCarouselProps) {
 
       <button
         type="button"
-        className="method-carousel__btn"
+        className="method-carousel__btn method-carousel__btn--right"
         onClick={() => scroll("right")}
         aria-label="次へ"
       >

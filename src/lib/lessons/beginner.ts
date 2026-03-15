@@ -166,6 +166,8 @@ export const beginnerLessons: Lesson[] = [
   <li><strong>質問が増える</strong>（「あなたはどう思いますか？」など）</li>
   <li>声のトーンが上がる、話すスピードが速くなる</li>
 </ul>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>業種別・褒めフレーズ例</h2>
@@ -264,6 +266,8 @@ export const beginnerLessons: Lesson[] = [
 
 <h3>「検討します」を事前に封じる</h3>
 <p>「検討します」は多くの場合、<strong>断りの婉曲表現</strong>です。前提設定で「気に入らなければ断ってOK」と伝えることで、わざわざ「検討します」と言う必要がなくなり、本音が出やすくなります。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>前提設定トーク例</h2>
@@ -476,6 +480,9 @@ export const beginnerLessons: Lesson[] = [
 </ul>
 
 <!-- DIAGRAM:three-needs-direction -->
+
+<!-- WORKSHEET -->
+
 <h3>お客様自身に語らせる重要性</h3>
 <p>営業が「こういう課題がありますよね？」と決めつけるのではなく、<strong>お客様自身の口から課題を言ってもらう</strong>ことが重要です。自分で言った言葉は自分自身を説得する力を持ちます。これを心理学では<strong>一貫性の原理</strong>と呼びます。</p>
 `,
@@ -579,6 +586,8 @@ export const beginnerLessons: Lesson[] = [
 
 <h3>最後に「気分はどうですか？」</h3>
 <p>深掘りの最後に<strong>「率直に、今の気分はどうですか？」</strong>と聞くことで、お客様自身に「これは解決しなければいけない」と言わせることが目的です。営業が説得するのではなく、<strong>お客様自身が自分を説得する</strong>構図を作ります。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>深掘り質問チェーンのトーク例</h2>
@@ -688,6 +697,8 @@ export const beginnerLessons: Lesson[] = [
   <li>× 「当社のシステムは処理速度が速いです」</li>
   <li>○ 「○○様は、毎月の処理時間を半分に短縮できます」</li>
 </ul>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>SP→ベネフィット変換の3組の例</h2>
@@ -776,6 +787,8 @@ export const beginnerLessons: Lesson[] = [
   <li><strong>ステップ③</strong>：お客様のメリット<br>「だから○○様は、○○を心配する必要がありません」</li>
 </ul>
 <p>注意点として、<strong>特定の他社名を出して直接的に批判するのは避けましょう</strong>。「一般的に」「業界全体として」という表現を使います。</p>
+
+<!-- WORKSHEET -->
 
 <h2>IF活用とは</h2>
 <p>IF活用とは、<strong>「もし〜だったら」と想像させることで、感情を動かす</strong>テクニックです。人間の脳は、<strong>現実に起きていることと想像していることを完全には区別できない</strong>という認知心理学の原理を活用します。</p>

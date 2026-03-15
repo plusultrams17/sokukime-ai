@@ -40,6 +40,8 @@ export const advancedLessons: Lesson[] = [
   <li><strong>権威性</strong>：専門家やデータの裏付けを提示する</li>
   <li><strong>好意</strong>：信頼関係を築き、好意を持ってもらう</li>
 </ul>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>反論が出た時の初動トーク例</h2>
@@ -143,6 +145,8 @@ export const advancedLessons: Lesson[] = [
 <!-- DIAGRAM:hook-yes -->
 <h3>フックYES質問</h3>
 <p>感謝の後に<strong>小さなYESを取る質問</strong>を挟みます。「商品自体は良いと思ってくださってますか？」「サービス内容にはご満足いただけましたか？」など。ここでYESを得ることで、一貫性の法則が働き、その後の切り返しが効きやすくなります。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>共感→感謝→フック→AREA→訴求の完成フロー例</h2>
@@ -252,6 +256,8 @@ export const advancedLessons: Lesson[] = [
   <li>「タイミングが今じゃない」→ ベストタイミングは今</li>
   <li>「もう少し情報が欲しい」→ 必要な情報は既に揃っている</li>
 </ul>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>目的振り返りの具体的トーク例</h2>
@@ -351,6 +357,8 @@ export const advancedLessons: Lesson[] = [
 <!-- DIAGRAM:episode-timing -->
 <h3>使い分けのタイミング</h3>
 <p>天国エピソードは<strong>お客様がやや前向きな時</strong>に背中を押すために使います。地獄エピソードは<strong>お客様が迷っている・後回しにしようとしている時</strong>に危機感を持たせるために使います。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>天国エピソードのトーク例</h2>
@@ -450,6 +458,8 @@ export const advancedLessons: Lesson[] = [
 <!-- DIAGRAM:atmosphere-change -->
 <h3>聞く姿勢で場の空気を変える</h3>
 <p>プラスのシャワーのもう一つの効果は、<strong>場の空気を変える</strong>ことです。営業マンが「聞く姿勢」に切り替わることで、お客様は攻撃的な態度から協力的な態度に変わります。対立構造から協力構造への転換です。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>プラスのシャワーの実践トーク例</h2>
@@ -546,6 +556,8 @@ export const advancedLessons: Lesson[] = [
   <li><strong>他者相談</strong>：「ご相談されること自体は素晴らしいです。ただ、最終的に使うのは○○様ご自身です。ご自身の直感を信じてみてはいかがでしょうか」</li>
   <li><strong>タイミング先延ばし</strong>：「いつか始めようと思っている方の『いつか』は、多くの場合来ません。今日がその『いつか』です」</li>
 </ul>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>3パターンのすり替えトーク例</h2>
@@ -646,6 +658,8 @@ export const advancedLessons: Lesson[] = [
 <h3>分割思考法</h3>
 <p>総額で見ると高く感じる価格も、<strong>日割り・月割り</strong>にすると受け入れやすくなります。</p>
 <p>「月額に換算すると1日あたりたった○○円です。コーヒー1杯分の投資で、○○が手に入ります。」</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>価値の上乗せの実践トーク例</h2>

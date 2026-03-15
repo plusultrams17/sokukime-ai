@@ -1688,19 +1688,17 @@ body {
 
 .method-carousel {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  width: 100%;
 }
 
 .method-carousel__viewport {
-  flex: 1;
+  width: 100%;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
 }
 
 .method-carousel__viewport::-webkit-scrollbar {
@@ -1715,31 +1713,72 @@ body {
 }
 
 .method-carousel__btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   flex-shrink: 0;
   width: 44px;
   height: 44px;
   border-radius: 50%;
   border: 2px solid var(--card-border);
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
   color: var(--foreground);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  z-index: 10;
+}
+
+.method-carousel__btn--left {
+  left: 1rem;
+}
+
+.method-carousel__btn--right {
+  right: 1rem;
 }
 
 .method-carousel__btn:hover {
   background: var(--foreground);
   color: white;
   border-color: var(--foreground);
-  transform: scale(1.1);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .method-carousel__btn:active {
-  transform: scale(0.95);
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* Mobile: smaller buttons, tighter positioning */
+@media (max-width: 640px) {
+  .method-carousel__btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .method-carousel__btn--left {
+    left: 0.5rem;
+  }
+
+  .method-carousel__btn--right {
+    right: 0.5rem;
+  }
+
+  .method-carousel__btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .method-carousel__track {
+    gap: 1rem;
+    padding: 1rem 3rem 2rem;
+  }
 }
 
 /* ── Comic Card (5-Step Method) ── */

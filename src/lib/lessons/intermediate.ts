@@ -45,6 +45,8 @@ export const intermediateLessons: Lesson[] = [
 
 <h3>訴求は「。」で言い切る</h3>
 <p>訴求のフレーズは必ず<strong>断定形</strong>で終えてください。「〜しませんか？」ではなく「〜しましょう。」と言い切ることで、お客様に安心感と決断の勢いを与えます。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>NGワードとGoodワードの比較</h2>
@@ -149,6 +151,8 @@ export const intermediateLessons: Lesson[] = [
 
 <h3>クロージング3大技術の一つ</h3>
 <p>社会的証明は、クロージングにおける<strong>3大技術の一つ</strong>です。残りの2つ（一貫性の法則・第三者話法）と組み合わせることで、さらに強力なクロージングが可能になります。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>社会的証明を使ったトーク例</h2>
@@ -243,6 +247,8 @@ export const intermediateLessons: Lesson[] = [
 
 <h3>沈黙は味方</h3>
 <p>多くの営業パーソンは沈黙が怖くて自分から喋ってしまいます。しかし、<strong>沈黙はあなたの味方</strong>です。言い切った後の沈黙の時間こそ、お客様の中で一貫性の心理が働いている時間なのです。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>一貫性の法則を使ったトーク例</h2>
@@ -341,6 +347,8 @@ export const intermediateLessons: Lesson[] = [
 <!-- DIAGRAM:three-techniques-combo -->
 <h3>基本3技術の組み合わせ</h3>
 <p>最も強力なクロージングは、<strong>社会的証明＋一貫性＋カギカッコ</strong>の3つを組み合わせることです。この3つを一つのクロージングトークに織り込めるようになれば、成約率は飛躍的に向上します。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>カギカッコ技術のトーク例</h2>
@@ -437,6 +445,8 @@ export const intermediateLessons: Lesson[] = [
 <!-- DIAGRAM:pyramid-structure -->
 <h3>ピラミッドストラクチャー</h3>
 <p>トリプルは<strong>ピラミッドストラクチャー</strong>を意識してください。最も強いベネフィットを最後に持ってくることで、クライマックスに向かって盛り上がる構成になります。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>ポジティブシングルのトーク例</h2>
@@ -538,6 +548,8 @@ export const intermediateLessons: Lesson[] = [
 <!-- DIAGRAM:negative-impact -->
 <h3>ネガティブの心理的インパクト</h3>
 <p>心理学研究により、人は<strong>「得する喜び」よりも「損する痛み」の方を強く感じる</strong>ことがわかっています。だからこそ、ネガティブクロージングは非常に効果的なのです。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>ネガティブクロージングのトーク例</h2>
@@ -647,6 +659,8 @@ export const intermediateLessons: Lesson[] = [
   <li><strong>ポジティブ20%</strong>で希望の光を見せて決断を後押しする</li>
 </ul>
 <p>この配分を意識することで、お客様は「行動しなければならない」と感じつつ、「行動すれば良い未来がある」と確信できるようになります。</p>
+
+<!-- WORKSHEET -->
 `,
     examples: `
 <h2>積極的・消極的欲求の組み合わせトーク例</h2>

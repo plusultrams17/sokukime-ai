@@ -38,7 +38,6 @@ export function Footer() {
             <nav className="flex flex-col gap-2 text-sm text-muted">
               <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
               <Link href="/features" className="transition hover:text-foreground">機能紹介</Link>
-              <Link href="/worksheet" className="transition hover:text-foreground">ワークシート</Link>
               <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
               <Link href="/use-cases" className="transition hover:text-foreground">活用シーン</Link>
               <Link href="/blog" className="transition hover:text-foreground">ブログ</Link>

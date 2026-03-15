@@ -11,6 +11,7 @@ import { LessonDiagram, getSectionDiagram } from "@/components/lesson-diagrams";
 import { LessonScene } from "@/components/lesson-scenes";
 import { PdfExportButton } from "@/components/pdf/PdfExportButton";
 import LessonPdfContent from "@/components/pdf/LessonPdfContent";
+import { InlineWorksheet } from "@/components/inline-worksheet";
 
 const TABS = ["理論", "トーク例", "確認クイズ", "実践練習"];
 
@@ -182,227 +183,244 @@ export default function LessonPage() {
 
       <div className="pt-24 px-6 pb-20">
         <div className="mx-auto max-w-3xl">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-muted mb-8">
-            <Link
-              href="/learn"
-              className="hover:text-foreground hover:underline transition"
-            >
-              学習コース
-            </Link>
-            <span className="text-gray-300">/</span>
-            <span style={{ color }} className="font-medium">
-              {lesson.levelLabel}
-            </span>
-            <span className="text-gray-300">/</span>
-            <span className="text-foreground">Lesson {lesson.order}</span>
-          </nav>
-
-          {/* Scene Banner */}
-          <div className="mb-8 rounded-2xl overflow-hidden border border-card-border">
-            <div className="w-full">
-              <LessonScene slug={slug} />
-            </div>
-            <div className="p-5 sm:p-6">
-              <p
-                className="text-xs font-bold tracking-widest uppercase mb-2"
-                style={{ color }}
-              >
-                Lesson {lesson.order}
-              </p>
-              <h1 className="text-2xl font-bold text-foreground sm:text-3xl mb-2">
-                {lesson.title}
-              </h1>
-              <p className="text-base text-muted">{lesson.description}</p>
-            </div>
-          </div>
-
-          {/* Learning Objectives */}
-          {lesson.objectives && lesson.objectives.length > 0 && (
-            <div
-              className="mb-10 border-l-4 pl-5 py-1"
-              style={{ borderColor: color }}
-            >
-              <p className="text-sm font-bold text-foreground mb-3">
-                このレッスンの学習目標
-              </p>
-              <ul className="space-y-1.5">
-                {lesson.objectives.map((obj, i) => (
-                  <li
-                    key={i}
-                    className="text-sm text-muted leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[9px] before:w-1.5 before:h-1.5 before:rounded-full"
-                    style={
-                      {
-                        "--tw-before-bg": color,
-                      } as React.CSSProperties
-                    }
-                  >
-                    <span
-                      className="absolute left-0 top-[9px] w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: color }}
-                    />
-                    {obj}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* PDF Export */}
-          <div className="mb-6 flex justify-end">
-            <PdfExportButton
-              filename={`レッスン${lesson.order}_${lesson.title}.pdf`}
-              renderContent={(ref) => (
-                <LessonPdfContent
-                  ref={ref}
-                  lesson={lesson}
-                  slug={slug}
-                  quizScore={getProgress().quizScores[slug]}
-                />
-              )}
-            >
-              レッスンをPDFで保存
-            </PdfExportButton>
-          </div>
-
-          {/* Tab Bar */}
-          <div className="sticky top-16 z-40 bg-white border-b border-gray-200 mb-10">
-            <div className="flex">
-              {TABS.map((tab, i) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(i)}
-                  className={`flex-1 py-3.5 text-center text-sm transition relative ${
-                    activeTab === i
-                      ? "font-bold text-foreground"
-                      : "font-medium text-muted hover:text-foreground"
-                  }`}
-                >
-                  {tab}
-                  {activeTab === i && (
-                    <div
-                      className="absolute bottom-0 left-0 right-0 h-[3px]"
-                      style={{ backgroundColor: color }}
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Tab Content */}
+          {/* Top Section */}
           <div>
-            {/* Theory Tab */}
-            {activeTab === 0 && (
-              <div>
-                <LessonDiagram slug={slug} />
-                <TheoryContent slug={slug} theory={lesson.theory} />
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-sm text-muted mb-8">
+              <Link
+                href="/learn"
+                className="hover:text-foreground hover:underline transition"
+              >
+                学習コース
+              </Link>
+              <span className="text-gray-300">/</span>
+              <span style={{ color }} className="font-medium">
+                {lesson.levelLabel}
+              </span>
+              <span className="text-gray-300">/</span>
+              <span className="text-foreground">Lesson {lesson.order}</span>
+            </nav>
+
+            {/* Scene Banner */}
+            <div className="mb-8 rounded-2xl overflow-hidden border border-card-border">
+              <div className="w-full">
+                <LessonScene slug={slug} />
               </div>
-            )}
-
-            {/* Examples Tab */}
-            {activeTab === 1 && (
-              <div>
-                <div
-                  className="blog-content"
-                  dangerouslySetInnerHTML={{ __html: processExamplesHtml(lesson.examples) }}
-                />
-                <div className="mt-8 border-l-4 border-gray-300 pl-5 py-2">
-                  <p className="text-sm text-muted">
-                    <strong className="text-foreground">ポイント：</strong>
-                    トーク例はそのまま暗記するのではなく、自分の言葉でアレンジして使いましょう。
-                    大切なのは「型」を身につけることです。
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Quiz Tab */}
-            {activeTab === 2 && (
-              <QuizSection
-                quiz={lesson.quiz}
-                currentQ={currentQ}
-                selected={selected}
-                submitted={submitted}
-                score={score}
-                quizCompleted={quizCompleted}
-                onSelect={handleSelect}
-                onSubmit={handleSubmit}
-                onNext={handleNext}
-                onRetry={() => {
-                  setCurrentQ(0);
-                  setSelected(null);
-                  setSubmitted(false);
-                  setScore(0);
-                  setQuizCompleted(false);
-                }}
-                color={color}
-              />
-            )}
-
-            {/* Practice Tab */}
-            {activeTab === 3 && (
-              <div>
-                <h2 className="text-lg font-bold text-foreground mb-3">
-                  実践練習のテーマ
-                </h2>
-                <p className="text-muted leading-relaxed mb-8 text-base">
-                  {lesson.practicePrompt}
+              <div className="p-5 sm:p-6">
+                <p
+                  className="text-xs font-bold tracking-widest uppercase mb-2"
+                  style={{ color }}
+                >
+                  Lesson {lesson.order}
                 </p>
+                <h1 className="text-2xl font-bold text-foreground sm:text-3xl mb-2">
+                  {lesson.title}
+                </h1>
+                <p className="text-base text-muted">{lesson.description}</p>
+              </div>
+            </div>
 
-                <div className="border-t border-gray-200 pt-6 space-y-4">
-                  <Link
-                    href="/roleplay"
-                    className="flex items-center justify-between py-3 border-b border-gray-100 group"
-                  >
-                    <div>
-                      <p className="text-sm font-bold text-foreground group-hover:underline">
-                        AIロープレで練習する
-                      </p>
-                      <p className="text-xs text-muted mt-0.5">
-                        学んだ技術をAI相手に実践
-                      </p>
-                    </div>
-                    <svg
-                      className="w-4 h-4 text-gray-300 group-hover:text-foreground transition shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+            {/* Learning Objectives */}
+            {lesson.objectives && lesson.objectives.length > 0 && (
+              <div
+                className="mb-10 border-l-4 pl-5 py-1"
+                style={{ borderColor: color }}
+              >
+                <p className="text-sm font-bold text-foreground mb-3">
+                  このレッスンの学習目標
+                </p>
+                <ul className="space-y-1.5">
+                  {lesson.objectives.map((obj, i) => (
+                    <li
+                      key={i}
+                      className="text-sm text-muted leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[9px] before:w-1.5 before:h-1.5 before:rounded-full"
+                      style={
+                        {
+                          "--tw-before-bg": color,
+                        } as React.CSSProperties
+                      }
                     >
-                      <polyline points="9 18 15 12 9 6" />
-                    </svg>
-                  </Link>
-
-                  <Link
-                    href="/worksheet"
-                    className="flex items-center justify-between py-3 border-b border-gray-100 group"
-                  >
-                    <div>
-                      <p className="text-sm font-bold text-foreground group-hover:underline">
-                        ワークシートで準備する
-                      </p>
-                      <p className="text-xs text-muted mt-0.5">
-                        商談準備を体系的に行う
-                      </p>
-                    </div>
-                    <svg
-                      className="w-4 h-4 text-gray-300 group-hover:text-foreground transition shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="9 18 15 12 9 6" />
-                    </svg>
-                  </Link>
-                </div>
+                      <span
+                        className="absolute left-0 top-[9px] w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: color }}
+                      />
+                      {obj}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
+
+            {/* PDF Export */}
+            <div className="mb-6 flex justify-end">
+              <PdfExportButton
+                filename={`レッスン${lesson.order}_${lesson.title}.pdf`}
+                renderContent={(ref) => {
+                  let worksheetData: Record<string, string>[] | undefined;
+                  try {
+                    const saved = localStorage.getItem("worksheet-v2-data");
+                    if (saved) {
+                      const parsed = JSON.parse(saved);
+                      if (parsed.phaseData) worksheetData = parsed.phaseData;
+                    }
+                  } catch {}
+                  return (
+                    <LessonPdfContent
+                      ref={ref}
+                      lesson={lesson}
+                      slug={slug}
+                      quizScore={getProgress().quizScores[slug]}
+                      worksheetData={worksheetData}
+                    />
+                  );
+                }}
+              >
+                レッスンをPDFで保存
+              </PdfExportButton>
+            </div>
+          </div>
+
+          {/* Tab + Content */}
+          <div>
+              {/* Tab Bar */}
+              <div className="sticky top-16 z-40 bg-white border-b border-gray-200 mb-10">
+                <div className="flex">
+                  {TABS.map((tab, i) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(i)}
+                      className={`flex-1 py-3.5 text-center text-sm transition relative ${
+                        activeTab === i
+                          ? "font-bold text-foreground"
+                          : "font-medium text-muted hover:text-foreground"
+                      }`}
+                    >
+                      {tab}
+                      {activeTab === i && (
+                        <div
+                          className="absolute bottom-0 left-0 right-0 h-[3px]"
+                          style={{ backgroundColor: color }}
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tab Content */}
+              <div>
+                {/* Theory Tab */}
+                {activeTab === 0 && (
+                  <div>
+                    <LessonDiagram slug={slug} />
+                    <TheoryContent slug={slug} theory={lesson.theory} />
+                  </div>
+                )}
+
+                {/* Examples Tab */}
+                {activeTab === 1 && (
+                  <div>
+                    <div
+                      className="blog-content"
+                      dangerouslySetInnerHTML={{ __html: processExamplesHtml(lesson.examples) }}
+                    />
+                    <div className="mt-8 border-l-4 border-gray-300 pl-5 py-2">
+                      <p className="text-sm text-muted">
+                        <strong className="text-foreground">ポイント：</strong>
+                        トーク例はそのまま暗記するのではなく、自分の言葉でアレンジして使いましょう。
+                        大切なのは「型」を身につけることです。
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Quiz Tab */}
+                {activeTab === 2 && (
+                  <QuizSection
+                    quiz={lesson.quiz}
+                    currentQ={currentQ}
+                    selected={selected}
+                    submitted={submitted}
+                    score={score}
+                    quizCompleted={quizCompleted}
+                    onSelect={handleSelect}
+                    onSubmit={handleSubmit}
+                    onNext={handleNext}
+                    onRetry={() => {
+                      setCurrentQ(0);
+                      setSelected(null);
+                      setSubmitted(false);
+                      setScore(0);
+                      setQuizCompleted(false);
+                    }}
+                    color={color}
+                  />
+                )}
+
+                {/* Practice Tab */}
+                {activeTab === 3 && (
+                  <div>
+                    <h2 className="text-lg font-bold text-foreground mb-3">
+                      実践練習のテーマ
+                    </h2>
+                    <p className="text-muted leading-relaxed mb-8 text-base">
+                      {lesson.practicePrompt}
+                    </p>
+
+                    <div className="border-t border-gray-200 pt-6 space-y-4">
+                      <Link
+                        href="/roleplay"
+                        className="flex items-center justify-between py-3 border-b border-gray-100 group"
+                      >
+                        <div>
+                          <p className="text-sm font-bold text-foreground group-hover:underline">
+                            AIロープレで練習する
+                          </p>
+                          <p className="text-xs text-muted mt-0.5">
+                            学んだ技術をAI相手に実践
+                          </p>
+                        </div>
+                        <svg
+                          className="w-4 h-4 text-gray-300 group-hover:text-foreground transition shrink-0"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                      </Link>
+
+                      <Link
+                        href="/worksheet"
+                        className="flex items-center justify-between py-3 border-b border-gray-100 group"
+                      >
+                        <div>
+                          <p className="text-sm font-bold text-foreground group-hover:underline">
+                            ワークシートで準備する
+                          </p>
+                          <p className="text-xs text-muted mt-0.5">
+                            商談準備を体系的に行う
+                          </p>
+                        </div>
+                        <svg
+                          className="w-4 h-4 text-gray-300 group-hover:text-foreground transition shrink-0"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
           </div>
 
           {/* Prev / Next Navigation */}
@@ -450,15 +468,31 @@ export default function LessonPage() {
 /* ── Theory with inline diagrams ─────────────────── */
 
 function TheoryContent({ slug, theory }: { slug: string; theory: string }) {
-  const parts = theory.split(/<!-- DIAGRAM:([\w-]+) -->/);
+  // First split on WORKSHEET marker, then handle DIAGRAM markers within each segment
+  const worksheetParts = theory.split(/<!-- WORKSHEET -->/);
+
+  return (
+    <>
+      {worksheetParts.map((segment, wi) => (
+        <div key={`ws-${wi}`}>
+          {wi > 0 && <InlineWorksheet slug={slug} />}
+          <TheorySegment slug={slug} html={segment} keyPrefix={`ws${wi}`} />
+        </div>
+      ))}
+    </>
+  );
+}
+
+function TheorySegment({ slug, html, keyPrefix }: { slug: string; html: string; keyPrefix: string }) {
+  const parts = html.split(/<!-- DIAGRAM:([\w-]+) -->/);
 
   if (parts.length === 1) {
-    return (
+    return html.trim() ? (
       <div
         className="blog-content"
-        dangerouslySetInnerHTML={{ __html: theory }}
+        dangerouslySetInnerHTML={{ __html: html }}
       />
-    );
+    ) : null;
   }
 
   return (
@@ -467,14 +501,14 @@ function TheoryContent({ slug, theory }: { slug: string; theory: string }) {
         if (i % 2 === 0) {
           return part.trim() ? (
             <div
-              key={i}
+              key={`${keyPrefix}-${i}`}
               className="blog-content"
               dangerouslySetInnerHTML={{ __html: part }}
             />
           ) : null;
         }
         const Comp = getSectionDiagram(slug, part);
-        return Comp ? <Comp key={`d-${i}`} /> : null;
+        return Comp ? <Comp key={`${keyPrefix}-d-${i}`} /> : null;
       })}
     </>
   );

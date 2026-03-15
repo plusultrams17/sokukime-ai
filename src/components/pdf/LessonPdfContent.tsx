@@ -3,6 +3,8 @@
 import { forwardRef } from "react";
 import type { Lesson } from "@/lib/lessons/types";
 import { LessonDiagram, getSectionDiagram } from "@/components/lesson-diagrams";
+import { WORKSHEET_PHASES } from "@/lib/pdf/worksheet-fields";
+import { LESSON_WORKSHEET_MAP } from "@/lib/lessons/worksheet-mapping";
 
 const LEVEL_COLORS: Record<string, string> = {
   beginner: "#0F6E56",
@@ -47,12 +49,14 @@ interface LessonPdfContentProps {
   lesson: Lesson;
   slug: string;
   quizScore?: number;
+  worksheetData?: Record<string, string>[];
 }
 
 const LessonPdfContent = forwardRef<HTMLDivElement, LessonPdfContentProps>(
-  function LessonPdfContent({ lesson, slug, quizScore }, ref) {
+  function LessonPdfContent({ lesson, slug, quizScore, worksheetData }, ref) {
     const color = LEVEL_COLORS[lesson.level];
     const theoryParts = lesson.theory.split(/<!-- DIAGRAM:([\w-]+) -->/);
+    const mapping = LESSON_WORKSHEET_MAP[slug];
 
     return (
       <div
@@ -270,6 +274,88 @@ const LessonPdfContent = forwardRef<HTMLDivElement, LessonPdfContentProps>(
             </div>
           ))}
         </div>
+
+        {/* Worksheet Section */}
+        {mapping && worksheetData && (() => {
+          const phase = WORKSHEET_PHASES[mapping.phaseIndex];
+          const phaseValues = worksheetData[mapping.phaseIndex] || {};
+          const hasAnyValue = mapping.sections.some((sec) => {
+            const section = phase.sections[sec.sectionIndex];
+            const fields = sec.fieldKeys
+              ? section.fields.filter((f) => sec.fieldKeys!.includes(f.key))
+              : section.fields;
+            return fields.some((f) => (phaseValues[f.key] || "").trim());
+          });
+          if (!hasAnyValue) return null;
+          return (
+            <div style={{ marginBottom: "32px" }}>
+              <h2
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "800",
+                  backgroundColor: phase.color,
+                  color: "#FFFFFF",
+                  padding: "8px 14px",
+                  marginBottom: "16px",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                ワークシート — {phase.phaseName}
+              </h2>
+              {mapping.sections.map((sec, si) => {
+                const section = phase.sections[sec.sectionIndex];
+                const fields = sec.fieldKeys
+                  ? section.fields.filter((f) => sec.fieldKeys!.includes(f.key))
+                  : section.fields;
+                return (
+                  <div key={si} style={{ marginBottom: "14px" }}>
+                    <h3
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: "bold",
+                        color: phase.color,
+                        borderBottom: `1px solid ${phase.color}30`,
+                        paddingBottom: "3px",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      {section.title}
+                    </h3>
+                    {fields.map((field) => {
+                      const value = phaseValues[field.key] || "";
+                      return (
+                        <div key={field.key} style={{ marginBottom: "6px" }}>
+                          <div
+                            style={{
+                              fontSize: "10px",
+                              fontWeight: "bold",
+                              color: "#64748B",
+                            }}
+                          >
+                            {field.label}
+                          </div>
+                          <div
+                            style={{
+                              border: "1px solid #E5DFD6",
+                              padding: "5px 10px",
+                              minHeight: field.multiline ? "40px" : "24px",
+                              fontSize: "11px",
+                              backgroundColor: value.trim() ? "#FFFFFF" : "#F8F9FA",
+                              color: value.trim() ? "#1E293B" : "#CBD5E1",
+                              whiteSpace: "pre-wrap",
+                            }}
+                          >
+                            {value.trim() || "(未入力)"}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
 
         {/* Footer */}
         <div

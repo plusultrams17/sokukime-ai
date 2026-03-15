@@ -9,7 +9,25 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(npx vercel logs:*)",
+      "Bash(npx vercel:*)",
+      "WebFetch(domain:sokukime-kgkxjwsw7-mikihisaedit-3599s-projects.vercel.app)",
+      "Bash(pip install:*)",
+      "Bash(python3:*)",
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:sokukime-ai.vercel.app)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(vercel:*)",
+      "mcp__claude_ai_Notion__notion-create-pages",
+      "Bash(npx next build:*)",
+      "Bash(npx next dev:*)",
+      "Bash(for f in *.pdf)",
+      "Bash(do echo \"Found: $f\")",
+      "Bash(done)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(wc:*)"
     ]
   }
 }

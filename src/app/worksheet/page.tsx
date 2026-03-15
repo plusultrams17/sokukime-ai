@@ -28,6 +28,8 @@ import {
   trackWorksheetPhaseCompleted,
   trackWorksheetCompleted,
 } from "@/lib/tracking";
+import { loadCompanyContext, hasCompanyContext } from "@/lib/company-context";
+import { loadTargetContext, hasTargetContext } from "@/lib/target-context";
 
 /* ─── Industry presets ──────────────────────────── */
 
@@ -120,13 +122,37 @@ export default function WorksheetPage() {
     trackWorksheetAIGenerated(activePhase, PHASES[activePhase].name);
     setGeneratingPhase(activePhase);
     try {
-      // Try the real OpenAI-powered endpoint first
+      // Build context from company + target info
+      const companyCtx = loadCompanyContext();
+      const tgt = loadTargetContext();
+
       let res = await fetch("/api/worksheet/generate-phase", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           phase: activePhase,
           industry: industry.trim(),
+          ...(hasCompanyContext(companyCtx) && {
+            productInfo: {
+              productName: companyCtx.productName,
+              targetAudience: companyCtx.targetAudience,
+              keyFeatures: companyCtx.keyFeatures,
+              priceRange: companyCtx.priceRange,
+              advantages: companyCtx.advantages,
+              challenges: companyCtx.challenges,
+            },
+          }),
+          ...(hasTargetContext(tgt) && {
+            targetInfo: {
+              targetCompanyName: tgt.targetCompanyName,
+              targetIndustry: tgt.targetIndustry,
+              targetPosition: tgt.targetPosition,
+              targetScale: tgt.targetScale,
+              targetNeeds: tgt.targetNeeds,
+              targetBudget: tgt.targetBudget,
+              targetTimeline: tgt.targetTimeline,
+            },
+          }),
         }),
       });
 
