@@ -31,6 +31,8 @@ interface ChatUIProps {
   difficulty: string;
   scene: string;
   customerType: string;
+  productContext?: string;
+  customerContext?: string;
   onFinish: (score: ScoreResult) => void;
   isGuest?: boolean;
   onAuthGate?: (messages: Message[], previewScore?: ScoreResult) => void;
@@ -50,7 +52,21 @@ const sceneLabels: Record<string, string> = {
   inbound: "📩 問い合わせ対応",
 };
 
-export function ChatUI({ industry, product, difficulty, scene, customerType, onFinish, isGuest, onAuthGate }: ChatUIProps) {
+const sceneHints: Record<string, string> = {
+  phone: "電話をかけるところから始めてみましょう",
+  visit: "お客さんの玄関先・受付での第一声から始めてみましょう",
+  inbound: "お問い合わせへの返答から始めてみましょう",
+};
+
+const STEP_LESSON_MAP: Record<number, { slug: string; label: string }> = {
+  1: { slug: "premise-setting", label: "前提設定（先回りトーク）" },
+  2: { slug: "drawer-phrases", label: "引き出しフレーズ（ニーズ発掘）" },
+  3: { slug: "benefit-method", label: "利点話法（SP→ベネフィット変換）" },
+  4: { slug: "closing-intro", label: "クロージング概論" },
+  5: { slug: "rebuttal-pattern", label: "切り返しの型（共通フレームワーク）" },
+};
+
+export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, onFinish, isGuest, onAuthGate }: ChatUIProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -58,65 +74,48 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
   const [isScoring, setIsScoring] = useState(false);
   const [coach, setCoach] = useState<CoachData | null>(null);
   const [showCoach, setShowCoach] = useState(true);
+  const [showNudge, setShowNudge] = useState(false);
+  const nudgeShownRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const maxTurns = 10;
   const chatStartTime = useRef(Date.now());
 
+  // Idle detection — show learning nudge after 30s of inactivity
   useEffect(() => {
-    startConversation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (nudgeShownRef.current || isLoading || messages.length === 0 || input.length > 0) return;
+    const timer = setTimeout(() => {
+      if (!nudgeShownRef.current) {
+        setShowNudge(true);
+        nudgeShownRef.current = true;
+      }
+    }, 30_000);
+    return () => clearTimeout(timer);
+  }, [messages, isLoading, input]);
+
+  // User speaks first — set initial coach data and focus input
+  useEffect(() => {
+    setCoach({
+      currentStep: "アプローチ",
+      stepNumber: 1,
+      detectedTechniques: [],
+      nextTip: "まずは相手を褒めて心理的安全の確保をしましょう。2度褒めが理想。その後「前提設定」でYESを取ります",
+      examplePhrase: "素敵な会社ですね！今まで○社伺いましたがダントツです。ところで、もしお話聞いて気に入らなかったら断ってくださいね。気に入ったらぜひスタートしてください！",
+    });
+    setTimeout(() => inputRef.current?.focus(), 300);
   }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  async function startConversation() {
-    setIsLoading(true);
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [],
-          industry,
-          product,
-          difficulty,
-          scene,
-          customerType,
-          isFirstMessage: true,
-        }),
-      });
-      const data = await res.json();
-      setMessages([{ role: "assistant", content: data.message }]);
-      // Initial coach tip
-      setCoach({
-        currentStep: "アプローチ",
-        stepNumber: 1,
-        detectedTechniques: [],
-        nextTip: "まずは相手を褒めて心理的安全の確保をしましょう。2度褒めが理想。その後「前提設定」でYESを取ります",
-        examplePhrase: "素敵な会社ですね！今まで○社伺いましたがダントツです。ところで、もしお話聞いて気に入らなかったら断ってくださいね。気に入ったらぜひスタートしてください！",
-      });
-    } catch {
-      setMessages([
-        {
-          role: "assistant",
-          content:
-            "こんにちは。お電話ありがとうございます。どのようなご用件でしょうか？",
-        },
-      ]);
-    }
-    setIsLoading(false);
-  }
-
   async function fetchCoach(allMessages: Message[]) {
     try {
       const res = await fetch("/api/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene }),
+        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene, difficulty, productContext, customerContext }),
       });
       const data = await res.json();
       setCoach(data);
@@ -140,7 +139,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
     trackRoleplayMessage(newTurn, userMessage.length);
     setIsLoading(true);
 
-    // Fetch customer response and coach analysis in parallel
+    // Fetch customer response
     const [chatRes] = await Promise.all([
       fetch("/api/chat", {
         method: "POST",
@@ -152,6 +151,8 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
           difficulty,
           scene,
           customerType,
+          productContext,
+          customerContext,
           isFirstMessage: false,
         }),
       }).then((r) => r.json()).catch(() => ({ message: "（通信エラー）" })),
@@ -180,7 +181,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
         const res = await fetch("/api/score/preview", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType }),
+          body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType, productContext, customerContext }),
         });
         const data = await res.json();
         if (!data.error) {
@@ -199,7 +200,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
       const res = await fetch("/api/score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType }),
+        body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType, productContext, customerContext }),
       });
       const data = await res.json();
       onFinish(data);
@@ -230,19 +231,19 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
   };
 
   return (
-    <div className="flex flex-1 overflow-hidden">
+    <div className="flex flex-1 flex-col md:flex-row overflow-hidden">
       {/* Main chat area */}
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col min-w-0">
         {/* Step progress bar - sticky */}
-        <div className="sticky top-0 z-30 border-b border-card-border bg-card px-4 py-2">
+        <div className="sticky top-0 z-30 border-b border-card-border bg-card px-3 py-2 sm:px-4">
           <div className="mx-auto max-w-3xl">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-muted">
+              <span className="text-[11px] sm:text-xs text-muted truncate mr-2">
                 {sceneLabels[scene] || "🏠 訪問営業"} │ {product} → {industry}
               </span>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted">
-                  ターン {turnCount}/{maxTurns}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <span className="text-[11px] sm:text-xs text-muted">
+                  {turnCount}/{maxTurns}
                 </span>
                 <button
                   onClick={() => {
@@ -250,7 +251,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
                     setShowCoach(next);
                     trackRoleplayCoachToggled(next);
                   }}
-                  className={`rounded px-2 py-0.5 text-xs transition ${
+                  className={`rounded px-2 py-0.5 text-[11px] sm:text-xs transition ${
                     showCoach
                       ? "bg-accent/20 text-accent"
                       : "bg-card-border text-muted"
@@ -265,7 +266,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
               {STEPS.map((step) => (
                 <div
                   key={step.num}
-                  className={`flex-1 rounded-full py-0.5 text-center text-[10px] font-medium transition ${
+                  className={`flex-1 rounded-full py-0.5 text-center text-[10px] sm:text-[11px] font-medium transition ${
                     coach && coach.stepNumber === step.num
                       ? "bg-accent text-white"
                       : coach && coach.stepNumber > step.num
@@ -282,25 +283,43 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-6">
-          <div className="mx-auto max-w-3xl space-y-5">
-            {/* Scenario intro */}
+        <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-4 sm:py-6">
+          <div className="mx-auto max-w-3xl space-y-4 sm:space-y-5">
+            {/* First turn guide — user starts the conversation */}
+            {messages.length === 0 && !isLoading && (
+              <div className="animate-fade-in-up space-y-4 sm:space-y-5">
+                <div className="rounded-xl border border-card-border bg-card/50 px-4 py-3 text-center text-xs sm:text-sm text-muted">
+                  {sceneLabels[scene] || "🏠"} ロープレ開始 ─ あなたは<span className="font-bold text-accent">営業マン</span>です。<span className="font-bold text-blue-400">{industry || "お客さん"}</span>に{product}を提案してください。
+                </div>
+                <div className="rounded-xl border border-accent/30 bg-accent/5 px-4 py-4 sm:px-5 sm:py-5 text-center">
+                  <div className="mb-2 text-2xl sm:text-3xl">🎤</div>
+                  <p className="text-sm sm:text-base font-bold text-foreground mb-1">
+                    あなたの第一声からスタートです！
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted">
+                    {sceneHints[scene] || "自由に営業トークを始めてみましょう"}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Scenario intro (after first message) */}
             {messages.length > 0 && (
-              <div className="animate-fade-in-up rounded-xl border border-card-border bg-card/50 px-4 py-3 text-center text-xs text-muted">
-                {sceneLabels[scene] || "🏠"} ロープレ開始 ─ あなたは<span className="font-bold text-accent">営業マン</span>。<span className="font-bold text-blue-400">{industry || "お客さん"}</span>に{product}を提案してください。
+              <div className="animate-fade-in-up rounded-xl border border-card-border bg-card/50 px-3 py-2 sm:px-4 sm:py-3 text-center text-[11px] sm:text-xs text-muted">
+                {sceneLabels[scene] || "🏠"} ロープレ中 ─ <span className="font-bold text-accent">営業マン</span> vs <span className="font-bold text-blue-400">{industry || "お客さん"}</span>
               </div>
             )}
 
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex animate-fade-in-up gap-3 ${
+                className={`flex animate-fade-in-up gap-2 sm:gap-3 ${
                   msg.role === "user" ? "flex-row-reverse" : "flex-row"
                 }`}
               >
                 {/* Avatar */}
                 <div
-                  className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-sm ${
+                  className={`flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-full text-xs sm:text-sm ${
                     msg.role === "user"
                       ? "bg-accent/20 text-accent"
                       : "bg-blue-500/20 text-blue-400"
@@ -310,16 +329,16 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
                 </div>
 
                 {/* Bubble */}
-                <div className={`max-w-[75%] ${msg.role === "user" ? "text-right" : "text-left"}`}>
+                <div className={`max-w-[80%] sm:max-w-[75%] ${msg.role === "user" ? "text-right" : "text-left"}`}>
                   <div
-                    className={`mb-1 text-[11px] font-bold ${
+                    className={`mb-1 text-[11px] sm:text-xs font-bold ${
                       msg.role === "user" ? "text-accent" : "text-blue-400"
                     }`}
                   >
                     {msg.role === "user" ? "あなた（営業マン）" : "お客さん"}
                   </div>
                   <div
-                    className={`inline-block rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                    className={`inline-block rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm leading-relaxed ${
                       msg.role === "user"
                         ? "bg-accent text-white"
                         : "border border-card-border bg-card text-foreground"
@@ -332,15 +351,15 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
             ))}
 
             {isLoading && (
-              <div className="flex animate-fade-in-up gap-3">
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-sm text-blue-400">
+              <div className="flex animate-fade-in-up gap-2 sm:gap-3">
+                <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-xs sm:text-sm text-blue-400">
                   👤
                 </div>
                 <div>
-                  <div className="mb-1 text-[11px] font-bold text-blue-400">
+                  <div className="mb-1 text-[11px] sm:text-xs font-bold text-blue-400">
                     お客さん
                   </div>
-                  <div className="inline-block rounded-2xl border border-card-border bg-card px-4 py-3">
+                  <div className="inline-block rounded-2xl border border-card-border bg-card px-3 py-2.5 sm:px-4 sm:py-3">
                     <div className="flex gap-1.5">
                       <div className="typing-dot h-2 w-2 rounded-full bg-muted" />
                       <div className="typing-dot h-2 w-2 rounded-full bg-muted" />
@@ -355,29 +374,48 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
           </div>
         </div>
 
-        {/* Mobile coach (above input) */}
+        {/* Mobile coach (above input) — larger text */}
         {showCoach && coach && (
-          <div className="border-t border-accent/20 bg-card/80 px-4 py-2 md:hidden">
+          <div className="border-t border-accent/20 bg-card/80 px-3 py-3 sm:px-4 md:hidden">
             <div className="mx-auto max-w-3xl">
-              <div className="mb-1 flex items-center justify-between">
-                <span className="text-xs font-medium text-accent">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-sm font-bold text-accent">
                   🎓 {coach.stepNumber}. {coach.currentStep}
                 </span>
                 {coach.detectedTechniques.length > 0 && (
-                  <div className="flex gap-1">
+                  <div className="flex gap-1.5">
                     {coach.detectedTechniques.map((t, i) => (
-                      <span key={i} className="text-xs">
+                      <span key={i} className="text-sm" title={t.name}>
                         {qualityIcon(t.quality)}
                       </span>
                     ))}
                   </div>
                 )}
               </div>
-              <p className="mb-1 text-xs leading-relaxed text-muted">
+              {coach.detectedTechniques.length > 0 && (
+                <div className="mb-2 space-y-1.5">
+                  {coach.detectedTechniques.map((t, i) => (
+                    <div
+                      key={i}
+                      className={`rounded-lg px-2.5 py-1.5 text-xs ${
+                        t.quality === "good"
+                          ? "bg-green-500/10 border border-green-500/20"
+                          : t.quality === "ok"
+                          ? "bg-yellow-500/10 border border-yellow-500/20"
+                          : "bg-red-500/10 border border-red-500/20"
+                      }`}
+                    >
+                      {qualityIcon(t.quality)} {t.name}
+                      {t.quote && <span className="text-muted ml-1">&ldquo;{t.quote}&rdquo;</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+              <p className="mb-2 text-sm leading-relaxed text-muted">
                 💡 {coach.nextTip}
               </p>
-              <div className="flex items-center gap-2">
-                <p className="flex-1 truncate text-xs font-medium text-accent">
+              <div className="flex items-start gap-2 rounded-lg bg-accent/5 border border-accent/20 px-3 py-2">
+                <p className="flex-1 text-sm font-medium text-accent leading-relaxed">
                   🗣️ {coach.examplePhrase}
                 </p>
                 <button
@@ -385,7 +423,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
                     setInput(coach.examplePhrase);
                     inputRef.current?.focus();
                   }}
-                  className="flex-shrink-0 rounded bg-accent/10 px-2 py-0.5 text-[10px] font-medium text-accent"
+                  className="flex-shrink-0 rounded bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent"
                 >
                   コピー
                 </button>
@@ -394,28 +432,69 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
           </div>
         )}
 
+        {/* Learning nudge banner — shown after 30s idle */}
+        {showNudge && (
+          <div className="animate-fade-in-up border-t border-yellow-500/30 bg-yellow-500/5 px-3 py-3 sm:px-4 sm:py-4">
+            <div className="mx-auto max-w-3xl flex items-start gap-3">
+              <span className="text-xl sm:text-2xl flex-shrink-0 mt-0.5">💡</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm sm:text-base font-bold text-foreground mb-1">
+                  行き詰まっていますか？
+                </p>
+                <p className="text-xs sm:text-sm text-muted mb-3">
+                  言葉が出てこないときは、学習ステップを確認してから戻ってくると効果的です
+                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={`/learn/${STEP_LESSON_MAP[coach?.stepNumber ?? 1]?.slug ?? "premise-setting"}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3.5 py-2 text-xs sm:text-sm font-bold text-white transition hover:bg-accent-hover"
+                  >
+                    📖 「{STEP_LESSON_MAP[coach?.stepNumber ?? 1]?.label ?? "前提設定"}」を学ぶ
+                  </a>
+                  <a
+                    href="/learn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-lg border border-card-border px-3 py-2 text-xs sm:text-sm font-medium text-muted transition hover:text-foreground"
+                  >
+                    全レッスン一覧
+                  </a>
+                  <button
+                    onClick={() => setShowNudge(false)}
+                    className="ml-auto text-xs text-muted transition hover:text-foreground"
+                  >
+                    閉じる
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Input area */}
-        <div className="border-t border-card-border bg-background px-4 py-4">
+        <div className="border-t border-card-border bg-background px-3 py-3 sm:px-4 sm:py-4">
           <div className="mx-auto max-w-3xl">
             {turnCount >= maxTurns ? (
               <button
                 onClick={finishAndScore}
                 disabled={isScoring}
-                className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
+                className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-sm sm:text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
               >
                 {isScoring ? "📊 採点中..." : "📊 商談を終了して採点する"}
               </button>
             ) : (
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 <div className="relative flex-1">
                   <textarea
                     ref={inputRef}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="営業トークを入力... (Enterで送信)"
+                    placeholder={messages.length === 0 ? "第一声を入力してください... (Enterで送信)" : "営業トークを入力... (Enterで送信)"}
                     rows={1}
-                    className="w-full resize-none rounded-xl border border-card-border bg-card px-4 py-3 text-sm outline-none placeholder:text-muted/50 focus:border-accent"
+                    className="w-full resize-none rounded-xl border border-card-border bg-card px-3 py-3 sm:px-4 text-sm outline-none placeholder:text-muted/50 focus:border-accent"
                   />
                 </div>
                 <button
@@ -431,7 +510,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
               <button
                 onClick={finishAndScore}
                 disabled={isScoring}
-                className="mt-2 w-full text-center text-xs text-muted transition hover:text-accent"
+                className="mt-2 w-full text-center text-xs sm:text-sm text-muted transition hover:text-accent"
               >
                 {isScoring ? "採点中..." : "途中で商談を終了して採点する →"}
               </button>
@@ -440,34 +519,35 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
         </div>
       </div>
 
-      {/* Coach Panel (right sidebar) */}
+      {/* Coach Panel (right sidebar) — larger text on desktop */}
       {showCoach && coach && (
-        <div className="hidden w-80 flex-shrink-0 self-start sticky top-14 max-h-[calc(100vh-3.5rem)] overflow-y-auto border-l border-card-border bg-card/50 p-4 md:block">
-          <div className="space-y-4">
+        <div className="hidden w-80 lg:w-96 flex-shrink-0 md:flex flex-col border-l border-card-border bg-card/50 overflow-y-auto">
+          <div className="mt-auto p-5">
+          <div className="space-y-5">
             {/* Current Step */}
-            <div className="rounded-xl border border-accent/30 bg-accent/5 p-4">
+            <div className="rounded-xl border border-accent/30 bg-accent/5 p-5">
               <div className="mb-1 flex items-center gap-2">
-                <span className="text-lg">🎓</span>
-                <span className="text-xs font-medium text-accent">
+                <span className="text-xl">🎓</span>
+                <span className="text-sm font-medium text-accent">
                   現在のステップ
                 </span>
               </div>
-              <div className="text-lg font-bold">
+              <div className="text-xl font-bold">
                 {coach.stepNumber}. {coach.currentStep}
               </div>
             </div>
 
             {/* Detected Techniques */}
             {coach.detectedTechniques.length > 0 && (
-              <div className="rounded-xl border border-card-border p-4">
-                <div className="mb-2 text-xs font-medium text-muted">
+              <div className="rounded-xl border border-card-border p-5">
+                <div className="mb-3 text-sm font-medium text-muted">
                   検出されたテクニック
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {coach.detectedTechniques.map((t, i) => (
                     <div
                       key={i}
-                      className={`rounded-lg p-2 text-xs ${
+                      className={`rounded-lg p-3 text-sm ${
                         t.quality === "good"
                           ? "bg-green-500/10 border border-green-500/20"
                           : t.quality === "ok"
@@ -490,19 +570,19 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
             )}
 
             {/* Next Tip */}
-            <div className="rounded-xl border border-card-border p-4">
-              <div className="mb-2 text-xs font-medium text-muted">
+            <div className="rounded-xl border border-card-border p-5">
+              <div className="mb-2 text-sm font-medium text-muted">
                 💡 次に使うべきテクニック
               </div>
-              <p className="text-sm leading-relaxed">{coach.nextTip}</p>
+              <p className="text-base leading-relaxed">{coach.nextTip}</p>
             </div>
 
             {/* Example Phrase */}
-            <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
-              <div className="mb-2 text-xs font-medium text-accent">
+            <div className="rounded-xl border border-accent/20 bg-accent/5 p-5">
+              <div className="mb-2 text-sm font-medium text-accent">
                 🗣️ トーク例（コピーして使ってOK）
               </div>
-              <p className="text-sm leading-relaxed font-medium">
+              <p className="text-base leading-relaxed font-medium">
                 {coach.examplePhrase}
               </p>
               <button
@@ -510,36 +590,37 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
                   setInput(coach.examplePhrase);
                   inputRef.current?.focus();
                 }}
-                className="mt-2 rounded-lg bg-accent/10 px-3 py-1 text-xs font-medium text-accent transition hover:bg-accent/20"
+                className="mt-3 rounded-lg bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent transition hover:bg-accent/20"
               >
                 ← 入力欄にコピー
               </button>
             </div>
 
             {/* 5 Step Reference */}
-            <div className="rounded-xl border border-card-border p-4">
-              <div className="mb-2 text-xs font-medium text-muted">
+            <div className="rounded-xl border border-card-border p-5">
+              <div className="mb-3 text-sm font-medium text-muted">
                 📖 営業5ステップ
               </div>
-              <div className="space-y-1 text-[11px]">
+              <div className="space-y-1.5 text-sm">
                 {STEPS.map((s) => (
                   <div
                     key={s.num}
-                    className={`flex items-center gap-2 rounded px-2 py-1 ${
+                    className={`flex items-center gap-2 rounded px-2.5 py-1.5 ${
                       coach.stepNumber === s.num
                         ? "bg-accent/10 text-accent font-medium"
                         : "text-muted"
                     }`}
                   >
-                    <span className="w-3">{s.num}</span>
+                    <span className="w-4">{s.num}</span>
                     <span>{s.name}</span>
                     {coach.stepNumber === s.num && (
-                      <span className="ml-auto">← 今ここ</span>
+                      <span className="ml-auto text-xs">← 今ここ</span>
                     )}
                   </div>
                 ))}
               </div>
             </div>
+          </div>
           </div>
         </div>
       )}

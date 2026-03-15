@@ -48,7 +48,7 @@ const offerMap: Record<CancelReason, CancelOffer> = {
   "他のツールを使っている": {
     type: "comparison",
     title: "成約コーチ AI だけの強み",
-    description: "即決営業メソッドに基づくAIコーチングは他にありません",
+    description: "成約5ステップメソッドに基づくAIコーチングは他にありません",
     discountPercent: 25,
     discountMonths: 2,
     showAchievements: true,

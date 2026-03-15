@@ -249,7 +249,7 @@ export function CancelSaveModal({
                     <div className="space-y-2 text-xs">
                       <div className="flex items-center gap-2">
                         <span className="text-accent">✓</span>
-                        <span>即決営業メソッドに基づくAIコーチング</span>
+                        <span>成約5ステップメソッドに基づくAIコーチング</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-accent">✓</span>

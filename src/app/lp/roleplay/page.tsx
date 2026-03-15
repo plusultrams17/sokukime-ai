@@ -14,12 +14,12 @@ import { SalesAnalyzer } from "@/components/sales-analyzer";
 export const metadata: Metadata = {
   title: "AI営業分析ツール｜URLを入れるだけで営業トーク・競合分析を自動生成",
   description:
-    "URLまたは商材名を入力するだけでAIがセリングポイント分析・競合分析・即決営業トークスクリプトを自動生成。営業ロープレ練習アプリ。無料・登録不要で今すぐ使える。",
+    "URLまたは商材名を入力するだけでAIがセリングポイント分析・競合分析・成約トークスクリプトを自動生成。営業ロープレ練習アプリ。無料・登録不要で今すぐ使える。",
   alternates: { canonical: "/lp/roleplay" },
   openGraph: {
     title: "AI営業分析ツール｜10秒であなたの商材を営業武器に変える",
     description:
-      "URLを入れるだけ。AIがセリングポイント・競合分析・即決トークスクリプトを自動生成。無料・登録不要。",
+      "URLを入れるだけ。AIがセリングポイント・競合分析・成約トークスクリプトを自動生成。無料・登録不要。",
     url: "/lp/roleplay",
   },
 };
@@ -537,7 +537,7 @@ export default async function RoleplayLP() {
           <p className="mx-auto mb-10 max-w-2xl text-base text-white/70 leading-relaxed sm:text-lg">
             URLまたは商材名を入力するだけ。
             <br className="hidden sm:block" />
-            AIがセリングポイント・競合分析・即決トークスクリプトを自動生成。
+            AIがセリングポイント・競合分析・成約トークスクリプトを自動生成。
           </p>
 
           <div data-hero-cta>

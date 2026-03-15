@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { JsonLd } from "@/components/json-ld";
 
 export const metadata: Metadata = {
   title: "活用シーン",
@@ -74,8 +75,35 @@ const useCases = [
 ];
 
 export default function UseCasesPage() {
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `${siteUrl}/use-cases#webpage`,
+              name: "活用シーン | 成約コーチ AI",
+              description:
+                "成約コーチ AIは、新人営業研修（独り立ち期間50%短縮）、チームスキル底上げ（成約率平均20%向上）、個人事業主の自主トレ、テレアポ練習（アポ獲得率1.3倍）など幅広い営業シーンで活用されています。",
+              url: `${siteUrl}/use-cases`,
+              isPartOf: { "@id": `${siteUrl}/#website` },
+              inLanguage: "ja",
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": `${siteUrl}/use-cases#breadcrumb`,
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "ホーム", item: siteUrl },
+                { "@type": "ListItem", position: 2, name: "活用シーン", item: `${siteUrl}/use-cases` },
+              ],
+            },
+          ],
+        }}
+      />
       <Header />
 
       <section className="px-6 pt-32 pb-16">
@@ -83,6 +111,9 @@ export default function UseCasesPage() {
           <h1 className="mb-4 text-4xl font-bold">活用シーン</h1>
           <p className="text-lg text-muted">
             あらゆる営業シーンで成約コーチ AIを活用できます
+          </p>
+          <p className="mx-auto mt-6 max-w-3xl text-sm text-muted leading-relaxed text-left">
+            成約コーチ AIは、新人営業マンの研修（独り立ち期間<strong className="text-foreground">平均50%短縮</strong>）、営業チームのスキル底上げ（成約率<strong className="text-foreground">平均20%向上</strong>）、個人事業主・フリーランスの自主トレ、テレアポ・電話営業の練習（アポイント獲得率<strong className="text-foreground">1.3倍</strong>）など、幅広い営業シーンで活用されています。6業種（不動産・保険・SaaS・人材・教育・物販）に対応。
           </p>
         </div>
       </section>
@@ -151,6 +182,33 @@ export default function UseCasesPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Industry Links */}
+      <section className="border-t border-card-border px-6 py-16">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="mb-8 text-center text-2xl font-bold">
+            業種別の営業ロープレ
+          </h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+            {[
+              { name: "不動産営業", href: "/industry/real-estate" },
+              { name: "保険営業", href: "/industry/insurance" },
+              { name: "SaaS営業", href: "/industry/saas" },
+              { name: "人材営業", href: "/industry/hr" },
+              { name: "教育・スクール営業", href: "/industry/education" },
+              { name: "物販営業", href: "/industry/retail" },
+            ].map((industry) => (
+              <Link
+                key={industry.href}
+                href={industry.href}
+                className="rounded-xl border border-card-border bg-card p-4 text-center text-sm font-medium transition hover:border-accent/50 hover:text-accent"
+              >
+                {industry.name}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

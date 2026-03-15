@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -20,17 +21,17 @@ const stats = [
 const industries = ["不動産", "保険", "SaaS", "人材", "教育", "物販"];
 
 const beforeCards = [
-  { title: "ロープレ環境", desc: "先輩に頼まないとロープレできない" },
-  { title: "本番への不安", desc: "練習不足で本番が怖い" },
-  { title: "切り返し力", desc: "切り返しパターンが少ない" },
-  { title: "弱点の把握", desc: "自分の弱点がわからない" },
+  { title: "ロープレ環境", desc: "先輩に頼まないとロープレできない", image: "/images/ba/before-01.png" },
+  { title: "本番への不安", desc: "練習不足で本番が怖い", image: "/images/ba/before-02.png" },
+  { title: "切り返し力", desc: "切り返しパターンが少ない", image: "/images/ba/before-03.png" },
+  { title: "弱点の把握", desc: "自分の弱点がわからない", image: "/images/ba/before-04.png" },
 ];
 
 const afterCards = [
-  { title: "ロープレ環境", desc: "24時間いつでもAIとロープレ" },
-  { title: "本番への自信", desc: "場数を踏んで自信がつく" },
-  { title: "切り返し力", desc: "営業の型が体に染みつく" },
-  { title: "弱点の把握", desc: "AIスコアで弱点を可視化" },
+  { title: "ロープレ環境", desc: "24時間いつでもAIとロープレ", image: "/images/ba/after-01.png" },
+  { title: "本番への自信", desc: "場数を踏んで自信がつく", image: "/images/ba/after-02.png" },
+  { title: "切り返し力", desc: "営業の型が体に染みつく", image: "/images/ba/after-03.png" },
+  { title: "弱点の把握", desc: "AIスコアで弱点を可視化", image: "/images/ba/after-04.png" },
 ];
 
 const steps = [
@@ -38,16 +39,19 @@ const steps = [
     num: "01",
     title: "業種・商材を入力",
     desc: "あなたの営業シーンに合わせたリアルなお客さんをAIが生成",
+    image: "/images/steps/step-01.png",
   },
   {
     num: "02",
     title: "AIとロープレ開始",
     desc: "AIが実際のお客さんのように反応。アプローチからクロージングまで実践",
+    image: "/images/steps/step-02.png",
   },
   {
     num: "03",
     title: "成約スコアで採点",
     desc: "アプローチ・ヒアリング・クロージング・反論処理を成約メソッドで分析",
+    image: "/images/steps/step-03.png",
   },
 ];
 
@@ -66,8 +70,10 @@ const methods = [
 ];
 
 const serviceCategories = [
-  { title: "ロープレ", desc: "AIと営業ロープレ", href: "/roleplay" },
+  { title: "AIロープレ", desc: "AIがお客さん役を演じて実践練習", href: "/roleplay" },
   { title: "学習コース", desc: "22レッスン+認定試験", href: "/learn" },
+  { title: "ワークシート", desc: "商談前の5フェーズ準備シート", href: "/worksheet" },
+  { title: "無料営業ツール", desc: "診断・スクリプト・切り返し集", href: "/tools" },
   { title: "ブログ", desc: "営業ノウハウ記事", href: "/blog" },
 ];
 
@@ -592,6 +598,9 @@ export default async function Home() {
           <h1 className="sr-only">
             AIで営業ロープレ練習 — 成約率を上げる5ステップメソッド
           </h1>
+          <p className="sr-only">
+            成約コーチ AIは、AIがリアルなお客さん役を演じる営業ロープレ練習アプリです。営業心理学に基づく「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAIコーチがリアルタイムで評価し、24時間いつでも無料で営業力を鍛えることができます。1,600件の商談から体系化された営業の型を、22レッスンの学習コースとAIロープレで習得できます。
+          </p>
 
           <p className="mb-6 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-6xl" role="presentation" style={{ textWrap: "balance" } as React.CSSProperties}>
             「考えます」で終わる商談を、
@@ -677,10 +686,16 @@ export default async function Home() {
             </span>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {beforeCards.map((card, i) => (
+            {beforeCards.map((card) => (
               <div key={card.title} className="ba-card ba-card--before">
                 <div className="ba-card__illustration">
-                  <BeforeScene index={i} />
+                  <Image
+                    src={card.image}
+                    alt={card.desc}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                  />
                 </div>
                 <div className="mt-3">
                   <p className="text-xs font-semibold text-red-800/60">{card.title}</p>
@@ -704,10 +719,16 @@ export default async function Home() {
             </span>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {afterCards.map((card, i) => (
+            {afterCards.map((card) => (
               <div key={card.title} className="ba-card">
                 <div className="ba-card__illustration">
-                  <AfterScene index={i} />
+                  <Image
+                    src={card.image}
+                    alt={card.desc}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                  />
                 </div>
                 <div className="mt-3">
                   <p className="text-xs font-semibold text-gray-600">{card.title}</p>
@@ -717,8 +738,11 @@ export default async function Home() {
             ))}
           </div>
 
-          {/* Intermediate CTA */}
+          {/* Intermediate CTA — Loss Aversion framing at psychological peak (after B/A) */}
           <div className="mt-10 flex flex-col items-center gap-4">
+            <p className="text-center text-sm font-medium text-muted">
+              明日の商談、今日練習しないまま迎えますか？
+            </p>
             <PrimaryCTA />
           </div>
         </div>
@@ -737,10 +761,16 @@ export default async function Home() {
             登録もダウンロードも不要。思い立った瞬間にロープレ開始。
           </p>
           <div className="flex flex-wrap justify-center gap-8">
-            {steps.map((step, i) => (
+            {steps.map((step) => (
               <div key={step.num} className="howto-card">
                 <div className="howto-card__photo">
-                  <HowtoScene step={i} />
+                  <Image
+                    src={step.image}
+                    alt={step.title}
+                    fill
+                    className="object-cover"
+                    sizes="250px"
+                  />
                 </div>
                 <div className="howto-card__num">{step.num}</div>
                 <div className="howto-card__title">
@@ -806,9 +836,9 @@ export default async function Home() {
       <section className="px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-12 text-center text-2xl font-bold text-foreground sm:text-3xl">
-            あなたの営業力を上げる4つの武器
+            あなたの営業力を上げる5つの武器
           </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 sm:gap-6">
             {serviceCategories.map((cat) => (
               <Link key={cat.title} href={cat.href} className="continue-application">
                 <FolderIcon />
@@ -942,17 +972,17 @@ export default async function Home() {
       <HomepageCTATracker />
       <HomeExitPopup />
       <ScrollSlideIn sessionKey="home-slide-in">
-        <p className="mb-2 text-sm font-bold text-foreground">
-          まだ試してない？
+        <p className="mb-2 pr-6 text-sm font-bold text-foreground">
+          明日の商談、準備できてる？
         </p>
         <p className="mb-3 text-xs text-muted">
-          3分でAIがあなたの営業力を採点します
+          練習なしで本番に臨むリスク、AIが3分で可視化します
         </p>
         <Link
           href="/roleplay"
           className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
         >
-          無料で診断する
+          無料で営業力を診断する
         </Link>
       </ScrollSlideIn>
     </div>

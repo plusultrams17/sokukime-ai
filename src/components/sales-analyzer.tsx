@@ -256,7 +256,7 @@ export function SalesAnalyzer() {
           <div className="mb-8">
             <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-sm text-accent">3</span>
-              即決営業トークスクリプト
+              成約トークスクリプト
             </h3>
             <div className="space-y-4">
               {result.closingScripts.map((cs, i) => {

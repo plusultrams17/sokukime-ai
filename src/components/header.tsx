@@ -9,6 +9,8 @@ interface HeaderProps {
 }
 
 const navLinks = [
+  { href: "/tools", label: "無料ツール" },
+  { href: "/industry", label: "業種別" },
   { href: "/learn", label: "学習" },
   { href: "/blog", label: "ブログ" },
   { href: "/pricing", label: "料金プラン" },

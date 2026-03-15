@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const ANALYSIS_PROMPT = `あなたは即決営業メソッド（成約5ステップ）の専門コンサルタントです。
+const ANALYSIS_PROMPT = `あなたは成約5ステップメソッドの専門コンサルタントです。
 与えられた商材・サービス情報を分析し、営業現場で即座に使える武器を作成してください。
 
 以下のJSON形式で回答してください：
@@ -26,7 +26,7 @@ const ANALYSIS_PROMPT = `あなたは即決営業メソッド（成約5ステッ
   "closingScripts": [
     {
       "situation": "場面（例: お客さんが『考えます』と言った時）",
-      "script": "即決営業メソッドに基づくトークスクリプト",
+      "script": "成約5ステップメソッドに基づくトークスクリプト",
       "step": "対応する成約5ステップ（アプローチ/ヒアリング/プレゼン/クロージング/反論処理）"
     }
   ]
@@ -36,7 +36,7 @@ const ANALYSIS_PROMPT = `あなたは即決営業メソッド（成約5ステッ
 - sellingPointsは3つ生成
 - closingScriptsは3つ生成（クロージングと反論処理を中心に）
 - 言い回しは日本語の口語体で、実際の商談で使える自然な表現にする
-- 即決営業の核心：「考えます」を言わせない前提設定、社会的証明、一貫性の原理を活用
+- 成約メソッドの核心：「考えます」を言わせない前提設定、社会的証明、一貫性の原理を活用
 - JSONのみを返すこと`;
 
 function extractTextFromHtml(html: string): string {

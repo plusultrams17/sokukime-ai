@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { JsonLd } from "@/components/json-ld";
 
 export const metadata: Metadata = {
   title: "成約コーチ AIについて",
@@ -29,8 +30,36 @@ const values = [
 ];
 
 export default function AboutPage() {
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "AboutPage",
+              "@id": `${siteUrl}/about#webpage`,
+              name: "成約コーチ AIについて",
+              description:
+                "成約コーチ AIは、4年半・1,600件の商談経験から体系化された「成約5ステップメソッド」をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。",
+              url: `${siteUrl}/about`,
+              isPartOf: { "@id": `${siteUrl}/#website` },
+              about: { "@id": `${siteUrl}/#organization` },
+              inLanguage: "ja",
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": `${siteUrl}/about#breadcrumb`,
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "ホーム", item: siteUrl },
+                { "@type": "ListItem", position: 2, name: "成約コーチ AIについて", item: `${siteUrl}/about` },
+              ],
+            },
+          ],
+        }}
+      />
       <Header />
 
       {/* Hero */}
@@ -45,6 +74,15 @@ export default function AboutPage() {
             成約コーチ AIは、AI × 営業心理学で営業マンの練習環境を変えるサービスです。
             <br />
             先輩に頼まなくても、24時間いつでも、何度でも営業ロープレができる世界を目指しています。
+          </p>
+        </div>
+      </section>
+
+      {/* AEO Definition */}
+      <section className="border-t border-card-border px-6 py-12">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-sm leading-relaxed text-muted">
+            <strong className="text-foreground">成約コーチ AI</strong>は、4年半・1,600件の商談経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間無制限ロープレで解決します。
           </p>
         </div>
       </section>
@@ -154,6 +192,43 @@ export default function AboutPage() {
                 <p className="text-xs text-muted leading-relaxed">{v.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Related Links */}
+      <section className="border-t border-card-border px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-6 text-xl font-bold">もっと詳しく</h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Link href="/features" className="flex items-center gap-3 rounded-xl border border-card-border bg-card p-4 transition hover:border-accent/50">
+              <span className="text-2xl">🔧</span>
+              <div>
+                <p className="text-sm font-bold">機能紹介</p>
+                <p className="text-xs text-muted">AIロープレ・コーチ・スコアリング</p>
+              </div>
+            </Link>
+            <Link href="/use-cases" className="flex items-center gap-3 rounded-xl border border-card-border bg-card p-4 transition hover:border-accent/50">
+              <span className="text-2xl">💼</span>
+              <div>
+                <p className="text-sm font-bold">活用シーン</p>
+                <p className="text-xs text-muted">新人研修・チーム・個人・テレアポ</p>
+              </div>
+            </Link>
+            <Link href="/blog/sokketsu-eigyo-method-guide" className="flex items-center gap-3 rounded-xl border border-card-border bg-card p-4 transition hover:border-accent/50">
+              <span className="text-2xl">📖</span>
+              <div>
+                <p className="text-sm font-bold">成約5ステップメソッド解説</p>
+                <p className="text-xs text-muted">ブログで詳しく学ぶ</p>
+              </div>
+            </Link>
+            <Link href="/pricing" className="flex items-center gap-3 rounded-xl border border-card-border bg-card p-4 transition hover:border-accent/50">
+              <span className="text-2xl">💰</span>
+              <div>
+                <p className="text-sm font-bold">料金プラン</p>
+                <p className="text-xs text-muted">無料プラン・Proプラン比較</p>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

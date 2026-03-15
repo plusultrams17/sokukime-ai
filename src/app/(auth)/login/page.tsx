@@ -1,10 +1,8 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { trackLoginCompleted } from "@/lib/tracking";
 
 function GoogleIcon() {
   return (
@@ -18,16 +16,12 @@ function GoogleIcon() {
 }
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/roleplay";
+  const refCode = searchParams.get("ref") || "";
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState(searchParams.get("error") || "");
-  const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   async function handleGoogleLogin() {
     setError("");
@@ -40,10 +34,14 @@ function LoginForm() {
       return;
     }
 
+    const callbackUrl = new URL("/auth/callback", window.location.origin);
+    callbackUrl.searchParams.set("redirect", redirect);
+    if (refCode) callbackUrl.searchParams.set("ref", refCode);
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirect)}`,
+        redirectTo: callbackUrl.toString(),
       },
     });
 
@@ -53,37 +51,13 @@ function LoginForm() {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
-    const supabase = createClient();
-    if (!supabase) {
-      setError("サービスが一時的に利用できません");
-      setIsLoading(false);
-      return;
-    }
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError("メールアドレスまたはパスワードが正しくありません");
-      setIsLoading(false);
-      return;
-    }
-
-    trackLoginCompleted("email");
-    router.push(redirect);
-    router.refresh();
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <div className="space-y-5">
       <div className="rounded-2xl border border-card-border bg-card p-6 space-y-4">
-        <h2 className="text-lg font-bold">ログイン</h2>
+        <h2 className="text-lg font-bold text-center">ログイン / 新規登録</h2>
+        <p className="text-xs text-muted text-center">
+          Googleアカウントで簡単にログインできます
+        </p>
 
         {error && (
           <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
@@ -91,90 +65,36 @@ function LoginForm() {
           </div>
         )}
 
-        {/* Google OAuth */}
         <button
           type="button"
           onClick={handleGoogleLogin}
           disabled={isGoogleLoading}
-          className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-card-border bg-white text-sm font-medium text-foreground transition hover:bg-gray-50 disabled:opacity-60"
+          className="flex h-14 w-full items-center justify-center gap-3 rounded-xl border-2 border-accent bg-accent/5 text-sm font-bold text-accent transition hover:bg-accent/10 disabled:opacity-60"
         >
           {isGoogleLoading ? (
             "接続中..."
           ) : (
             <>
               <GoogleIcon />
-              Googleでログイン
+              Googleで続ける
             </>
           )}
         </button>
 
-        {/* Divider */}
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-card-border" />
-          </div>
-          <div className="relative flex justify-center text-xs">
-            <span className="bg-card px-3 text-muted">または</span>
-          </div>
+        <div className="rounded-xl border border-card-border bg-card/50 p-4 space-y-2">
+          <div className="text-xs font-medium text-muted mb-2">無料アカウントに含まれるもの:</div>
+          {["AIロープレ（1日1回）", "成約5ステップ採点", "リアルタイムAIコーチ", "クレジットカード不要"].map(item => (
+            <div key={item} className="flex items-center gap-2 text-xs text-muted">
+              <span className="text-accent">✓</span> {item}
+            </div>
+          ))}
         </div>
-
-        <div>
-          <label className="mb-1.5 block text-xs font-medium text-muted">
-            メールアドレス
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="you@example.com"
-            className="w-full rounded-lg border border-card-border bg-background px-4 py-3 text-sm outline-none placeholder:text-muted/50 focus:border-accent"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1.5 block text-xs font-medium text-muted">
-            パスワード
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              placeholder="6文字以上"
-              className="w-full rounded-lg border border-card-border bg-background px-4 py-3 pr-12 text-sm outline-none placeholder:text-muted/50 focus:border-accent"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded px-1.5 py-1 text-xs font-medium text-muted transition hover:text-foreground"
-            >
-              {showPassword ? "隠す" : "表示"}
-            </button>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
-        >
-          {isLoading ? "ログイン中..." : "ログイン"}
-        </button>
       </div>
 
-      <p className="text-center text-sm text-muted">
-        アカウントをお持ちでない方は{" "}
-        <Link
-          href={`/signup${redirect !== "/roleplay" ? `?redirect=${encodeURIComponent(redirect)}` : ""}`}
-          className="text-accent hover:underline"
-        >
-          新規登録
-        </Link>
+      <p className="text-center text-xs text-muted">
+        Googleアカウントでログインすると、初回は自動的にアカウントが作成されます。
       </p>
-    </form>
+    </div>
   );
 }
 

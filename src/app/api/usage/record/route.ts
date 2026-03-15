@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getUsageStatus, recordUsage } from "@/lib/usage";
 
+const UNVERIFIED_USAGE_LIMIT = 3;
+
 export async function POST() {
   const supabase = await createClient();
   if (!supabase) {
@@ -13,6 +15,29 @@ export async function POST() {
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Check if email verification is needed (email signup only, not OAuth)
+  const isOAuthUser = user.app_metadata?.provider !== "email";
+  if (!isOAuthUser && !user.email_confirmed_at) {
+    // Count total usage for unverified users
+    const { count } = await supabase
+      .from("usage_records")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id);
+
+    if ((count || 0) >= UNVERIFIED_USAGE_LIMIT) {
+      return NextResponse.json(
+        {
+          error: "email_verification_required",
+          message: "メール認証が必要です",
+          email: user.email,
+          usedBeforeVerify: count || 0,
+          verifyLimit: UNVERIFIED_USAGE_LIMIT,
+        },
+        { status: 403 }
+      );
+    }
   }
 
   // Check usage limit before recording

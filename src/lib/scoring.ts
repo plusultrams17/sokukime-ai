@@ -5,6 +5,8 @@ export interface ScoreInput {
   difficulty: string;
   scene: string;
   customerType: string;
+  productContext?: string;
+  customerContext?: string;
 }
 
 export interface ScoreResult {
@@ -137,7 +139,9 @@ export function generateFallbackScore(): ScoreResult {
 }
 
 export async function scoreConversation(input: ScoreInput): Promise<ScoreResult> {
-  const { messages, industry, product, difficulty, scene, customerType } = input;
+  const { getPersona } = await import("@/lib/personas");
+  const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext } = input;
+  const persona = getPersona(difficulty);
 
   const conversationText = messages
     .map(
@@ -172,10 +176,12 @@ export async function scoreConversation(input: ScoreInput): Promise<ScoreResult>
 【シナリオ情報】
 業種: ${industry}
 商材: ${product}
-難易度: ${difficulty}
+お客さんのタイプ: ${persona?.label || difficulty}
 お客さんの属性: ${customerTypeLabels[customerType] || "個人"}
 営業シーン: ${sceneLabels[scene] || "訪問営業"}
 ${isB2B ? `取引タイプ: B2B（法人取引）─ 「${product}」を「${industry}」事業者に提案\n※ B2B営業の観点も含めて採点してください（事業課題の把握、ROI訴求、同業他社事例の活用など）` : ""}
+${productContext ? `\n【商材の詳細情報】\n${productContext}` : ""}
+${customerContext ? `\n【お客さんのペルソナ詳細】\n${customerContext}` : ""}
 
 --- 会話内容 ---
 ${conversationText}

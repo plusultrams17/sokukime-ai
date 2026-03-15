@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { JsonLd } from "@/components/json-ld";
 import { getAllBlogPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
@@ -13,9 +14,44 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getAllBlogPosts();
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
 
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "CollectionPage",
+              "@id": `${siteUrl}/blog#webpage`,
+              name: "営業ノウハウブログ | 成約コーチ AI",
+              description:
+                "営業ロープレの効果的な練習方法、クロージングテクニック、成約率を上げるメソッドを解説。AI活用法から営業研修のコツまで実践的なノウハウを発信。",
+              url: `${siteUrl}/blog`,
+              isPartOf: { "@id": `${siteUrl}/#website` },
+              inLanguage: "ja",
+              mainEntity: {
+                "@type": "ItemList",
+                itemListElement: posts.map((post, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  url: `${siteUrl}/blog/${post.slug}`,
+                  name: post.title,
+                })),
+              },
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": `${siteUrl}/blog#breadcrumb`,
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "ホーム", item: siteUrl },
+                { "@type": "ListItem", position: 2, name: "ブログ", item: `${siteUrl}/blog` },
+              ],
+            },
+          ],
+        }}
+      />
       <Header />
 
       {/* Title Section */}
@@ -26,6 +62,9 @@ export default function BlogPage() {
           </h1>
           <p className="text-lg text-muted">
             成約メソッドやAI活用法など、営業力を鍛えるための実践的なノウハウを発信しています。
+          </p>
+          <p className="mx-auto mt-6 max-w-3xl text-sm text-muted leading-relaxed text-left">
+            営業ロープレの練習方法、クロージングテクニック、反論処理の切り返しトーク、成約率を上げるメソッドなど、現場で使える営業ノウハウを体系的に解説。AI活用の最新トレンドから、1,600件の商談経験に基づく実践的なテクニックまで、あなたの営業力を鍛える記事をお届けします。
           </p>
         </div>
       </section>

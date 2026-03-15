@@ -38,16 +38,24 @@ export function Footer() {
             <nav className="flex flex-col gap-2 text-sm text-muted">
               <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
               <Link href="/features" className="transition hover:text-foreground">機能紹介</Link>
+              <Link href="/tools" className="transition hover:text-foreground">無料ツール</Link>
+              <Link href="/industry" className="transition hover:text-foreground">業種別ロープレ</Link>
               <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
               <Link href="/use-cases" className="transition hover:text-foreground">活用シーン</Link>
               <Link href="/blog" className="transition hover:text-foreground">ブログ</Link>
             </nav>
           </div>
-          {/* Company */}
+          {/* Industries */}
           <div>
-            <h4 className="mb-3 text-sm font-semibold text-foreground">会社情報</h4>
+            <h4 className="mb-3 text-sm font-semibold text-foreground">業種別ロープレ</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted">
-              <Link href="/about" className="transition hover:text-foreground">成約コーチ AIについて</Link>
+              <Link href="/industry/real-estate" className="transition hover:text-foreground">不動産営業</Link>
+              <Link href="/industry/insurance" className="transition hover:text-foreground">保険営業</Link>
+              <Link href="/industry/saas" className="transition hover:text-foreground">SaaS営業</Link>
+              <Link href="/industry/hr" className="transition hover:text-foreground">人材営業</Link>
+              <Link href="/industry/education" className="transition hover:text-foreground">教育営業</Link>
+              <Link href="/industry/retail" className="transition hover:text-foreground">物販営業</Link>
+              <Link href="/about" className="mt-2 transition hover:text-foreground">成約コーチ AIについて</Link>
             </nav>
           </div>
           {/* Legal */}

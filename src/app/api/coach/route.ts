@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getPersona } from "@/lib/personas";
 
 const COACH_PROMPT = `あなたは「成約5ステップメソッド」の営業コーチAIです。
 営業ロープレの会話を見て、営業マンにリアルタイムでアドバイスします。
@@ -60,12 +61,14 @@ const COACH_PROMPT = `あなたは「成約5ステップメソッド」の営業
 - 会話の流れから今どのステップにいるか正確に判断する`;
 
 export async function POST(request: NextRequest) {
-  const { messages, industry, product, customerType, scene } = await request.json();
+  const { messages, industry, product, customerType, scene, difficulty, productContext, customerContext } = await request.json();
   try {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(generateFallbackCoach(messages));
     }
+
+    const persona = getPersona(difficulty);
 
     const conversationText = messages
       .map(
@@ -77,11 +80,15 @@ export async function POST(request: NextRequest) {
     const isBusiness = customerType === "owner" || customerType === "manager" || customerType === "staff";
     const isB2B = isBusiness && industry && industry !== customerType;
 
+    const personaHint = persona ? `- お客さんのタイプ: ${persona.label}（${persona.description}）\n- このタイプで鍛えるスキル: ${persona.testedSkills.join("、")}\n※ このタイプのお客さんに効果的なテクニックを中心にアドバイスしてください` : "";
+
     const scenarioContext = `【シナリオ情報】
 - お客さんの業種: ${industry || "一般"}
 - 営業マンの商材: ${product || "不明"}
 - 営業シーン: ${scene || "訪問"}
-${isB2B ? `- 取引タイプ: B2B（法人取引）\n※ B2B営業では「同業他社の導入事例」「コスト削減効果」「事業へのインパクト」の訴求が特に有効です` : ""}`;
+${personaHint ? `${personaHint}\n` : ""}${isB2B ? `- 取引タイプ: B2B（法人取引）\n※ B2B営業では「同業他社の導入事例」「コスト削減効果」「事業へのインパクト」の訴求が特に有効です` : ""}
+${productContext ? `\n【商材の詳細情報】\n${productContext}` : ""}
+${customerContext ? `\n【お客さんのペルソナ詳細】\n${customerContext}` : ""}`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",

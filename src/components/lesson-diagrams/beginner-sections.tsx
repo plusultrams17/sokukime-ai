@@ -324,7 +324,7 @@ function FourStepsDiagram() {
         {[
           { num: "1", text: "精一杯ご説明", sub: "誠意を見せる" },
           { num: "2", text: "断ってOK", sub: "安心感を作る" },
-          { num: "3", text: "スタートを", sub: "即決の道筋" },
+          { num: "3", text: "スタートを", sub: "成約の道筋" },
           { num: "4", text: "よろしい？", sub: "合意を取る" },
         ].map((step, i) => {
           const x = 15 + i * 133;
@@ -393,7 +393,7 @@ function TwiceTimingDiagram() {
         {/* Effect */}
         <rect x="120" y="128" width="300" height="25" fill={LIGHT_BG} stroke="none" />
         <text x="270" y="146" textAnchor="middle" fontSize="11" fill={DARK} fontWeight="bold">
-          2回繰り返すことで記憶に定着し、即決の前提が強化される
+          2回繰り返すことで記憶に定着し、成約の前提が強化される
         </text>
       </svg>
     </div>
