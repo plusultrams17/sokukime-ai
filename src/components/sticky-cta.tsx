@@ -5,18 +5,32 @@ import Link from "next/link";
 import { trackCTAClick } from "@/lib/tracking";
 
 export function StickyCTA() {
-  const [visible, setVisible] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+  const [footerVisible, setFooterVisible] = useState(false);
 
   useEffect(() => {
     const heroBtn = document.querySelector("[data-hero-cta]");
     if (!heroBtn) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setVisible(!entry.isIntersecting),
+      ([entry]) => setPastHero(!entry.isIntersecting),
       { threshold: 0 }
     );
     observer.observe(heroBtn);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setFooterVisible(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
+  const visible = pastHero && !footerVisible;
 
   if (!visible) return null;
 
