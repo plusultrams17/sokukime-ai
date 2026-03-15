@@ -5,35 +5,32 @@ import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
 import { StickyCTA } from "@/components/sticky-cta";
 import { MethodCarousel } from "@/components/method-carousel";
+import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
+import { HomeExitPopup } from "@/components/exit-popups/home-exit-popup";
+import { ScrollSlideIn } from "@/components/scroll-slide-in";
 
 /* ─── Data ─── */
 
 const stats = [
-  { value: "5ステップ", label: "成約メソッド" },
-  { value: "24時間", label: "いつでも練習可能" },
-  { value: "無料", label: "登録不要で体験" },
+  { value: "5ステップ", label: "営業心理学に基づく型" },
+  { value: "24時間365日", label: "深夜の練習もOK" },
+  { value: "0円", label: "メアド不要で今すぐ" },
 ];
 
-const serviceCategories = [
-  { title: "ロープレ", desc: "AIと営業ロープレ", href: "/roleplay" },
-  { title: "ワークシート", desc: "営業準備・分析シート", href: "/worksheet" },
-  { title: "学習コース", desc: "22レッスン+認定試験", href: "/learn" },
-  { title: "ブログ", desc: "営業ノウハウ記事", href: "/blog" },
-  { title: "料金プラン", desc: "Free / Pro プラン比較", href: "/pricing" },
-];
+const industries = ["不動産", "保険", "SaaS", "人材", "教育", "物販"];
 
 const beforeCards = [
-  { title: "練習機会", subtitle: "営業ロープレ", stat: "0回", unit: "月", desc: "先輩の都合待ち" },
-  { title: "成約率", subtitle: "直近3ヶ月", stat: "23%", unit: "目標50%", desc: "伸び悩み中" },
-  { title: "切り返し", subtitle: "反論処理", stat: "2", unit: "パターン", desc: "引き出し不足" },
-  { title: "弱点把握", subtitle: "フィードバック", stat: "0件", unit: "月", desc: "客観的評価なし" },
+  { title: "ロープレ環境", desc: "先輩に頼まないとロープレできない" },
+  { title: "本番への不安", desc: "練習不足で本番が怖い" },
+  { title: "切り返し力", desc: "切り返しパターンが少ない" },
+  { title: "弱点の把握", desc: "自分の弱点がわからない" },
 ];
 
 const afterCards = [
-  { title: "練習機会", subtitle: "AIロープレ", stat: "無制限", unit: "24時間", desc: "いつでもAIと練習" },
-  { title: "成約率", subtitle: "スキルUP", stat: "UP", unit: "目標達成", desc: "型が身につく" },
-  { title: "切り返し", subtitle: "学習コース", stat: "22", unit: "レッスン", desc: "引き出し豊富" },
-  { title: "弱点把握", subtitle: "AI分析", stat: "毎回", unit: "スコア", desc: "即座にフィードバック" },
+  { title: "ロープレ環境", desc: "24時間いつでもAIとロープレ" },
+  { title: "本番への自信", desc: "場数を踏んで自信がつく" },
+  { title: "切り返し力", desc: "営業の型が体に染みつく" },
+  { title: "弱点の把握", desc: "AIスコアで弱点を可視化" },
 ];
 
 const steps = [
@@ -68,6 +65,13 @@ const methods = [
   { name: "反論処理", desc: "共感→確認→根拠提示→行動促進の4ステップ", level: "上級" },
 ];
 
+const serviceCategories = [
+  { title: "ロープレ", desc: "AIと営業ロープレ", href: "/roleplay" },
+  { title: "ワークシート", desc: "営業準備・分析シート", href: "/worksheet" },
+  { title: "学習コース", desc: "22レッスン+認定試験", href: "/learn" },
+  { title: "ブログ", desc: "営業ノウハウ記事", href: "/blog" },
+];
+
 const betaFeatures = [
   "AIロープレ（1日1回無料）",
   "営業分析ワークシート",
@@ -97,16 +101,46 @@ const faqs = [
     q: "スマートフォンでも使えますか？",
     a: "はい。ブラウザから利用でき、スマートフォン・タブレット・PCすべてに対応しています。",
   },
+  {
+    q: "データの安全性は？",
+    a: "通信はSSL暗号化で保護されています。ロープレの会話データはお客様のアカウントに紐づいて管理され、第三者に共有されることはありません。",
+  },
+  {
+    q: "AIの採点はどの程度正確ですか？",
+    a: "AIは営業心理学に基づく5ステップメソッドの評価基準に沿って採点します。人間のコーチと同じ基準でフィードバックを提供しますが、AIの特性上、参考値としてご活用ください。",
+  },
+  {
+    q: "アカウントを削除できますか？",
+    a: "はい。設定画面からいつでもアカウントを削除できます。削除すると、すべてのデータが完全に消去されます。",
+  },
+  {
+    q: "法人・チームでの利用は可能ですか？",
+    a: "現在はベータテスト期間中のため個人向けのプランのみですが、法人向けプランも準備中です。チームでの研修利用をご検討の方は、お問い合わせください。",
+  },
+  {
+    q: "対応言語は日本語のみですか？",
+    a: "はい。現在は日本語のみ対応しています。AIのロープレ・フィードバック・学習コースのすべてが日本語で提供されます。",
+  },
 ];
 
-/* ─── Folder SVG (shared across all service buttons) ─── */
+/* ─── Shared SVG Icons ─── */
+
+function CheckIcon() {
+  return (
+    <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z" />
+    </svg>
+  );
+}
+
 function FolderIcon() {
   return (
     <div>
       <div className="pencil" />
       <div className="folder">
         <div className="top">
-          <svg viewBox="0 0 24 27">
+          <svg viewBox="0 0 24 27" aria-hidden="true">
             <path d="M1,0 L23,0 C23.5522847,-1.01453063e-16 24,0.44771525 24,1 L24,8.17157288 C24,8.70200585 23.7892863,9.21071368 23.4142136,9.58578644 L20.5857864,12.4142136 C20.2107137,12.7892863 20,13.2979941 20,13.8284271 L20,26 C20,26.5522847 19.5522847,27 19,27 L1,27 C0.44771525,27 6.76353751e-17,26.5522847 0,26 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z" />
           </svg>
         </div>
@@ -116,23 +150,13 @@ function FolderIcon() {
   );
 }
 
-/* ─── Check icon SVG ─── */
-function CheckIcon() {
-  return (
-    <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 0h24v24H0z" fill="none" />
-      <path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z" />
-    </svg>
-  );
-}
-
-
 /* ─── Before/After Card Illustrations ─── */
+
 function BeforeScene({ index }: { index: number }) {
   switch (index) {
-    case 0: // 練習機会 0回 - Dejected, alone at desk
+    case 0:
       return (
-        <svg viewBox="0 0 120 80" className="w-full h-full">
+        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
           <rect x="15" y="54" width="90" height="2" fill="#4a5568" />
           <rect x="20" y="56" width="3" height="18" fill="#3a4050" />
           <rect x="97" y="56" width="3" height="18" fill="#3a4050" />
@@ -152,9 +176,9 @@ function BeforeScene({ index }: { index: number }) {
           <path d="M60 16l3-5" stroke="#6b7b8d" strokeWidth="0.7" opacity="0.4" />
         </svg>
       );
-    case 1: // 成約率 23% - Slumped, declining chart
+    case 1:
       return (
-        <svg viewBox="0 0 120 80" className="w-full h-full">
+        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
           <line x1="68" y1="16" x2="68" y2="65" stroke="#3a4050" strokeWidth="0.8" />
           <line x1="68" y1="65" x2="112" y2="65" stroke="#3a4050" strokeWidth="0.8" />
           <rect x="72" y="55" width="7" height="10" fill="#4a5568" rx="1" />
@@ -176,9 +200,9 @@ function BeforeScene({ index }: { index: number }) {
           <path d="M44 60L48 74" stroke="#5a6478" strokeWidth="3" fill="none" strokeLinecap="round" />
         </svg>
       );
-    case 2: // 切り返し 2パターン - Frustrated, few resources
+    case 2:
       return (
-        <svg viewBox="0 0 120 80" className="w-full h-full">
+        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
           <circle cx="60" cy="22" r="8" fill="#c8a882" />
           <path d="M52 18Q60 10 68 18" fill="#3d2b1f" />
           <ellipse cx="57" cy="21" rx="1" ry="1.2" fill="#1a1a1a" />
@@ -200,9 +224,9 @@ function BeforeScene({ index }: { index: number }) {
           <path d="M69 58L73 74" stroke="#5a6478" strokeWidth="3" fill="none" strokeLinecap="round" />
         </svg>
       );
-    case 3: // 弱点把握 0件 - Alone in the dark
+    case 3:
       return (
-        <svg viewBox="0 0 120 80" className="w-full h-full">
+        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
           <circle cx="60" cy="40" r="35" fill="#131a2e" opacity="0.5" />
           <circle cx="60" cy="24" r="8" fill="#c8a882" />
           <path d="M52 20Q60 12 68 20" fill="#3d2b1f" />
@@ -229,9 +253,9 @@ function BeforeScene({ index }: { index: number }) {
 
 function AfterScene({ index }: { index: number }) {
   switch (index) {
-    case 0: // 練習機会 無制限 - Fist pump with laptop
+    case 0:
       return (
-        <svg viewBox="0 0 120 80" className="w-full h-full">
+        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
           <circle cx="45" cy="20" r="8" fill="#d4a574" />
           <path d="M37 16Q45 8 53 16" fill="#2d1f14" />
           <ellipse cx="42" cy="19" rx="1" ry="1.2" fill="#1a1a1a" />
@@ -254,9 +278,9 @@ function AfterScene({ index }: { index: number }) {
           <path d="M70 16l-1 2h2z" fill="#f9a825" opacity="0.6" />
         </svg>
       );
-    case 1: // 成約率 UP - Both arms up celebrating, rising chart
+    case 1:
       return (
-        <svg viewBox="0 0 120 80" className="w-full h-full">
+        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
           <line x1="10" y1="68" x2="55" y2="68" stroke="#81c784" strokeWidth="0.8" />
           <line x1="10" y1="20" x2="10" y2="68" stroke="#81c784" strokeWidth="0.8" />
           <rect x="14" y="58" width="7" height="10" fill="#66bb6a" rx="1" />
@@ -283,9 +307,9 @@ function AfterScene({ index }: { index: number }) {
           <path d="M92 8l-1 2h2z" fill="#f9a825" opacity="0.5" />
         </svg>
       );
-    case 2: // 切り返し 22レッスン - Confident, pointing up, books
+    case 2:
       return (
-        <svg viewBox="0 0 120 80" className="w-full h-full">
+        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
           <circle cx="55" cy="20" r="8" fill="#d4a574" />
           <path d="M47 16Q55 8 63 16" fill="#2d1f14" />
           <ellipse cx="52" cy="19" rx="1" ry="1.2" fill="#1a1a1a" />
@@ -310,9 +334,9 @@ function AfterScene({ index }: { index: number }) {
           <path d="M76 5v6M73 8h6" stroke="#f9a825" strokeWidth="1" />
         </svg>
       );
-    case 3: // 弱点把握 毎回 - Thumbs up, dashboard with scores
+    case 3:
       return (
-        <svg viewBox="0 0 120 80" className="w-full h-full">
+        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
           <circle cx="38" cy="22" r="8" fill="#d4a574" />
           <path d="M30 18Q38 10 46 18" fill="#2d1f14" />
           <ellipse cx="35" cy="21" rx="1" ry="1.2" fill="#1a1a1a" />
@@ -344,12 +368,13 @@ function AfterScene({ index }: { index: number }) {
 }
 
 /* ─── Method Step SVG Illustrations ─── */
+
 function MethodScene({ step }: { step: number }) {
   const cls = "w-20 h-20";
   switch (step) {
-    case 0: // アプローチ - Two people meeting
+    case 0:
       return (
-        <svg viewBox="0 0 64 56" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+        <svg viewBox="0 0 64 56" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
           <circle cx="18" cy="14" r="6" fill="white" />
           <path d="M18 20v14M18 26l-8-5M18 26l8 5" />
           <path d="M18 34l-5 14M18 34l5 14" />
@@ -360,9 +385,9 @@ function MethodScene({ step }: { step: number }) {
           <path d="M32 2v3M29 5h6" strokeWidth="1.5" />
         </svg>
       );
-    case 1: // ヒアリング - Ear with sound waves
+    case 1:
       return (
-        <svg viewBox="0 0 48 48" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+        <svg viewBox="0 0 48 48" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
           <path d="M18 10a12 12 0 0 1 6 22c-2 2-3 4-3 6" />
           <path d="M18 10c-5 0-10 5-10 12s5 12 10 12" />
           <path d="M30 18a5 5 0 0 1 0 8" />
@@ -370,9 +395,9 @@ function MethodScene({ step }: { step: number }) {
           <path d="M38 10a13 13 0 0 1 0 24" opacity="0.5" />
         </svg>
       );
-    case 2: // プレゼン - Chart going up
+    case 2:
       return (
-        <svg viewBox="0 0 48 48" className={cls} fill="white" stroke="none">
+        <svg viewBox="0 0 48 48" className={cls} fill="white" stroke="none" aria-hidden="true">
           <rect x="4" y="32" width="9" height="12" rx="1" />
           <rect x="17" y="24" width="9" height="20" rx="1" />
           <rect x="30" y="14" width="9" height="30" rx="1" />
@@ -380,18 +405,18 @@ function MethodScene({ step }: { step: number }) {
           <polygon points="38,8 42,14 34,14" />
         </svg>
       );
-    case 3: // クロージング - Handshake
+    case 3:
       return (
-        <svg viewBox="0 0 48 40" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 48 40" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M4 24l8-10 8 4 4-6" />
           <path d="M44 24l-8-10-8 4-4-6" />
           <path d="M12 24l6 6 5-3 5 5" />
           <path d="M36 24l-6 6-5-3-3 3" />
         </svg>
       );
-    case 4: // 反論処理 - Shield with checkmark
+    case 4:
       return (
-        <svg viewBox="0 0 48 48" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 48 48" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M24 4L6 12v12c0 10 8 16 18 20 10-4 18-10 18-20V12L24 4z" />
           <path d="M16 24l5 5 10-10" strokeWidth="3" />
         </svg>
@@ -402,12 +427,13 @@ function MethodScene({ step }: { step: number }) {
 }
 
 /* ─── How-to Step SVG Illustrations ─── */
+
 function HowtoScene({ step }: { step: number }) {
   const cls = "w-full h-full";
   switch (step) {
-    case 0: // 業種・商材を入力 - Form/input
+    case 0:
       return (
-        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round">
+        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <rect x="4" y="8" width="48" height="32" rx="3" />
           <line x1="10" y1="16" x2="46" y2="16" opacity="0.3" />
           <line x1="10" y1="24" x2="38" y2="24" />
@@ -416,9 +442,9 @@ function HowtoScene({ step }: { step: number }) {
           <path d="M12 20v-1" strokeWidth="2.5" />
         </svg>
       );
-    case 1: // AIとロープレ開始 - Chat bubbles
+    case 1:
       return (
-        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round">
+        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <rect x="2" y="4" width="26" height="16" rx="4" />
           <path d="M10 20l4 5" />
           <circle cx="10" cy="12" r="1.5" fill="#323232" />
@@ -431,9 +457,9 @@ function HowtoScene({ step }: { step: number }) {
           <circle cx="46" cy="30" r="1.5" fill="#323232" />
         </svg>
       );
-    case 2: // 成約スコアで採点 - Score/star
+    case 2:
       return (
-        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round">
+        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <rect x="8" y="2" width="40" height="44" rx="3" />
           <path d="M28 12l3 6 6.5 1-4.7 4.6 1.1 6.4-5.9-3.1-5.9 3.1 1.1-6.4-4.7-4.6 6.5-1z" fill="#323232" opacity="0.12" stroke="#323232" />
           <line x1="16" y1="36" x2="40" y2="36" />
@@ -443,6 +469,28 @@ function HowtoScene({ step }: { step: number }) {
     default:
       return null;
   }
+}
+
+/* ─── Reusable Primary CTA Button ─── */
+
+function PrimaryCTA({ className = "" }: { className?: string }) {
+  return (
+    <Link href="/roleplay" className={`morph-btn ${className}`}>
+      <span className="btn-fill" />
+      <span className="shadow" />
+      <span className="btn-text">
+        {"今すぐAIと商談してみる".split("").map((char, i) => (
+          <span key={i} style={{ "--i": i } as React.CSSProperties}>{char}</span>
+        ))}
+      </span>
+      <span className="orbit-dots">
+        <span /><span /><span /><span />
+      </span>
+      <span className="corners">
+        <span /><span /><span /><span />
+      </span>
+    </Link>
+  );
 }
 
 /* ─── Page ─── */
@@ -459,29 +507,66 @@ export default async function Home() {
     // Supabase unavailable — render as guest
   }
 
-  const roleplayHref = "/roleplay";
-  const worksheetHref = "/worksheet";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
 
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "成約コーチ AI",
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web",
-    description:
-      "AI × 成約メソッドで営業ロープレを何度でも練習。成約5ステップを身につけて成約率を上げる。",
-    offers: [
+    "@graph": [
       {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "JPY",
-        description: "無料プラン（1日1回）",
+        "@type": "SoftwareApplication",
+        "@id": `${siteUrl}/#application`,
+        name: "成約コーチ AI",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        url: siteUrl,
+        description:
+          "AIがリアルなお客さん役を演じる営業ロープレ練習アプリ。クロージング・反論処理を24時間練習。成約率を上げる5ステップメソッドで営業研修を効率化。",
+        provider: { "@id": `${siteUrl}/#organization` },
+        offers: [
+          {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "JPY",
+            name: "無料プラン",
+            description: "1日1回AIロープレ・成約スコアリング・学習コース閲覧",
+            availability: "https://schema.org/InStock",
+          },
+          {
+            "@type": "Offer",
+            price: "2980",
+            priceCurrency: "JPY",
+            name: "Proプラン",
+            description: "AIロープレ無制限・22レッスン+認定試験・リアルタイムコーチング・優先サポート",
+            availability: "https://schema.org/InStock",
+          },
+        ],
+        featureList: "AIロープレ, 成約スコア分析, 22レッスン+認定試験, リアルタイムコーチング, 営業分析ワークシート",
+        inLanguage: "ja",
       },
       {
-        "@type": "Offer",
-        price: "2980",
-        priceCurrency: "JPY",
-        description: "Proプラン（無制限）",
+        "@type": "FAQPage",
+        "@id": `${siteUrl}/#faq`,
+        mainEntity: faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.a,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${siteUrl}/#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "ホーム",
+            item: siteUrl,
+          },
+        ],
       },
     ],
   };
@@ -489,71 +574,60 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-background">
       <JsonLd data={jsonLdData} />
-
-      {/* Header */}
       <Header user={{ isLoggedIn }} />
 
-      {/* Hero — Cityscape Background + Flashlight */}
-      <section className="relative overflow-hidden px-6 pt-28 pb-20 sm:pt-36 sm:pb-28">
+      {/* ═══════════════════════════════════════════════
+          1. HERO
+      ═══════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden px-6 pt-20 pb-16 sm:pt-28 sm:pb-20">
         <div className="hero-city" aria-hidden="true" />
 
         <div className="relative z-10 mx-auto max-w-4xl text-center">
-          <div className="mb-6 inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white">
-            営業心理学ベースのAIコーチング
+          {/* Authority badge */}
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
+            <svg className="h-4 w-4 text-yellow-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            1,600件の商談から生まれたメソッド
           </div>
 
-          <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-white sm:text-6xl">
-            AIとロープレして
-            <br />
-            <span className="text-accent">成約率を上げろ。</span>
+          <h1 className="sr-only">
+            AIで営業ロープレ練習 — 成約率を上げる5ステップメソッド
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-white/70">
-            「考えます」を「お願いします」に変える営業の型を、AIと反復練習。
+          <p className="mb-6 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-6xl" role="presentation" style={{ textWrap: "balance" } as React.CSSProperties}>
+            「考えます」で終わる商談を、
             <br />
-            24時間いつでも、何度でも。
+            <span className="text-accent">「お願いします」で終わらせる。</span>
           </p>
 
-          <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-center" data-hero-cta>
-            <Link href={roleplayHref} className="morph-btn">
-              <span className="btn-fill" />
-              <span className="shadow" />
-              <span className="btn-text">
-                <span style={{ "--i": 0 } as React.CSSProperties}>ロ</span>
-                <span style={{ "--i": 1 } as React.CSSProperties}>ー</span>
-                <span style={{ "--i": 2 } as React.CSSProperties}>プ</span>
-                <span style={{ "--i": 3 } as React.CSSProperties}>レ</span>
-                <span style={{ "--i": 4 } as React.CSSProperties}>す</span>
-                <span style={{ "--i": 5 } as React.CSSProperties}>る</span>
-              </span>
-              <span className="orbit-dots">
-                <span /><span /><span /><span />
-              </span>
-              <span className="corners">
-                <span /><span /><span /><span />
-              </span>
-            </Link>
-            <div className="button-borders">
-              <Link href={worksheetHref} className="primary-button">
-                分析を行う
-              </Link>
-            </div>
-            <div className="button-borders">
-              <Link href="/learn" className="primary-button">
-                学習する
-              </Link>
-            </div>
+          <p className="mx-auto mb-10 max-w-2xl text-base text-white/70 leading-relaxed sm:text-lg">
+            営業心理学に基づく5ステップの「型」をAIと反復練習。
+            <br className="hidden sm:block" />
+            先輩の空きを待つ必要はもうありません。
+          </p>
+
+          {/* Single Primary CTA */}
+          <div className="flex flex-col items-center gap-4" data-hero-cta>
+            <PrimaryCTA />
+            <p className="text-sm text-white/50">
+              &#10003; 無料で体験&ensp;&#10003; 登録不要&ensp;&#10003; 1分で最初の商談開始
+            </p>
           </div>
 
-          <p className="mt-4 text-xs text-white/50">
-            &#10003; 無料で体験可能 &#10003; 登録不要で今すぐ試せる
+          {/* Secondary text link */}
+          <p className="mt-4 text-sm text-white/60">
+            まずは学習コースから →{" "}
+            <Link href="/learn" className="underline decoration-white/40 underline-offset-4 transition-colors hover:text-white hover:decoration-white">
+              コースを見る
+            </Link>
           </p>
 
           {/* Stats */}
-          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
             {stats.map((s) => (
-              <div key={s.label} className="rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
-                <div className="text-3xl font-bold text-accent">{s.value}</div>
+              <div key={s.label} className="rounded-2xl bg-white/10 p-5 backdrop-blur-sm sm:p-6">
+                <div className="text-2xl font-bold text-accent sm:text-3xl">{s.value}</div>
                 <div className="mt-1 text-sm text-white/60">{s.label}</div>
               </div>
             ))}
@@ -561,70 +635,41 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Service Categories — Continue Application Buttons */}
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="mb-12 text-center text-2xl font-bold text-foreground">
-            サービスカテゴリ
+      {/* ═══════════════════════════════════════════════
+          2. SOCIAL PROOF
+      ═══════════════════════════════════════════════ */}
+      <section className="px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="mb-3 text-lg font-semibold text-foreground sm:text-xl">
+            あなたの業界に対応しています
           </h2>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {serviceCategories.map((cat) => (
-              <Link key={cat.title} href={cat.href} className="continue-application">
-                <FolderIcon />
-                {cat.title}
-                <span className="continue-application__desc">{cat.desc}</span>
-              </Link>
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            {industries.map((name) => (
+              <span key={name} className="rounded-full border border-card-border bg-white px-4 py-2 text-sm font-medium text-foreground shadow-sm">
+                {name}
+              </span>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Beta Test CTA — Plan Card */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="mb-4 text-3xl font-bold text-foreground">
-            現在ベータテスト中
-          </h2>
-          <p className="mb-10 text-muted">
-            成約コーチ AIは現在ベータ版として公開中です。<br />
-            テストユーザーとしてお試しいただき、フィードバックをお聞かせください。
-          </p>
-
-          <div className="plan">
-            <div className="inner">
-              <span className="pricing">
-                <span>無料 <small>ベータ版</small></span>
-              </span>
-              <p className="title">ベータテストプラン</p>
-              <p className="info">全機能を無料でお試しいただけます。フィードバックをお待ちしています。</p>
-              <ul className="features">
-                {betaFeatures.map((feat) => (
-                  <li key={feat}>
-                    <span className="icon">
-                      <CheckIcon />
-                    </span>
-                    <span>{feat}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="action">
-                <Link href="/roleplay" className="button">
-                  今すぐ無料で試す
-                </Link>
-              </div>
-            </div>
+          <div className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-sm font-medium text-accent">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
+            </span>
+            ベータテスト中 — テストユーザー募集中
           </div>
         </div>
       </section>
 
-      {/* Before / After — Full-screen Comparison */}
-      <section className="flex min-h-screen flex-col items-center justify-center px-4 py-16 sm:px-6">
-        <div className="w-full max-w-6xl">
-          <h2 className="mb-2 text-center text-3xl font-bold text-foreground">
-            成約コーチ AIで変わること
+      {/* ═══════════════════════════════════════════════
+          3. BEFORE / AFTER
+      ═══════════════════════════════════════════════ */}
+      <section className="px-4 py-16 sm:px-6 sm:py-20">
+        <div className="mx-auto w-full max-w-6xl">
+          <h2 className="mb-2 text-center text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
+            先週のあなた vs. 来週のあなた
           </h2>
-          <p className="mb-8 text-center text-sm text-muted">
-            練習環境の悩みを解消し、営業力を飛躍させる
+          <p className="mb-10 text-center text-sm text-muted sm:text-base">
+            もう「練習相手がいない」と悩む必要はありません
           </p>
 
           {/* Before */}
@@ -633,26 +678,23 @@ export default async function Home() {
               Before
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {beforeCards.map((card, i) => (
               <div key={card.title} className="ba-card ba-card--before">
                 <div className="ba-card__illustration">
                   <BeforeScene index={i} />
                 </div>
                 <div className="mt-3">
-                  <p className="text-sm font-semibold text-red-800/60">{card.title}</p>
-                  <p className="text-2xl font-bold text-red-600">
-                    {card.stat} <span className="text-sm font-normal text-red-800/40">/ {card.unit}</span>
-                  </p>
-                  <p className="text-xs text-red-800/50">{card.desc}</p>
+                  <p className="text-xs font-semibold text-red-800/60">{card.title}</p>
+                  <p className="text-sm font-medium leading-snug text-red-600">{card.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Divider Arrow */}
+          {/* Divider */}
           <div className="my-6 flex justify-center">
-            <svg className="h-10 w-10 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <svg className="h-10 w-10 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
           </div>
@@ -663,35 +705,38 @@ export default async function Home() {
               After
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {afterCards.map((card, i) => (
               <div key={card.title} className="ba-card">
                 <div className="ba-card__illustration">
                   <AfterScene index={i} />
                 </div>
                 <div className="mt-3">
-                  <p className="text-sm font-semibold text-gray-600">{card.title}</p>
-                  <p className="text-2xl font-bold text-emerald-500">
-                    {card.stat} <span className="text-sm font-normal text-gray-400">/ {card.unit}</span>
-                  </p>
-                  <p className="text-xs text-gray-500">{card.desc}</p>
+                  <p className="text-xs font-semibold text-gray-600">{card.title}</p>
+                  <p className="text-sm font-medium leading-snug text-emerald-500">{card.desc}</p>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Intermediate CTA */}
+          <div className="mt-10 flex flex-col items-center gap-4">
+            <PrimaryCTA />
+          </div>
         </div>
       </section>
 
-      {/* How it works — Profile Card Style */}
-      <section className="relative overflow-hidden px-6 py-24">
+      {/* ═══════════════════════════════════════════════
+          4. HOW IT WORKS
+      ═══════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
         <div className="blob blob-pink" style={{ width: 300, height: 300, top: -40, right: -60 }} />
-
         <div className="relative z-10 mx-auto max-w-5xl">
-          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
-            使い方は3ステップ
+          <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
+            3ステップで、今日から営業練習が変わる
           </h2>
-          <p className="mb-16 text-center text-muted">
-            複雑な設定は不要。すぐにロープレを始められます。
+          <p className="mb-12 text-center text-sm text-muted sm:mb-16 sm:text-base">
+            登録もダウンロードも不要。思い立った瞬間にロープレ開始。
           </p>
           <div className="flex flex-wrap justify-center gap-8">
             {steps.map((step, i) => (
@@ -711,14 +756,19 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Method — Comic Cards */}
-      <section className="overflow-hidden py-24">
+      {/* ═══════════════════════════════════════════════
+          5. 5-STEP METHOD
+      ═══════════════════════════════════════════════ */}
+      <section className="overflow-hidden py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
-            成約コーチ 5ステップメソッド
+          <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
+            トップ営業マンが無意識にやっている5つのステップ
           </h2>
-          <p className="mb-16 text-center text-muted">
-            体系化された営業の「型」をAIが正確に評価します
+          <p className="mb-2 text-center text-sm font-medium text-accent">
+            4年半・1,600件の現場経験を体系化した営業の型
+          </p>
+          <p className="mb-12 text-center text-sm text-muted sm:mb-16 sm:text-base">
+            この流れを身につければ、どんな商材でも商談の型ができる
           </p>
           <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
             {Object.entries(LEVEL_COLORS).map(([label, color]) => (
@@ -752,37 +802,84 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="relative overflow-hidden px-6 py-24">
-        <div className="blob blob-cream" style={{ width: 250, height: 250, bottom: -40, left: -60 }} />
+      {/* ═══════════════════════════════════════════════
+          6. SERVICE CATEGORIES
+      ═══════════════════════════════════════════════ */}
+      <section className="px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="mb-12 text-center text-2xl font-bold text-foreground sm:text-3xl">
+            あなたの営業力を上げる4つの武器
+          </h2>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8">
+            {serviceCategories.map((cat) => (
+              <Link key={cat.title} href={cat.href} className="continue-application">
+                <FolderIcon />
+                {cat.title}
+                <span className="continue-application__desc">{cat.desc}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* ═══════════════════════════════════════════════
+          7. BETA TEST CTA
+      ═══════════════════════════════════════════════ */}
+      <section className="px-6 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">
+            今なら全機能を無料で体験できます
+          </h2>
+          <p className="mb-10 text-sm text-muted sm:text-base">
+            まずは1回、AIと商談してみてください。
+            <br />
+            あなたのフィードバックがサービスを育てます。
+          </p>
+          <div className="plan">
+            <div className="inner">
+              <span className="pricing">
+                <span>無料 <small>ベータ版</small></span>
+              </span>
+              <p className="title">ベータテストプラン</p>
+              <p className="info">全機能を無料でお試しいただけます。フィードバックをお待ちしています。</p>
+              <ul className="features">
+                {betaFeatures.map((feat) => (
+                  <li key={feat}>
+                    <span className="icon"><CheckIcon /></span>
+                    <span>{feat}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="action">
+                <Link href="/roleplay" className="button">今すぐAIと商談してみる</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          8. FAQ
+      ═══════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+        <div className="blob blob-cream" style={{ width: 250, height: 250, bottom: -40, left: -60 }} />
         <div className="relative z-10 mx-auto max-w-3xl">
-          <h2 className="mb-4 text-center text-3xl font-bold text-foreground">
+          <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl">
             よくある質問
           </h2>
-          <p className="mb-12 text-center text-muted">
+          <p className="mb-12 text-center text-sm text-muted sm:text-base">
             成約コーチ AIについてのよくある質問にお答えします
           </p>
           <div className="space-y-3">
             {faqs.map((faq) => (
-              <details
-                key={faq.q}
-                className="group rounded-2xl bg-white shadow-sm"
-              >
+              <details key={faq.q} className="group rounded-2xl bg-white shadow-sm">
                 <summary className="flex cursor-pointer items-center justify-between px-6 py-5 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden list-none">
                   <span>{faq.q}</span>
                   <svg
-                    className="h-4 w-4 flex-shrink-0 text-muted transition-transform duration-200 group-open:rotate-180"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
+                    className="h-5 w-5 flex-shrink-0 text-muted transition-transform duration-200 group-open:rotate-180"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19 9l-7 7-7-7"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
                 <div className="border-t border-card-border px-6 pb-5 pt-4 text-sm leading-relaxed text-muted">
@@ -794,67 +891,72 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative overflow-hidden px-6 py-24">
-        <div className="blob blob-teal" style={{ width: 400, height: 400, top: -100, left: '30%' }} />
-
+      {/* ═══════════════════════════════════════════════
+          9. FINAL CTA
+      ═══════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+        <div className="blob blob-teal" style={{ width: 400, height: 400, top: -100, left: "30%" }} />
         <div className="relative z-10 mx-auto max-w-3xl text-center">
-          <h2 className="mb-4 text-3xl font-bold text-foreground">
-            今すぐ営業力を鍛えよう
+          <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
+            明日の商談に間に合う。今すぐ練習を始めよう。
           </h2>
-          <p className="mb-4 text-muted">
-            無料アカウントで1日1回ロープレできます。Proプランなら無制限。
+          <p className="mb-4 text-sm text-muted sm:text-base">
+            無料アカウントで今日から練習できます。まずは1回、試してみてください。
           </p>
-          <p className="mb-10 text-xs text-muted">
-            &#10003; クレジットカード不要 &#10003; 30秒で登録完了 &#10003;
-            いつでも解約OK
+          <p className="mb-10 text-sm text-muted">
+            &#10003; 無料で体験 &#10003; 登録不要 &#10003; いつでも解約OK
           </p>
-          <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
-            <Link href={roleplayHref} className="morph-btn">
-              <span className="btn-fill" />
-              <span className="shadow" />
-              <span className="btn-text">
-                <span style={{ "--i": 0 } as React.CSSProperties}>ロ</span>
-                <span style={{ "--i": 1 } as React.CSSProperties}>ー</span>
-                <span style={{ "--i": 2 } as React.CSSProperties}>プ</span>
-                <span style={{ "--i": 3 } as React.CSSProperties}>レ</span>
-                <span style={{ "--i": 4 } as React.CSSProperties}>す</span>
-                <span style={{ "--i": 5 } as React.CSSProperties}>る</span>
-              </span>
-              <span className="orbit-dots">
-                <span /><span /><span /><span />
-              </span>
-              <span className="corners">
-                <span /><span /><span /><span />
-              </span>
-            </Link>
-            <div className="button-borders">
-              <Link href={worksheetHref} className="primary-button">
-                分析を行う
-              </Link>
-            </div>
-            <div className="button-borders">
-              <Link href="/learn" className="primary-button">
-                学習する
-              </Link>
-            </div>
+          <div className="flex flex-col items-center gap-4">
+            <PrimaryCTA />
           </div>
-          <div className="mt-4">
-            <Link
-              href="/pricing"
-              className="text-sm text-muted transition hover:text-accent hover:underline"
-            >
+          <div className="mt-6">
+            <Link href="/pricing" className="text-sm text-muted transition hover:text-accent hover:underline">
               料金プランを見る →
             </Link>
+          </div>
+
+          {/* Trust badges */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs text-muted sm:gap-6">
+            <span className="inline-flex items-center gap-1.5">
+              <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              SSL暗号化通信
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              データ安全保護
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              いつでも退会可能
+            </span>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
       <Footer />
-
-      {/* Sticky CTA (client component) */}
       <StickyCTA />
+      <HomepageCTATracker />
+      <HomeExitPopup />
+      <ScrollSlideIn sessionKey="home-slide-in">
+        <p className="mb-2 text-sm font-bold text-foreground">
+          まだ試してない？
+        </p>
+        <p className="mb-3 text-xs text-muted">
+          3分でAIがあなたの営業力を採点します
+        </p>
+        <Link
+          href="/roleplay"
+          className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
+        >
+          無料で診断する
+        </Link>
+      </ScrollSlideIn>
     </div>
   );
 }

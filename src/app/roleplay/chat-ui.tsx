@@ -2,6 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import type { ScoreResult } from "./page";
+import {
+  trackRoleplayMessage,
+  trackRoleplayCoachToggled,
+  trackRoleplayScoreRequested,
+} from "@/lib/tracking";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -28,7 +33,7 @@ interface ChatUIProps {
   customerType: string;
   onFinish: (score: ScoreResult) => void;
   isGuest?: boolean;
-  onAuthGate?: (messages: Message[]) => void;
+  onAuthGate?: (messages: Message[], previewScore?: ScoreResult) => void;
 }
 
 const STEPS = [
@@ -57,6 +62,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const maxTurns = 10;
+  const chatStartTime = useRef(Date.now());
 
   useEffect(() => {
     startConversation();
@@ -129,7 +135,9 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
       { role: "user", content: userMessage },
     ];
     setMessages(newMessages);
-    setTurnCount((c) => c + 1);
+    const newTurn = turnCount + 1;
+    setTurnCount(newTurn);
+    trackRoleplayMessage(newTurn, userMessage.length);
     setIsLoading(true);
 
     // Fetch customer response and coach analysis in parallel
@@ -163,8 +171,27 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
   }
 
   async function finishAndScore() {
+    const durationSec = Math.round((Date.now() - chatStartTime.current) / 1000);
+    trackRoleplayScoreRequested(turnCount, durationSec);
+
     if (isGuest && onAuthGate) {
-      onAuthGate(messages);
+      setIsScoring(true);
+      try {
+        const res = await fetch("/api/score/preview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType }),
+        });
+        const data = await res.json();
+        if (!data.error) {
+          onAuthGate(messages, data);
+        } else {
+          onAuthGate(messages);
+        }
+      } catch {
+        onAuthGate(messages);
+      }
+      setIsScoring(false);
       return;
     }
     setIsScoring(true);
@@ -218,7 +245,11 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, onF
                   ターン {turnCount}/{maxTurns}
                 </span>
                 <button
-                  onClick={() => setShowCoach(!showCoach)}
+                  onClick={() => {
+                    const next = !showCoach;
+                    setShowCoach(next);
+                    trackRoleplayCoachToggled(next);
+                  }}
                   className={`rounded px-2 py-0.5 text-xs transition ${
                     showCoach
                       ? "bg-accent/20 text-accent"

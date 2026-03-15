@@ -4,12 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { Footer } from "@/components/footer";
+import { trackCTAClick, trackCheckoutStarted } from "@/lib/tracking";
+import { PricingExitPopup } from "@/components/exit-popups/pricing-exit-popup";
+import { ScrollSlideIn } from "@/components/scroll-slide-in";
 
 const features = [
   { name: "AIロープレ", free: "1日1回", pro: "無制限" },
-  { name: "成約スコア採点", free: "✓", pro: "✓" },
+  { name: "詳細スコア", free: "1カテゴリ", pro: "全5カテゴリ" },
+  { name: "AI改善アドバイス", free: "−", pro: "✓" },
   { name: "リアルタイムコーチ", free: "✓", pro: "✓" },
-  { name: "5ステップ分析", free: "✓", pro: "✓" },
   { name: "営業シーン選択", free: "✓", pro: "✓" },
   { name: "難易度選択", free: "✓", pro: "✓" },
 ];
@@ -25,13 +28,13 @@ const testimonials = [
   {
     name: "T.S.",
     role: "不動産営業 / 入社2年目",
-    text: "毎日練習できるから、1ヶ月でクロージングに自信がついた。月の契約数が1.5倍に。",
+    text: "毎日練習できるから、クロージングに自信がついた。",
     score: "78",
   },
   {
     name: "M.K.",
     role: "保険営業 / マネージャー",
-    text: "チーム全員の営業力を底上げできた。研修予算の削減にもつながっている。",
+    text: "チームの営業力を底上げする練習ツールとして活用しています。",
     score: "85",
   },
 ];
@@ -45,12 +48,12 @@ const faqItems = [
   {
     question: "支払い方法は？",
     answer:
-      "クレジットカード（Visa, Mastercard, JCB, AMEX）でお支払いいただけます。Stripeによる安全な決済システムを使用しています。",
+      "クレジットカード（Visa, Mastercard, JCB, American Express）でお支払いいただけます。Stripeによる安全な決済システムを使用しています。",
   },
   {
     question: "無料プランに制限はありますか？",
     answer:
-      "無料プランは1日1回のロープレ制限があります。スコア採点やコーチ機能は制限なくご利用いただけます。",
+      "無料プランは1日1回のロープレ制限があり、スコアは1カテゴリのみ詳細表示されます。Proプランでは全5カテゴリの詳細スコアとAI改善アドバイスが表示されます。",
   },
   {
     question: "無料プランからProへの切り替えはすぐにできますか？",
@@ -60,22 +63,49 @@ const faqItems = [
   {
     question: "Proプランで何が変わりますか？",
     answer:
-      "ロープレ回数が無制限になります。1日に何度でも繰り返し練習でき、短期間でスキルアップを実感できます。",
+      "ロープレ回数が無制限になり、全5カテゴリの詳細スコアとAI改善アドバイスが表示されます。1日に何度でも繰り返し練習でき、短期間でスキルアップを実感できます。",
+  },
+  {
+    question: "年額プランはありますか？",
+    answer:
+      "はい。年額プラン（¥29,800/年）をご用意しています。月額換算で約¥2,483となり、2ヶ月分おトクです。",
   },
   {
     question: "領収書・請求書は発行できますか？",
     answer:
       "はい。Stripeの決済管理画面から領収書をダウンロードいただけます。法人利用の場合は経費精算にもご利用いただけます。",
   },
+  {
+    question: "返金はできますか？",
+    answer:
+      "デジタルコンテンツの性質上、サービス提供開始後の返金は行っておりません。解約後は請求期間の終了まで利用可能です。",
+  },
+  {
+    question: "複数のデバイスで使えますか？",
+    answer:
+      "はい。同一アカウントでPC・スマートフォン・タブレットからご利用いただけます。",
+  },
 ];
 
 export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [billing, setBilling] = useState<"monthly" | "annual">("annual");
+
+  const monthlyPrice = 2980;
+  const annualPrice = 29800;
+  const annualMonthly = Math.round(annualPrice / 12);
+  const savingsMonths = 2;
 
   async function handleUpgrade() {
     setIsLoading(true);
+    trackCTAClick("pricing_pro", "pricing_page", "/api/stripe/checkout");
+    trackCheckoutStarted();
     try {
-      const res = await fetch("/api/stripe/checkout", { method: "POST" });
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ billing }),
+      });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -88,22 +118,89 @@ export default function PricingPage() {
     setIsLoading(false);
   }
 
-  const faqJsonLd = {
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+
+  const pricingJsonLd = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
+    "@graph": [
+      {
+        "@type": "Product",
+        "@id": `${siteUrl}/pricing#product`,
+        name: "成約コーチ AI Proプラン",
+        description:
+          "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス・リアルタイムコーチング付きの営業トレーニングプラン",
+        brand: {
+          "@type": "Organization",
+          name: "成約コーチ AI",
+        },
+        offers: [
+          {
+            "@type": "Offer",
+            name: "無料プラン",
+            price: "0",
+            priceCurrency: "JPY",
+            description: "AIロープレ1日1回・成約スコア1カテゴリ",
+            availability: "https://schema.org/InStock",
+            url: `${siteUrl}/pricing`,
+          },
+          {
+            "@type": "Offer",
+            name: "Proプラン（月額）",
+            price: "2980",
+            priceCurrency: "JPY",
+            description: "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス",
+            availability: "https://schema.org/InStock",
+            url: `${siteUrl}/pricing`,
+            priceValidUntil: "2026-12-31",
+          },
+          {
+            "@type": "Offer",
+            name: "Proプラン（年額）",
+            price: "29800",
+            priceCurrency: "JPY",
+            description: "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス（2ヶ月分おトク）",
+            availability: "https://schema.org/InStock",
+            url: `${siteUrl}/pricing`,
+            priceValidUntil: "2026-12-31",
+          },
+        ],
       },
-    })),
+      {
+        "@type": "FAQPage",
+        "@id": `${siteUrl}/pricing#faq`,
+        mainEntity: faqItems.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${siteUrl}/pricing#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "ホーム",
+            item: siteUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "料金プラン",
+            item: `${siteUrl}/pricing`,
+          },
+        ],
+      },
+    ],
   };
 
   return (
     <div className="min-h-screen bg-background">
-      <JsonLd data={faqJsonLd} />
+      <JsonLd data={pricingJsonLd} />
 
       {/* Header */}
       <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
@@ -123,11 +220,38 @@ export default function PricingPage() {
 
       <div className="mx-auto max-w-4xl px-6 py-20">
         {/* Pricing Section Title */}
-        <div className="mb-16 text-center">
+        <div className="mb-10 text-center">
           <h1 className="mb-4 text-4xl font-bold">料金プラン</h1>
           <p className="text-lg text-muted">
             無料で始めて、もっと練習したくなったらProへ
           </p>
+        </div>
+
+        {/* Billing Toggle */}
+        <div className="mb-10 flex items-center justify-center gap-3">
+          <button
+            onClick={() => setBilling("monthly")}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+              billing === "monthly"
+                ? "bg-card text-foreground shadow-sm border border-card-border"
+                : "text-muted hover:text-foreground"
+            }`}
+          >
+            月額
+          </button>
+          <button
+            onClick={() => setBilling("annual")}
+            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              billing === "annual"
+                ? "bg-card text-foreground shadow-sm border border-card-border"
+                : "text-muted hover:text-foreground"
+            }`}
+          >
+            年額
+            <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-[11px] font-bold text-green-500">
+              {savingsMonths}ヶ月分おトク
+            </span>
+          </button>
         </div>
 
         {/* Pricing Cards */}
@@ -161,7 +285,9 @@ export default function PricingPage() {
                   <span className="text-muted">{f.name}</span>
                   <span
                     className={
-                      f.free === "1日1回" ? "text-muted" : "text-foreground"
+                      f.free === "−" || f.free === "1日1回" || f.free === "1カテゴリ"
+                        ? "text-muted"
+                        : "text-foreground"
                     }
                   >
                     {f.free}
@@ -180,8 +306,23 @@ export default function PricingPage() {
             <div className="mb-6">
               <h3 className="text-xl font-bold text-accent">Proプラン</h3>
               <div className="mt-4">
-                <span className="text-4xl font-bold">¥2,980</span>
-                <span className="text-muted">/月</span>
+                {billing === "annual" ? (
+                  <>
+                    <span className="text-4xl font-bold">¥{annualMonthly.toLocaleString()}</span>
+                    <span className="text-muted">/月</span>
+                    <div className="mt-1 flex items-center gap-2">
+                      <span className="text-sm text-muted line-through">¥{monthlyPrice.toLocaleString()}/月</span>
+                      <span className="text-xs text-muted">
+                        年額 ¥{annualPrice.toLocaleString()}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-4xl font-bold">¥{monthlyPrice.toLocaleString()}</span>
+                    <span className="text-muted">/月</span>
+                  </>
+                )}
               </div>
               <p className="mt-2 text-sm text-muted">
                 本気で営業力を鍛えたい方に
@@ -193,7 +334,7 @@ export default function PricingPage() {
               disabled={isLoading}
               className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
             >
-              {isLoading ? "処理中..." : "Proプランに申し込む"}
+              {isLoading ? "処理中..." : billing === "annual" ? "年額プランに申し込む" : "Proプランに申し込む"}
             </button>
             <p className="mt-3 text-center text-[11px] text-muted">
               いつでも解約OK・即日反映・違約金なし
@@ -257,6 +398,9 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
+          <p className="mt-4 text-center text-xs text-muted">
+            ※一般的な市場価格の参考値です。実際の価格はサービス提供者により異なります。
+          </p>
         </div>
 
         {/* Testimonials Section */}
@@ -288,6 +432,9 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
+          <p className="mt-4 text-center text-xs text-muted">
+            ※個人の感想であり、効果を保証するものではありません
+          </p>
         </div>
 
         {/* FAQ */}
@@ -310,11 +457,8 @@ export default function PricingPage() {
 
         {/* Bottom CTA */}
         <div className="mt-20 text-center">
-          <p className="mb-2 text-muted">
+          <p className="mb-4 text-muted">
             営業研修1回の費用で、1ヶ月間無制限にロープレできます
-          </p>
-          <p className="mb-4 text-sm font-semibold text-accent">
-            🔥 500+ 人の営業マンが利用中
           </p>
           <Link
             href="/roleplay"
@@ -327,6 +471,21 @@ export default function PricingPage() {
 
       {/* Footer */}
       <Footer />
+      <PricingExitPopup />
+      <ScrollSlideIn sessionKey="pricing-slide-in" scrollThreshold={0.4}>
+        <p className="mb-2 text-sm font-bold text-foreground">
+          まずは無料で体験
+        </p>
+        <p className="mb-3 text-xs text-muted">
+          リスクゼロで営業力を鍛えよう
+        </p>
+        <Link
+          href="/roleplay"
+          className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
+        >
+          無料で始める
+        </Link>
+      </ScrollSlideIn>
     </div>
   );
 }

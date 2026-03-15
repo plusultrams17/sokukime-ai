@@ -7,9 +7,9 @@ interface GtagEventParams {
 
 interface Window {
   gtag: (
-    command: "config" | "event" | "js" | "set",
+    command: "config" | "event" | "js" | "set" | "consent",
     targetIdOrAction: string | Date,
     params?: GtagEventParams | Record<string, unknown>
   ) => void;
-  dataLayer: Array<unknown>;
+  dataLayer: Array<Record<string, unknown>>;
 }

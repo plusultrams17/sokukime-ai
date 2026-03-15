@@ -10,7 +10,7 @@ export default function PrivacyPage() {
   return (
     <article className="prose-custom">
       <h1 className="mb-8 text-3xl font-bold">プライバシーポリシー</h1>
-      <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月1日</p>
+      <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月15日</p>
 
       <p className="mb-6 text-sm leading-relaxed text-muted">
         成約コーチ AI（以下「当サービス」）は、ユーザーの個人情報の保護を重要視しています。
@@ -176,7 +176,7 @@ export default function PrivacyPage() {
 
       <Section title="9. ポリシーの変更">
         <p>
-          当社は、必要に応じて本ポリシーを変更することがあります。重要な変更がある場合は、
+          運営者は、必要に応じて本ポリシーを変更することがあります。重要な変更がある場合は、
           当サービス上での告知または登録メールアドレスへの通知を行います。
           変更後のポリシーは、当サービス上に掲載した時点から効力を生じます。
         </p>
@@ -190,7 +190,7 @@ export default function PrivacyPage() {
 
       <div className="mt-12 rounded-xl border border-card-border bg-card p-6 text-sm text-muted">
         <p>成約コーチ AI 個人情報保護担当</p>
-        <p>メール: privacy@seiyaku-coach.vercel.app</p>
+        <p>メール: seiyaku.coach.ai@gmail.com</p>
       </div>
     </article>
   );

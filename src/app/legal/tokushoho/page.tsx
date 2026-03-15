@@ -10,12 +10,12 @@ export default function TokushohoPage() {
   return (
     <article>
       <h1 className="mb-8 text-3xl font-bold">特定商取引法に基づく表記</h1>
-      <p className="mb-8 text-sm text-muted">最終更新日: 2026年3月1日</p>
+      <p className="mb-8 text-sm text-muted">最終更新日: 2026年3月15日</p>
 
       <div className="overflow-hidden rounded-2xl border border-card-border">
         <table className="w-full">
           <tbody>
-            <Row label="販売事業者" value="成約コーチ AI" />
+            <Row label="販売事業者" value="HAKUSO（サービス名：成約コーチ AI）" />
             <Row
               label="代表者"
               value="※ご請求いただければ遅滞なく開示いたします"
@@ -30,11 +30,11 @@ export default function TokushohoPage() {
             />
             <Row
               label="メールアドレス"
-              value="support@seiyaku-coach.vercel.app"
+              value="seiyaku.coach.ai@gmail.com"
             />
             <Row
               label="販売URL"
-              value="https://seiyaku-coach.vercel.app"
+              value="https://sokukime-ai.vercel.app"
             />
             <Row
               label="販売価格"
@@ -106,7 +106,7 @@ export default function TokushohoPage() {
         </p>
         <p>
           個人事業主のため、住所・電話番号・代表者名は、ご請求いただければ遅滞なく開示いたします。
-          開示をご希望の方は、support@seiyaku-coach.vercel.app までメールでご連絡ください。
+          開示をご希望の方は、seiyaku.coach.ai@gmail.com までメールでご連絡ください。
         </p>
       </div>
     </article>

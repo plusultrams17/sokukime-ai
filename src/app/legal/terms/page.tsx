@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "利用規約 | 成約コーチ AI",
@@ -9,10 +10,11 @@ export default function TermsPage() {
   return (
     <article className="prose-custom">
       <h1 className="mb-8 text-3xl font-bold">利用規約</h1>
-      <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月1日</p>
+      <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月15日</p>
 
       <p className="mb-6 text-sm leading-relaxed text-muted">
         この利用規約（以下「本規約」）は、成約コーチ AI（以下「当サービス」）の利用条件を定めるものです。
+        本規約において「運営者」とは、成約コーチ AIを運営する個人事業主（屋号：HAKUSO）を指します。
         ユーザーの皆さま（以下「ユーザー」）には、本規約に同意いただいた上で当サービスをご利用いただきます。
       </p>
 
@@ -46,7 +48,10 @@ export default function TermsPage() {
             Proプランの料金は月額2,980円（税込）です。
           </li>
           <li>
-            支払いはクレジットカード（Visa、Mastercard、JCB、AMEX）による月額自動課金です。決済処理にはStripe社のサービスを利用します。
+            支払いはクレジットカード（Visa、Mastercard、JCB、American Express）による月額自動課金です。
+          </li>
+          <li>
+            決済処理にはStripe社のサービスを利用します。
           </li>
           <li>
             Proプランは月単位の自動更新となり、解約手続きを行うまで自動的に更新されます。
@@ -77,11 +82,15 @@ export default function TermsPage() {
       </Section>
 
       <Section title="第5条（知的財産権）">
-        <p>
-          当サービスに関する知的財産権（ソフトウェア、デザイン、テキスト、画像等）は当社に帰属します。
-          ユーザーがロープレ中に入力したテキストの著作権はユーザーに帰属しますが、
-          当社はサービス改善のために匿名化した上で利用できるものとします。
-        </p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>
+            当サービスに関する知的財産権（ソフトウェア、デザイン、テキスト、画像等）は運営者に帰属します。
+          </li>
+          <li>
+            ユーザーがロープレ中に入力したテキストの著作権はユーザーに帰属しますが、
+            運営者はサービス改善のために匿名化した上で利用できるものとします。
+          </li>
+        </ol>
       </Section>
 
       <Section title="第6条（AI生成コンテンツに関する免責）">
@@ -93,41 +102,42 @@ export default function TermsPage() {
             AIの応答内容の正確性・完全性を保証するものではありません。
           </li>
           <li>
-            当サービスの利用による営業成果について、当社は一切の保証を行いません。
+            当サービスの利用による営業成果について、運営者は一切の保証を行いません。
           </li>
         </ol>
       </Section>
 
       <Section title="第7条（サービスの変更・停止）">
         <p>
-          当社は、事前の通知なくサービスの内容を変更、または一時的もしくは永続的にサービスの提供を停止できるものとします。
-          これによりユーザーに生じた損害について、当社は責任を負いません。
+          運営者は、サービスの内容を変更、または一時的もしくは永続的にサービスの提供を停止する場合、合理的な期間を設けて事前に通知するよう努めます。
+          ただし、緊急のメンテナンスやシステム障害等やむを得ない場合はこの限りではありません。
+          これによりユーザーに生じた損害について、運営者は責任を負いません。
         </p>
       </Section>
 
       <Section title="第8条（免責事項）">
         <ol className="list-decimal pl-6 space-y-2">
           <li>
-            当社は、当サービスに事実上または法律上の瑕疵（安全性、信頼性、正確性、完全性、有効性、特定目的への適合性等）がないことを保証しません。
+            運営者は、当サービスに事実上または法律上の不具合や欠陥（契約不適合を含む。安全性、信頼性、正確性、完全性、有効性、特定目的への適合性等）がないことを保証しません。
           </li>
           <li>
-            当サービスの利用に起因してユーザーに生じた損害について、当社の故意または重過失による場合を除き、当社は責任を負いません。
+            当サービスの利用に起因してユーザーに生じた損害について、運営者の故意または重過失による場合を除き、運営者は責任を負いません。
           </li>
           <li>
-            当社がユーザーに対して損害賠償責任を負う場合、その賠償額はユーザーが過去12ヶ月間に当サービスに支払った金額を上限とします。
+            運営者がユーザーに対して損害賠償責任を負う場合、その賠償額はユーザーが過去12ヶ月間に当サービスに支払った金額を上限とします。
           </li>
         </ol>
       </Section>
 
       <Section title="第9条（個人情報の取り扱い）">
         <p>
-          ユーザーの個人情報の取り扱いについては、別途定めるプライバシーポリシーに従います。
+          ユーザーの個人情報の取り扱いについては、別途定める<Link href="/legal/privacy" className="text-accent hover:underline">プライバシーポリシー</Link>に従います。
         </p>
       </Section>
 
       <Section title="第10条（規約の変更）">
         <p>
-          当社は、必要に応じて本規約を変更できるものとします。変更後の規約は、当サービス上に表示した時点から効力を生じるものとします。
+          運営者は、必要に応じて本規約を変更できるものとします。変更後の規約は、当サービス上に表示した時点から効力を生じるものとします。
           重要な変更がある場合は、登録メールアドレスへの通知または当サービス上での告知を行います。
         </p>
       </Section>
@@ -142,7 +152,7 @@ export default function TermsPage() {
       </Section>
 
       <div className="mt-12 rounded-xl border border-card-border bg-card p-6 text-sm text-muted">
-        <p>お問い合わせ: support@seiyaku-coach.vercel.app</p>
+        <p>お問い合わせ: seiyaku.coach.ai@gmail.com</p>
       </div>
     </article>
   );

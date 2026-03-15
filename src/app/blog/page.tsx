@@ -5,9 +5,9 @@ import { Footer } from "@/components/footer";
 import { getAllBlogPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
-  title: "営業ノウハウブログ",
+  title: "営業ロープレ・クロージング練習のノウハウ",
   description:
-    "成約メソッド、AIロープレ活用法、クロージングテクニックなど、営業力を鍛えるための実践的なノウハウを発信。",
+    "営業ロープレの効果的な練習方法、クロージングテクニック、成約率を上げるメソッドを解説。AI活用法から営業研修のコツまで実践的なノウハウを発信。",
   alternates: { canonical: "/blog" },
 };
 

@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
 
   return {
     title: post.title,
@@ -64,35 +64,58 @@ export default async function BlogPostPage({ params }: Props) {
     .slice(0, 2);
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
 
-  const articleJsonLd = {
+  const blogJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.description,
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt || post.publishedAt,
-    author: {
-      "@type": "Organization",
-      name: "成約コーチ AI",
-      url: siteUrl,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "成約コーチ AI",
-      url: siteUrl,
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${siteUrl}/blog/${post.slug}`,
-    },
-    keywords: post.tags.join(", "),
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": `${siteUrl}/blog/${post.slug}#article`,
+        headline: post.title,
+        description: post.description,
+        datePublished: post.publishedAt,
+        dateModified: post.updatedAt || post.publishedAt,
+        author: { "@id": `${siteUrl}/#organization` },
+        publisher: { "@id": `${siteUrl}/#organization` },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `${siteUrl}/blog/${post.slug}`,
+        },
+        isPartOf: { "@id": `${siteUrl}/#website` },
+        keywords: post.tags.join(", "),
+        inLanguage: "ja",
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${siteUrl}/blog/${post.slug}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "ホーム",
+            item: siteUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "ブログ",
+            item: `${siteUrl}/blog`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: post.title,
+            item: `${siteUrl}/blog/${post.slug}`,
+          },
+        ],
+      },
+    ],
   };
 
   return (
     <div className="min-h-screen bg-background">
-      <JsonLd data={articleJsonLd} />
+      <JsonLd data={blogJsonLd} />
       <Header />
 
       {/* Article */}

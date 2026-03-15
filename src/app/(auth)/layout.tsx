@@ -17,7 +17,7 @@ export default function AuthLayout({
             AI営業ロープレコーチ
           </p>
           <p className="mt-3 text-xs text-muted">
-            <span className="text-accent font-medium">500+</span> 人の営業マンが利用中
+            登録不要・無料ですぐ試せる
           </p>
         </div>
         {children}

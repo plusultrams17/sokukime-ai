@@ -8,22 +8,25 @@ import { ScoreCard } from "./score-card";
 import { UserMenu } from "@/components/user-menu";
 import { UpgradeModal } from "@/components/upgrade-modal";
 import { WelcomeModal } from "@/components/welcome-modal";
+import { RadarChart } from "@/components/radar-chart";
 import { createClient } from "@/lib/supabase/client";
 import type { UsageStatus } from "@/lib/usage";
+import type { ScoreResult } from "@/lib/scoring";
+import {
+  trackRoleplaySetup,
+  trackRoleplayCompleted,
+  trackUpgradeModalShown,
+  trackEngagementEvent,
+} from "@/lib/tracking";
+import {
+  canShowPaywall,
+  recordPaywallShown,
+  recordPaywallDismissed,
+} from "@/lib/paywall-cooldown";
+
+export type { ScoreResult } from "@/lib/scoring";
 
 export type RoleplayPhase = "setup" | "chat" | "auth-gate" | "score";
-
-export interface ScoreResult {
-  overall: number;
-  categories: {
-    name: string;
-    score: number;
-    feedback: string;
-  }[];
-  summary: string;
-  strengths: string[];
-  improvements: string[];
-}
 
 interface PendingScore {
   messages: { role: string; content: string }[];
@@ -33,6 +36,7 @@ interface PendingScore {
   scene: string;
   customerType: string;
   timestamp: number;
+  score?: ScoreResult;
 }
 
 const PENDING_SCORE_KEY = "seiyaku-pending-score";
@@ -112,10 +116,13 @@ export default function RoleplayPage() {
   const [usage, setUsage] = useState<UsageStatus | null>(null);
   const [isGuest, setIsGuest] = useState(true);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeModalTrigger, setUpgradeModalTrigger] = useState<"limit" | "score" | "feature">("limit");
   const [showWelcome, setShowWelcome] = useState(false);
   const [isCheckingUsage, setIsCheckingUsage] = useState(false);
   const [isAutoScoring, setIsAutoScoring] = useState(false);
   const [pendingTurnCount, setPendingTurnCount] = useState(0);
+  const [previewScore, setPreviewScore] = useState<ScoreResult | null>(null);
+  const [previousScore, setPreviousScore] = useState<number | undefined>(undefined);
 
   const productSuggestions = ["外壁塗装", "法人向けクラウドサービス", "学習塾の入会", "生命保険", "太陽光パネル"];
 
@@ -162,6 +169,17 @@ export default function RoleplayPage() {
         return;
       }
 
+      // Use pre-computed score if available (no API call needed)
+      if (pending.score) {
+        setScore(pending.score);
+        setPhase("score");
+        setProduct(pending.product);
+        setDifficulty(pending.difficulty);
+        localStorage.removeItem(PENDING_SCORE_KEY);
+        return;
+      }
+
+      // Fallback: call /api/score for old localStorage data without pre-computed score
       setIsAutoScoring(true);
       const res = await fetch("/api/score", {
         method: "POST",
@@ -179,7 +197,6 @@ export default function RoleplayPage() {
       if (!data.error) {
         setScore(data);
         setPhase("score");
-        // Restore scenario data for usage display
         setProduct(pending.product);
         setDifficulty(pending.difficulty);
       }
@@ -191,7 +208,10 @@ export default function RoleplayPage() {
   }, []);
 
   // Handle guest finishing roleplay → save to localStorage and show auth gate
-  function handleAuthGate(messages: { role: string; content: string }[]) {
+  function handleAuthGate(
+    messages: { role: string; content: string }[],
+    previewScoreData?: ScoreResult
+  ) {
     const pending: PendingScore = {
       messages,
       industry,
@@ -200,14 +220,26 @@ export default function RoleplayPage() {
       scene,
       customerType,
       timestamp: Date.now(),
+      score: previewScoreData,
     };
     localStorage.setItem(PENDING_SCORE_KEY, JSON.stringify(pending));
     setPendingTurnCount(messages.filter((m) => m.role === "user").length);
+    if (previewScoreData) {
+      setPreviewScore(previewScoreData);
+    }
     setPhase("auth-gate");
   }
 
   async function handleStartRoleplay() {
     if (!canStart) return;
+
+    trackRoleplaySetup({
+      product,
+      customerType,
+      industry,
+      scene,
+      difficulty,
+    });
 
     // Guest: skip usage check, go directly to chat
     if (isGuest) {
@@ -223,13 +255,19 @@ export default function RoleplayPage() {
 
       if (res.status === 403) {
         setUsage(data);
-        setShowUpgradeModal(true);
+        if (canShowPaywall("limit")) {
+          setUpgradeModalTrigger("limit");
+          setShowUpgradeModal(true);
+          recordPaywallShown("limit");
+          trackUpgradeModalShown("daily_limit");
+        }
         setIsCheckingUsage(false);
         return;
       }
 
       setUsage(data);
       setPhase("chat");
+      trackEngagementEvent("roleplay_start", { product, difficulty });
     } catch {
       // Allow to proceed on network error
       setPhase("chat");
@@ -467,6 +505,28 @@ export default function RoleplayPage() {
           onFinish={(result) => {
             setScore(result);
             setPhase("score");
+            trackEngagementEvent("roleplay_complete", { score: result.overall });
+            trackEngagementEvent("score_view");
+            const categoryScores: Record<string, number> = {};
+            result.categories?.forEach((c: { name: string; score: number }) => {
+              const key = c.name;
+              if (key === "アプローチ") categoryScores.approach = c.score;
+              else if (key === "ヒアリング") categoryScores.hearing = c.score;
+              else if (key === "プレゼン") categoryScores.presentation = c.score;
+              else if (key === "クロージング") categoryScores.closing = c.score;
+              else if (key === "反論処理") categoryScores.objection = c.score;
+            });
+            trackRoleplayCompleted({
+              totalScore: result.overall,
+              scoreApproach: categoryScores.approach,
+              scoreHearing: categoryScores.hearing,
+              scorePresentation: categoryScores.presentation,
+              scoreClosing: categoryScores.closing,
+              scoreObjection: categoryScores.objection,
+              difficulty,
+              totalTurns: 0,
+              durationSeconds: 0,
+            });
           }}
         />
       )}
@@ -476,24 +536,63 @@ export default function RoleplayPage() {
         <div className="flex flex-1 items-center justify-center px-4 py-12">
           <div className="w-full max-w-md animate-fade-in-up text-center">
             <div className="mb-6 rounded-2xl border border-card-border bg-card p-8">
-              <div className="mb-4 text-5xl">📊</div>
               <h2 className="mb-2 text-xl font-bold">
                 ロープレお疲れさまでした！
               </h2>
-              <p className="mb-6 text-sm text-muted">
-                診断結果を見るには、無料アカウントの登録が必要です
-              </p>
 
-              {pendingTurnCount > 0 && (
-                <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3">
-                  <div className="text-sm text-muted">
-                    あなたの営業トーク <span className="font-bold text-accent">{pendingTurnCount}ターン</span> を
-                    AIが分析中...
+              {previewScore ? (
+                <>
+                  {/* Overall score - visible */}
+                  <div className="my-6">
+                    <div className="text-xs text-muted mb-1">あなたの営業スコア</div>
+                    <div className="flex items-center justify-center gap-2">
+                      <span className={`text-6xl font-black ${
+                        previewScore.overall >= 80 ? "text-green-600" :
+                        previewScore.overall >= 60 ? "text-yellow-600" :
+                        previewScore.overall >= 40 ? "text-orange-500" : "text-red-500"
+                      }`}>
+                        {previewScore.overall}
+                      </span>
+                      <span className="text-2xl font-black text-muted/30">/ 100</span>
+                    </div>
                   </div>
-                  <div className="mt-1 text-xs text-muted">
-                    ログイン後すぐに結果をお見せします
+
+                  {/* Radar chart - blurred with lock overlay */}
+                  <div className="relative my-6">
+                    <div className="pointer-events-none blur-sm">
+                      <RadarChart categories={previewScore.categories} size={200} />
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="rounded-full border border-card-border bg-card/80 px-4 py-2 text-xs font-medium text-muted backdrop-blur-sm">
+                        🔒 詳細を見るには無料登録
+                      </div>
+                    </div>
                   </div>
-                </div>
+
+                  <p className="mb-6 text-sm text-muted">
+                    詳細なフィードバックと改善アドバイスを見るには、
+                    <br />
+                    無料アカウントの登録が必要です
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="mb-4 text-5xl">📊</div>
+                  <p className="mb-6 text-sm text-muted">
+                    診断結果を見るには、無料アカウントの登録が必要です
+                  </p>
+                  {pendingTurnCount > 0 && (
+                    <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3">
+                      <div className="text-sm text-muted">
+                        あなたの営業トーク <span className="font-bold text-accent">{pendingTurnCount}ターン</span> を
+                        AIが分析中...
+                      </div>
+                      <div className="mt-1 text-xs text-muted">
+                        ログイン後すぐに結果をお見せします
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
 
               <div className="space-y-3">
@@ -524,8 +623,12 @@ export default function RoleplayPage() {
         <ScoreCard
           score={score}
           plan={usage?.plan}
-          onUpgrade={() => setShowUpgradeModal(true)}
+          onUpgrade={() => {
+            setUpgradeModalTrigger("score");
+            setShowUpgradeModal(true);
+          }}
           onRetry={() => {
+            if (score) setPreviousScore(score.overall);
             setScore(null);
             setPhase("setup");
             // Refresh usage if logged in
@@ -544,7 +647,13 @@ export default function RoleplayPage() {
       {/* Upgrade Modal */}
       <UpgradeModal
         open={showUpgradeModal}
-        onClose={() => setShowUpgradeModal(false)}
+        onClose={() => {
+          setShowUpgradeModal(false);
+          recordPaywallDismissed();
+        }}
+        trigger={upgradeModalTrigger}
+        currentScore={score?.overall}
+        previousScore={previousScore}
       />
     </div>
   );
