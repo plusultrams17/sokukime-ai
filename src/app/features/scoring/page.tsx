@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -74,7 +75,7 @@ export default function ScoringFeaturePage() {
 
       <section className="px-6 pt-32 pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 text-5xl">📊</div>
+          <div className="mb-4"><Image src="/images/pages/scoring-hero.png" alt="成約スコアリング" width={80} height={80} className="mx-auto rounded-2xl" /></div>
           <h1 className="mb-4 text-4xl font-bold">成約スコアリング</h1>
           <p className="text-lg text-muted">
             5ステップ × 20点の100点満点で
@@ -168,21 +169,25 @@ export default function ScoringFeaturePage() {
             {[
               {
                 icon: "📈",
+                image: "/images/pages/scoring-total.png",
                 title: "総合スコア & ランク",
                 desc: "100点満点の総合評価とS〜Eのランク表示",
               },
               {
                 icon: "📋",
+                image: "/images/pages/scoring-feedback.png",
                 title: "カテゴリ別フィードバック",
                 desc: "各ステップの得点と具体的な改善アドバイス",
               },
               {
                 icon: "💪",
+                image: "/images/pages/scoring-strength.png",
                 title: "強みの分析",
                 desc: "あなたの営業で特に良かったポイント",
               },
               {
                 icon: "🎯",
+                image: "/images/pages/scoring-improve.png",
                 title: "改善ポイント",
                 desc: "次のロープレで意識すべき具体的な課題",
               },
@@ -191,7 +196,7 @@ export default function ScoringFeaturePage() {
                 key={item.title}
                 className="rounded-xl border border-card-border bg-card p-5"
               >
-                <span className="text-2xl">{item.icon}</span>
+                {item.image ? <Image src={item.image} alt={item.title} width={48} height={48} className="rounded-lg" /> : <span className="text-2xl">{item.icon}</span>}
                 <h3 className="mt-2 font-bold">{item.title}</h3>
                 <p className="mt-1 text-sm text-muted">{item.desc}</p>
               </div>

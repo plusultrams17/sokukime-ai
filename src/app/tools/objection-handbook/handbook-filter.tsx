@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { Category } from "./page";
 
 export function HandbookFilter({ categories }: { categories: Category[] }) {
@@ -34,7 +35,7 @@ export function HandbookFilter({ categories }: { categories: Category[] }) {
                 : "bg-white border border-card-border text-foreground hover:bg-gray-50"
             }`}
           >
-            {cat.icon} {cat.name}（{cat.items.length}）
+            {cat.image ? <Image src={cat.image} alt="" width={20} height={20} className="inline-block rounded" /> : cat.icon} {cat.name}（{cat.items.length}）
           </button>
         ))}
       </div>
@@ -44,7 +45,7 @@ export function HandbookFilter({ categories }: { categories: Category[] }) {
         {filtered.map((cat) => (
           <div key={cat.id}>
             <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
-              <span className="text-2xl">{cat.icon}</span>
+              {cat.image ? <Image src={cat.image} alt={cat.name} width={32} height={32} className="rounded-lg" /> : <span className="text-2xl">{cat.icon}</span>}
               {cat.name}の反論（{cat.items.length}パターン）
             </h3>
             <div className="space-y-3">

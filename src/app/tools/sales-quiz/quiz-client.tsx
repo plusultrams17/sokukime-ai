@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 type Category = "アプローチ" | "ヒアリング" | "プレゼン" | "クロージング" | "反論処理";
@@ -178,7 +179,7 @@ export function SalesQuizClient() {
   if (state === "intro") {
     return (
       <div className="rounded-2xl bg-white border border-card-border shadow-sm p-8 text-center">
-        <div className="text-5xl mb-4">📊</div>
+        <div className="mb-4"><Image src="/images/misc/tool-sales-quiz.png" alt="営業力診断テスト" width={64} height={64} className="mx-auto rounded-xl" /></div>
         <h3 className="text-xl font-bold text-foreground mb-2">営業力診断テスト</h3>
         <p className="text-sm text-muted mb-6">10問の質問であなたの営業スキルを5項目で診断します。所要時間は約3分です。</p>
         <ul className="text-left text-sm text-muted space-y-2 mb-8 max-w-xs mx-auto">

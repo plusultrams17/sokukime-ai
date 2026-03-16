@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -34,7 +35,7 @@ export default function SalesQuizPage() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f1729] to-[#1a2744] px-6 pt-24 pb-16 sm:pt-32 sm:pb-20">
         <div className="relative z-10 mx-auto max-w-4xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">📊 約3分・登録不要</div>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm"><Image src="/images/misc/tool-sales-quiz.png" alt="" width={24} height={24} className="rounded" /> 約3分・登録不要</div>
           <h1 className="mb-4 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
             あなたの<span className="text-accent">営業力</span>を診断
           </h1>
@@ -68,16 +69,18 @@ export default function SalesQuizPage() {
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 text-xl font-bold text-foreground">関連ツール</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {[
-              { href: "/tools/script-generator", name: "トークスクリプト生成", icon: "📝" },
-              { href: "/tools/objection-handbook", name: "反論切り返しトーク集", icon: "🛡️" },
-              { href: "/tools/closing-calculator", name: "クロージング率計算", icon: "🧮" },
-            ].map((t) => (
-              <Link key={t.href} href={t.href} className="rounded-xl border border-card-border bg-white p-4 text-center transition hover:-translate-y-0.5 hover:shadow-sm">
-                <div className="text-2xl mb-1">{t.icon}</div>
-                <div className="text-sm font-medium text-foreground">{t.name}</div>
-              </Link>
-            ))}
+            <Link href="/tools/script-generator" className="rounded-xl border border-card-border bg-white p-4 text-center transition hover:-translate-y-0.5 hover:shadow-sm">
+              <div className="flex justify-center mb-1"><Image src="/images/misc/tool-script-generator.png" alt="" width={20} height={20} className="inline-block rounded" /></div>
+              <div className="text-sm font-medium text-foreground">トークスクリプト生成</div>
+            </Link>
+            <Link href="/tools/objection-handbook" className="rounded-xl border border-card-border bg-white p-4 text-center transition hover:-translate-y-0.5 hover:shadow-sm">
+              <div className="flex justify-center mb-1"><Image src="/images/misc/tool-objection-handbook.png" alt="" width={20} height={20} className="inline-block rounded" /></div>
+              <div className="text-sm font-medium text-foreground">反論切り返しトーク集</div>
+            </Link>
+            <Link href="/tools/closing-calculator" className="rounded-xl border border-card-border bg-white p-4 text-center transition hover:-translate-y-0.5 hover:shadow-sm">
+              <div className="flex justify-center mb-1"><Image src="/images/misc/tool-closing-calculator.png" alt="" width={20} height={20} className="inline-block rounded" /></div>
+              <div className="text-sm font-medium text-foreground">クロージング率計算</div>
+            </Link>
           </div>
         </div>
       </section>

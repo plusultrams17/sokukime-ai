@@ -4,6 +4,7 @@ export interface IndustryChallenge {
   title: string;
   description: string;
   icon: string;
+  image?: string;
 }
 
 export interface ObjectionPattern {
@@ -71,18 +72,21 @@ export const industries: Industry[] = [
         description:
           "お客様自身がリスクを実感していない状態から、保険の必要性を気づかせるヒアリング力が求められる",
         icon: "🎯",
+        image: "/images/challenges/insurance-1-needs-awareness.png",
       },
       {
         title: "競合との差別化",
         description:
           "似たような保障内容の中で、自社商品の優位性を論理的かつ感情的に伝えられない",
         icon: "🏢",
+        image: "/images/challenges/insurance-2-competitor-differentiation.png",
       },
       {
         title: "「検討します」の壁",
         description:
           "保険は緊急性が低く、商談後に「考えます」と持ち帰られるケースが多い",
         icon: "⏰",
+        image: "/images/challenges/insurance-3-consideration-wall.png",
       },
     ],
     objectionPatterns: [
@@ -220,18 +224,21 @@ export const industries: Industry[] = [
         description:
           "数千万円の買い物だけに「もう少し考えたい」が当たり前。決断を促すクロージング技術が必要",
         icon: "💰",
+        image: "/images/challenges/realestate-1-high-price-decision.png",
       },
       {
         title: "物件の魅力を超えた提案力",
         description:
           "スペック説明だけではなく、お客様の理想の暮らしと結びつけた提案ができていない",
         icon: "🏠",
+        image: "/images/challenges/realestate-2-proposal-beyond-specs.png",
       },
       {
         title: "競合物件との比較対応",
         description:
           "他社物件やポータルサイトで情報武装したお客様への差別化提案が求められる",
         icon: "🔄",
+        image: "/images/challenges/realestate-3-competitor-comparison.png",
       },
     ],
     objectionPatterns: [
@@ -368,18 +375,21 @@ export const industries: Industry[] = [
         description:
           "「他社からも見積もりを取っています」が常態化。価格だけでなく信頼で選ばれる提案が必要",
         icon: "📋",
+        image: "/images/challenges/reform-1-competing-estimates.png",
       },
       {
         title: "ニーズの深掘り不足",
         description:
           "表面的な要望だけで見積もりを出し、お客様の本当の「理想の暮らし」を引き出せていない",
         icon: "🔍",
+        image: "/images/challenges/reform-2-needs-discovery.png",
       },
       {
         title: "高額見積もりへの抵抗感",
         description:
           "自信を持って適正価格を提示できず、値引きに走ってしまう営業が多い",
         icon: "💰",
+        image: "/images/challenges/reform-3-price-resistance.png",
       },
     ],
     objectionPatterns: [
@@ -513,18 +523,21 @@ export const industries: Industry[] = [
         title: "飛び込み訪問の第一印象",
         description: "ドアを開けてもらう最初の10秒で信頼を勝ち取るトーク力が不可欠",
         icon: "🚪",
+        image: "/images/challenges/painting-1-first-impression.png",
       },
       {
         title: "塗装の必要性を伝える難しさ",
         description:
           "お客様は外壁の劣化を実感していないケースが多く、必要性を気づかせるスキルが必要",
         icon: "🎯",
+        image: "/images/challenges/painting-2-need-awareness.png",
       },
       {
         title: "訪問販売への不信感",
         description:
           "悪質業者の存在で業界全体への警戒心が強く、信頼構築に時間がかかる",
         icon: "🛡️",
+        image: "/images/challenges/painting-3-distrust.png",
       },
     ],
     objectionPatterns: [
@@ -658,16 +671,19 @@ export const industries: Industry[] = [
         title: "初期費用への抵抗",
         description: "100〜300万円の初期投資に対する心理的ハードルが高い",
         icon: "💰",
+        image: "/images/challenges/solar-1-initial-cost.png",
       },
       {
         title: "情報過多の顧客対応",
         description: "ネットで調べた情報で武装した顧客に、正確かつ説得力のある説明が必要",
         icon: "📱",
+        image: "/images/challenges/solar-2-info-overload.png",
       },
       {
         title: "制度変更への対応",
         description: "FIT価格・補助金制度が毎年変わるため、常に最新情報での提案が求められる",
         icon: "📊",
+        image: "/images/challenges/solar-3-policy-changes.png",
       },
     ],
     objectionPatterns: [
@@ -793,16 +809,19 @@ export const industries: Industry[] = [
         title: "来店客の温度感の見極め",
         description: "冷やかしなのか本気の購入検討なのか、早期に見極めるスキルが必要",
         icon: "🔍",
+        image: "/images/challenges/auto-1-temperature-check.png",
       },
       {
         title: "値引き交渉への対応",
         description: "「あと10万引いて」への対応で利益を守りつつ成約するバランス感覚",
         icon: "💰",
+        image: "/images/challenges/auto-2-price-negotiation.png",
       },
       {
         title: "オンライン比較への対抗",
         description: "ネットで価格・スペックを調べ尽くした顧客に、対面ならではの価値を提供する",
         icon: "📱",
+        image: "/images/challenges/auto-3-online-comparison.png",
       },
     ],
     objectionPatterns: [
@@ -908,16 +927,19 @@ export const industries: Industry[] = [
         title: "テレアポの突破率",
         description: "受付ブロックを突破し、人事担当者にアポを取るまでのトーク力が課題",
         icon: "📞",
+        image: "/images/challenges/recruit-1-cold-call.png",
       },
       {
         title: "求人の深堀りヒアリング",
         description: "表面的な求人条件だけでなく、採用背景や組織課題まで聞き出す力",
         icon: "🔍",
+        image: "/images/challenges/recruit-2-deep-hearing.png",
       },
       {
         title: "成約率の低さ",
         description: "候補者推薦しても内定辞退や入社後のミスマッチで成約に至らないケース",
         icon: "📉",
+        image: "/images/challenges/recruit-3-low-close-rate.png",
       },
     ],
     objectionPatterns: [
@@ -1018,16 +1040,19 @@ export const industries: Industry[] = [
         title: "機能説明偏重の罠",
         description: "製品の機能を語りすぎて、顧客のビジネス課題との接点を示せていない",
         icon: "⚙️",
+        image: "/images/challenges/saas-1-feature-trap.png",
       },
       {
         title: "長い決裁プロセス",
         description: "担当者→マネージャー→役員と複数の意思決定者を攻略する必要がある",
         icon: "🏢",
+        image: "/images/challenges/saas-2-long-approval.png",
       },
       {
         title: "トライアル後の失注",
         description: "無料トライアルまでは進むが、有料化のタイミングで離脱されるケースが多い",
         icon: "📉",
+        image: "/images/challenges/saas-3-trial-churn.png",
       },
     ],
     objectionPatterns: [
@@ -1136,16 +1161,19 @@ export const industries: Industry[] = [
         title: "効果の定量化が困難",
         description: "「広告でどれだけ売上が上がるか」を具体的な数字で示すのが難しい",
         icon: "📊",
+        image: "/images/challenges/ad-1-roi-measurement.png",
       },
       {
         title: "予算確保の壁",
         description: "広告費は真っ先にカットされやすく、予算の必要性を説得する力が求められる",
         icon: "💰",
+        image: "/images/challenges/ad-2-budget-wall.png",
       },
       {
         title: "成果報告のプレゼン力",
         description: "数字の羅列ではなく、経営インパクトとして成果を伝えるストーリー力",
         icon: "📈",
+        image: "/images/challenges/ad-3-presentation.png",
       },
     ],
     objectionPatterns: [
@@ -1246,16 +1274,19 @@ export const industries: Industry[] = [
         title: "ドクターの短い面談時間",
         description: "診療の合間の5分で、製品の価値を的確に伝える簡潔なプレゼン力",
         icon: "⏱️",
+        image: "/images/challenges/medical-1-short-meeting.png",
       },
       {
         title: "院内のキーパーソン特定",
         description: "ドクター、看護師長、事務長、購買担当など、複数のキーパーソンへの攻略",
         icon: "🏥",
+        image: "/images/challenges/medical-2-key-persons.png",
       },
       {
         title: "エビデンスベースの提案",
         description: "臨床データや学会発表に基づく、科学的根拠のある提案が必須",
         icon: "📋",
+        image: "/images/challenges/medical-3-evidence-based.png",
       },
     ],
     objectionPatterns: [
@@ -1355,16 +1386,19 @@ export const industries: Industry[] = [
         title: "価格競争からの脱却",
         description: "同じ仕様なら安いほうに流れる構造を、付加価値提案で変えていく必要がある",
         icon: "💰",
+        image: "/images/challenges/print-1-price-war.png",
       },
       {
         title: "デジタル化への対応",
         description: "紙媒体からデジタルへの移行で、新しい提案領域を開拓する力が必要",
         icon: "📱",
+        image: "/images/challenges/print-2-digital-shift.png",
       },
       {
         title: "新規開拓の壁",
         description: "既存取引先に依存しがちで、新規開拓のトーク力・行動量が不足",
         icon: "🚀",
+        image: "/images/challenges/print-3-new-customers.png",
       },
     ],
     objectionPatterns: [
@@ -1464,16 +1498,19 @@ export const industries: Industry[] = [
         title: "フェア後の即決率",
         description: "ブライダルフェア来場後にその場で決まらないと、他式場に流れるリスクが高い",
         icon: "💒",
+        image: "/images/challenges/bridal-1-instant-decision.png",
       },
       {
         title: "カップル間の温度差",
         description: "二人の間で式への意欲や予算感に差があり、両方を満足させる提案が必要",
         icon: "💑",
+        image: "/images/challenges/bridal-2-couple-gap.png",
       },
       {
         title: "高額オプションの提案",
         description: "ドレス、装花、料理のグレードアップなど、追加提案で単価を上げるスキル",
         icon: "✨",
+        image: "/images/challenges/bridal-3-premium-options.png",
       },
     ],
     objectionPatterns: [
@@ -1588,18 +1625,21 @@ export const industries: Industry[] = [
         description:
           "法人営業では意思決定に複数のステークホルダーが関わり、その場で決まらないケースが多発する",
         icon: "🏢",
+        image: "/images/challenges/saassales-1-internal-review.png",
       },
       {
         title: "競合SaaSとの差別化困難",
         description:
           "機能比較だけでは差がつかず、お客様の業務課題にフォーカスした提案力が求められる",
         icon: "⚔️",
+        image: "/images/challenges/saassales-2-competitor-diff.png",
       },
       {
         title: "トライアル→有料転換率の低さ",
         description:
           "無料トライアルは開始されるが、有料プランに移行しないケースが多い",
         icon: "📉",
+        image: "/images/challenges/saassales-3-trial-conversion.png",
       },
     ],
     objectionPatterns: [
@@ -1723,18 +1763,21 @@ export const industries: Industry[] = [
         description:
           "「今は採用予定がない」と言われ、潜在的な人材ニーズを引き出せずに商談が終わってしまう",
         icon: "🚪",
+        image: "/images/challenges/hr-1-rejection.png",
       },
       {
         title: "競合との差別化困難",
         description:
           "「他の人材会社も使っている」と言われ、価格競争に陥りやすい",
         icon: "🏢",
+        image: "/images/challenges/hr-2-differentiation.png",
       },
       {
         title: "ヒアリング不足で不採用",
         description:
           "求人票は獲得できるが、紹介した人材が採用に至らずクライアントの信頼を失う",
         icon: "📋",
+        image: "/images/challenges/hr-3-poor-matching.png",
       },
     ],
     objectionPatterns: [
@@ -1858,18 +1901,21 @@ export const industries: Industry[] = [
         description:
           "保護者が意思決定者だが「本人の意思を尊重したい」と言われると押せなくなる",
         icon: "👨‍👩‍👦",
+        image: "/images/challenges/edu-1-family-consultation.png",
       },
       {
         title: "料金への抵抗感",
         description:
           "「月謝が高い」「他の塾と比べると…」という価格の壁で入会に至らない",
         icon: "💰",
+        image: "/images/challenges/edu-2-price-resistance.png",
       },
       {
         title: "体験後の未入会",
         description:
           "体験授業では好反応なのに、体験後のクロージングが不十分で入会に繋がらない",
         icon: "📝",
+        image: "/images/challenges/edu-3-post-trial.png",
       },
     ],
     objectionPatterns: [
@@ -1998,18 +2044,21 @@ export const industries: Industry[] = [
         description:
           "飛び込み・アポなし訪問で「間に合っています」と即断され、話を聞いてもらえない",
         icon: "🚪",
+        image: "/images/challenges/retail-1-door-rejection.png",
       },
       {
         title: "見積もり後の音信不通",
         description:
           "現地調査・見積もり提出後にお客様と連絡が取れなくなるケースが多い",
         icon: "📱",
+        image: "/images/challenges/retail-2-lost-contact.png",
       },
       {
         title: "相見積もりでの敗北",
         description:
           "高額商材では相見積もりが当たり前で、価格だけの比較になると利益が削られる",
         icon: "📊",
+        image: "/images/challenges/retail-3-estimate-loss.png",
       },
     ],
     objectionPatterns: [

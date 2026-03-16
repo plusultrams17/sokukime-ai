@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -21,6 +22,7 @@ const tools = [
     description:
       "10問の質問でアプローチ・ヒアリング・プレゼン・クロージング・反論処理の5項目を診断。あなたの強みと弱点が一目でわかります。",
     icon: "📊",
+    image: "/images/misc/tool-sales-quiz.png",
     keywords: ["営業力 診断", "営業スキル チェック"],
     time: "約3分",
   },
@@ -30,6 +32,7 @@ const tools = [
     description:
       "業種と商材を選ぶだけで、5ステップメソッドに基づくトークスクリプトを自動生成。アプローチからクロージングまでの台本が手に入ります。",
     icon: "📝",
+    image: "/images/misc/tool-script-generator.png",
     keywords: ["トークスクリプト", "営業 台本"],
     time: "約1分",
   },
@@ -39,6 +42,7 @@ const tools = [
     description:
       "「高い」「検討します」「必要ない」——営業でよくある断り文句30パターンへの切り返しトークを6カテゴリで整理。即実践できる対処法を無料公開。",
     icon: "🛡️",
+    image: "/images/misc/tool-objection-handbook.png",
     keywords: ["反論処理", "切り返しトーク"],
     time: "読み放題",
   },
@@ -48,6 +52,7 @@ const tools = [
     description:
       "商談数・提案数・成約数を入力して成約率を自動計算。業種別ベンチマークと比較し、改善すべきポイントを可視化します。",
     icon: "🧮",
+    image: "/images/misc/tool-closing-calculator.png",
     keywords: ["成約率 計算", "営業 KPI"],
     time: "約1分",
   },
@@ -117,7 +122,11 @@ export default function ToolsPage() {
                 className="group rounded-2xl border border-card-border bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:p-8"
               >
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="text-4xl">{tool.icon}</span>
+                  {tool.image ? (
+                    <Image src={tool.image} alt={tool.name} width={64} height={64} className="rounded-xl object-cover" />
+                  ) : (
+                    <span className="text-4xl">{tool.icon}</span>
+                  )}
                   <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
                     {tool.time}
                   </span>

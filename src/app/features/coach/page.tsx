@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -13,21 +14,25 @@ export const metadata: Metadata = {
 const coachFeatures = [
   {
     icon: "📍",
+    image: "/images/pages/coach-step.png",
     title: "現在のステップ表示",
     desc: "会話の進行に応じて、今どのステップにいるかを自動判定。アプローチ→ヒアリング→プレゼン→クロージング→反論処理の流れを把握できます。",
   },
   {
     icon: "✅",
+    image: "/images/pages/coach-detect.png",
     title: "テクニック検出",
     desc: "あなたの発言から使用したテクニックを自動検出。「前提設定トーク」「共感フレーズ」「根拠提示」など、成約メソッドの型が使えているかリアルタイムで確認できます。",
   },
   {
     icon: "💡",
+    image: "/images/pages/coach-suggest.png",
     title: "次のアクション提案",
     desc: "「次はヒアリングで深掘りしましょう」「クロージングのタイミングです」など、会話の流れに沿った具体的なアドバイスを表示します。",
   },
   {
     icon: "💬",
+    image: "/images/pages/coach-example.png",
     title: "例文コピー機能",
     desc: "各テクニックの具体的な例文をワンクリックでコピー。「こう言えばいい」がすぐにわかるので、初心者でも型を実践しやすくなっています。",
   },
@@ -40,7 +45,7 @@ export default function CoachFeaturePage() {
 
       <section className="px-6 pt-32 pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 text-5xl">🧠</div>
+          <div className="mb-4"><Image src="/images/pages/coach-hero.png" alt="リアルタイムAIコーチ" width={80} height={80} className="mx-auto rounded-2xl" /></div>
           <h1 className="mb-4 text-4xl font-bold">リアルタイムAIコーチ</h1>
           <p className="text-lg text-muted">
             ロープレ中にAIがあなたの営業テクニックを分析し、
@@ -59,7 +64,7 @@ export default function CoachFeaturePage() {
               className="rounded-2xl border border-card-border bg-card p-6"
             >
               <div className="flex items-start gap-4">
-                <span className="text-2xl">{f.icon}</span>
+                {f.image ? <Image src={f.image} alt={f.title} width={48} height={48} className="rounded-lg flex-shrink-0" /> : <span className="text-2xl">{f.icon}</span>}
                 <div>
                   <h2 className="text-lg font-bold">{f.title}</h2>
                   <p className="mt-2 text-sm text-muted leading-relaxed">

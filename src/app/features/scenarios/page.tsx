@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -13,18 +14,21 @@ export const metadata: Metadata = {
 const scenes = [
   {
     icon: "📞",
+    image: "/images/pages/scenario-phone.png",
     name: "電話営業",
     desc: "テレアポ・電話商談のシミュレーション。短い会話の中でアポイントを取る練習に最適。",
     tips: "素早い切り返しと簡潔なトークが求められます",
   },
   {
     icon: "🏠",
+    image: "/images/pages/scenario-visit.png",
     name: "訪問営業",
     desc: "お客さん宅・会社に訪問するシーンを再現。対面ならではの信頼構築から契約までの流れを練習。",
     tips: "アプローチから丁寧に信頼関係を築くことがポイント",
   },
   {
     icon: "📩",
+    image: "/images/pages/scenario-inbound.png",
     name: "問い合わせ対応",
     desc: "お客さんからの問い合わせに対応するシーン。ニーズが顕在化しているお客さんへの提案を練習。",
     tips: "お客さんの関心を的確にキャッチして、提案につなげましょう",
@@ -34,21 +38,25 @@ const scenes = [
 const customerTypes = [
   {
     icon: "👤",
+    image: "/images/pages/scenario-individual.png",
     name: "個人のお客さん",
     desc: "一般消費者への営業。感情に寄り添ったアプローチが重要です。",
   },
   {
     icon: "👔",
+    image: "/images/pages/scenario-executive.png",
     name: "会社オーナー・社長",
     desc: "経営者への営業。ROIや経営課題の解決を軸にした提案が求められます。",
   },
   {
     icon: "📊",
+    image: "/images/pages/scenario-manager.png",
     name: "部長・課長クラス",
     desc: "決裁権を持つ管理職への営業。上への説明のしやすさも考慮した提案を。",
   },
   {
     icon: "🙋",
+    image: "/images/pages/scenario-staff.png",
     name: "担当者・一般社員",
     desc: "現場の担当者への営業。上長への起案をサポートする提案が効果的です。",
   },
@@ -79,7 +87,7 @@ export default function ScenariosFeaturePage() {
 
       <section className="px-6 pt-32 pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-4 text-5xl">🎭</div>
+          <div className="mb-4"><Image src="/images/pages/scenario-hero.png" alt="シナリオカスタマイズ" width={80} height={80} className="mx-auto rounded-2xl" /></div>
           <h1 className="mb-4 text-4xl font-bold">シナリオカスタマイズ</h1>
           <p className="text-lg text-muted">
             あなたの営業シーンに合わせて、
@@ -99,7 +107,7 @@ export default function ScenariosFeaturePage() {
                 key={s.name}
                 className="rounded-2xl border border-card-border bg-card p-6"
               >
-                <div className="text-3xl mb-3">{s.icon}</div>
+                <div className="mb-3">{s.image ? <Image src={s.image} alt={s.name} width={56} height={56} className="rounded-xl" /> : <span className="text-3xl">{s.icon}</span>}</div>
                 <h3 className="font-bold mb-2">{s.name}</h3>
                 <p className="text-xs text-muted leading-relaxed mb-3">
                   {s.desc}
@@ -123,7 +131,7 @@ export default function ScenariosFeaturePage() {
                 key={ct.name}
                 className="flex items-start gap-3 rounded-xl border border-card-border bg-card p-5"
               >
-                <span className="text-2xl">{ct.icon}</span>
+                {ct.image ? <Image src={ct.image} alt={ct.name} width={40} height={40} className="rounded-lg flex-shrink-0" /> : <span className="text-2xl">{ct.icon}</span>}
                 <div>
                   <h3 className="font-bold">{ct.name}</h3>
                   <p className="mt-1 text-xs text-muted leading-relaxed">

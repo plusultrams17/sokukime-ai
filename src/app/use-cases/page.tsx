@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 const useCases = [
   {
     icon: "🆕",
+    image: "/images/pages/usecase-newbie.png",
     title: "新人営業マンの研修",
     problem:
       "従来のロープレは先輩の時間を奪い、新人は遠慮して十分な練習ができない。研修後も自主練の環境がない。",
@@ -29,6 +31,7 @@ const useCases = [
   },
   {
     icon: "👥",
+    image: "/images/pages/usecase-team.png",
     title: "営業チームのスキル底上げ",
     problem:
       "チーム内で営業手法がバラバラ。エースの技術が属人化し、チーム全体の底上げが進まない。",
@@ -44,6 +47,7 @@ const useCases = [
   },
   {
     icon: "💼",
+    image: "/images/pages/usecase-freelance.png",
     title: "個人事業主・フリーランス",
     problem:
       "一人で営業するため、ロープレ相手がいない。提案・クロージングに不安を抱えたまま商談に臨んでいる。",
@@ -59,6 +63,7 @@ const useCases = [
   },
   {
     icon: "📞",
+    image: "/images/pages/usecase-teleapo.png",
     title: "テレアポ・電話営業の練習",
     problem:
       "電話営業はスピードが命。瞬時の切り返しが求められるが、練習する場がない。",
@@ -128,7 +133,7 @@ export default function UseCasesPage() {
               {/* Header */}
               <div className="border-b border-card-border bg-card p-6">
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl">{uc.icon}</span>
+                  {uc.image ? <Image src={uc.image} alt={uc.title} width={56} height={56} className="rounded-xl flex-shrink-0" /> : <span className="text-3xl">{uc.icon}</span>}
                   <div>
                     <h2 className="text-xl font-bold">{uc.title}</h2>
                     <p className="mt-1 text-sm text-accent font-medium">

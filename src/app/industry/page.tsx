@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { StickyCTA } from "@/components/sticky-cta";
 import { JsonLd } from "@/components/json-ld";
-import { industries } from "@/data/industries";
+import { IndustryCards } from "@/components/industry-cards";
 
 export const metadata: Metadata = {
   title: "業種別AI営業ロープレ練習",
@@ -81,55 +80,7 @@ export default function IndustryIndexPage() {
             あなたの業界に特化したロープレシナリオ・反論パターン・商談テクニックを確認できます
           </p>
 
-          <div className="flex flex-wrap justify-center gap-6">
-            {industries.map((industry) => (
-              <Link
-                key={industry.slug}
-                href={`/industry/${industry.slug}`}
-                className="ind-card"
-              >
-                {/* Corner rectangles */}
-                <div className="ind-rect lt" />
-                <div className="ind-rect rt" />
-                <div className="ind-rect lb" />
-                <div className="ind-rect rb" />
-
-                {/* Image */}
-                <div className="ind-image">
-                  <Image
-                    src={`/images/industries/${industry.slug}.png`}
-                    alt={`${industry.name}営業イメージ`}
-                    fill
-                    className="object-cover rounded-[0.25rem]"
-                    sizes="(max-width: 640px) 50vw, 14rem"
-                  />
-                </div>
-
-                {/* Title */}
-                <div className="ind-title">{industry.name}</div>
-
-                {/* Love / description */}
-                <div className="ind-love">
-                  <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" className="ind-love-svg">
-                    <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
-                  </svg>
-                  <span>{industry.description}</span>
-                </div>
-
-                {/* Category / keywords */}
-                <div className="ind-category">
-                  {industry.keywords.slice(0, 3).map((keyword) => (
-                    <span key={keyword} className="ind-btn">
-                      {keyword}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Action */}
-                <div className="ind-action">練習を始める</div>
-              </Link>
-            ))}
-          </div>
+          <IndustryCards />
         </div>
       </section>
 
@@ -139,7 +90,7 @@ export default function IndustryIndexPage() {
           <h2 className="mb-6 text-2xl font-bold text-foreground sm:text-3xl text-center">
             業種別AI営業ロープレとは
           </h2>
-          <div className="space-y-4 text-sm text-muted leading-relaxed sm:text-base">
+          <div className="speech-bubble space-y-4 text-sm text-muted leading-relaxed sm:text-base">
             <p>
               営業の現場では、業種ごとに商談の流れやお客様の反応が大きく異なります。
               不動産営業では高額商材ならではの慎重な判断への対応が、保険営業ではニーズ喚起のスキルが、

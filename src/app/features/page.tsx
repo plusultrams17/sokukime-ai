@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 const features = [
   {
     icon: "🎭",
+    image: "/images/pages/feature-roleplay.png",
     title: "AIロープレ",
     desc: "AIがリアルなお客さん役を演じます。業種・商材・難易度を自由にカスタマイズして、あらゆる営業シーンを練習。",
     href: "/features/scenarios",
@@ -25,6 +27,7 @@ const features = [
   },
   {
     icon: "🧠",
+    image: "/images/pages/feature-coach.png",
     title: "リアルタイムAIコーチ",
     desc: "会話中にリアルタイムで成約メソッドのテクニックを分析。今何をすべきかをコーチがアドバイスします。",
     href: "/features/coach",
@@ -36,6 +39,7 @@ const features = [
   },
   {
     icon: "📊",
+    image: "/images/pages/feature-scoring.png",
     title: "成約スコアリング",
     desc: "5ステップそれぞれを20点満点で採点。総合スコアとランク（S〜E）で実力を可視化します。",
     href: "/features/scoring",
@@ -100,7 +104,7 @@ export default function FeaturesPage() {
               className="rounded-2xl border border-card-border bg-card p-8"
             >
               <div className="flex items-start gap-4 mb-6">
-                <span className="text-4xl">{f.icon}</span>
+                {f.image ? <Image src={f.image} alt={f.title} width={64} height={64} className="rounded-xl flex-shrink-0" /> : <span className="text-4xl">{f.icon}</span>}
                 <div>
                   <h2 className="text-2xl font-bold">{f.title}</h2>
                   <p className="mt-2 text-sm text-muted leading-relaxed">

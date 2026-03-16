@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { Footer } from "@/components/footer";
@@ -18,10 +19,10 @@ const features = [
 ];
 
 const comparisons = [
-  { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", icon: "🏢" },
-  { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", icon: "👔" },
-  { name: "先輩にロープレ依頼", cost: "時給換算 ¥3,000〜", frequency: "週1回（相手の都合次第）", icon: "👥" },
-  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "毎日・無制限・24時間", icon: "🔥", highlight: true },
+  { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", icon: "🏢", image: "/images/misc/comparison-training.png" },
+  { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", icon: "👔", image: "/images/misc/comparison-consulting.png" },
+  { name: "先輩にロープレ依頼", cost: "時給換算 ¥3,000〜", frequency: "週1回（相手の都合次第）", icon: "👥", image: "/images/misc/comparison-senpai.png" },
+  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "毎日・無制限・24時間", icon: "🔥", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
 const testimonials = [
@@ -397,7 +398,11 @@ export default function PricingPage() {
                     : "border-card-border bg-card"
                 }`}
               >
-                <span className="text-2xl">{item.icon}</span>
+                {item.image ? (
+                  <Image src={item.image} alt={item.name} width={48} height={48} className="rounded-lg object-cover" />
+                ) : (
+                  <span className="text-2xl">{item.icon}</span>
+                )}
                 <div className="flex-1">
                   <p
                     className={`font-bold ${

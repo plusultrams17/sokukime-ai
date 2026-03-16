@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -14,16 +15,19 @@ export const metadata: Metadata = {
 const values = [
   {
     icon: "🎯",
+    image: "/images/pages/about-value-practice.png",
     title: "実践主義",
     desc: "理論だけでなく、繰り返し実践することで営業力は身につく。AIとの反復練習で「型」を体に染み込ませます。",
   },
   {
     icon: "📊",
+    image: "/images/pages/about-value-datadriven.png",
     title: "データドリブン",
     desc: "感覚ではなく、5ステップの定量スコアで弱点を可視化。何を改善すべきか明確にします。",
   },
   {
     icon: "🔥",
+    image: "/images/pages/about-value-accessible.png",
     title: "アクセシブル",
     desc: "24時間いつでも、スマホからでも練習可能。先輩の時間を奪わず、自分のペースでスキルアップ。",
   },
@@ -97,19 +101,19 @@ export default function AboutPage() {
             </p>
             <div className="rounded-xl border border-card-border bg-card p-6 space-y-3">
               <div className="flex items-start gap-3">
-                <span className="text-lg">😩</span>
+                <Image src="/images/pages/about-problem-burden.png" alt="練習相手の負担" width={40} height={40} className="rounded-lg flex-shrink-0" />
                 <span>
                   ロープレは先輩や上司に頼む必要があり、相手の時間を奪ってしまう
                 </span>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-lg">😰</span>
+                <Image src="/images/pages/about-problem-unprepared.png" alt="練習不足" width={40} height={40} className="rounded-lg flex-shrink-0" />
                 <span>
                   練習不足のまま本番に臨み、「考えます」で終わってしまう
                 </span>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-lg">🤷</span>
+                <Image src="/images/pages/about-problem-unknown.png" alt="弱点不明" width={40} height={40} className="rounded-lg flex-shrink-0" />
                 <span>
                   自分の弱点がわからず、何を改善すべきかも不明確
                 </span>
@@ -187,7 +191,7 @@ export default function AboutPage() {
                 key={v.title}
                 className="rounded-xl border border-card-border bg-card p-6 text-center"
               >
-                <div className="mb-3 text-3xl">{v.icon}</div>
+                <div className="mb-3">{v.image ? <Image src={v.image} alt={v.title} width={64} height={64} className="mx-auto rounded-xl" /> : <span className="text-3xl">{v.icon}</span>}</div>
                 <h3 className="mb-2 font-bold">{v.title}</h3>
                 <p className="text-xs text-muted leading-relaxed">{v.desc}</p>
               </div>
@@ -202,28 +206,28 @@ export default function AboutPage() {
           <h2 className="mb-6 text-xl font-bold">もっと詳しく</h2>
           <div className="grid gap-3 sm:grid-cols-2">
             <Link href="/features" className="flex items-center gap-3 rounded-xl border border-card-border bg-card p-4 transition hover:border-accent/50">
-              <span className="text-2xl">🔧</span>
+              <Image src="/images/pages/about-link-features.png" alt="機能紹介" width={48} height={48} className="rounded-lg flex-shrink-0" />
               <div>
                 <p className="text-sm font-bold">機能紹介</p>
                 <p className="text-xs text-muted">AIロープレ・コーチ・スコアリング</p>
               </div>
             </Link>
             <Link href="/use-cases" className="flex items-center gap-3 rounded-xl border border-card-border bg-card p-4 transition hover:border-accent/50">
-              <span className="text-2xl">💼</span>
+              <Image src="/images/pages/about-link-usecases.png" alt="活用シーン" width={48} height={48} className="rounded-lg flex-shrink-0" />
               <div>
                 <p className="text-sm font-bold">活用シーン</p>
                 <p className="text-xs text-muted">新人研修・チーム・個人・テレアポ</p>
               </div>
             </Link>
             <Link href="/blog/sokketsu-eigyo-method-guide" className="flex items-center gap-3 rounded-xl border border-card-border bg-card p-4 transition hover:border-accent/50">
-              <span className="text-2xl">📖</span>
+              <Image src="/images/pages/about-link-method.png" alt="メソッド解説" width={48} height={48} className="rounded-lg flex-shrink-0" />
               <div>
                 <p className="text-sm font-bold">成約5ステップメソッド解説</p>
                 <p className="text-xs text-muted">ブログで詳しく学ぶ</p>
               </div>
             </Link>
             <Link href="/pricing" className="flex items-center gap-3 rounded-xl border border-card-border bg-card p-4 transition hover:border-accent/50">
-              <span className="text-2xl">💰</span>
+              <Image src="/images/pages/about-link-pricing.png" alt="料金プラン" width={48} height={48} className="rounded-lg flex-shrink-0" />
               <div>
                 <p className="text-sm font-bold">料金プラン</p>
                 <p className="text-xs text-muted">無料プラン・Proプラン比較</p>

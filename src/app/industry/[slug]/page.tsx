@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/header";
@@ -151,10 +152,24 @@ export default async function IndustryPage({ params }: Props) {
           </p>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {industry.challenges.map((c) => (
-              <div key={c.title} className="rounded-2xl bg-white shadow-sm border border-card-border p-6">
-                <div className="mb-4 text-3xl">{c.icon}</div>
-                <h3 className="mb-2 text-base font-bold text-foreground">{c.title}</h3>
-                <p className="text-sm text-muted leading-relaxed">{c.description}</p>
+              <div key={c.title} className="rounded-2xl bg-white shadow-sm border border-card-border overflow-hidden">
+                {c.image ? (
+                  <div className="relative w-full aspect-square bg-gray-50">
+                    <Image
+                      src={c.image}
+                      alt={c.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, 33vw"
+                    />
+                  </div>
+                ) : (
+                  <div className="px-6 pt-6 text-3xl">{c.icon}</div>
+                )}
+                <div className="p-6">
+                  <h3 className="mb-2 text-base font-bold text-foreground">{c.title}</h3>
+                  <p className="text-sm text-muted leading-relaxed">{c.description}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -253,7 +268,7 @@ export default async function IndustryPage({ params }: Props) {
           <h2 className="mb-6 text-2xl font-bold text-foreground sm:text-3xl text-center">
             {industry.name}営業にAIロープレが効果的な理由
           </h2>
-          <div className="space-y-4 text-sm text-muted leading-relaxed sm:text-base">
+          <div className="speech-bubble space-y-4 text-sm text-muted leading-relaxed sm:text-base">
             <p>
               {industry.name}業界の営業では、{industry.longDescription}
               こうした業界特有の課題に対応するためには、十分な練習量と的確なフィードバックが必要です。
