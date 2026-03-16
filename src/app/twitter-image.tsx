@@ -1,5 +1,3 @@
-import { ImageResponse } from "next/og";
-
 export const runtime = "edge";
 
 export const alt = "成約コーチ AI - AI営業ロープレコーチ";

@@ -1,47 +1,43 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 
 interface MethodCarouselProps {
   children: React.ReactNode;
 }
 
 export function MethodCarousel({ children }: MethodCarouselProps) {
-  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = useState(false);
+  const [duration, setDuration] = useState(30);
 
-  // Auto-scroll — never stops
+  // Calculate animation duration based on content width so speed is consistent
   useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    let raf: number;
-    let last = 0;
-    const speed = 0.5; // px per frame (~30px/s at 60fps)
-
-    const tick = (ts: number) => {
-      if (last) {
-        viewport.scrollLeft += speed;
-        // loop: when scrolled past halfway (duplicated content), jump back
-        const half = viewport.scrollWidth / 2;
-        if (viewport.scrollLeft >= half) {
-          viewport.scrollLeft -= half;
-        }
-      }
-      last = ts;
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
+    const track = trackRef.current;
+    if (!track) return;
+    // Half width = one set of cards. Target ~30px/s.
+    const halfWidth = track.scrollWidth / 2;
+    const pxPerSecond = 30;
+    setDuration(Math.max(10, halfWidth / pxPerSecond));
+  }, [children]);
 
   const scroll = useCallback((dir: "left" | "right") => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    const cardWidth = 312; // ~18em + gap
-    viewport.scrollBy({ left: dir === "left" ? -cardWidth : cardWidth, behavior: "smooth" });
+    const track = trackRef.current;
+    if (!track) return;
+    const parent = track.parentElement;
+    if (!parent) return;
+    const cardWidth = 312;
+    parent.scrollBy({ left: dir === "left" ? -cardWidth : cardWidth, behavior: "smooth" });
   }, []);
 
   return (
-    <div className="method-carousel">
+    <div
+      className="method-carousel"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
+    >
       <button
         type="button"
         className="method-carousel__btn method-carousel__btn--left"
@@ -53,8 +49,15 @@ export function MethodCarousel({ children }: MethodCarouselProps) {
         </svg>
       </button>
 
-      <div className="method-carousel__viewport" ref={viewportRef}>
-        <div className="method-carousel__track">
+      <div className="method-carousel__viewport">
+        <div
+          ref={trackRef}
+          className="method-carousel__track"
+          style={{
+            animationDuration: `${duration}s`,
+            animationPlayState: paused ? "paused" : "running",
+          }}
+        >
           {children}
           {children}
         </div>

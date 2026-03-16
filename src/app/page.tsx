@@ -18,7 +18,7 @@ const stats = [
   { value: "0円", label: "メアド不要で今すぐ" },
 ];
 
-const industries = ["不動産", "保険", "SaaS", "人材", "教育", "物販"];
+const industries = ["塗装", "リフォーム", "不動産", "保険", "SaaS", "人材", "教育", "物販"];
 
 const beforeCards = [
   { title: "ロープレ環境", desc: "先輩に頼まないとロープレできない", image: "/images/ba/before-01.png" },
@@ -138,238 +138,6 @@ function CheckIcon() {
   );
 }
 
-function FolderIcon() {
-  return (
-    <div>
-      <div className="pencil" />
-      <div className="folder">
-        <div className="top">
-          <svg viewBox="0 0 24 27" aria-hidden="true">
-            <path d="M1,0 L23,0 C23.5522847,-1.01453063e-16 24,0.44771525 24,1 L24,8.17157288 C24,8.70200585 23.7892863,9.21071368 23.4142136,9.58578644 L20.5857864,12.4142136 C20.2107137,12.7892863 20,13.2979941 20,13.8284271 L20,26 C20,26.5522847 19.5522847,27 19,27 L1,27 C0.44771525,27 6.76353751e-17,26.5522847 0,26 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z" />
-          </svg>
-        </div>
-        <div className="paper" />
-      </div>
-    </div>
-  );
-}
-
-/* ─── Before/After Card Illustrations ─── */
-
-function BeforeScene({ index }: { index: number }) {
-  switch (index) {
-    case 0:
-      return (
-        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-          <rect x="15" y="54" width="90" height="2" fill="#4a5568" />
-          <rect x="20" y="56" width="3" height="18" fill="#3a4050" />
-          <rect x="97" y="56" width="3" height="18" fill="#3a4050" />
-          <circle cx="45" cy="22" r="8" fill="#c8a882" />
-          <path d="M37 18Q45 10 53 18" fill="#3d2b1f" />
-          <ellipse cx="42" cy="22" rx="1" ry="1.2" fill="#1a1a1a" />
-          <ellipse cx="48" cy="22" rx="1" ry="1.2" fill="#1a1a1a" />
-          <path d="M41 27Q45 25 49 27" stroke="#6b4c3b" fill="none" strokeWidth="0.8" />
-          <path d="M39 31L36 54h18L51 31Q45 29 39 31z" fill="#5a6478" />
-          <path d="M43 31v12" stroke="#3d4556" strokeWidth="3" />
-          <path d="M51 36L62 48v6" stroke="#c8a882" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M39 36L30 46v8" stroke="#c8a882" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <rect x="75" y="40" width="16" height="14" rx="2" fill="#2d3548" opacity="0.4" />
-          <rect x="73" y="52" width="20" height="2" rx="1" fill="#3a4050" opacity="0.4" />
-          <path d="M56 14l4-4" stroke="#6b7b8d" strokeWidth="0.7" opacity="0.6" />
-          <path d="M58 18l5-3" stroke="#6b7b8d" strokeWidth="0.7" opacity="0.6" />
-          <path d="M60 16l3-5" stroke="#6b7b8d" strokeWidth="0.7" opacity="0.4" />
-        </svg>
-      );
-    case 1:
-      return (
-        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-          <line x1="68" y1="16" x2="68" y2="65" stroke="#3a4050" strokeWidth="0.8" />
-          <line x1="68" y1="65" x2="112" y2="65" stroke="#3a4050" strokeWidth="0.8" />
-          <rect x="72" y="55" width="7" height="10" fill="#4a5568" rx="1" />
-          <rect x="82" y="45" width="7" height="20" fill="#4a5568" rx="1" />
-          <rect x="92" y="35" width="7" height="30" fill="#4a5568" rx="1" />
-          <rect x="102" y="48" width="7" height="17" fill="#9b2c2c" rx="1" />
-          <path d="M76 52L86 42L96 32L106 45" stroke="#e53e3e" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <polygon points="106,42 110,47 104,47" fill="#e53e3e" />
-          <circle cx="35" cy="25" r="8" fill="#c8a882" />
-          <path d="M27 21Q35 13 43 21" fill="#3d2b1f" />
-          <ellipse cx="32" cy="25" rx="1" ry="1.2" fill="#1a1a1a" />
-          <ellipse cx="38" cy="25" rx="1" ry="1.2" fill="#1a1a1a" />
-          <path d="M31 30Q35 28 39 30" stroke="#6b4c3b" fill="none" strokeWidth="0.8" />
-          <path d="M29 33L26 60h18L41 33Q35 31 29 33z" fill="#5a6478" />
-          <path d="M33 33v12" stroke="#3d4556" strokeWidth="3" />
-          <path d="M41 40L50 50" stroke="#c8a882" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M29 40L20 50" stroke="#c8a882" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M26 60L22 74" stroke="#5a6478" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M44 60L48 74" stroke="#5a6478" strokeWidth="3" fill="none" strokeLinecap="round" />
-        </svg>
-      );
-    case 2:
-      return (
-        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-          <circle cx="60" cy="22" r="8" fill="#c8a882" />
-          <path d="M52 18Q60 10 68 18" fill="#3d2b1f" />
-          <ellipse cx="57" cy="21" rx="1" ry="1.2" fill="#1a1a1a" />
-          <ellipse cx="63" cy="21" rx="1" ry="1.2" fill="#1a1a1a" />
-          <path d="M55 14L51 10" stroke="#c8a882" strokeWidth="2" fill="none" strokeLinecap="round" />
-          <path d="M65 14L69 10" stroke="#c8a882" strokeWidth="2" fill="none" strokeLinecap="round" />
-          <path d="M57 27Q60 25 63 27" stroke="#6b4c3b" fill="none" strokeWidth="0.8" />
-          <path d="M54 31L51 58h18L66 31Q60 29 54 31z" fill="#5a6478" />
-          <path d="M58 31v12" stroke="#3d4556" strokeWidth="3" />
-          <path d="M54 36L42 28" stroke="#c8a882" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M66 36L78 28" stroke="#c8a882" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M40 26l-2-4 2 0-1-4" stroke="#c8a882" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <path d="M80 26l2-4-2 0 1-4" stroke="#c8a882" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <rect x="20" y="60" width="8" height="10" fill="#4a5568" rx="1" />
-          <rect x="30" y="62" width="8" height="8" fill="#4a5568" rx="1" />
-          <text x="84" y="52" fontSize="14" fill="#6b7b8d" opacity="0.5" fontWeight="bold">?</text>
-          <text x="94" y="44" fontSize="10" fill="#6b7b8d" opacity="0.4" fontWeight="bold">?</text>
-          <path d="M51 58L47 74" stroke="#5a6478" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M69 58L73 74" stroke="#5a6478" strokeWidth="3" fill="none" strokeLinecap="round" />
-        </svg>
-      );
-    case 3:
-      return (
-        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-          <circle cx="60" cy="40" r="35" fill="#131a2e" opacity="0.5" />
-          <circle cx="60" cy="24" r="8" fill="#c8a882" />
-          <path d="M52 20Q60 12 68 20" fill="#3d2b1f" />
-          <ellipse cx="57" cy="24" rx="1" ry="1.2" fill="#1a1a1a" />
-          <ellipse cx="63" cy="24" rx="1" ry="1.2" fill="#1a1a1a" />
-          <path d="M57 29Q60 27 63 29" stroke="#6b4c3b" fill="none" strokeWidth="0.8" />
-          <path d="M54 33L51 60h18L66 33Q60 31 54 33z" fill="#5a6478" />
-          <path d="M58 33v12" stroke="#3d4556" strokeWidth="3" />
-          <path d="M54 38L46 48" stroke="#c8a882" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M66 38L74 48" stroke="#c8a882" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M51 60L47 74" stroke="#5a6478" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M69 60L73 74" stroke="#5a6478" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <text x="25" y="30" fontSize="14" fill="#4a5568" opacity="0.5" fontWeight="bold">?</text>
-          <text x="88" y="35" fontSize="12" fill="#4a5568" opacity="0.4" fontWeight="bold">?</text>
-          <text x="30" y="60" fontSize="10" fill="#4a5568" opacity="0.3" fontWeight="bold">?</text>
-          <text x="85" y="58" fontSize="16" fill="#4a5568" opacity="0.5" fontWeight="bold">?</text>
-          <circle cx="60" cy="40" r="30" fill="none" stroke="#2d3548" strokeWidth="0.5" strokeDasharray="3 3" opacity="0.4" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-}
-
-function AfterScene({ index }: { index: number }) {
-  switch (index) {
-    case 0:
-      return (
-        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-          <circle cx="45" cy="20" r="8" fill="#d4a574" />
-          <path d="M37 16Q45 8 53 16" fill="#2d1f14" />
-          <ellipse cx="42" cy="19" rx="1" ry="1.2" fill="#1a1a1a" />
-          <ellipse cx="48" cy="19" rx="1" ry="1.2" fill="#1a1a1a" />
-          <path d="M41 24Q45 27 49 24" stroke="#8b5e3c" fill="none" strokeWidth="0.8" />
-          <path d="M39 29L36 56h18L51 29Q45 27 39 29z" fill="#1e3a2f" />
-          <path d="M43 29v12" stroke="#2a5e47" strokeWidth="3" />
-          <path d="M51 34L62 22" stroke="#d4a574" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <circle cx="63" cy="20" r="3" fill="#d4a574" />
-          <path d="M39 36L28 46" stroke="#d4a574" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M36 56L32 72" stroke="#1e3a2f" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M54 56L58 72" stroke="#1e3a2f" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <rect x="72" y="38" width="30" height="22" rx="2" fill="#e8f5e9" stroke="#43a047" strokeWidth="1" />
-          <rect x="72" y="38" width="30" height="5" rx="2" fill="#43a047" />
-          <rect x="76" y="47" width="10" height="2" rx="1" fill="#81c784" />
-          <rect x="76" y="51" width="16" height="2" rx="1" fill="#a5d6a7" />
-          <rect x="76" y="55" width="12" height="2" rx="1" fill="#81c784" />
-          <path d="M66 10l-1.5 3h3z" fill="#f9a825" opacity="0.7" />
-          <path d="M58 6l-1 2.5h2z" fill="#f9a825" opacity="0.5" />
-          <path d="M70 16l-1 2h2z" fill="#f9a825" opacity="0.6" />
-        </svg>
-      );
-    case 1:
-      return (
-        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-          <line x1="10" y1="68" x2="55" y2="68" stroke="#81c784" strokeWidth="0.8" />
-          <line x1="10" y1="20" x2="10" y2="68" stroke="#81c784" strokeWidth="0.8" />
-          <rect x="14" y="58" width="7" height="10" fill="#66bb6a" rx="1" />
-          <rect x="24" y="50" width="7" height="18" fill="#66bb6a" rx="1" />
-          <rect x="34" y="40" width="7" height="28" fill="#43a047" rx="1" />
-          <rect x="44" y="28" width="7" height="40" fill="#2e7d32" rx="1" />
-          <path d="M18 55L28 47L38 37L48 25" stroke="#1b5e20" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <polygon points="48,22 52,27 46,27" fill="#1b5e20" />
-          <circle cx="82" cy="22" r="8" fill="#d4a574" />
-          <path d="M74 18Q82 10 90 18" fill="#2d1f14" />
-          <ellipse cx="79" cy="21" rx="1" ry="1.2" fill="#1a1a1a" />
-          <ellipse cx="85" cy="21" rx="1" ry="1.2" fill="#1a1a1a" />
-          <path d="M78 26Q82 29 86 26" stroke="#8b5e3c" fill="none" strokeWidth="0.8" />
-          <path d="M76 31L73 58h18L88 31Q82 29 76 31z" fill="#1e3a2f" />
-          <path d="M80 31v12" stroke="#2a5e47" strokeWidth="3" />
-          <path d="M76 35L66 18" stroke="#d4a574" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M88 35L98 18" stroke="#d4a574" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <circle cx="65" cy="16" r="2.5" fill="#d4a574" />
-          <circle cx="99" cy="16" r="2.5" fill="#d4a574" />
-          <path d="M73 58L69 72" stroke="#1e3a2f" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M91 58L95 72" stroke="#1e3a2f" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M82 6l-1.5 3h3z" fill="#f9a825" opacity="0.7" />
-          <path d="M72 8l-1 2h2z" fill="#f9a825" opacity="0.5" />
-          <path d="M92 8l-1 2h2z" fill="#f9a825" opacity="0.5" />
-        </svg>
-      );
-    case 2:
-      return (
-        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-          <circle cx="55" cy="20" r="8" fill="#d4a574" />
-          <path d="M47 16Q55 8 63 16" fill="#2d1f14" />
-          <ellipse cx="52" cy="19" rx="1" ry="1.2" fill="#1a1a1a" />
-          <ellipse cx="58" cy="19" rx="1" ry="1.2" fill="#1a1a1a" />
-          <path d="M51 24Q55 27 59 24" stroke="#8b5e3c" fill="none" strokeWidth="0.8" />
-          <path d="M49 29L46 56h18L61 29Q55 27 49 29z" fill="#1e3a2f" />
-          <path d="M53 29v12" stroke="#2a5e47" strokeWidth="3" />
-          <path d="M61 34L72 18" stroke="#d4a574" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <circle cx="72" cy="15" r="2" fill="#d4a574" />
-          <path d="M72 13v-5" stroke="#f9a825" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <path d="M49 36L38 46" stroke="#d4a574" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M46 56L42 72" stroke="#1e3a2f" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M64 56L68 72" stroke="#1e3a2f" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <rect x="85" y="42" width="18" height="4" rx="1" fill="#43a047" />
-          <rect x="85" y="47" width="18" height="4" rx="1" fill="#66bb6a" />
-          <rect x="85" y="52" width="18" height="4" rx="1" fill="#43a047" />
-          <rect x="85" y="57" width="18" height="4" rx="1" fill="#81c784" />
-          <rect x="85" y="62" width="18" height="4" rx="1" fill="#66bb6a" />
-          <rect x="85" y="67" width="18" height="4" rx="1" fill="#43a047" />
-          <text x="88" y="50" fontSize="3" fill="white" fontWeight="bold">22</text>
-          <circle cx="76" cy="8" r="5" fill="none" stroke="#f9a825" strokeWidth="1" />
-          <path d="M76 5v6M73 8h6" stroke="#f9a825" strokeWidth="1" />
-        </svg>
-      );
-    case 3:
-      return (
-        <svg viewBox="0 0 120 80" className="w-full h-full" aria-hidden="true">
-          <circle cx="38" cy="22" r="8" fill="#d4a574" />
-          <path d="M30 18Q38 10 46 18" fill="#2d1f14" />
-          <ellipse cx="35" cy="21" rx="1" ry="1.2" fill="#1a1a1a" />
-          <ellipse cx="41" cy="21" rx="1" ry="1.2" fill="#1a1a1a" />
-          <path d="M34 26Q38 29 42 26" stroke="#8b5e3c" fill="none" strokeWidth="0.8" />
-          <path d="M32 31L29 58h18L44 31Q38 29 32 31z" fill="#1e3a2f" />
-          <path d="M36 31v12" stroke="#2a5e47" strokeWidth="3" />
-          <path d="M44 36L54 30" stroke="#d4a574" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <circle cx="55" cy="28" r="3" fill="#d4a574" />
-          <path d="M55 25v-3" stroke="#d4a574" strokeWidth="2" fill="none" strokeLinecap="round" />
-          <path d="M32 38L22 48" stroke="#d4a574" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          <path d="M29 58L25 72" stroke="#1e3a2f" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M47 58L51 72" stroke="#1e3a2f" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <rect x="65" y="18" width="45" height="50" rx="3" fill="#e8f5e9" stroke="#43a047" strokeWidth="1" />
-          <rect x="65" y="18" width="45" height="8" rx="3" fill="#43a047" />
-          <text x="75" y="24" fontSize="5" fill="white" fontWeight="bold">SCORE</text>
-          <rect x="70" y="32" width="6" height="18" rx="1" fill="#a5d6a7" />
-          <rect x="79" y="38" width="6" height="12" rx="1" fill="#81c784" />
-          <rect x="88" y="28" width="6" height="22" rx="1" fill="#66bb6a" />
-          <rect x="97" y="34" width="6" height="16" rx="1" fill="#43a047" />
-          <path d="M70 55l2 3 5-6" stroke="#2e7d32" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <path d="M82 55l2 3 5-6" stroke="#2e7d32" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <path d="M94 55l2 3 5-6" stroke="#2e7d32" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-}
 
 /* ─── Method Step SVG Illustrations ─── */
 
@@ -423,51 +191,6 @@ function MethodScene({ step }: { step: number }) {
         <svg viewBox="0 0 48 48" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M24 4L6 12v12c0 10 8 16 18 20 10-4 18-10 18-20V12L24 4z" />
           <path d="M16 24l5 5 10-10" strokeWidth="3" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-}
-
-/* ─── How-to Step SVG Illustrations ─── */
-
-function HowtoScene({ step }: { step: number }) {
-  const cls = "w-full h-full";
-  switch (step) {
-    case 0:
-      return (
-        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-          <rect x="4" y="8" width="48" height="32" rx="3" />
-          <line x1="10" y1="16" x2="46" y2="16" opacity="0.3" />
-          <line x1="10" y1="24" x2="38" y2="24" />
-          <line x1="10" y1="30" x2="30" y2="30" opacity="0.5" />
-          <rect x="38" y="28" width="10" height="6" rx="1" fill="#323232" opacity="0.15" />
-          <path d="M12 20v-1" strokeWidth="2.5" />
-        </svg>
-      );
-    case 1:
-      return (
-        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-          <rect x="2" y="4" width="26" height="16" rx="4" />
-          <path d="M10 20l4 5" />
-          <circle cx="10" cy="12" r="1.5" fill="#323232" />
-          <circle cx="15" cy="12" r="1.5" fill="#323232" />
-          <circle cx="20" cy="12" r="1.5" fill="#323232" />
-          <rect x="28" y="22" width="26" height="16" rx="4" />
-          <path d="M46 38l4 5" />
-          <circle cx="36" cy="30" r="1.5" fill="#323232" />
-          <circle cx="41" cy="30" r="1.5" fill="#323232" />
-          <circle cx="46" cy="30" r="1.5" fill="#323232" />
-        </svg>
-      );
-    case 2:
-      return (
-        <svg viewBox="0 0 56 48" className={cls} fill="none" stroke="#323232" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-          <rect x="8" y="2" width="40" height="44" rx="3" />
-          <path d="M28 12l3 6 6.5 1-4.7 4.6 1.1 6.4-5.9-3.1-5.9 3.1 1.1-6.4-4.7-4.6 6.5-1z" fill="#323232" opacity="0.12" stroke="#323232" />
-          <line x1="16" y1="36" x2="40" y2="36" />
-          <line x1="16" y1="40" x2="32" y2="40" opacity="0.5" />
         </svg>
       );
     default:
@@ -662,7 +385,7 @@ export default async function Home() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
             </span>
-            ベータテスト中 — テストユーザー募集中
+            ベータテスト中 — 先着100名無料ご招待
           </div>
         </div>
       </section>
@@ -741,7 +464,7 @@ export default async function Home() {
           {/* Intermediate CTA — Loss Aversion framing at psychological peak (after B/A) */}
           <div className="mt-10 flex flex-col items-center gap-4">
             <p className="text-center text-sm font-medium text-muted">
-              明日の商談、今日練習しないまま迎えますか？
+              次の現場訪問、切り返しの練習をしないまま迎えますか？
             </p>
             <PrimaryCTA />
           </div>
@@ -838,12 +561,26 @@ export default async function Home() {
           <h2 className="mb-12 text-center text-2xl font-bold text-foreground sm:text-3xl">
             あなたの営業力を上げる5つの武器
           </h2>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 sm:gap-6">
+          <div className="brutalist-cards">
             {serviceCategories.map((cat) => (
-              <Link key={cat.title} href={cat.href} className="continue-application">
-                <FolderIcon />
-                {cat.title}
-                <span className="continue-application__desc">{cat.desc}</span>
+              <Link key={cat.title} href={cat.href} className="brutalist-card">
+                <div className="brutalist-card__logo">
+                  <svg
+                    className="brutalist-card__icon"
+                    viewBox="0 0 24 27"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M1,0 L23,0 C23.5522847,-1.01453063e-16 24,0.44771525 24,1 L24,8.17157288 C24,8.70200585 23.7892863,9.21071368 23.4142136,9.58578644 L20.5857864,12.4142136 C20.2107137,12.7892863 20,13.2979941 20,13.8284271 L20,26 C20,26.5522847 19.5522847,27 19,27 L1,27 C0.44771525,27 6.76353751e-17,26.5522847 0,26 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z"
+                      fill="#F3E9CB"
+                    />
+                  </svg>
+                </div>
+                <div className="brutalist-card__text">
+                  <span>{cat.desc}</span>
+                  <span>{cat.title}</span>
+                </div>
               </Link>
             ))}
           </div>
@@ -861,7 +598,7 @@ export default async function Home() {
           <p className="mb-10 text-sm text-muted sm:text-base">
             まずは1回、AIと商談してみてください。
             <br />
-            あなたのフィードバックがサービスを育てます。
+            「これ、うちの後輩にやらせたい」そんな声をいただいています。
           </p>
           <div className="plan">
             <div className="inner">
@@ -929,7 +666,7 @@ export default async function Home() {
             明日の商談に間に合う。今すぐ練習を始めよう。
           </h2>
           <p className="mb-4 text-sm text-muted sm:text-base">
-            無料アカウントで今日から練習できます。まずは1回、試してみてください。
+            3分で最初の商談が終わります。まずは1回、試してみてください。
           </p>
           <p className="mb-10 text-sm text-muted">
             &#10003; 無料で体験 &#10003; 登録不要 &#10003; いつでも解約OK
@@ -973,10 +710,10 @@ export default async function Home() {
       <HomeExitPopup />
       <ScrollSlideIn sessionKey="home-slide-in">
         <p className="mb-2 pr-6 text-sm font-bold text-foreground">
-          明日の商談、準備できてる？
+          次のお客さん、もっと上手くいくかも？
         </p>
         <p className="mb-3 text-xs text-muted">
-          練習なしで本番に臨むリスク、AIが3分で可視化します
+          AIが3分であなたの営業力をスコアリングします
         </p>
         <Link
           href="/roleplay"

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { RadarChart } from "@/components/radar-chart";
 import { ReferralPrompt } from "@/components/referral-prompt";
@@ -289,8 +290,114 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
         )}
       </div>
 
+      {/* フィードバックフォーム */}
+      <FeedbackForm roleplayScore={score.overall} />
+
       {/* 紹介プロンプト（スコア80点以上で表示） */}
       {!isFree && <ReferralPrompt score={score.overall} />}
+    </div>
+  );
+}
+
+/* ── NPS + 自由記述フィードバックフォーム ── */
+
+const NPS_LABELS: Record<number, string> = {
+  0: "全く薦めない",
+  5: "どちらでもない",
+  10: "強く薦める",
+};
+
+function FeedbackForm({ roleplayScore }: { roleplayScore: number }) {
+  const [nps, setNps] = useState<number | null>(null);
+  const [comment, setComment] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  if (submitted) {
+    return (
+      <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 animate-fade-in-up">
+        <div className="rounded-xl border border-green-500/30 bg-green-500/10 px-6 py-3 text-sm font-medium text-green-400 shadow-xl backdrop-blur-md">
+          フィードバックありがとうございます！
+        </div>
+      </div>
+    );
+  }
+
+  async function handleSubmit() {
+    if (nps === null || submitting) return;
+    setSubmitting(true);
+    try {
+      await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          npsScore: nps,
+          comment,
+          roleplayScore,
+        }),
+      });
+    } catch {
+      // Fire-and-forget
+    }
+    setSubmitted(true);
+  }
+
+  return (
+    <div className="mt-8 w-full max-w-2xl rounded-2xl border border-card-border bg-card p-6">
+      <h3 className="mb-1 text-sm font-bold text-foreground">
+        このサービスを友人・同僚に薦める可能性はどのくらいですか？
+      </h3>
+      <p className="mb-4 text-xs text-muted">
+        0（全く薦めない）〜 10（強く薦める）
+      </p>
+
+      {/* NPS Buttons */}
+      <div className="mb-4 flex justify-between gap-1">
+        {Array.from({ length: 11 }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setNps(i)}
+            className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-sm font-bold transition ${
+              nps === i
+                ? i <= 6
+                  ? "bg-red-500 text-white"
+                  : i <= 8
+                  ? "bg-yellow-500 text-white"
+                  : "bg-green-500 text-white"
+                : "border border-card-border text-muted hover:border-accent hover:text-accent"
+            }`}
+          >
+            {i}
+          </button>
+        ))}
+      </div>
+
+      {/* Labels */}
+      <div className="mb-4 flex justify-between text-[10px] text-muted">
+        <span>{NPS_LABELS[0]}</span>
+        <span>{NPS_LABELS[5]}</span>
+        <span>{NPS_LABELS[10]}</span>
+      </div>
+
+      {/* Comment */}
+      {nps !== null && (
+        <div className="animate-fade-in-up">
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="改善してほしい点、気に入った点など自由にお書きください（任意）"
+            rows={3}
+            className="mb-3 w-full resize-none rounded-xl border border-card-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted/50 focus:border-accent focus:outline-none"
+          />
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
+          >
+            {submitting ? "送信中..." : "送信する"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -123,3 +123,84 @@ CREATE POLICY "Users insert own referral code" ON referral_codes FOR INSERT WITH
 CREATE POLICY "Anyone can lookup referral code" ON referral_codes FOR SELECT USING (true);
 
 CREATE POLICY "Referrers read own conversions" ON referral_conversions FOR SELECT USING (auth.uid() = referrer_id);
+
+-- ── 業種いいね (Industry Likes) ──
+CREATE TABLE public.industry_likes (
+  slug TEXT PRIMARY KEY,
+  like_count INTEGER NOT NULL DEFAULT 0,
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+ALTER TABLE public.industry_likes ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Anyone can read likes" ON industry_likes FOR SELECT USING (true);
+
+-- アトミックいいねインクリメント関数
+CREATE OR REPLACE FUNCTION increment_industry_like(industry_slug TEXT)
+RETURNS INTEGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  new_count INTEGER;
+BEGIN
+  INSERT INTO public.industry_likes (slug, like_count, updated_at)
+  VALUES (industry_slug, 1, now())
+  ON CONFLICT (slug)
+  DO UPDATE SET like_count = industry_likes.like_count + 1, updated_at = now()
+  RETURNING like_count INTO new_count;
+  RETURN new_count;
+END;
+$$;
+
+-- アトミックいいね解除（デクリメント）関数
+CREATE OR REPLACE FUNCTION decrement_industry_like(industry_slug TEXT)
+RETURNS INTEGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  new_count INTEGER;
+BEGIN
+  UPDATE public.industry_likes
+  SET like_count = GREATEST(like_count - 1, 0), updated_at = now()
+  WHERE slug = industry_slug
+  RETURNING like_count INTO new_count;
+  -- 行が存在しない場合は 0 を返す
+  IF new_count IS NULL THEN
+    RETURN 0;
+  END IF;
+  RETURN new_count;
+END;
+$$;
+
+-- =============================================
+-- フィードバック（NPS + 自由記述）
+-- =============================================
+
+CREATE TABLE public.feedback (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+  nps_score INTEGER NOT NULL CHECK (nps_score >= 0 AND nps_score <= 10),
+  comment TEXT DEFAULT '',
+  roleplay_score INTEGER,
+  page TEXT DEFAULT 'roleplay',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_feedback_user ON feedback(user_id);
+CREATE INDEX idx_feedback_created ON feedback(created_at);
+
+ALTER TABLE feedback ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users insert own feedback" ON feedback FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users read own feedback" ON feedback FOR SELECT USING (auth.uid() = user_id);
+
+-- =============================================
+-- ベータテスター募集（メールのみ・認証不要）
+-- =============================================
+
+CREATE TABLE public.beta_signups (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_beta_signups_email ON beta_signups(email);
+ALTER TABLE beta_signups ENABLE ROW LEVEL SECURITY;
+-- API route uses service role key (bypasses RLS). No public policies needed.

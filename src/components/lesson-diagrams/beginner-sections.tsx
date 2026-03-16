@@ -917,7 +917,7 @@ function ThreeBenefitSetsDiagram() {
           { num: "1", purpose: "最大の課題に対応", x: 20 },
           { num: "2", purpose: "競合と差別化", x: 190 },
           { num: "3", purpose: "コスト・時間", x: 360 },
-        ].map((set, i) => (
+        ].map((set) => (
           <g key={set.num}>
             <circle cx={set.x + 70} cy="50" r="14" fill={ACCENT} />
             <text x={set.x + 70} y="55" textAnchor="middle" fontSize="12" fill={WHITE} fontWeight="bold">

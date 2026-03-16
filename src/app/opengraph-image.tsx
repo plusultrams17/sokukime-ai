@@ -17,23 +17,37 @@ export default function OgImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#FBF8F3",
+          backgroundColor: "#1a1a2e",
           position: "relative",
           overflow: "hidden",
         }}
       >
-        {/* Teal radial gradient circle */}
+        {/* Orange radial gradient */}
         <div
           style={{
             position: "absolute",
-            width: "600px",
-            height: "600px",
+            width: "700px",
+            height: "700px",
             borderRadius: "50%",
             background:
-              "radial-gradient(circle, rgba(27,107,90,0.2) 0%, rgba(27,107,90,0.05) 50%, transparent 70%)",
+              "radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(249,115,22,0.05) 40%, transparent 70%)",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+          }}
+        />
+
+        {/* Subtle top-right accent blob */}
+        <div
+          style={{
+            position: "absolute",
+            width: "300px",
+            height: "300px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%)",
+            top: "-80px",
+            right: "-60px",
           }}
         />
 
@@ -53,10 +67,11 @@ export default function OgImage() {
               fontSize: "36px",
               fontWeight: 800,
               color: "#ffffff",
-              backgroundColor: "#1B6B5A",
+              backgroundColor: "#f97316",
               borderRadius: "16px",
-              padding: "12px 24px",
-              marginBottom: "24px",
+              padding: "12px 28px",
+              marginBottom: "28px",
+              boxShadow: "0 4px 24px rgba(249,115,22,0.3)",
             }}
           >
             SC
@@ -67,7 +82,7 @@ export default function OgImage() {
             style={{
               fontSize: "72px",
               fontWeight: 800,
-              color: "#1E293B",
+              color: "#ffffff",
               marginBottom: "16px",
               letterSpacing: "-0.02em",
             }}
@@ -80,7 +95,7 @@ export default function OgImage() {
             style={{
               fontSize: "32px",
               fontWeight: 600,
-              color: "#1B6B5A",
+              color: "#f97316",
               marginBottom: "16px",
             }}
           >
@@ -91,7 +106,7 @@ export default function OgImage() {
           <div
             style={{
               fontSize: "20px",
-              color: "#64748B",
+              color: "#94a3b8",
             }}
           >
             営業心理学ベースのAIコーチング | 無料で始められる

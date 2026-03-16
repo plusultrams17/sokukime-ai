@@ -22,7 +22,7 @@ interface LessonWorksheetProps {
   color: string;
 }
 
-export function LessonWorksheet({ slug, color }: LessonWorksheetProps) {
+export function LessonWorksheet({ slug }: LessonWorksheetProps) {
   const mapping = LESSON_WORKSHEET_MAP[slug];
 
   const [data, setData] = useState<Record<string, string>>({});
