@@ -294,7 +294,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════
           1. HERO
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 pt-8 pb-16 sm:pt-12 sm:pb-20">
+      <section className="relative z-0 overflow-hidden px-6 pt-8 pb-16 sm:pt-12 sm:pb-20">
         <div className="hero-city" aria-hidden="true" />
 
         <div className="relative z-10 mx-auto max-w-4xl text-center">

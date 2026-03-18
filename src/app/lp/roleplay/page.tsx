@@ -507,7 +507,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           1. HERO — 即座に価値を体験
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 pt-20 pb-16 sm:pt-28 sm:pb-20">
+      <section className="relative z-0 overflow-hidden px-6 pt-20 pb-16 sm:pt-28 sm:pb-20">
         <div className="hero-city" aria-hidden="true" />
 
         <div className="relative z-10 mx-auto max-w-4xl text-center">
