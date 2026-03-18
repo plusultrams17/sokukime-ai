@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { UserMenu } from "@/components/user-menu";
 import { trackCTAClick } from "@/lib/tracking";
 
 const navLinks = [
@@ -59,29 +60,20 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          {isLoggedIn && (
-            <Link href="/referral" className="header-link">
-              紹介
-            </Link>
-          )}
         </nav>
 
         {/* Desktop nav — auth (right aligned) */}
         <div className="hidden items-center gap-4 lg:flex">
           {isLoggedIn ? (
-            <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_roleplay", "header", "/roleplay")}>
-              <span>ロープレを始める</span>
-            </Link>
+            <UserMenu />
           ) : (
-            <>
-              <Link href="/login" className="header-link">
-                ログイン
-              </Link>
-              <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_signup", "header", "/roleplay")}>
-                <span>無料で試す</span>
-              </Link>
-            </>
+            <Link href="/login" className="header-link">
+              ログイン
+            </Link>
           )}
+          <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_signup", "header", "/roleplay")}>
+            <span>無料で試す</span>
+          </Link>
         </div>
 
         {/* Mobile hamburger */}
@@ -113,15 +105,6 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          {isLoggedIn && (
-            <Link
-              href="/referral"
-              className="mobile-menu__link"
-              onClick={() => setOpen(false)}
-            >
-              紹介
-            </Link>
-          )}
           <div className="mobile-menu__divider" />
           {isLoggedIn ? (
             <Link

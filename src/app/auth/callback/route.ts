@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
   const refCode = searchParams.get("ref");
 
   if (!code) {
-    // No code provided - redirect to login with error
     return NextResponse.redirect(
       `${origin}/login?error=${encodeURIComponent("認証コードが見つかりません。もう一度お試しください。")}`
     );
@@ -29,46 +28,50 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Check if first-time user
+    // Check if first-time user (gracefully handle missing tables)
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (user) {
-      const { count } = await supabase
-        .from("usage_records")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", user.id);
+      try {
+        const { count } = await supabase
+          .from("usage_records")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id);
 
-      if (!count || count === 0) {
-        // 紹介コードがあれば紹介コンバージョンを記録
-        if (refCode) {
-          try {
-            const { data: referralCode } = await supabase
-              .from("referral_codes")
-              .select("user_id")
-              .eq("code", refCode.toUpperCase())
-              .single();
+        if (!count || count === 0) {
+          // Record referral if applicable
+          if (refCode) {
+            try {
+              const { data: referralCode } = await supabase
+                .from("referral_codes")
+                .select("user_id")
+                .eq("code", refCode.toUpperCase())
+                .single();
 
-            if (referralCode && referralCode.user_id !== user.id) {
-              await supabase.from("referral_conversions").insert({
-                referrer_id: referralCode.user_id,
-                referee_id: user.id,
-                status: "signed_up",
-              });
+              if (referralCode && referralCode.user_id !== user.id) {
+                await supabase.from("referral_conversions").insert({
+                  referrer_id: referralCode.user_id,
+                  referee_id: user.id,
+                  status: "signed_up",
+                });
+              }
+            } catch {
+              // Ignore referral errors
             }
-          } catch {
-            // 紹介記録のエラーは無視（ユーザー登録フローを妨げない）
           }
-        }
 
-        // Preserve redirect params (e.g. showScore=true) for first-time users
-        if (redirect && redirect !== "/roleplay" && redirect.startsWith("/roleplay")) {
-          const redirectUrl = new URL(redirect, origin);
-          redirectUrl.searchParams.set("welcome", "true");
-          return NextResponse.redirect(redirectUrl.toString());
+          // First-time user welcome
+          if (redirect && redirect !== "/roleplay" && redirect.startsWith("/roleplay")) {
+            const redirectUrl = new URL(redirect, origin);
+            redirectUrl.searchParams.set("welcome", "true");
+            return NextResponse.redirect(redirectUrl.toString());
+          }
+          return NextResponse.redirect(`${origin}/roleplay?welcome=true`);
         }
-        return NextResponse.redirect(`${origin}/roleplay?welcome=true`);
+      } catch {
+        // DB tables may not exist yet — skip first-time check, proceed normally
       }
     }
   } catch {
