@@ -21,7 +21,8 @@ export function Header({ user }: HeaderProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-card-border bg-background/90 backdrop-blur-md">
+    <>
+    <header className="fixed top-0 z-50 w-full border-b border-card-border bg-background backdrop-blur-md">
       <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
@@ -52,7 +53,7 @@ export function Header({ user }: HeaderProps) {
         </Link>
 
         {/* Desktop nav — links */}
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href} className="header-link">
               {link.label}
@@ -66,7 +67,7 @@ export function Header({ user }: HeaderProps) {
         </nav>
 
         {/* Desktop nav — auth (right aligned) */}
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-4 lg:flex">
           {isLoggedIn ? (
             <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_roleplay", "header", "/roleplay")}>
               <span>ロープレを始める</span>
@@ -86,7 +87,7 @@ export function Header({ user }: HeaderProps) {
         {/* Mobile hamburger */}
         <button
           type="button"
-          className="hamburger md:hidden"
+          className="hamburger lg:hidden"
           onClick={() => setOpen(!open)}
           aria-label="メニュー"
           aria-expanded={open}
@@ -99,7 +100,7 @@ export function Header({ user }: HeaderProps) {
 
       {/* Mobile menu overlay */}
       <div
-        className={`mobile-menu md:hidden ${open ? "mobile-menu--open" : ""}`}
+        className={`mobile-menu lg:hidden ${open ? "mobile-menu--open" : ""}`}
       >
         <nav className="mobile-menu__nav">
           {navLinks.map((link) => (
@@ -151,5 +152,8 @@ export function Header({ user }: HeaderProps) {
         </nav>
       </div>
     </header>
+    {/* Spacer to offset fixed header height */}
+    <div className="h-16" />
+    </>
   );
 }
