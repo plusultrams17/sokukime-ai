@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return {
     title: post.title,
@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: Props) {
     .slice(0, 2);
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const blogJsonLd = {
     "@context": "https://schema.org",

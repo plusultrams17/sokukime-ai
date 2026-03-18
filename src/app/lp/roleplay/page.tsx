@@ -451,7 +451,7 @@ export default async function RoleplayLP() {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const jsonLdData = {
     "@context": "https://schema.org",

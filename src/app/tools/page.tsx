@@ -59,7 +59,7 @@ const tools = [
 ];
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 export default function ToolsPage() {
   const jsonLdData = {

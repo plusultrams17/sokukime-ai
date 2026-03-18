@@ -67,7 +67,7 @@ export default async function IndustryPage({ params }: Props) {
   const industry = getIndustryBySlug(slug);
   if (!industry) notFound();
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
   const otherIndustries = getOtherIndustries(slug);
 
   const jsonLdData = {

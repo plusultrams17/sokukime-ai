@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/closing-calculator" },
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 const benchmarks = [
   { industry: "保険", rate: 25 },

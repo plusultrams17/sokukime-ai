@@ -34,9 +34,10 @@
 **Emotional tension:** 「練習したいのに環境がない」「本番が怖い」「自分の何がダメなのかわからない」
 
 ## Competitive Landscape
-**Direct:** 日本市場にAI営業ロープレの直接競合はほぼ存在しない（ブルーオーシャン）
-**Secondary:** 営業研修会社（リクルート、セールスフォースのTrailhead等） — 高額・低頻度・汎用的すぎる
-**Indirect:** YouTube営業チャンネル、営業本 — インプットのみでアウトプット練習不可
+**Direct:** 法人向けAIロープレ（exaBase=初期300万、amptalk coach、SAPI ロープレ）は存在するが全て法人向け高額。個人向けはReflect AI（汎用・メソッドなし）のみ。個人×AI×体系的メソッド×低価格のポジションは空白地帯
+**Secondary:** 営業研修会社（インソース=1日10-50万、リクルートMS、セレブリックス） — 高額・低頻度・個人利用不可
+**Indirect:** YouTube営業チャンネル、営業本、Schoo、ストアカ — インプットのみでアウトプット練習不可
+**注意:** 即決営業（堀口龍介）はメソッド面で最も近い間接競合。200社/30,000人の実績あり
 
 ## Differentiation
 **Key differentiators:**

@@ -52,7 +52,7 @@ const features = [
 ];
 
 export default function FeaturesPage() {
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return (
     <div className="min-h-screen bg-background">

@@ -3,7 +3,7 @@ import { getAllBlogPosts } from "@/lib/blog";
 import { getAllIndustrySlugs } from "@/data/industries";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const staticPages: MetadataRoute.Sitemap = [
     {

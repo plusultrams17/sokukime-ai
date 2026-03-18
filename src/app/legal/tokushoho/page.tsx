@@ -34,7 +34,7 @@ export default function TokushohoPage() {
             />
             <Row
               label="販売URL"
-              value="https://sokukime-ai.vercel.app"
+              value="https://seiyaku-coach.vercel.app"
             />
             <Row
               label="販売価格"

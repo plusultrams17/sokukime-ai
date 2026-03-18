@@ -119,7 +119,7 @@ export default function PricingPage() {
     setIsLoading(false);
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const pricingJsonLd = {
     "@context": "https://schema.org",

@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 /* ─── SEO Metadata ─── */
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://sokukime-ai.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 export const metadata: Metadata = {
   title:
