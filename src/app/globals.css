@@ -2198,6 +2198,19 @@ body {
   right: 0;
 }
 
+/* ── Site Header (always on top) ── */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 64px;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--card-border);
+}
+
 /* ── Header Nav Links ── */
 
 .header-link {

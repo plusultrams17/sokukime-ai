@@ -28,7 +28,7 @@ export function Header() {
 
   return (
     <>
-    <header className="fixed top-0 z-50 w-full border-b border-card-border bg-background backdrop-blur-md">
+    <header className="site-header">
       <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
