@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
@@ -438,18 +437,7 @@ function LpPrimaryCTA({ text = "今すぐAIとロープレする", className = "
 
 /* ─── Page ─── */
 
-export default async function RoleplayLP() {
-  let isLoggedIn = false;
-  try {
-    const supabase = await createClient();
-    if (supabase) {
-      const { data: { user } } = await supabase.auth.getUser();
-      isLoggedIn = !!user;
-    }
-  } catch {
-    // Supabase unavailable — render as guest
-  }
-
+export default function RoleplayLP() {
   const siteUrl =
     process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
@@ -514,7 +502,7 @@ export default async function RoleplayLP() {
   return (
     <div className="min-h-screen bg-background">
       <JsonLd data={jsonLdData} />
-      <Header user={{ isLoggedIn }} />
+      <Header />
 
       {/* ═══════════════════════════════════════════════
           1. HERO — 即座に価値を体験

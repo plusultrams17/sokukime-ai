@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
-import { createClient } from "@/lib/supabase/server";
 
 /* ─── SEO Metadata ─── */
 
@@ -255,20 +254,7 @@ function FlowIcon({ type }: { type: string }) {
 
 /* ─── Page ─── */
 
-export default async function LearnLP() {
-  let isLoggedIn = false;
-  try {
-    const supabase = await createClient();
-    if (supabase) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      isLoggedIn = !!user;
-    }
-  } catch {
-    // Supabase unavailable
-  }
-
+export default function LearnLP() {
   const jsonLdData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -346,7 +332,7 @@ export default async function LearnLP() {
   return (
     <div className="min-h-screen bg-background">
       <JsonLd data={jsonLdData} />
-      <Header user={{ isLoggedIn }} />
+      <Header />
 
       {/* ═══════════════════════════════════════════════
           1. HERO
