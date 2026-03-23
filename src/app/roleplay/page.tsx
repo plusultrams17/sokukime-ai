@@ -26,6 +26,7 @@ import {
   trackUpgradePromptClicked,
 } from "@/lib/tracking";
 import { trackCheckoutComplete } from "@/lib/tracking";
+import { PostPaymentSurvey } from "@/components/post-payment-survey";
 import {
   canShowPaywall,
   recordPaywallShown,
@@ -437,6 +438,7 @@ export default function RoleplayPage() {
         <WelcomeCheck onWelcome={handleWelcome} />
         <ShowScoreCheck onShowScore={handleShowScore} />
       </Suspense>
+      <PostPaymentSurvey />
 
       {/* Welcome Modal (Do-Based Onboarding) */}
       <WelcomeModal open={showWelcome} onComplete={handleOnboardingComplete} />

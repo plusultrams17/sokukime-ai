@@ -225,3 +225,13 @@ ALTER TABLE user_reviews ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users insert own review" ON user_reviews FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users read own review" ON user_reviews FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Anyone can read approved reviews" ON user_reviews FOR SELECT USING (is_approved = true);
+
+-- =============================================
+-- 課金直後アンケート（決め手は何でしたか？）
+-- =============================================
+CREATE TABLE public.post_payment_surveys (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  answer TEXT NOT NULL CHECK (answer IN ('unlimited', 'score_detail', 'ai_advice', 'price', 'other')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+-- API route uses service role key (bypasses RLS). No public policies needed.

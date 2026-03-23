@@ -320,9 +320,9 @@ export default function Home() {
           </p>
 
           <p className="mx-auto mb-10 max-w-2xl text-base text-white/70 leading-relaxed sm:text-lg">
-            営業心理学に基づく5ステップの「型」をAIと反復練習。
+            AIだから、何回失敗しても恥ずかしくない。
             <br className="hidden sm:block" />
-            先輩の空きを待つ必要はもうありません。
+            営業心理学に基づく5ステップの「型」を、24時間いつでも反復練習。
           </p>
 
           {/* Single Primary CTA */}
@@ -387,7 +387,7 @@ export default function Home() {
             先週のあなた vs. 来週のあなた
           </h2>
           <p className="mb-10 text-center text-sm text-muted sm:text-base">
-            もう「練習相手がいない」と悩む必要はありません
+            AIが相手だから、失敗しても恥ずかしくない。何度でも練習できる。
           </p>
 
           {/* Before */}

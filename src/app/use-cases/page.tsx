@@ -25,9 +25,9 @@ const useCases = [
       scene: "入社3ヶ月目の保険営業マン",
       product: "生命保険の新規契約",
       result:
-        "毎日のAIロープレで、アプローチの「前提設定トーク」が自然にできるように。入社半年で月3件の契約を達成。",
+        "毎日のAIロープレで、アプローチの「前提設定トーク」が自然にできるように。自信を持って商談に臨めるようになった。",
     },
-    stats: "独り立ちまでの期間が平均50%短縮",
+    stats: "独り立ちまでの期間を大幅に短縮",
   },
   {
     icon: "👥",
@@ -41,9 +41,9 @@ const useCases = [
       scene: "不動産営業チーム（5名）",
       product: "マンション販売",
       result:
-        "チーム全員がスコア70以上を目標に練習。クロージング力が統一され、チーム全体の成約率が20%向上。",
+        "チーム全員がスコア70以上を目標に練習。クロージング力が統一され、チーム全体の営業力が底上げされた。",
     },
-    stats: "チーム成約率が平均20%向上",
+    stats: "チーム全体の営業力を底上げ",
   },
   {
     icon: "💼",
@@ -73,9 +73,9 @@ const useCases = [
       scene: "SaaS企業のインサイドセールス",
       product: "クラウド勤怠管理システム",
       result:
-        "断り文句への切り返しパターンが増え、アポイント獲得率が1.3倍に。",
+        "断り文句への切り返しパターンが増え、アポイント獲得率が目に見えて改善。",
     },
-    stats: "アポ獲得率が平均30%アップ",
+    stats: "アポ獲得率の大幅アップを目指せる",
   },
 ];
 
@@ -93,7 +93,7 @@ export default function UseCasesPage() {
               "@id": `${siteUrl}/use-cases#webpage`,
               name: "活用シーン | 成約コーチ AI",
               description:
-                "成約コーチ AIは、新人営業研修（独り立ち期間50%短縮）、チームスキル底上げ（成約率平均20%向上）、個人事業主の自主トレ、テレアポ練習（アポ獲得率1.3倍）など幅広い営業シーンで活用されています。",
+                "成約コーチ AIは、新人営業研修、チームの営業力底上げ、個人事業主の自主トレ、テレアポ練習など幅広い営業シーンで活用できるAIロープレツールです。",
               url: `${siteUrl}/use-cases`,
               isPartOf: { "@id": `${siteUrl}/#website` },
               inLanguage: "ja",
@@ -118,7 +118,7 @@ export default function UseCasesPage() {
             あらゆる営業シーンで成約コーチ AIを活用できます
           </p>
           <p className="mx-auto mt-6 max-w-3xl text-sm text-muted leading-relaxed text-left">
-            成約コーチ AIは、新人営業マンの研修（独り立ち期間<strong className="text-foreground">平均50%短縮</strong>）、営業チームのスキル底上げ（成約率<strong className="text-foreground">平均20%向上</strong>）、個人事業主・フリーランスの自主トレ、テレアポ・電話営業の練習（アポイント獲得率<strong className="text-foreground">1.3倍</strong>）など、幅広い営業シーンで活用されています。6業種（不動産・保険・SaaS・人材・教育・物販）に対応。
+            成約コーチ AIは、新人営業マンの研修（<strong className="text-foreground">独り立ちまでの期間を短縮</strong>）、営業チームのスキル底上げ（<strong className="text-foreground">共通の型でチーム力向上</strong>）、個人事業主・フリーランスの自主トレ、テレアポ・電話営業の練習（<strong className="text-foreground">切り返し力を強化</strong>）など、幅広い営業シーンで活用できます。6業種（不動産・保険・SaaS・人材・教育・物販）に対応。
           </p>
         </div>
       </section>
