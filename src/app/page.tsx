@@ -45,22 +45,33 @@ const afterCards = [
 const steps = [
   {
     num: "01",
-    title: "業種・商材を入力",
-    desc: "あなたの営業シーンに合わせたリアルなお客さんをAIが生成",
+    title: "5ステップの型を学ぶ",
+    desc: "22レッスンで営業心理学の型をインプット。1レッスン5分",
     image: "/images/steps/step-01.png",
+    href: "/learn",
   },
   {
     num: "02",
-    title: "AIとロープレ開始",
-    desc: "AIが実際のお客さんのように反応。アプローチからクロージングまで実践",
+    title: "AIとロープレで実践",
+    desc: "学んだテクニックをAI相手に即実践。何度でも練習できる",
     image: "/images/steps/step-02.png",
+    href: "/roleplay",
   },
   {
     num: "03",
-    title: "成約スコアで採点",
-    desc: "アプローチ・ヒアリング・クロージング・反論処理を成約メソッドで分析",
+    title: "スコアで弱点を発見",
+    desc: "5ステップごとのスコアで弱点を可視化。改善アドバイスはProで",
     image: "/images/steps/step-03.png",
+    href: "/roleplay",
   },
+];
+
+const methodStepLinks = [
+  { step: "01", name: "アプローチ", desc: "信頼構築・褒め・前提設定", href: "/learn/sales-mindset" },
+  { step: "02", name: "ヒアリング", desc: "ニーズ発掘・深掘り質問", href: "/learn/mehrabian-rule" },
+  { step: "03", name: "プレゼン", desc: "利点話法・比較提案", href: "/learn/benefit-method" },
+  { step: "04", name: "クロージング", desc: "決断を後押しする技術", href: "/learn/closing-intro" },
+  { step: "05", name: "反論処理", desc: "切り返しトーク", href: "/learn/rebuttal-basics" },
 ];
 
 
@@ -97,22 +108,28 @@ const freeTools = [
 
 const serviceCategories = [
   {
-    title: "AIロープレ",
-    desc: "AIがリアルなお客さん役を演じます。アプローチからクロージング、反論処理まで、何度でも実践練習。スコアで弱点を可視化。",
-    href: "/roleplay",
-    image: "/images/cards/roleplay.png",
-  },
-  {
     title: "学習コース",
     desc: "成約5ステップメソッドを22レッスンで体系的に習得。各ステップの理論と実践を学び、認定試験で理解度を確認できます。",
     href: "/learn",
     image: "/images/cards/learn.png",
   },
   {
+    title: "AIロープレ",
+    desc: "AIがリアルなお客さん役を演じます。アプローチからクロージング、反論処理まで、何度でも実践練習。スコアで弱点を可視化。",
+    href: "/roleplay",
+    image: "/images/cards/roleplay.png",
+  },
+  {
     title: "ワークシート",
     desc: "商談前に5フェーズの準備シートを記入するだけで、ヒアリング漏れやクロージングの抜けを防止。商談の質が格段に上がります。",
     href: "/worksheet",
     image: "/images/cards/worksheet.png",
+  },
+  {
+    title: "無料ツール",
+    desc: "営業力診断テスト・トークスクリプト生成・反論切り返しトーク集・クロージング率計算。登録不要で今すぐ使えます。",
+    href: "/tools",
+    image: "/images/cards/tools.png",
   },
   {
     title: "ブログ",
@@ -123,8 +140,8 @@ const serviceCategories = [
 ];
 
 const betaFeatures = [
+  "22レッスンで営業の型を学ぶ",
   "AIロープレ（1日1回無料）",
-  "22レッスン+AI営業分析",
   "成約スコアリング",
   "リアルタイムコーチング",
 ];
@@ -229,13 +246,13 @@ function IndustryIcon({ name }: { name: string }) {
 
 /* ─── Reusable Primary CTA Button ─── */
 
-function PrimaryCTA({ className = "" }: { className?: string }) {
+function PrimaryCTA({ className = "", text = "今すぐAIと商談してみる", href = "/roleplay" }: { className?: string; text?: string; href?: string }) {
   return (
-    <Link href="/roleplay" className={`morph-btn ${className}`}>
+    <Link href={href} className={`morph-btn ${className}`}>
       <span className="btn-fill" />
       <span className="shadow" />
       <span className="btn-text">
-        {"今すぐAIと商談してみる".split("").map((char, i) => (
+        {text.split("").map((char, i) => (
           <span key={i} style={{ "--i": i } as React.CSSProperties}>{char}</span>
         ))}
       </span>
@@ -359,11 +376,11 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4" data-hero-cta>
             <Link
               href="/learn"
-              className="inline-flex h-14 items-center justify-center rounded-xl border-2 border-white/40 px-8 text-base font-bold text-white transition hover:bg-white/10 hover:border-white/60 sm:min-w-[220px]"
+              className="inline-flex h-14 items-center justify-center rounded-xl bg-white px-8 text-base font-bold text-gray-900 shadow-lg transition hover:bg-white/90 sm:min-w-[240px]"
             >
-              まず型を学ぶ
+              まず営業の型を学ぶ（5分）
             </Link>
-            <PrimaryCTA />
+            <PrimaryCTA text="すぐにAIと商談する" />
           </div>
           <p className="mt-4 text-sm text-white/50">
             &#10003; 無料で体験&ensp;&#10003; 登録不要&ensp;&#10003; 1分で最初の商談開始
@@ -491,7 +508,15 @@ export default function Home() {
             <p className="text-center text-sm font-medium text-muted">
               次の現場訪問、切り返しの練習をしないまま迎えますか？
             </p>
-            <PrimaryCTA />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/learn"
+                className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
+              >
+                まず型を学んでから練習する
+              </Link>
+              <PrimaryCTA text="すぐにAIと練習する" />
+            </div>
           </div>
         </div>
       </section>
@@ -506,11 +531,11 @@ export default function Home() {
             3ステップで、今日から営業練習が変わる
           </h2>
           <p className="mb-12 text-center text-sm text-muted sm:mb-16 sm:text-base">
-            登録もダウンロードも不要。思い立った瞬間にロープレ開始。
+            学ぶ → 実践する → 弱点に気づく。この繰り返しで営業力が伸びる。
           </p>
           <div className="flex flex-wrap justify-center gap-8">
             {steps.map((step) => (
-              <div key={step.num} className="howto-card">
+              <Link key={step.num} href={step.href} className="howto-card group">
                 <div className="howto-card__photo">
                   <Image
                     src={step.image}
@@ -526,7 +551,7 @@ export default function Home() {
                   <br />
                   <span>{step.desc}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -600,6 +625,30 @@ export default function Home() {
             アプローチからクロージング・反論処理まで、どんな商材でも使える型が身につく
           </p>
         </div>
+        {/* 5-step quick links */}
+        <div className="mx-auto max-w-5xl px-6 mb-8">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            {methodStepLinks.map((s) => (
+              <Link
+                key={s.step}
+                href={s.href}
+                className="group relative overflow-hidden rounded-xl border border-card-border bg-white p-4 text-center transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10"
+              >
+                <div className="absolute inset-x-0 top-0 h-0.5 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <span className="mb-1 block text-xs font-bold text-accent">STEP {s.step}</span>
+                <span className="block text-sm font-bold text-foreground">{s.name}</span>
+                <span className="mt-1 block text-xs text-muted leading-snug">{s.desc}</span>
+                <span className="mt-2 inline-flex items-center gap-0.5 text-xs font-medium text-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  このステップを学ぶ
+                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         <MethodLevelCards />
       </section>
 
@@ -662,8 +711,9 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <div className="action">
-                <Link href="/roleplay" className="button">今すぐAIと商談してみる</Link>
+              <div className="action flex flex-col gap-2">
+                <Link href="/learn" className="button" style={{ background: "transparent", border: "2px solid rgba(249,115,22,0.4)", color: "#f97316" }}>まず営業の型を学ぶ</Link>
+                <Link href="/roleplay" className="button">すぐにAIと商談する</Link>
               </div>
             </div>
           </div>
@@ -718,8 +768,14 @@ export default function Home() {
           <p className="mb-10 text-sm text-muted">
             &#10003; 無料で体験 &#10003; 登録不要 &#10003; いつでも解約OK
           </p>
-          <div className="flex flex-col items-center gap-4">
-            <PrimaryCTA />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/learn"
+              className="inline-flex h-14 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-8 text-base font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
+            >
+              まず営業の型を学ぶ
+            </Link>
+            <PrimaryCTA text="すぐにAIと練習する" />
           </div>
           <div className="mt-6">
             <Link href="/pricing" className="text-sm text-muted transition hover:text-accent hover:underline">
