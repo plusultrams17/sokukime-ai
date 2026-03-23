@@ -6,8 +6,6 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getLessonsByLevel, getAllLessons } from "@/lib/lessons";
 import { LessonScene } from "@/components/lesson-scenes";
-import { CompanyContextSetup } from "@/components/company-context-setup";
-import { TargetContextSetup } from "@/components/target-context-setup";
 import { PdfExportButton } from "@/components/pdf/PdfExportButton";
 import WorksheetPdfContent from "@/components/pdf/WorksheetPdfContent";
 import { loadCompanyContext, hasCompanyContext } from "@/lib/company-context";
@@ -127,20 +125,6 @@ export default function LearnPage() {
               </span>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* Company Context Setup */}
-      <section className="px-6 pt-8 pb-0">
-        <div className="mx-auto max-w-5xl">
-          <CompanyContextSetup />
-        </div>
-      </section>
-
-      {/* Target Context Setup */}
-      <section className="px-6 pt-4 pb-0">
-        <div className="mx-auto max-w-5xl">
-          <TargetContextSetup />
         </div>
       </section>
 
