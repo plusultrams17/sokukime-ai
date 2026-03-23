@@ -533,13 +533,16 @@ export default function Home() {
           <div className="flip-cards">
             {serviceCategories.map((cat) => (
               <Link key={cat.title} href={cat.href} className="flip-card">
-                <Image
-                  src={cat.image}
-                  alt={cat.title}
-                  width={120}
-                  height={120}
-                  className="flip-card__icon"
-                />
+                <div className="flip-card__front">
+                  <Image
+                    src={cat.image}
+                    alt={cat.title}
+                    width={120}
+                    height={120}
+                    className="flip-card__icon"
+                  />
+                  <p className="flip-card__label">{cat.title}</p>
+                </div>
                 <div className="flip-card__content">
                   <p className="flip-card__title">{cat.title}</p>
                   <p className="flip-card__description">{cat.desc}</p>
