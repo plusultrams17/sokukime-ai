@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { RadarChart } from "@/components/radar-chart";
 import { ReferralPrompt } from "@/components/referral-prompt";
 import type { ScoreResult } from "./page";
-import { trackCTAClick } from "@/lib/tracking";
+import { trackCTAClick, trackUpgradePromptShown, trackUpgradePromptClicked } from "@/lib/tracking";
 
 interface ScoreCardProps {
   score: ScoreResult;
@@ -51,6 +51,20 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
   const lockedCategories = isFree
     ? score.categories.slice(FREE_VISIBLE_CATEGORIES)
     : [];
+
+  // Fire upgrade_prompt_shown when free user sees locked content
+  const upgradePromptFired = useRef(false);
+  useEffect(() => {
+    if (isFree && lockedCategories.length > 0 && !upgradePromptFired.current) {
+      trackUpgradePromptShown({ trigger: "score_blur" });
+      upgradePromptFired.current = true;
+    }
+  }, [isFree, lockedCategories.length]);
+
+  function handleLockedClick(trigger: string) {
+    trackUpgradePromptClicked({ trigger });
+    onUpgrade?.();
+  }
 
   return (
     <div className="flex flex-1 items-start justify-center overflow-y-auto px-4 py-12">
@@ -103,31 +117,38 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           </div>
         </div>
 
-        {/* Locked Categories for Free users */}
+        {/* Locked Categories for Free users — blurred but visible scores */}
         {isFree && lockedCategories.length > 0 && (
-          <div className="relative mb-8">
-            {/* Blurred locked content */}
+          <div
+            className="relative mb-8 cursor-pointer group"
+            onClick={() => handleLockedClick("score_category_blur")}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleLockedClick("score_category_blur"); }}
+          >
             <div className="rounded-2xl border border-card-border bg-card p-6 select-none">
-              <div className="space-y-4 blur-sm pointer-events-none" aria-hidden>
+              <div className="space-y-4">
                 {lockedCategories.map((cat) => (
-                  <div key={cat.name}>
+                  <div key={cat.name} className="blur-[6px] pointer-events-none" aria-hidden>
                     <div className="mb-1 flex items-center justify-between">
                       <span className="text-sm font-medium">{cat.name}</span>
-                      <span className="text-sm font-bold text-muted">??</span>
+                      <span className={`text-sm font-bold ${getScoreColor(cat.score)}`}>
+                        {cat.score}
+                      </span>
                     </div>
                     <div className="mb-2 h-2 overflow-hidden rounded-full bg-card-border">
                       <div
-                        className="h-full rounded-full bg-muted/30"
-                        style={{ width: "50%" }}
+                        className={`h-full rounded-full transition-all duration-700 ${getScoreBarColor(cat.score)}`}
+                        style={{ width: `${cat.score}%` }}
                       />
                     </div>
-                    <p className="text-xs text-muted">詳細なフィードバックはProプランで確認できます</p>
+                    <p className="text-xs leading-relaxed text-muted">{cat.feedback}</p>
                   </div>
                 ))}
               </div>
 
-              {/* Lock overlay */}
-              <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-background/60 backdrop-blur-[2px]">
+              {/* Tap-to-unlock overlay */}
+              <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-background/40 transition group-hover:bg-background/50">
                 <div className="text-center">
                   <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-xl">
                     🔒
@@ -136,17 +157,11 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                     残り{lockedCategories.length}カテゴリの詳細スコア
                   </p>
                   <p className="mb-4 text-xs text-muted">
-                    各カテゴリの点数とAI改善アドバイスを確認できます
+                    タップしてProプランで全スコアを確認
                   </p>
-                  <button
-                    onClick={() => {
-                      trackCTAClick("scorecard_unlock", "score_card", "/pricing");
-                      onUpgrade?.();
-                    }}
-                    className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
-                  >
+                  <span className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition group-hover:bg-accent-hover">
                     Proで全スコアを見る
-                  </button>
+                  </span>
                 </div>
               </div>
             </div>
@@ -158,20 +173,34 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           <div className="mb-4 h-0" /> /* spacer for consistent layout */
         )}
 
-        {/* Summary - locked for free */}
+        {/* Summary / AI Advice — show preview for free */}
         {isFree ? (
-          <div className="relative mb-8">
+          <div
+            className="relative mb-8 cursor-pointer group"
+            onClick={() => handleLockedClick("ai_advice_preview")}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleLockedClick("ai_advice_preview"); }}
+          >
             <div className="rounded-2xl border border-card-border bg-card p-6 select-none">
-              <h3 className="mb-3 text-sm font-medium text-muted">総評</h3>
-              <div className="blur-sm pointer-events-none" aria-hidden>
+              <h3 className="mb-3 text-sm font-medium text-muted">AI改善アドバイス</h3>
+              {/* Show first 1-2 lines of summary as preview */}
+              {score.summary && (
+                <p className="text-sm leading-relaxed mb-2">
+                  {score.summary.split("。").slice(0, 2).join("。")}。
+                </p>
+              )}
+              {/* Blurred remainder */}
+              <div className="blur-[6px] pointer-events-none" aria-hidden>
                 <p className="text-sm leading-relaxed text-muted">
-                  Proプランにアップグレードすると、AIによる詳細な総評と具体的な改善アドバイスを確認できます。あなたの営業スキルの強みと弱みを分析し、効果的な練習方法を提案します。
+                  {score.summary && score.summary.split("。").slice(2).join("。")}
+                  具体的な改善ステップとして、まずヒアリングでの深掘り質問を増やし、お客さんの本当の悩みを引き出すことで、プレゼンの説得力が大幅に向上します。
                 </p>
               </div>
-              <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-                <div className="rounded-full border border-card-border bg-card/90 px-4 py-2 text-xs font-medium text-muted backdrop-blur-sm">
-                  🔒 Proプランで総評を見る
-                </div>
+              <div className="absolute inset-x-0 bottom-0 h-24 flex items-end justify-center rounded-b-2xl bg-gradient-to-t from-card via-card/80 to-transparent pb-4">
+                <span className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-white transition group-hover:bg-accent-hover">
+                  🔓 続きを読む（Proプラン）
+                </span>
               </div>
             </div>
           </div>
@@ -182,35 +211,54 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           </div>
         )}
 
-        {/* Strengths & Improvements - locked for free */}
+        {/* Strengths & Improvements - blurred preview for free */}
         {isFree ? (
-          <div className="relative mb-8">
+          <div
+            className="relative mb-8 cursor-pointer group"
+            onClick={() => handleLockedClick("strengths_improvements")}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleLockedClick("strengths_improvements"); }}
+          >
             <div className="grid gap-4 sm:grid-cols-2 select-none">
               <div className="rounded-2xl border border-card-border bg-card p-6">
                 <h3 className="mb-3 text-sm font-medium text-green-600">💪 良かった点</h3>
-                <div className="blur-sm pointer-events-none" aria-hidden>
+                {/* Show first item visible, rest blurred */}
+                {score.strengths.length > 0 && (
+                  <p className="text-sm leading-relaxed text-muted mb-2">・{score.strengths[0]}</p>
+                )}
+                <div className="blur-[6px] pointer-events-none" aria-hidden>
                   <ul className="space-y-2">
-                    <li className="text-sm text-muted">・詳細はProプランで確認できます</li>
-                    <li className="text-sm text-muted">・詳細はProプランで確認できます</li>
-                    <li className="text-sm text-muted">・詳細はProプランで確認できます</li>
+                    {score.strengths.slice(1).map((s, i) => (
+                      <li key={i} className="text-sm text-muted">・{s}</li>
+                    ))}
+                    {score.strengths.length <= 1 && (
+                      <li className="text-sm text-muted">・詳細なフィードバックがここに表示されます</li>
+                    )}
                   </ul>
                 </div>
               </div>
               <div className="rounded-2xl border border-card-border bg-card p-6">
                 <h3 className="mb-3 text-sm font-medium text-accent">📈 改善ポイント</h3>
-                <div className="blur-sm pointer-events-none" aria-hidden>
+                {score.improvements.length > 0 && (
+                  <p className="text-sm leading-relaxed text-muted mb-2">・{score.improvements[0]}</p>
+                )}
+                <div className="blur-[6px] pointer-events-none" aria-hidden>
                   <ul className="space-y-2">
-                    <li className="text-sm text-muted">・詳細はProプランで確認できます</li>
-                    <li className="text-sm text-muted">・詳細はProプランで確認できます</li>
-                    <li className="text-sm text-muted">・詳細はProプランで確認できます</li>
+                    {score.improvements.slice(1).map((s, i) => (
+                      <li key={i} className="text-sm text-muted">・{s}</li>
+                    ))}
+                    {score.improvements.length <= 1 && (
+                      <li className="text-sm text-muted">・具体的な改善アドバイスがここに表示されます</li>
+                    )}
                   </ul>
                 </div>
               </div>
             </div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="rounded-full border border-card-border bg-card/90 px-4 py-2 text-xs font-medium text-muted backdrop-blur-sm">
-                🔒 Proプランで詳細フィードバックを見る
-              </div>
+            <div className="absolute inset-0 flex items-end justify-center pb-4">
+              <span className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card/90 px-4 py-2 text-xs font-medium text-muted backdrop-blur-sm transition group-hover:border-accent group-hover:text-accent">
+                🔒 タップしてProプランで詳細フィードバックを見る
+              </span>
             </div>
           </div>
         ) : (
@@ -289,6 +337,11 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           </div>
         )}
       </div>
+
+      {/* レビュー投稿（70点以上のユーザーに表示） */}
+      {score.overall >= 70 && !isFree && (
+        <ReviewPrompt roleplayScore={score.overall} />
+      )}
 
       {/* フィードバックフォーム */}
       <FeedbackForm roleplayScore={score.overall} />
@@ -398,6 +451,125 @@ function FeedbackForm({ roleplayScore }: { roleplayScore: number }) {
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── レビュー投稿プロンプト（70点以上のProユーザーに表示） ── */
+
+function ReviewPrompt({ roleplayScore }: { roleplayScore: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [role, setRole] = useState("");
+  const [reviewText, setReviewText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  if (submitted) {
+    return (
+      <div className="mt-6 w-full max-w-2xl rounded-2xl border border-green-500/20 bg-green-500/5 p-6 text-center">
+        <p className="text-sm font-bold text-green-400">
+          レビューありがとうございます！承認後に料金ページに掲載されます。
+        </p>
+      </div>
+    );
+  }
+
+  if (!isOpen) {
+    return (
+      <div className="mt-6 w-full max-w-2xl rounded-2xl border border-accent/20 bg-accent/5 p-6 text-center">
+        <p className="mb-1 text-sm font-bold">
+          スコア {roleplayScore} 点、お見事です！
+        </p>
+        <p className="mb-4 text-xs text-muted">
+          あなたの声を聞かせてください。料金ページに掲載させていただきます。
+        </p>
+        <button
+          onClick={() => setIsOpen(true)}
+          className="inline-flex h-10 items-center rounded-lg border border-accent px-6 text-sm font-bold text-accent transition hover:bg-accent/10"
+        >
+          レビューを書く
+        </button>
+      </div>
+    );
+  }
+
+  async function handleSubmit() {
+    if (!displayName.trim() || !reviewText.trim() || submitting) return;
+    setSubmitting(true);
+    try {
+      await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          displayName: displayName.trim(),
+          role: role.trim(),
+          reviewText: reviewText.trim(),
+          roleplayScore,
+        }),
+      });
+    } catch {
+      // fire-and-forget
+    }
+    setSubmitted(true);
+  }
+
+  return (
+    <div className="mt-6 w-full max-w-2xl rounded-2xl border border-card-border bg-card p-6">
+      <h3 className="mb-4 text-sm font-bold">レビューを投稿する</h3>
+      <div className="space-y-3">
+        <div>
+          <label className="mb-1 block text-xs text-muted">表示名（イニシャルOK）</label>
+          <input
+            type="text"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            placeholder="例: T.S."
+            maxLength={20}
+            className="w-full rounded-lg border border-card-border bg-background px-4 py-2.5 text-sm placeholder:text-muted/50 focus:border-accent focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-xs text-muted">役職・業種（任意）</label>
+          <input
+            type="text"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            placeholder="例: 不動産営業 / 入社3年目"
+            maxLength={40}
+            className="w-full rounded-lg border border-card-border bg-background px-4 py-2.5 text-sm placeholder:text-muted/50 focus:border-accent focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-xs text-muted">レビュー内容</label>
+          <textarea
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+            placeholder="成約コーチ AIを使ってみた感想をお聞かせください"
+            rows={3}
+            maxLength={200}
+            className="w-full resize-none rounded-lg border border-card-border bg-background px-4 py-2.5 text-sm placeholder:text-muted/50 focus:border-accent focus:outline-none"
+          />
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleSubmit}
+            disabled={!displayName.trim() || !reviewText.trim() || submitting}
+            className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
+          >
+            {submitting ? "送信中..." : "投稿する"}
+          </button>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-xs text-muted transition hover:text-foreground"
+          >
+            キャンセル
+          </button>
+        </div>
+      </div>
+      <p className="mt-3 text-[11px] text-muted">
+        ※ 掲載前に管理者が確認します。スコア {roleplayScore} 点と合わせて表示されます。
+      </p>
     </div>
   );
 }

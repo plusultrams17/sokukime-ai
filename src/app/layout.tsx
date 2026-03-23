@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { GoogleAnalytics } from "@/components/analytics";
+import { GoogleAnalytics, MicrosoftClarity } from "@/components/analytics";
 import { ScrollDepthTracker } from "@/components/scroll-depth-tracker";
 import { JsonLd } from "@/components/json-ld";
 import { Analytics } from "@vercel/analytics/react";
@@ -69,6 +69,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <GoogleAnalytics />
+        <MicrosoftClarity />
         <ScrollDepthTracker />
         <JsonLd
           data={{

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { Footer } from "@/components/footer";
-import { trackCTAClick, trackCheckoutStarted } from "@/lib/tracking";
+import { trackCTAClick, trackCheckoutStarted, trackPricingPageView, trackCheckoutStart } from "@/lib/tracking";
 import { PricingExitPopup } from "@/components/exit-popups/pricing-exit-popup";
+import { UserReviews } from "@/components/user-reviews";
 import { ScrollSlideIn } from "@/components/scroll-slide-in";
 
 const features = [
@@ -92,6 +93,10 @@ export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [billing, setBilling] = useState<"monthly" | "annual">("annual");
 
+  useEffect(() => {
+    trackPricingPageView({});
+  }, []);
+
   const monthlyPrice = 2980;
   const annualPrice = 29800;
   const annualMonthly = Math.round(annualPrice / 12);
@@ -101,6 +106,7 @@ export default function PricingPage() {
     setIsLoading(true);
     trackCTAClick("pricing_pro", "pricing_page", "/api/stripe/checkout");
     trackCheckoutStarted();
+    trackCheckoutStart({ billing });
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
@@ -428,7 +434,11 @@ export default function PricingPage() {
           </p>
         </div>
 
-        {/* Testimonials Section */}
+        {/* Testimonials Section — コメントアウト（案A）
+         * ベータテスト段階のため、実際の有料ユーザーの声が集まるまで非表示。
+         * 有料ユーザーのレビューが集まったら、このセクションを復活させてください。
+         */}
+        {/*
         <div className="mt-20">
           <h2 className="mb-8 text-center text-2xl font-bold">
             利用者の声
@@ -461,6 +471,10 @@ export default function PricingPage() {
             ※個人の感想であり、効果を保証するものではありません
           </p>
         </div>
+        */}
+
+        {/* Dynamic User Reviews — 承認済みレビューがあれば自動表示 */}
+        <UserReviews />
 
         {/* FAQ */}
         <div className="mt-20">

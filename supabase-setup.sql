@@ -204,3 +204,24 @@ CREATE TABLE public.beta_signups (
 CREATE INDEX idx_beta_signups_email ON beta_signups(email);
 ALTER TABLE beta_signups ENABLE ROW LEVEL SECURITY;
 -- API route uses service role key (bypasses RLS). No public policies needed.
+
+-- =============================================
+-- ユーザーレビュー（利用者の声）
+-- =============================================
+
+CREATE TABLE public.user_reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  display_name TEXT NOT NULL,
+  role TEXT DEFAULT '',
+  review_text TEXT NOT NULL,
+  roleplay_score INTEGER,
+  is_approved BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_user_reviews_approved ON user_reviews(is_approved, created_at);
+
+ALTER TABLE user_reviews ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users insert own review" ON user_reviews FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users read own review" ON user_reviews FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Anyone can read approved reviews" ON user_reviews FOR SELECT USING (is_approved = true);

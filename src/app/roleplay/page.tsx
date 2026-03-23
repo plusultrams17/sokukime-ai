@@ -19,7 +19,13 @@ import {
   trackRoleplayCompleted,
   trackUpgradeModalShown,
   trackEngagementEvent,
+  trackRoleplayStart,
+  trackRoleplayComplete,
+  trackScoreView,
+  trackUpgradePromptShown,
+  trackUpgradePromptClicked,
 } from "@/lib/tracking";
+import { trackCheckoutComplete } from "@/lib/tracking";
 import {
   canShowPaywall,
   recordPaywallShown,
@@ -51,6 +57,7 @@ function UpgradeToast() {
   useEffect(() => {
     if (searchParams.get("upgraded") === "true") {
       setShow(true);
+      trackCheckoutComplete({});
       const timer = setTimeout(() => setShow(false), 5000);
       return () => clearTimeout(timer);
     }
@@ -366,6 +373,7 @@ export default function RoleplayPage() {
     // Guest: skip usage check, go directly to chat
     if (isGuest) {
       setPhase("chat");
+      trackRoleplayStart({ industry, difficulty });
       return;
     }
 
@@ -397,6 +405,7 @@ export default function RoleplayPage() {
 
       setUsage(data);
       setPhase("chat");
+      trackRoleplayStart({ industry, difficulty });
       trackEngagementEvent("roleplay_start", { product, difficulty });
     } catch {
       // Allow to proceed on network error
@@ -840,13 +849,55 @@ export default function RoleplayPage() {
               </div>
             </div>
 
+            {/* Daily Limit Banner for Free Users */}
+            {usage && usage.plan === "free" && !usage.canStart && (
+              <div className="pixar-card" style={{ borderColor: '#e65e5e', background: '#fdf2f2' }}>
+                <div className="text-center">
+                  <div style={{ fontSize: '2em', marginBottom: '0.3em' }}>⏰</div>
+                  <p style={{ fontSize: '1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.3em' }}>
+                    本日の無料ロープレは終了しました
+                  </p>
+                  <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '1em', lineHeight: 1.6 }}>
+                    Proプランなら<span style={{ color: '#f48a58', fontWeight: 800 }}>無制限</span>に練習できます。<br />
+                    毎日の反復練習で、営業力を飛躍的に向上させましょう。
+                  </p>
+                  <a
+                    href="/pricing"
+                    onClick={() => {
+                      trackUpgradePromptClicked({ trigger: "daily_limit_banner" });
+                    }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: '2.8em',
+                      padding: '0 1.5em',
+                      borderRadius: '2em',
+                      background: '#f48a58',
+                      color: '#fff',
+                      fontWeight: 800,
+                      fontSize: '0.9em',
+                      textDecoration: 'none',
+                      border: '0.12em solid #c4693d',
+                      boxShadow: '0.12em 0.12em 0 #c4693d',
+                    }}
+                  >
+                    Proプランを見る →
+                  </a>
+                  <p style={{ fontSize: '0.72em', color: '#a09a90', marginTop: '0.5em' }}>
+                    ¥2,980/月 ・ いつでも解約OK
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Action: Start Button */}
             <button
               onClick={handleStartRoleplay}
-              disabled={!canStart || isCheckingUsage}
+              disabled={!canStart || isCheckingUsage || (usage !== null && usage.plan === "free" && !usage.canStart)}
               className="pixar-start-btn"
             >
-              {isCheckingUsage ? "確認中..." : "🎯 ロープレを開始する"}
+              {isCheckingUsage ? "確認中..." : usage && usage.plan === "free" && !usage.canStart ? "本日の無料回数を使い切りました" : "🎯 ロープレを開始する"}
             </button>
           </div>
         </div>
@@ -867,6 +918,8 @@ export default function RoleplayPage() {
           onFinish={(result) => {
             setScore(result);
             setPhase("score");
+            trackRoleplayComplete({ industry, difficulty, totalScore: result.overall });
+            trackScoreView({ industry, difficulty, totalScore: result.overall });
             trackEngagementEvent("roleplay_complete", { score: result.overall });
             trackEngagementEvent("score_view");
             const categoryScores: Record<string, number> = {};

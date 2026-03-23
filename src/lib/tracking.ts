@@ -216,6 +216,75 @@ export function trackCancelOfferRejected(offerType: string) {
   pushEvent("cancel_offer_rejected", { offer_type: offerType });
 }
 
+// ─── Funnel Events (GA4 Custom) ─────────────────────
+
+export function trackRoleplayStart(params: { industry: string; difficulty: string }) {
+  pushEvent("roleplay_start", {
+    industry: params.industry,
+    difficulty: params.difficulty,
+  });
+}
+
+export function trackRoleplayComplete(params: { industry: string; difficulty: string; totalScore?: number }) {
+  pushEvent("roleplay_complete", {
+    industry: params.industry,
+    difficulty: params.difficulty,
+    total_score: params.totalScore,
+  });
+}
+
+export function trackScoreView(params: { industry: string; difficulty: string; totalScore: number }) {
+  pushEvent("score_view", {
+    industry: params.industry,
+    difficulty: params.difficulty,
+    total_score: params.totalScore,
+  });
+}
+
+export function trackPricingPageView(params: { industry?: string; difficulty?: string }) {
+  pushEvent("pricing_page_view", {
+    industry: params.industry || "",
+    difficulty: params.difficulty || "",
+  });
+}
+
+export function trackCheckoutStart(params: { industry?: string; difficulty?: string; billing?: string }) {
+  pushEvent("checkout_start", {
+    industry: params.industry || "",
+    difficulty: params.difficulty || "",
+    billing: params.billing || "monthly",
+    plan: "pro",
+    currency: "JPY",
+  });
+}
+
+export function trackCheckoutComplete(params: { industry?: string; difficulty?: string }) {
+  pushEvent("checkout_complete", {
+    industry: params.industry || "",
+    difficulty: params.difficulty || "",
+    plan: "pro",
+    currency: "JPY",
+  });
+}
+
+// ─── Upgrade Prompt ─────────────────────────────────
+
+export function trackUpgradePromptShown(params: { trigger: string; industry?: string; difficulty?: string }) {
+  pushEvent("upgrade_prompt_shown", {
+    trigger: params.trigger,
+    industry: params.industry || "",
+    difficulty: params.difficulty || "",
+  });
+}
+
+export function trackUpgradePromptClicked(params: { trigger: string; industry?: string; difficulty?: string }) {
+  pushEvent("upgrade_prompt_clicked", {
+    trigger: params.trigger,
+    industry: params.industry || "",
+    difficulty: params.difficulty || "",
+  });
+}
+
 // ─── Referral ───────────────────────────────────────
 
 export function trackReferralCodeCopied() {
