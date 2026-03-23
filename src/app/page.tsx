@@ -18,14 +18,14 @@ const stats = [
 ];
 
 const industries = [
-  { name: "塗装", desc: "外壁・屋根塗装" },
-  { name: "リフォーム", desc: "住宅リフォーム" },
-  { name: "不動産", desc: "売買・賃貸仲介" },
-  { name: "保険", desc: "生保・損保営業" },
-  { name: "SaaS", desc: "法人向けIT営業" },
-  { name: "人材", desc: "採用・人材派遣" },
-  { name: "教育", desc: "塾・スクール" },
-  { name: "物販", desc: "小売・EC販売" },
+  { name: "塗装", desc: "外壁・屋根塗装", slug: "exterior-painting" },
+  { name: "リフォーム", desc: "住宅リフォーム", slug: "reform" },
+  { name: "不動産", desc: "売買・賃貸仲介", slug: "real-estate" },
+  { name: "保険", desc: "生保・損保営業", slug: "insurance" },
+  { name: "SaaS", desc: "法人向けIT営業", slug: "saas" },
+  { name: "人材", desc: "採用・人材派遣", slug: "hr" },
+  { name: "教育", desc: "塾・スクール", slug: "education" },
+  { name: "物販", desc: "小売・EC販売", slug: "retail" },
 ];
 
 const beforeCards = [
@@ -367,14 +367,14 @@ export default function Home() {
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             {industries.map((ind) => (
-              <div key={ind.name} className="group relative overflow-hidden rounded-2xl border border-card-border bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10">
+              <Link key={ind.name} href={`/industry/${ind.slug}`} className="group relative overflow-hidden rounded-2xl border border-card-border bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10">
                 <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent to-orange-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
                   <IndustryIcon name={ind.name} />
                 </div>
                 <p className="text-sm font-bold text-foreground">{ind.name}</p>
                 <p className="mt-0.5 text-xs text-muted">{ind.desc}</p>
-              </div>
+              </Link>
             ))}
           </div>
           <div className="mt-10 inline-flex items-center gap-2 rounded-full bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent">
