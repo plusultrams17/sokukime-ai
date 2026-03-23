@@ -69,11 +69,36 @@ const methods = [
 ];
 
 const serviceCategories = [
-  { title: "AIロープレ", desc: "AIがお客さん役を演じて実践練習", href: "/roleplay" },
-  { title: "学習コース", desc: "22レッスン+認定試験", href: "/learn" },
-  { title: "ワークシート", desc: "商談前の5フェーズ準備シート", href: "/worksheet" },
-  { title: "無料営業ツール", desc: "診断・スクリプト・切り返し集", href: "/tools" },
-  { title: "ブログ", desc: "営業ノウハウ記事", href: "/blog" },
+  {
+    title: "AIロープレ",
+    desc: "AIがリアルなお客さん役を演じます。アプローチからクロージング、反論処理まで、何度でも実践練習。スコアで弱点を可視化。",
+    href: "/roleplay",
+    icon: "roleplay",
+  },
+  {
+    title: "学習コース",
+    desc: "成約5ステップメソッドを22レッスンで体系的に習得。各ステップの理論と実践を学び、認定試験で理解度を確認できます。",
+    href: "/learn",
+    icon: "learn",
+  },
+  {
+    title: "ワークシート",
+    desc: "商談前に5フェーズの準備シートを記入するだけで、ヒアリング漏れやクロージングの抜けを防止。商談の質が格段に上がります。",
+    href: "/worksheet",
+    icon: "worksheet",
+  },
+  {
+    title: "無料営業ツール",
+    desc: "営業力診断テスト、トークスクリプト自動生成、断り文句への切り返し集など、すぐに使える無料ツールを多数用意。",
+    href: "/tools",
+    icon: "tools",
+  },
+  {
+    title: "ブログ",
+    desc: "クロージングのコツ、飛び込み営業の心得、反論処理のテクニックなど、現場で使える営業ノウハウ記事を毎週更新中。",
+    href: "/blog",
+    icon: "blog",
+  },
 ];
 
 const betaFeatures = [
@@ -196,6 +221,36 @@ function MethodScene({ step }: { step: number }) {
       return null;
   }
 }
+
+/* ─── Flip Card Icons ─── */
+
+const flipCardIcons: Record<string, React.ReactNode> = {
+  roleplay: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M4.929 2.929l1.414 1.414A7.975 7.975 0 0 0 4 10c0 2.21.895 4.21 2.343 5.657l-1.414 1.414A9.969 9.969 0 0 1 2 10c0-2.761 1.12-5.263 2.929-7.071zm14.142 0A9.969 9.969 0 0 1 22 10a9.969 9.969 0 0 1-2.929 7.071l-1.414-1.414A7.975 7.975 0 0 0 20 10c0-2.21-.895-4.21-2.343-5.657l1.414-1.414zM7.757 5.757l1.415 1.415A3.987 3.987 0 0 0 8 10c0 1.105.448 2.105 1.172 2.828l-1.415 1.415A5.981 5.981 0 0 1 6 10c0-1.657.672-3.157 1.757-4.243zm8.486 0A5.981 5.981 0 0 1 18 10a5.981 5.981 0 0 1-1.757 4.243l-1.415-1.415A3.987 3.987 0 0 0 16 10c0-1.105-.448-2.105-1.172-2.828l1.415-1.415zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2c.58 0 1.077.413 1.184.983C14.265 14.349 15.51 14 17 14v2c-2.5 0-3.5.5-3.5 2h-3c0-1.5-1-2-3.5-2v-2c1.49 0 2.735.349 3.816.983A1.19 1.19 0 0 1 12 14z" />
+    </svg>
+  ),
+  learn: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M4 19V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm2-1h12V5H6v13zm3-7h6v2H9v-2zm0-4h6v2H9V7z" />
+    </svg>
+  ),
+  worksheet: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M17 2v2h3.007C20.555 4 21 4.445 21 4.993v14.014A.994.994 0 0 1 20.007 20H3.993A.994.994 0 0 1 3 19.007V4.993C3 4.445 3.445 4 3.993 4H7V2h10zm0 6H7v10h10V8zm-3 2v2h-1v3h-2v-3H9.5v-2H14zm2-4H8v-.5h1V4h6v1.5h1V6z" />
+    </svg>
+  ),
+  tools: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M5.33 3.272A3.5 3.5 0 0 1 8 7.202V8l4.564-.001a2 2 0 0 1 1.98 1.717l.007.001.007.14.01.136L14.573 10H10v2h4.674l.108 1.517A2 2 0 0 1 12.8 15.5H10v2h2.8a4 4 0 0 0 3.959-3.42l.006-.08H22v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V14h5.214a3.5 3.5 0 0 1-2.646-4.808A3.5 3.5 0 0 1 5.33 3.272zM8 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8 3a1.5 1.5 0 0 0-.144 2.993L8 6a1.5 1.5 0 0 0 .144-2.993L8 3z" />
+    </svg>
+  ),
+  blog: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M20 22H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1zM5 20h14V4H5v16zm2-6h10v2H7v-2zm0-4h10v2H7v-2zm0-4h10v2H7V6z" />
+    </svg>
+  ),
+};
 
 /* ─── Reusable Primary CTA Button ─── */
 
@@ -545,29 +600,17 @@ export default function Home() {
           6. SERVICE CATEGORIES
       ═══════════════════════════════════════════════ */}
       <section className="px-6 py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-5xl">
           <h2 className="mb-12 text-center text-2xl font-bold text-foreground sm:text-3xl">
             あなたの営業力を上げる5つの武器
           </h2>
-          <div className="brutalist-cards">
+          <div className="flip-cards">
             {serviceCategories.map((cat) => (
-              <Link key={cat.title} href={cat.href} className="brutalist-card">
-                <div className="brutalist-card__logo">
-                  <svg
-                    className="brutalist-card__icon"
-                    viewBox="0 0 24 27"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M1,0 L23,0 C23.5522847,-1.01453063e-16 24,0.44771525 24,1 L24,8.17157288 C24,8.70200585 23.7892863,9.21071368 23.4142136,9.58578644 L20.5857864,12.4142136 C20.2107137,12.7892863 20,13.2979941 20,13.8284271 L20,26 C20,26.5522847 19.5522847,27 19,27 L1,27 C0.44771525,27 6.76353751e-17,26.5522847 0,26 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z"
-                      fill="#F3E9CB"
-                    />
-                  </svg>
-                </div>
-                <div className="brutalist-card__text">
-                  <span>{cat.desc}</span>
-                  <span>{cat.title}</span>
+              <Link key={cat.title} href={cat.href} className="flip-card">
+                {flipCardIcons[cat.icon]}
+                <div className="flip-card__content">
+                  <p className="flip-card__title">{cat.title}</p>
+                  <p className="flip-card__description">{cat.desc}</p>
                 </div>
               </Link>
             ))}
