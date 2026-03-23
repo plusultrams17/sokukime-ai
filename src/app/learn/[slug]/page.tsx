@@ -424,38 +424,62 @@ export default function LessonPage() {
           </div>
 
           {/* Prev / Next Navigation */}
-          <div className="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
-            {prev ? (
-              <Link
-                href={`/learn/${prev.slug}`}
-                className="group"
-              >
-                <p className="text-xs text-muted mb-0.5">前のレッスン</p>
-                <p className="text-sm font-bold text-foreground group-hover:underline">
-                  {prev.title}
-                </p>
-              </Link>
-            ) : (
-              <div />
-            )}
-            {next ? (
-              <Link
-                href={`/learn/${next.slug}`}
-                className="text-right group"
-              >
-                <p className="text-xs text-muted mb-0.5">次のレッスン</p>
-                <p className="text-sm font-bold text-foreground group-hover:underline">
-                  {next.title}
-                </p>
-              </Link>
-            ) : (
-              <Link
-                href="/learn"
-                className="text-sm font-semibold text-accent hover:underline"
-              >
-                コース一覧に戻る
-              </Link>
-            )}
+          <div className="mt-16 border-t border-gray-200 pt-8">
+            <div className="flex items-center justify-between gap-4">
+              {prev ? (
+                <Link
+                  href={`/learn/${prev.slug}`}
+                  className="group flex items-center gap-3 min-w-0"
+                >
+                  <svg className="w-5 h-5 text-gray-300 group-hover:text-foreground transition shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted mb-0.5">前のレッスン</p>
+                    <p className="text-sm font-bold text-foreground group-hover:underline truncate">
+                      {prev.title}
+                    </p>
+                  </div>
+                </Link>
+              ) : (
+                <div />
+              )}
+              {next ? (
+                <Link
+                  href={`/learn/${next.slug}`}
+                  className="lesson-next-btn group"
+                  style={{ "--level-color": color } as React.CSSProperties}
+                >
+                  <div className="text-right min-w-0">
+                    <p className="text-xs text-white/70 mb-0.5">次のレッスン</p>
+                    <p className="text-sm font-bold text-white truncate">
+                      {next.title}
+                    </p>
+                  </div>
+                  <svg className="lesson-next-btn__arrows" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 43">
+                    <polygon points="39.58,4.46 44.11,0 66,21.5 44.11,43 39.58,38.54 56.94,21.5" />
+                    <polygon points="19.79,4.46 24.32,0 46.21,21.5 24.32,43 19.79,38.54 37.15,21.5" />
+                    <polygon points="0,4.46 4.53,0 26.42,21.5 4.53,43 0,38.54 17.36,21.5" />
+                  </svg>
+                </Link>
+              ) : (
+                <Link
+                  href="/learn"
+                  className="lesson-next-btn group"
+                  style={{ "--level-color": color } as React.CSSProperties}
+                >
+                  <div className="text-right min-w-0">
+                    <p className="text-xs text-white/70 mb-0.5">全レッスン完了</p>
+                    <p className="text-sm font-bold text-white truncate">
+                      コース一覧に戻る
+                    </p>
+                  </div>
+                  <svg className="lesson-next-btn__arrows" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 43">
+                    <polygon points="39.58,4.46 44.11,0 66,21.5 44.11,43 39.58,38.54 56.94,21.5" />
+                    <polygon points="19.79,4.46 24.32,0 46.21,21.5 24.32,43 19.79,38.54 37.15,21.5" />
+                    <polygon points="0,4.46 4.53,0 26.42,21.5 4.53,43 0,38.54 17.36,21.5" />
+                  </svg>
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>

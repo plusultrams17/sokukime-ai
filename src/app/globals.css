@@ -571,6 +571,58 @@ body {
   opacity: 1;
 }
 
+/* ── Lesson Next Button (Triple Arrow) ── */
+
+.lesson-next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background-color: var(--level-color, #f97316);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 320px;
+}
+
+.lesson-next-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 24px -4px var(--level-color, rgba(249, 115, 22, 0.5));
+  transform: translateX(4px);
+}
+
+.lesson-next-btn__arrows {
+  width: 28px;
+  height: 18px;
+  fill: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+  transition: fill 0.3s ease;
+}
+
+.lesson-next-btn:hover .lesson-next-btn__arrows {
+  fill: #fff;
+  animation: lesson-arrows-slide 0.6s ease-in-out;
+}
+
+@keyframes lesson-arrows-slide {
+  0% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(6px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .lesson-next-btn {
+    padding: 10px 16px;
+    gap: 10px;
+    max-width: 220px;
+  }
+
+  .lesson-next-btn__arrows {
+    width: 22px;
+    height: 14px;
+  }
+}
+
 /* ── Hero Cityscape Background ── */
 
 .hero-city {
