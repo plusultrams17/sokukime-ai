@@ -4,7 +4,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
 import { StickyCTA } from "@/components/sticky-cta";
-import { MethodCarousel } from "@/components/method-carousel";
+import { MethodFilterCarousel } from "@/components/method-filter-carousel";
 import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
 import { HomeExitPopup } from "@/components/exit-popups/home-exit-popup";
 import { ScrollSlideIn } from "@/components/scroll-slide-in";
@@ -17,7 +17,16 @@ const stats = [
   { value: "0円", label: "メアド不要で今すぐ" },
 ];
 
-const industries = ["塗装", "リフォーム", "不動産", "保険", "SaaS", "人材", "教育", "物販"];
+const industries = [
+  { name: "塗装", desc: "外壁・屋根塗装" },
+  { name: "リフォーム", desc: "住宅リフォーム" },
+  { name: "不動産", desc: "売買・賃貸仲介" },
+  { name: "保険", desc: "生保・損保営業" },
+  { name: "SaaS", desc: "法人向けIT営業" },
+  { name: "人材", desc: "採用・人材派遣" },
+  { name: "教育", desc: "塾・スクール" },
+  { name: "物販", desc: "小売・EC販売" },
+];
 
 const beforeCards = [
   { title: "ロープレ環境", desc: "先輩に頼まないとロープレできない", image: "/images/ba/before-01.png" },
@@ -73,31 +82,31 @@ const serviceCategories = [
     title: "AIロープレ",
     desc: "AIがリアルなお客さん役を演じます。アプローチからクロージング、反論処理まで、何度でも実践練習。スコアで弱点を可視化。",
     href: "/roleplay",
-    icon: "roleplay",
+    image: "/images/cards/roleplay.png",
   },
   {
     title: "学習コース",
     desc: "成約5ステップメソッドを22レッスンで体系的に習得。各ステップの理論と実践を学び、認定試験で理解度を確認できます。",
     href: "/learn",
-    icon: "learn",
+    image: "/images/cards/learn.png",
   },
   {
     title: "ワークシート",
     desc: "商談前に5フェーズの準備シートを記入するだけで、ヒアリング漏れやクロージングの抜けを防止。商談の質が格段に上がります。",
     href: "/worksheet",
-    icon: "worksheet",
+    image: "/images/cards/worksheet.png",
   },
   {
     title: "無料営業ツール",
     desc: "営業力診断テスト、トークスクリプト自動生成、断り文句への切り返し集など、すぐに使える無料ツールを多数用意。",
     href: "/tools",
-    icon: "tools",
+    image: "/images/cards/tools.png",
   },
   {
     title: "ブログ",
     desc: "クロージングのコツ、飛び込み営業の心得、反論処理のテクニックなど、現場で使える営業ノウハウ記事を毎週更新中。",
     href: "/blog",
-    icon: "blog",
+    image: "/images/cards/blog.png",
   },
 ];
 
@@ -162,95 +171,31 @@ function CheckIcon() {
   );
 }
 
+/* ─── Industry Icons ─── */
 
-/* ─── Method Step SVG Illustrations ─── */
-
-function MethodScene({ step }: { step: number }) {
-  const cls = "w-20 h-20";
-  switch (step) {
-    case 0:
-      return (
-        <svg viewBox="0 0 64 56" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-          <circle cx="18" cy="14" r="6" fill="white" />
-          <path d="M18 20v14M18 26l-8-5M18 26l8 5" />
-          <path d="M18 34l-5 14M18 34l5 14" />
-          <circle cx="46" cy="14" r="6" fill="white" />
-          <path d="M46 20v14M46 26l8-5M46 26l-8 5" />
-          <path d="M46 34l-5 14M46 34l5 14" />
-          <path d="M32 4l-2 4h4z" fill="white" stroke="none" />
-          <path d="M32 2v3M29 5h6" strokeWidth="1.5" />
-        </svg>
-      );
-    case 1:
-      return (
-        <svg viewBox="0 0 48 48" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-          <path d="M18 10a12 12 0 0 1 6 22c-2 2-3 4-3 6" />
-          <path d="M18 10c-5 0-10 5-10 12s5 12 10 12" />
-          <path d="M30 18a5 5 0 0 1 0 8" />
-          <path d="M34 14a9 9 0 0 1 0 16" />
-          <path d="M38 10a13 13 0 0 1 0 24" opacity="0.5" />
-        </svg>
-      );
-    case 2:
-      return (
-        <svg viewBox="0 0 48 48" className={cls} fill="white" stroke="none" aria-hidden="true">
-          <rect x="4" y="32" width="9" height="12" rx="1" />
-          <rect x="17" y="24" width="9" height="20" rx="1" />
-          <rect x="30" y="14" width="9" height="30" rx="1" />
-          <path d="M6 30L22 18l14-8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" />
-          <polygon points="38,8 42,14 34,14" />
-        </svg>
-      );
-    case 3:
-      return (
-        <svg viewBox="0 0 48 40" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M4 24l8-10 8 4 4-6" />
-          <path d="M44 24l-8-10-8 4-4-6" />
-          <path d="M12 24l6 6 5-3 5 5" />
-          <path d="M36 24l-6 6-5-3-3 3" />
-        </svg>
-      );
-    case 4:
-      return (
-        <svg viewBox="0 0 48 48" className={cls} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M24 4L6 12v12c0 10 8 16 18 20 10-4 18-10 18-20V12L24 4z" />
-          <path d="M16 24l5 5 10-10" strokeWidth="3" />
-        </svg>
-      );
+function IndustryIcon({ name }: { name: string }) {
+  const p = { className: "h-6 w-6", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true as const };
+  switch (name) {
+    case "塗装":
+      return <svg {...p}><rect x="3" y="2" width="18" height="8" rx="1.5" /><path d="M12 10v8" /><path d="M8 21h8" /></svg>;
+    case "リフォーム":
+      return <svg {...p}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="M9 22V12h6v10" /></svg>;
+    case "不動産":
+      return <svg {...p}><rect x="4" y="2" width="16" height="20" rx="1.5" /><path d="M9 22V12h6v10" /><circle cx="8" cy="6" r=".5" fill="currentColor" /><circle cx="16" cy="6" r=".5" fill="currentColor" /><circle cx="8" cy="9" r=".5" fill="currentColor" /><circle cx="16" cy="9" r=".5" fill="currentColor" /></svg>;
+    case "保険":
+      return <svg {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>;
+    case "SaaS":
+      return <svg {...p}><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" /></svg>;
+    case "人材":
+      return <svg {...p}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>;
+    case "教育":
+      return <svg {...p}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>;
+    case "物販":
+      return <svg {...p}><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>;
     default:
       return null;
   }
 }
-
-/* ─── Flip Card Icons ─── */
-
-const flipCardIcons: Record<string, React.ReactNode> = {
-  roleplay: (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M4.929 2.929l1.414 1.414A7.975 7.975 0 0 0 4 10c0 2.21.895 4.21 2.343 5.657l-1.414 1.414A9.969 9.969 0 0 1 2 10c0-2.761 1.12-5.263 2.929-7.071zm14.142 0A9.969 9.969 0 0 1 22 10a9.969 9.969 0 0 1-2.929 7.071l-1.414-1.414A7.975 7.975 0 0 0 20 10c0-2.21-.895-4.21-2.343-5.657l1.414-1.414zM7.757 5.757l1.415 1.415A3.987 3.987 0 0 0 8 10c0 1.105.448 2.105 1.172 2.828l-1.415 1.415A5.981 5.981 0 0 1 6 10c0-1.657.672-3.157 1.757-4.243zm8.486 0A5.981 5.981 0 0 1 18 10a5.981 5.981 0 0 1-1.757 4.243l-1.415-1.415A3.987 3.987 0 0 0 16 10c0-1.105-.448-2.105-1.172-2.828l1.415-1.415zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2c.58 0 1.077.413 1.184.983C14.265 14.349 15.51 14 17 14v2c-2.5 0-3.5.5-3.5 2h-3c0-1.5-1-2-3.5-2v-2c1.49 0 2.735.349 3.816.983A1.19 1.19 0 0 1 12 14z" />
-    </svg>
-  ),
-  learn: (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M4 19V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm2-1h12V5H6v13zm3-7h6v2H9v-2zm0-4h6v2H9V7z" />
-    </svg>
-  ),
-  worksheet: (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M17 2v2h3.007C20.555 4 21 4.445 21 4.993v14.014A.994.994 0 0 1 20.007 20H3.993A.994.994 0 0 1 3 19.007V4.993C3 4.445 3.445 4 3.993 4H7V2h10zm0 6H7v10h10V8zm-3 2v2h-1v3h-2v-3H9.5v-2H14zm2-4H8v-.5h1V4h6v1.5h1V6z" />
-    </svg>
-  ),
-  tools: (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M5.33 3.272A3.5 3.5 0 0 1 8 7.202V8l4.564-.001a2 2 0 0 1 1.98 1.717l.007.001.007.14.01.136L14.573 10H10v2h4.674l.108 1.517A2 2 0 0 1 12.8 15.5H10v2h2.8a4 4 0 0 0 3.959-3.42l.006-.08H22v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V14h5.214a3.5 3.5 0 0 1-2.646-4.808A3.5 3.5 0 0 1 5.33 3.272zM8 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8 3a1.5 1.5 0 0 0-.144 2.993L8 6a1.5 1.5 0 0 0 .144-2.993L8 3z" />
-    </svg>
-  ),
-  blog: (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M20 22H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1zM5 20h14V4H5v16zm2-6h10v2H7v-2zm0-4h10v2H7v-2zm0-4h10v2H7V6z" />
-    </svg>
-  ),
-};
 
 /* ─── Reusable Primary CTA Button ─── */
 
@@ -411,19 +356,28 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════
           2. SOCIAL PROOF
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="mb-3 text-lg font-semibold text-foreground sm:text-xl">
+      <section className="relative overflow-hidden px-6 py-16 sm:py-20">
+        <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.03] via-transparent to-transparent" aria-hidden="true" />
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
+          <h2 className="mb-2 text-2xl font-bold text-foreground sm:text-3xl">
             あなたの業界に対応しています
           </h2>
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {industries.map((name) => (
-              <span key={name} className="rounded-full border border-card-border bg-white px-4 py-2 text-sm font-medium text-foreground shadow-sm">
-                {name}
-              </span>
+          <p className="mb-10 text-sm text-muted sm:text-base">
+            業種・商材を入力するだけ。AIがリアルなお客さん役を演じます
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+            {industries.map((ind) => (
+              <div key={ind.name} className="group relative overflow-hidden rounded-2xl border border-card-border bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10">
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent to-orange-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
+                  <IndustryIcon name={ind.name} />
+                </div>
+                <p className="text-sm font-bold text-foreground">{ind.name}</p>
+                <p className="mt-0.5 text-xs text-muted">{ind.desc}</p>
+              </div>
             ))}
           </div>
-          <div className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-sm font-medium text-accent">
+          <div className="mt-10 inline-flex items-center gap-2 rounded-full bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent">
             <span className="relative flex h-2.5 w-2.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
@@ -564,36 +518,8 @@ export default function Home() {
           <p className="mb-12 text-center text-sm text-muted sm:mb-16 sm:text-base">
             この流れを身につければ、どんな商材でも商談の型ができる
           </p>
-          <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
-            {Object.entries(LEVEL_COLORS).map(([label, color]) => (
-              <span key={label} className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-bold text-white" style={{ backgroundColor: color }}>
-                {label}
-              </span>
-            ))}
-          </div>
         </div>
-        <MethodCarousel>
-          {methods.map((m, i) => {
-            const color = LEVEL_COLORS[m.level] || "#0F6E56";
-            return (
-              <div key={m.name} className="comic-card" style={{ "--level-color": color } as React.CSSProperties}>
-                <div className="card-header">
-                  <div className="card-avatar">{i + 1}</div>
-                  <div className="card-user-info">
-                    <p className="card-username">{m.name}</p>
-                    <p className="card-handle" style={{ color }}>{m.level}</p>
-                  </div>
-                </div>
-                <div className="card-content">
-                  <div className="card-image-container">
-                    <MethodScene step={i} />
-                  </div>
-                  <p className="card-caption">{m.desc}</p>
-                </div>
-              </div>
-            );
-          })}
-        </MethodCarousel>
+        <MethodFilterCarousel methods={methods} levelColors={LEVEL_COLORS} />
       </section>
 
       {/* ═══════════════════════════════════════════════
@@ -607,7 +533,13 @@ export default function Home() {
           <div className="flip-cards">
             {serviceCategories.map((cat) => (
               <Link key={cat.title} href={cat.href} className="flip-card">
-                {flipCardIcons[cat.icon]}
+                <Image
+                  src={cat.image}
+                  alt={cat.title}
+                  width={120}
+                  height={120}
+                  className="flip-card__icon"
+                />
                 <div className="flip-card__content">
                   <p className="flip-card__title">{cat.title}</p>
                   <p className="flip-card__description">{cat.desc}</p>
@@ -637,7 +569,7 @@ export default function Home() {
                 <span>無料 <small>ベータ版</small></span>
               </span>
               <p className="title">ベータテストプラン</p>
-              <p className="info">全機能を無料でお試しいただけます。フィードバックをお待ちしています。</p>
+              <p className="info">ベータ期間中はすべての機能が無料。ご意見・ご感想をお待ちしています。</p>
               <ul className="features">
                 {betaFeatures.map((feat) => (
                   <li key={feat}>
