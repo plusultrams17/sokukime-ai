@@ -36,7 +36,7 @@ const ANALYSIS_PROMPT = `あなたは成約5ステップメソッドの専門コ
 - sellingPointsは3つ生成
 - closingScriptsは3つ生成（クロージングと反論処理を中心に）
 - 言い回しは日本語の口語体で、実際の商談で使える自然な表現にする
-- 成約メソッドの核心：「考えます」を言わせない前提設定、社会的証明、一貫性の原理を活用
+- 成約メソッドの核心：「考えます」を防ぐゴール共有、社会的証明、一貫性の原理を活用
 - JSONのみを返すこと`;
 
 function extractTextFromHtml(html: string): string {

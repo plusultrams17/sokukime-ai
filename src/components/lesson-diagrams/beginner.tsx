@@ -197,7 +197,7 @@ export function PremiseSettingDiagram() {
 
         {/* Title */}
         <text x="310" y="28" textAnchor="middle" fontSize="14" fill={DARK} fontWeight="bold">
-          前提設定の4ステップ
+          ゴール共有の4ステップ
         </text>
 
         {steps.map((step, i) => {
@@ -361,7 +361,7 @@ export function DrawerPhrasesDiagram() {
 
         {/* Title */}
         <text x="300" y="28" textAnchor="middle" fontSize="14" fill={DARK} fontWeight="bold">
-          引き出しフレーズの構造
+          ニーズ発掘フレーズの構造
         </text>
 
         {/* Main flow: 3 boxes */}

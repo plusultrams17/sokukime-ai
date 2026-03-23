@@ -72,7 +72,7 @@ export function RebuttalBasicsDiagram() {
           { x: 155, label: "共感+感謝", sub: "受け止める" },
           { x: 310, label: "フック", sub: "小さなYES" },
           { x: 455, label: "技法 1〜5", sub: "切り返し" },
-          { x: 600, label: "AREA話法", sub: "説得構成" },
+          { x: 600, label: "切り返しの公式", sub: "説得構成" },
           { x: 710, label: "訴求", sub: "クロージング" },
         ].map((box, i) => {
           const w = i === 1 ? 120 : i === 5 ? 76 : 110;
@@ -230,9 +230,9 @@ export function RebuttalPatternDiagram() {
   const techniques = [
     "目的の振り返り",
     "第三者アタック",
-    "+のシャワー",
+    "YESの積み上げ",
     "すり替え",
-    "価値の上乗せ",
+    "価値の再提示",
   ];
   const situations = ["考えたい", "他社比較", "高い"];
   // Matrix: which technique applies to which situation
@@ -619,7 +619,7 @@ export function PurposeRecallDiagram() {
           fontFamily={FONT}
           fill={DARK}
         >
-          AREA話法サイクル
+          切り返しの公式サイクル
         </text>
 
         {/* A -> R -> E -> A circular */}
@@ -1000,7 +1000,7 @@ export function PositiveShowerDiagram() {
           fontFamily={FONT}
           fill={DARK}
         >
-          技法3: +のシャワー -- お客様自身にプラスを語らせる
+          技法3: YESの積み上げ -- お客様自身にプラスを語らせる
         </text>
 
         {/* Step 1 */}
@@ -1558,7 +1558,7 @@ export function ValueStackingDiagram() {
           fontFamily={FONT}
           fill={DARK}
         >
-          技法5: 価値の上乗せ -- 天秤のメタファー
+          技法5: 価値の再提示 -- 天秤のメタファー
         </text>
 
         {/* Scale base */}

@@ -48,24 +48,24 @@ export function Phase1Hearing({
       </div>
 
       <SectionLabel color={color}>
-        引き出しフレーズ（第三者話法）
+        ニーズ発掘フレーズ（第三者話法）
       </SectionLabel>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Field
-          label="引き出しフレーズ 1"
+          label="ニーズ発掘フレーズ 1"
           placeholder='例：「同じ業界の方から○○というお悩みをよく伺うのですが…」'
           hint="第三者を引き合いに出してニーズを引き出す"
           value={f("drawer1")}
           onChange={set("drawer1")}
         />
         <Field
-          label="引き出しフレーズ 2"
+          label="ニーズ発掘フレーズ 2"
           placeholder='例：「最近よく○○で困っているという声を聞くのですが…」'
           value={f("drawer2")}
           onChange={set("drawer2")}
         />
         <Field
-          label="引き出しフレーズ 3"
+          label="ニーズ発掘フレーズ 3"
           placeholder='例：「皆さん最初は○○とおっしゃるのですが、実は△△だった…」'
           value={f("drawer3")}
           onChange={set("drawer3")}

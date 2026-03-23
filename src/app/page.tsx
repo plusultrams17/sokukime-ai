@@ -67,7 +67,7 @@ const steps = [
 ];
 
 const methodStepLinks = [
-  { step: "01", name: "アプローチ", desc: "信頼構築・褒め・前提設定", href: "/learn/sales-mindset" },
+  { step: "01", name: "アプローチ", desc: "信頼構築・褒め・ゴール共有", href: "/learn/sales-mindset" },
   { step: "02", name: "ヒアリング", desc: "ニーズ発掘・深掘り質問", href: "/learn/mehrabian-rule" },
   { step: "03", name: "プレゼン", desc: "利点話法・比較提案", href: "/learn/benefit-method" },
   { step: "04", name: "クロージング", desc: "決断を後押しする技術", href: "/learn/closing-intro" },
@@ -350,20 +350,20 @@ export default function Home() {
             <svg className="h-4 w-4 text-yellow-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-            1,600件の商談から生まれたメソッド
+            営業心理学に基づくメソッド
           </div>
 
           <h1 className="sr-only">
             AIで営業ロープレ練習 — 成約率を上げる5ステップメソッド
           </h1>
           <p className="sr-only">
-            成約コーチ AIは、AIがリアルなお客さん役を演じる営業ロープレ練習アプリです。営業心理学に基づく「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAIコーチがリアルタイムで評価し、24時間いつでも無料で営業力を鍛えることができます。1,600件の商談から体系化された営業の型を、22レッスンの学習コースとAIロープレで習得できます。
+            成約コーチ AIは、AIがリアルなお客さん役を演じる営業ロープレ練習アプリです。営業心理学に基づく「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAIコーチがリアルタイムで評価し、24時間いつでも無料で営業力を鍛えることができます。営業心理学から体系化された営業の型を、22レッスンの学習コースとAIロープレで習得できます。
           </p>
 
           <p className="mb-6 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-6xl" role="presentation" style={{ textWrap: "balance" } as React.CSSProperties}>
-            「考えます」で終わる商談を、
+            断られて終わる商談を、
             <br />
-            <span className="text-accent">「お願いします」で終わらせる。</span>
+            <span className="text-accent">「決まる商談」に変える。</span>
           </p>
 
           <p className="mx-auto mb-10 max-w-2xl text-base text-white/70 leading-relaxed sm:text-lg">
@@ -616,7 +616,7 @@ export default function Home() {
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-6 mb-10">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
-            1,600件の商談から生まれた営業の型
+            営業心理学に基づく「型」
           </h2>
           <p className="mb-2 text-center text-sm font-medium text-accent">
             5つのステップを、初級→中級→上級の22レッスンで段階的に習得

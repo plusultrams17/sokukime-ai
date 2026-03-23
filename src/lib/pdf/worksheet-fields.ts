@@ -47,11 +47,11 @@ export const WORKSHEET_PHASES: PhaseFieldDefs[] = [
         ],
       },
       {
-        title: "前提設定（先回り・事前合意）",
+        title: "ゴール共有（事前合意）",
         fields: [
           {
             key: "premise",
-            label: "前提設定トーク",
+            label: "ゴール共有トーク",
             multiline: true,
             example:
               "○○様、本日は精一杯ご説明させていただきます。もし合わないと感じたら遠慮なくおっしゃってください。逆に良いなと思っていただけたら、ぜひその場でスタートしてください。それでよろしいですか？",
@@ -87,23 +87,23 @@ export const WORKSHEET_PHASES: PhaseFieldDefs[] = [
         ],
       },
       {
-        title: "引き出しフレーズ（第三者話法）",
+        title: "ニーズ発掘フレーズ（第三者話法）",
         fields: [
           {
             key: "drawer1",
-            label: "引き出しフレーズ1",
+            label: "ニーズ発掘フレーズ1",
             example:
               "『最近、広告費が上がって費用対効果が合わなくなってきた』とおっしゃる方が多いのですが、○○様のところではいかがですか？",
           },
           {
             key: "drawer2",
-            label: "引き出しフレーズ2",
+            label: "ニーズ発掘フレーズ2",
             example:
               "『人手が足りなくて、やりたいことが全然進まない』って声をよく聞くんですけど、○○様はいかがでしょうか？",
           },
           {
             key: "drawer3",
-            label: "引き出しフレーズ3",
+            label: "ニーズ発掘フレーズ3",
             example:
               "『一度来てくれたお客様がなかなかリピートしてくれない』というお悩み、同業の方からよく伺いますが…",
           },
@@ -244,13 +244,13 @@ export const WORKSHEET_PHASES: PhaseFieldDefs[] = [
         fields: [
           {
             key: "quote1",
-            label: "第三者の声（カギカッコ）1",
+            label: "第三者の声（証言引用）1",
             example:
               "先日のお客様が『もっと早くやればよかった。迷っていた時間がもったいなかった』とおっしゃっていました",
           },
           {
             key: "quote2",
-            label: "第三者の声（カギカッコ）2",
+            label: "第三者の声（証言引用）2",
             example:
               "別のお客様からは『最初は不安だったけど、やってみたら全然違った。家族にも勧めました』と言われました",
           },
@@ -262,7 +262,7 @@ export const WORKSHEET_PHASES: PhaseFieldDefs[] = [
           },
           {
             key: "consistency",
-            label: "一貫性（前提設定との連動）",
+            label: "一貫性（ゴール共有との連動）",
             example:
               "最初にお伝えした通り、良いと思っていただけたなら一緒に始めましょう。先ほど『良いですね』とおっしゃっていましたよね",
           },
@@ -456,7 +456,7 @@ export const WORKSHEET_PHASES: PhaseFieldDefs[] = [
           },
           {
             key: "tech1Area",
-            label: "①AREA話法",
+            label: "①切り返しの公式",
             example:
               "今日お決めいただくのが最善です（主張）。検討期間が長くなるほど熱が冷めます（理由）。以前半年悩んで後悔された方がいました（具体例）。だからこそ今日始めましょう（再主張）",
           },
@@ -468,7 +468,7 @@ export const WORKSHEET_PHASES: PhaseFieldDefs[] = [
           },
           {
             key: "tech3YesPlus",
-            label: "③プラスのシャワー（YES+質問）",
+            label: "③YESの積み上げ（自己説得法）",
             example:
               "今日のお話の中で、一番『これいいな』と思ったポイントはどこですか？ → なぜそう思いましたか？ → 他にも良い点はありますか？",
           },
@@ -492,7 +492,7 @@ export const WORKSHEET_PHASES: PhaseFieldDefs[] = [
           },
           {
             key: "tech5Value",
-            label: "⑤価値の上乗せ（SP×3連発）",
+            label: "⑤価値の再提示（SP×3連発）",
             multiline: true,
             example:
               "みなさん最終的には安いとおっしゃる理由は3つあります。①お悩みの集客問題を根本解決 ②専任サポートでいつでも相談可 ③一度身につけたスキルは一生もの",

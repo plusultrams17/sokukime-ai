@@ -176,7 +176,7 @@ function AREAMethodDiagram() {
         </defs>
 
         <text x="270" y="20" textAnchor="middle" fontSize="13" fontWeight="bold" fill={DARK}>
-          AREA話法
+          切り返しの公式
         </text>
 
         {steps.map((s, i) => {
@@ -392,7 +392,7 @@ function PurposeAREAComboDiagram() {
         </defs>
 
         <text x="270" y="18" textAnchor="middle" fontSize="13" fontWeight="bold" fill={DARK}>
-          目的の振り返り + AREA話法
+          目的の振り返り + 切り返しの公式
         </text>
 
         {/* Purpose recall box */}

@@ -59,8 +59,8 @@ const sceneHints: Record<string, string> = {
 };
 
 const STEP_LESSON_MAP: Record<number, { slug: string; label: string }> = {
-  1: { slug: "premise-setting", label: "前提設定（先回りトーク）" },
-  2: { slug: "drawer-phrases", label: "引き出しフレーズ（ニーズ発掘）" },
+  1: { slug: "premise-setting", label: "ゴール共有（商談の土台づくり）" },
+  2: { slug: "drawer-phrases", label: "ニーズ発掘フレーズ" },
   3: { slug: "benefit-method", label: "利点話法（SP→ベネフィット変換）" },
   4: { slug: "closing-intro", label: "クロージング概論" },
   5: { slug: "rebuttal-pattern", label: "切り返しの型（共通フレームワーク）" },
@@ -100,7 +100,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
       currentStep: "アプローチ",
       stepNumber: 1,
       detectedTechniques: [],
-      nextTip: "まずは相手を褒めて心理的安全の確保をしましょう。2度褒めが理想。その後「前提設定」でYESを取ります",
+      nextTip: "まずは相手を褒めて心理的安全の確保をしましょう。2度褒めが理想。その後「ゴール共有」でYESを取ります",
       examplePhrase: "素敵な会社ですね！今まで○社伺いましたがダントツです。ところで、もしお話聞いて気に入らなかったら断ってくださいね。気に入ったらぜひスタートしてください！",
     });
     setTimeout(() => inputRef.current?.focus(), 300);
@@ -451,7 +451,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3.5 py-2 text-xs sm:text-sm font-bold text-white transition hover:bg-accent-hover"
                   >
-                    📖 「{STEP_LESSON_MAP[coach?.stepNumber ?? 1]?.label ?? "前提設定"}」を学ぶ
+                    📖 「{STEP_LESSON_MAP[coach?.stepNumber ?? 1]?.label ?? "ゴール共有"}」を学ぶ
                   </a>
                   <a
                     href="/learn"

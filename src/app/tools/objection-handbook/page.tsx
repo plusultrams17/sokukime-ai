@@ -9,7 +9,7 @@ import { HandbookFilter } from "./handbook-filter";
 
 export const metadata: Metadata = {
   title: "営業の反論切り返しトーク集｜断り文句への対処法30選",
-  description: "「高い」「検討します」「必要ない」—営業でよくある断り文句への切り返しトーク30パターンを無料公開。即決営業メソッドに基づく実践的な対処法。",
+  description: "「高い」「検討します」「必要ない」—営業でよくある断り文句への切り返しトーク30パターンを無料公開。成約メソッドに基づく実践的な対処法。",
   alternates: { canonical: "/tools/objection-handbook" },
 };
 

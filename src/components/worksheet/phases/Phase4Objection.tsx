@@ -123,7 +123,7 @@ export function Phase4Objection({
       {/* ── 5つの切り返し技法 ── */}
       <SectionLabel color={color}>5つの切り返し技法</SectionLabel>
 
-      {/* 技法1: 目的の振り返り + AREA話法 */}
+      {/* 技法1: 目的の振り返り + 切り返しの公式 */}
       <div className="mb-4 rounded-xl border border-[#E8E4DD] bg-[#FAFAF8] p-5">
         <p className="mb-3 text-xs font-bold text-[#6B7280]">
           <span
@@ -132,7 +132,7 @@ export function Phase4Objection({
           >
             1
           </span>
-          目的の振り返り ＋ AREA話法
+          目的の振り返り ＋ 切り返しの公式
         </p>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field
@@ -143,7 +143,7 @@ export function Phase4Objection({
             onChange={set("tech1Recall")}
           />
           <Field
-            label="AREA話法"
+            label="切り返しの公式"
             placeholder='例：A(同意) → R(理由) → E(具体例) → A(提案)'
             hint="論理的な4ステップで説得する"
             value={f("tech1Area")}
@@ -163,10 +163,10 @@ export function Phase4Objection({
         />
       </div>
 
-      {/* 技法3: プラスのシャワー */}
+      {/* 技法3: YESの積み上げ */}
       <div className="mb-4">
         <Field
-          label="③ プラスのシャワー（YES+質問）"
+          label="③ YESの積み上げ（自己説得法）"
           placeholder='例：「ちなみに○○は良いと思いますか？」→「△△はどうですか？」→「□□はいかがですか？」'
           hint="YESを連続で引き出してポジティブな流れを作る"
           multiline
@@ -193,7 +193,7 @@ export function Phase4Objection({
         />
       </div>
 
-      {/* 技法5: 驚き＋謝罪 → 価値の上乗せ */}
+      {/* 技法5: 驚き＋謝罪 → 価値の再提示 */}
       <div className="mb-4 rounded-xl border border-[#E8E4DD] bg-[#FAFAF8] p-5">
         <p className="mb-3 text-xs font-bold text-[#6B7280]">
           <span
@@ -202,7 +202,7 @@ export function Phase4Objection({
           >
             5
           </span>
-          驚き＋謝罪 → 価値の上乗せ
+          驚き＋謝罪 → 価値の再提示
         </p>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field
@@ -213,7 +213,7 @@ export function Phase4Objection({
             onChange={set("tech5Apology")}
           />
           <Field
-            label="価値の上乗せ（SP×3連発）"
+            label="価値の再提示（SP×3連発）"
             placeholder='例：「実はまだお伝えしていないのですが、①○○ ②△△ ③□□ という特典もあるんです」'
             hint="セールスポイントを3つ畳みかける"
             multiline

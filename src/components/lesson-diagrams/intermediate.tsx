@@ -41,13 +41,13 @@ export function ClosingIntroDiagram() {
         {/* Top vertex */}
         <rect x="210" y="20" width="180" height="40" rx="0" fill={LIGHT_BG} stroke={ACCENT} strokeWidth="2" />
         <text x="300" y="46" textAnchor="middle" fontSize="14" fontFamily={FONT} fill={DARK} fontWeight="bold">
-          {"カギカッコ（第三者話法）"}
+          {"証言引用（第三者話法）"}
         </text>
 
         {/* Bottom-left vertex */}
         <rect x="40" y="210" width="180" height="40" rx="0" fill={LIGHT_BG} stroke={ACCENT} strokeWidth="2" />
         <text x="130" y="236" textAnchor="middle" fontSize="14" fontFamily={FONT} fill={DARK} fontWeight="bold">
-          {"社会的証明（過半数）"}
+          {"社会的証明（多数派）"}
         </text>
 
         {/* Bottom-right vertex */}
@@ -119,13 +119,13 @@ export function SocialProofDiagram() {
 
         {/* Title */}
         <text x="300" y="30" textAnchor="middle" fontSize="16" fontFamily={FONT} fill={ACCENT} fontWeight="bold">
-          {'"過半数"の力で安心感を与える'}
+          {'"多数派"の力で安心感を与える'}
         </text>
 
         {/* Group box */}
         <rect x="40" y="50" width="300" height="200" fill={LIGHT_BG} stroke={ACCENT} strokeWidth="2" />
         <text x="190" y="75" textAnchor="middle" fontSize="13" fontFamily={FONT} fill={ACCENT} fontWeight="bold">
-          {"過半数のお客様"}
+          {"大多数のお客様"}
         </text>
 
         {/* Person figures in group (simple head + body) */}
@@ -170,7 +170,7 @@ export function SocialProofDiagram() {
 }
 
 // ─── 3. ConsistencyDiagram ────────────────────────────────────────────────────
-// Loop: 前提設定 -> 商談 -> 一貫性通し, with start-end match
+// Loop: ゴール共有 -> 商談 -> 一貫性通し, with start-end match
 export function ConsistencyDiagram() {
   return (
     <div className="my-8">
@@ -200,10 +200,10 @@ export function ConsistencyDiagram() {
         </text>
 
         {/* Circular flow: three boxes in a triangle-loop */}
-        {/* Top-left: 前提設定 */}
+        {/* Top-left: ゴール共有 */}
         <rect x="60" y="60" width="160" height="44" fill={ACCENT} stroke={ACCENT} strokeWidth="2" />
         <text x="140" y="88" textAnchor="middle" fontSize="14" fontFamily={FONT} fill="white" fontWeight="bold">
-          {"前提設定（最初）"}
+          {"ゴール共有（最初）"}
         </text>
 
         {/* Top-right: 商談 */}
@@ -219,11 +219,11 @@ export function ConsistencyDiagram() {
         </text>
 
         {/* Arrows forming a loop */}
-        {/* 前提設定 -> 商談 */}
+        {/* ゴール共有 -> 商談 */}
         <line x1="220" y1="82" x2="370" y2="82" stroke={ACCENT} strokeWidth="2" markerEnd="url(#co-arrow)" />
         {/* 商談 -> 一貫性通し */}
         <line x1="460" y1="104" x2="365" y2="180" stroke={ACCENT} strokeWidth="2" markerEnd="url(#co-arrow)" />
-        {/* 一貫性通し -> 前提設定 (curved back) */}
+        {/* 一貫性通し -> ゴール共有 (curved back) */}
         <path
           d="M 220 202 Q 50 202 100 104"
           fill="none"
@@ -279,7 +279,7 @@ export function QuotationMethodDiagram() {
         width="100%"
         xmlns="http://www.w3.org/2000/svg"
         role="img"
-        aria-label="カギカッコ（第三者話法）の図解"
+        aria-label="証言引用（第三者話法）の図解"
       >
         <defs>
           <marker
@@ -330,7 +330,7 @@ export function QuotationMethodDiagram() {
 
         {/* Row 2: Quoted words — strong */}
         <text x="30" y="140" fontSize="13" fontFamily={FONT} fill={ACCENT} fontWeight="bold">
-          {"お客様の声（カギカッコ）"}
+          {"お客様の声（証言引用）"}
         </text>
 
         {/* Speech bubble (emphasized) */}
@@ -358,9 +358,9 @@ export function QuotationMethodDiagram() {
         {/* Divider */}
         <line x1="30" y1="225" x2="570" y2="225" stroke={BORDER} strokeWidth="1" />
 
-        {/* Pattern flow: 「間」-> カギカッコ -> 「間」-> 効果 */}
+        {/* Pattern flow: 「間」-> 証言引用 -> 「間」-> 効果 */}
         <text x="300" y="250" textAnchor="middle" fontSize="13" fontFamily={FONT} fill={MUTED} fontWeight="bold">
-          {"カギカッコのパターン"}
+          {"証言引用のパターン"}
         </text>
 
         <rect x="50" y="270" width="80" height="36" fill="white" stroke={BORDER} strokeWidth="1.5" />
@@ -372,7 +372,7 @@ export function QuotationMethodDiagram() {
 
         <rect x="170" y="270" width="120" height="36" fill={LIGHT_BG} stroke={ACCENT} strokeWidth="2" />
         <text x="230" y="293" textAnchor="middle" fontSize="13" fontFamily={FONT} fill={DARK} fontWeight="bold">
-          {"カギカッコ"}
+          {"証言引用"}
         </text>
 
         <line x1="290" y1="288" x2="320" y2="288" stroke={ACCENT} strokeWidth="2" markerEnd="url(#qm-arrow)" />
@@ -427,13 +427,13 @@ export function PositiveClosingDiagram() {
           {"ポジティブシングル"}
         </text>
 
-        {/* Flow: SP -> ベネフィット -> 天国IF -> 3倍リアクション -> カギカッコ -> 訴求 */}
+        {/* Flow: SP -> ベネフィット -> 天国IF -> 3倍リアクション -> 証言引用 -> 訴求 */}
         {[
           { label: "SP", x: 10, w: 60 },
           { label: "ベネフィット", x: 85, w: 95 },
           { label: "天国IF", x: 195, w: 70 },
           { label: "3倍\nリアクション", x: 280, w: 85 },
-          { label: "カギカッコ", x: 380, w: 85 },
+          { label: "証言引用", x: 380, w: 85 },
           { label: "訴求", x: 480, w: 70, accent: true },
         ].map((item, i) => (
           <g key={i}>

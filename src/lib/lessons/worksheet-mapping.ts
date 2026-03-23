@@ -25,14 +25,14 @@ export const LESSON_WORKSHEET_MAP: Record<string, WorksheetMapping> = {
   "premise-setting": {
     phaseIndex: 0,
     sections: [{ sectionIndex: 1 }],
-    description: "前提設定のトークスクリプトを書きましょう",
+    description: "ゴール共有のトークスクリプトを書きましょう",
   },
 
   // ── Beginner — Phase 1: ヒアリング ──
   "drawer-phrases": {
     phaseIndex: 1,
     sections: [{ sectionIndex: 0 }, { sectionIndex: 1 }],
-    description: "想定ニーズと引き出しフレーズを準備しましょう",
+    description: "想定ニーズとニーズ発掘フレーズを準備しましょう",
   },
   "deepening": {
     phaseIndex: 1,
@@ -71,7 +71,7 @@ export const LESSON_WORKSHEET_MAP: Record<string, WorksheetMapping> = {
   "quotation-method": {
     phaseIndex: 3,
     sections: [{ sectionIndex: 0, fieldKeys: ["quote1", "quote2"] }],
-    description: "第三者の声（カギカッコ）を準備しましょう",
+    description: "第三者の声（証言引用）を準備しましょう",
   },
   "positive-closing": {
     phaseIndex: 3,
@@ -106,7 +106,7 @@ export const LESSON_WORKSHEET_MAP: Record<string, WorksheetMapping> = {
       { sectionIndex: 1 },
       { sectionIndex: 2, fieldKeys: ["tech1Recall", "tech1Area"] },
     ],
-    description: "目的の振り返りとAREA話法を準備しましょう",
+    description: "目的の振り返りと切り返しの公式を準備しましょう",
   },
   "third-party-attack": {
     phaseIndex: 4,
@@ -116,7 +116,7 @@ export const LESSON_WORKSHEET_MAP: Record<string, WorksheetMapping> = {
   "positive-shower": {
     phaseIndex: 4,
     sections: [{ sectionIndex: 2, fieldKeys: ["tech3YesPlus"] }],
-    description: "プラスのシャワー（YES+質問）を準備しましょう",
+    description: "YESの積み上げ（自己説得法）を準備しましょう",
   },
   "reframe": {
     phaseIndex: 4,
@@ -130,6 +130,6 @@ export const LESSON_WORKSHEET_MAP: Record<string, WorksheetMapping> = {
     sections: [
       { sectionIndex: 2, fieldKeys: ["tech5Apology", "tech5Value"] },
     ],
-    description: "驚き＋謝罪と価値の上乗せを準備しましょう",
+    description: "驚き＋謝罪と価値の再提示を準備しましょう",
   },
 };

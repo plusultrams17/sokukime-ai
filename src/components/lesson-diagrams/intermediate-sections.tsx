@@ -318,7 +318,7 @@ function RepetitionEffectDiagram() {
 // 3. consistency  (一貫性の法則)
 // ═══════════════════════════════════════════════════════════════
 
-/** 前提設定 -> 「はい」 -> 一貫性で断りにくい */
+/** ゴール共有 -> 「はい」 -> 一貫性で断りにくい */
 function PremiseClosingLinkDiagram() {
   return (
     <div className="my-6">
@@ -336,12 +336,12 @@ function PremiseClosingLinkDiagram() {
 
         {/* Title */}
         <text x="270" y="22" textAnchor="middle" fontSize="13" fill={ACCENT} fontWeight="bold">
-          {"前提設定とクロージングの連動"}
+          {"ゴール共有とクロージングの連動"}
         </text>
 
         {/* Step 1: 序盤 */}
         <rect x="20" y="40" width="150" height="60" fill={LIGHT_BG} stroke={ACCENT} strokeWidth="1.5" />
-        <text x="95" y="62" textAnchor="middle" fontSize="11" fill={DARK} fontWeight="bold">{"序盤（前提設定）"}</text>
+        <text x="95" y="62" textAnchor="middle" fontSize="11" fill={DARK} fontWeight="bold">{"序盤（ゴール共有）"}</text>
         <text x="95" y="82" textAnchor="middle" fontSize="10" fill={MUTED}>{"「良ければスタートを」"}</text>
 
         {/* Arrow + はい */}
@@ -490,7 +490,7 @@ function ThirdPartyVsDiagram() {
 
         {/* Row 2: 第三者の声 = 信頼 */}
         <rect x="20" y="80" width="250" height="45" fill={LIGHT_BG} stroke={ACCENT} strokeWidth="2" />
-        <text x="145" y="99" textAnchor="middle" fontSize="11" fill={ACCENT} fontWeight="bold">{"第三者の声（カギカッコ）"}</text>
+        <text x="145" y="99" textAnchor="middle" fontSize="11" fill={ACCENT} fontWeight="bold">{"第三者の声（証言引用）"}</text>
         <text x="145" y="115" textAnchor="middle" fontSize="12" fill={DARK}>{"「お客様が『よかった』と…」"}</text>
 
         <text x="290" y="107" textAnchor="middle" fontSize="16" fill={ACCENT}>{"="}</text>
@@ -508,7 +508,7 @@ function ThirdPartyVsDiagram() {
   );
 }
 
-/** 定番カギカッコフレーズ集 */
+/** 定番証言引用フレーズ集 */
 function QuotePhraseDiagram() {
   return (
     <div className="my-6">
@@ -520,7 +520,7 @@ function QuotePhraseDiagram() {
       >
         {/* Title */}
         <text x="260" y="22" textAnchor="middle" fontSize="13" fill={ACCENT} fontWeight="bold">
-          {"効果的なカギカッコフレーズ"}
+          {"効果的な証言引用フレーズ"}
         </text>
 
         {/* Phrase boxes */}
@@ -568,7 +568,7 @@ function ThreeTechniquesComboDiagram() {
         <text x="365" y="50" textAnchor="middle" fontSize="18" fill={ACCENT} fontWeight="bold">{"+"}</text>
 
         <rect x="380" y="20" width="140" height="50" fill={LIGHT_BG} stroke={ACCENT} strokeWidth="1.5" />
-        <text x="450" y="40" textAnchor="middle" fontSize="11" fill={DARK} fontWeight="bold">{"カギカッコ"}</text>
+        <text x="450" y="40" textAnchor="middle" fontSize="11" fill={DARK} fontWeight="bold">{"証言引用"}</text>
         <text x="450" y="58" textAnchor="middle" fontSize="10" fill={MUTED}>{"『よかった』と…"}</text>
 
         {/* Down arrow */}
@@ -618,7 +618,7 @@ function PositiveSingleFlowDiagram() {
           { label: "SP", sub: "特徴提示", x: 10, w: 80 },
           { label: "ベネフィット", sub: "メリット", x: 108, w: 90 },
           { label: "天国想像", sub: "明るい未来", x: 216, w: 90 },
-          { label: "カギカッコ", sub: "お客様の声", x: 324, w: 90 },
+          { label: "証言引用", sub: "お客様の声", x: 324, w: 90 },
           { label: "訴求", sub: "言い切り", x: 432, w: 80, accent: true },
         ].map((item, i) => (
           <g key={i}>

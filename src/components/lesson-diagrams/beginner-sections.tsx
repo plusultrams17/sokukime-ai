@@ -311,7 +311,7 @@ function OpenSignalsDiagram() {
 // Lesson 3: premise-setting
 // =============================================
 
-// 前提設定の4ステップ — Numbered steps flow
+// ゴール共有の4ステップ — Numbered steps flow
 function FourStepsDiagram() {
   return (
     <div className="my-6">

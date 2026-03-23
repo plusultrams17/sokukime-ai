@@ -27,14 +27,14 @@ export function Phase3Closing({
       <SectionLabel color={color}>基本3技術</SectionLabel>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field
-          label="第三者の声（カギカッコ）1"
+          label="第三者の声（証言引用）1"
           placeholder='例：「もっと早くやればよかった」'
-          hint="実際のお客様の声をカギカッコで引用する"
+          hint="実際のお客様の声を証言として引用する"
           value={f("quote1")}
           onChange={set("quote1")}
         />
         <Field
-          label="第三者の声（カギカッコ）2"
+          label="第三者の声（証言引用）2"
           placeholder='例：「想像以上に成果が出た」'
           value={f("quote2")}
           onChange={set("quote2")}
@@ -48,9 +48,9 @@ export function Phase3Closing({
         onChange={set("socialProof")}
       />
       <Field
-        label="一貫性（前提設定との連動）"
+        label="一貫性（ゴール共有との連動）"
         placeholder='例：「先ほど良いと思われたとおっしゃっていましたよね？であれば…」'
-        hint="Phase1の前提設定と連動させ、一貫した行動を促す"
+        hint="Phase0のゴール共有と連動させ、一貫した行動を促す"
         value={f("consistency")}
         onChange={set("consistency")}
       />

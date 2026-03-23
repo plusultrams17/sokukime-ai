@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   title:
     "営業研修を無料でオンライン受講 | 22レッスン+認定試験 | 成約コーチAI",
   description:
-    "1,600件の商談から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。理論→トーク例→クイズ→実践の4ステップで確実にスキルアップ。",
+    "営業心理学から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。理論→トーク例→クイズ→実践の4ステップで確実にスキルアップ。",
   openGraph: {
     title:
       "営業研修を無料でオンライン受講 | 22レッスン+認定試験 | 成約コーチAI",
     description:
-      "1,600件の商談から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。理論→トーク例→クイズ→実践の4ステップで確実にスキルアップ。",
+      "営業心理学から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。理論→トーク例→クイズ→実践の4ステップで確実にスキルアップ。",
     url: `${SITE_URL}/lp/learn`,
     type: "website",
     locale: "ja_JP",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title:
       "営業研修を無料でオンライン受講 | 22レッスン+認定試験 | 成約コーチAI",
     description:
-      "1,600件の商談から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。",
+      "営業心理学から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。",
   },
   alternates: {
     canonical: `${SITE_URL}/lp/learn`,
@@ -42,7 +42,7 @@ const methodSteps = [
   {
     num: 1,
     name: "アプローチ",
-    desc: "信頼構築・前提設定・心理的安全の確保",
+    desc: "信頼構築・ゴール共有・心理的安全の確保",
     color: "#0F6E56",
   },
   {
@@ -81,7 +81,7 @@ const curriculum = [
     lessons: [
       "営業マインドセット",
       "褒める技術",
-      "前提設定",
+      "ゴール共有",
       "メラビアンの法則",
       "質問力・ヒアリング",
       "ニーズの深掘り",
@@ -117,7 +117,7 @@ const curriculum = [
       "「高い」の切り返し",
       "「他社と比較したい」の切り返し",
       "「今じゃない」の切り返し",
-      "共感→フック→AREA話法",
+      "共感→フック→切り返しの公式",
       "総合切り返しトレーニング",
     ],
   },
@@ -263,7 +263,7 @@ export default function LearnLP() {
         "@id": `${SITE_URL}/lp/learn`,
         name: "営業研修を無料でオンライン受講 | 22レッスン+認定試験 | 成約コーチAI",
         description:
-          "1,600件の商談から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。",
+          "営業心理学から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。",
         url: `${SITE_URL}/lp/learn`,
         isPartOf: { "@id": `${SITE_URL}/#website` },
         publisher: { "@id": `${SITE_URL}/#organization` },
@@ -273,7 +273,7 @@ export default function LearnLP() {
         "@type": "Course",
         name: "成約5ステップメソッド 営業学習プログラム",
         description:
-          "1,600件の商談から体系化した営業メソッド。22レッスン・3レベル構成。理論→トーク例→クイズ→実践の4ステップで確実にスキルアップ。",
+          "営業心理学から体系化した営業メソッド。22レッスン・3レベル構成。理論→トーク例→クイズ→実践の4ステップで確実にスキルアップ。",
         provider: {
           "@type": "Organization",
           name: "成約コーチ AI",
@@ -371,7 +371,7 @@ export default function LearnLP() {
             className="mb-6 text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
-            1,600件の商談から体系化。
+            営業心理学から体系化。
             <br />
             <span className="text-accent">
               営業の&ldquo;型&rdquo;を22レッスンで習得
@@ -1000,7 +1000,7 @@ export default function LearnLP() {
             今日から始める、営業スキルの体系的な習得。
           </h2>
           <p className="mb-4 text-sm text-muted sm:text-base">
-            1,600件の商談から生まれた実践的なカリキュラム。
+            営業心理学に基づく実践的なカリキュラム。
             <br className="hidden sm:block" />
             まずは初級レッスン1から、あなたのペースで。
           </p>

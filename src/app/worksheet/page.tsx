@@ -246,7 +246,7 @@ export default function WorksheetPage() {
             "@type": "HowToStep",
             position: 2,
             name: "アプローチフェーズを埋める",
-            text: "第一印象・信頼構築・前提設定など、アプローチに必要な情報を穴埋め形式で入力します。",
+            text: "第一印象・信頼構築・ゴール共有など、アプローチに必要な情報を穴埋め形式で入力します。",
           },
           {
             "@type": "HowToStep",

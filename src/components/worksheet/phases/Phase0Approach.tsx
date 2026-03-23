@@ -48,7 +48,7 @@ export function Phase0Approach({
         />
       </div>
 
-      <SectionLabel color={color}>前提設定（事前合意）</SectionLabel>
+      <SectionLabel color={color}>ゴール共有（事前合意）</SectionLabel>
       <Field
         multiline
         placeholder="例：本日は弊社サービスについてご説明させてください。もし良いなと思われたら、ぜひこの機会にスタートしてみてください。もし合わないと感じたら遠慮なくおっしゃってください。"

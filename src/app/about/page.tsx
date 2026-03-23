@@ -47,7 +47,7 @@ export default function AboutPage() {
               "@id": `${siteUrl}/about#webpage`,
               name: "成約コーチ AIについて",
               description:
-                "成約コーチ AIは、4年半・1,600件の商談経験から体系化された「成約5ステップメソッド」をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。",
+                "成約コーチ AIは、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。",
               url: `${siteUrl}/about`,
               isPartOf: { "@id": `${siteUrl}/#website` },
               about: { "@id": `${siteUrl}/#organization` },
@@ -86,7 +86,7 @@ export default function AboutPage() {
       <section className="border-t border-card-border px-6 py-12">
         <div className="mx-auto max-w-3xl">
           <p className="text-sm leading-relaxed text-muted">
-            <strong className="text-foreground">成約コーチ AI</strong>は、4年半・1,600件の商談経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間無制限ロープレで解決します。
+            <strong className="text-foreground">成約コーチ AI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間無制限ロープレで解決します。
           </p>
         </div>
       </section>
@@ -109,7 +109,7 @@ export default function AboutPage() {
               <div className="flex items-start gap-3">
                 <Image src="/images/pages/about-problem-unprepared.png" alt="練習不足" width={40} height={40} className="rounded-lg flex-shrink-0" />
                 <span>
-                  練習不足のまま本番に臨み、「考えます」で終わってしまう
+                  練習不足のまま本番に臨み、成果につながらないまま終わってしまう
                 </span>
               </div>
               <div className="flex items-start gap-3">
@@ -141,7 +141,7 @@ export default function AboutPage() {
               {
                 step: "1",
                 name: "アプローチ",
-                desc: "信頼構築→前提設定→心理的安全の確保。お客さんとの信頼関係を構築する最初のステップ。",
+                desc: "信頼構築→ゴール共有→心理的安全の確保。お客さんとの信頼関係を構築する最初のステップ。",
               },
               {
                 step: "2",
@@ -161,7 +161,7 @@ export default function AboutPage() {
               {
                 step: "5",
                 name: "反論処理",
-                desc: "共感→確認→根拠提示→行動促進の4ステップで、「考えます」を「お願いします」に変える。",
+                desc: "共感→確認→根拠提示→行動促進の4ステップで、反論を成約に変える。",
               },
             ].map((item) => (
               <div

@@ -47,7 +47,7 @@ export default function WorksheetLayout({
                   "@type": "HowToStep",
                   position: 1,
                   name: "アプローチの準備",
-                  text: "業種・商材を入力し、第一印象・信頼構築・前提設定など、アプローチに必要な情報を穴埋め形式で入力します。",
+                  text: "業種・商材を入力し、第一印象・信頼構築・ゴール共有など、アプローチに必要な情報を穴埋め形式で入力します。",
                   url: `${siteUrl}/worksheet`,
                 },
                 {
