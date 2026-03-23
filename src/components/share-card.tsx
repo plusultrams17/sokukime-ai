@@ -66,14 +66,16 @@ export function ShareCard({ score, rank, totalSessions }: ShareCardProps) {
         >
           ランク {rank}
         </div>
-        <div className="flex justify-center gap-6 text-center">
-          <div>
-            <div className="text-xl font-bold text-white">
-              {totalSessions}
+        {totalSessions > 0 && (
+          <div className="flex justify-center gap-6 text-center">
+            <div>
+              <div className="text-xl font-bold text-white">
+                {totalSessions}
+              </div>
+              <div className="text-[10px] text-white/60">回ロープレ</div>
             </div>
-            <div className="text-[10px] text-white/60">回ロープレ</div>
           </div>
-        </div>
+        )}
         <div className="mt-4 text-center text-[10px] text-white/40">
           sokukime.ai
         </div>
