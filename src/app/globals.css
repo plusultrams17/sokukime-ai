@@ -1834,6 +1834,51 @@ body {
   border-color: var(--paper-white) transparent transparent transparent;
 }
 
+/* ── Method Level Cards (5-Step Section) ── */
+
+.method-level-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 24px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.method-level-card:hover {
+  border-color: var(--level-border-hover);
+  box-shadow: 0 8px 30px -4px var(--level-bg);
+  transform: translateY(-4px);
+}
+
+.method-level-card__accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.method-level-card__badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 640px) {
+  .method-level-card {
+    padding: 20px;
+  }
+}
+
 /* ── Primary Button (Valorant Style) ── */
 
 .primary-button {

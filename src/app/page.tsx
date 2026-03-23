@@ -4,7 +4,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
 import { StickyCTA } from "@/components/sticky-cta";
-import { MethodFilterCarousel } from "@/components/method-filter-carousel";
+import { MethodLevelCards } from "@/components/method-level-cards";
 import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
 import { HomeExitPopup } from "@/components/exit-popups/home-exit-popup";
 import { ScrollSlideIn } from "@/components/scroll-slide-in";
@@ -63,19 +63,6 @@ const steps = [
   },
 ];
 
-const LEVEL_COLORS: Record<string, string> = {
-  "初級": "#0F6E56",
-  "中級": "#2563EB",
-  "上級": "#7C3AED",
-};
-
-const methods = [
-  { name: "アプローチ", desc: "信頼構築→前提設定→心理的安全の確保", level: "初級" },
-  { name: "ヒアリング", desc: "質問でニーズを引き出し、問題を深掘り", level: "初級" },
-  { name: "プレゼン", desc: "特徴ではなく価値（ベネフィット）で伝える", level: "初級" },
-  { name: "クロージング", desc: "社会的証明・一貫性の活用・お客様の声・段階的訴求", level: "中級" },
-  { name: "反論処理", desc: "共感→確認→根拠提示→行動促進の4ステップ", level: "上級" },
-];
 
 const serviceCategories = [
   {
@@ -507,19 +494,19 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════
           5. 5-STEP METHOD
       ═══════════════════════════════════════════════ */}
-      <section className="overflow-hidden py-16 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="py-16 sm:py-24">
+        <div className="mx-auto max-w-6xl px-6 mb-10">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
             トップ営業マンが無意識にやっている5つのステップ
           </h2>
           <p className="mb-2 text-center text-sm font-medium text-accent">
             4年半・1,600件の現場経験を体系化した営業の型
           </p>
-          <p className="mb-12 text-center text-sm text-muted sm:mb-16 sm:text-base">
+          <p className="text-center text-sm text-muted sm:text-base">
             この流れを身につければ、どんな商材でも商談の型ができる
           </p>
         </div>
-        <MethodFilterCarousel methods={methods} levelColors={LEVEL_COLORS} />
+        <MethodLevelCards />
       </section>
 
       {/* ═══════════════════════════════════════════════

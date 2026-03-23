@@ -158,7 +158,7 @@ export default function LearnPage() {
                 : 0;
 
             return (
-              <div key={level.key}>
+              <div key={level.key} id={level.key}>
                 {/* Level heading */}
                 <div className="mb-8">
                   <div className="flex items-baseline gap-3 mb-1">
