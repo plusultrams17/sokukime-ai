@@ -64,6 +64,37 @@ const steps = [
 ];
 
 
+const freeTools = [
+  {
+    slug: "sales-quiz",
+    name: "営業力診断テスト",
+    description: "10問の質問で5項目を診断。あなたの営業スキルの強みと弱点が一目でわかる",
+    badge: "約3分",
+    icon: "quiz",
+  },
+  {
+    slug: "script-generator",
+    name: "トークスクリプト生成",
+    description: "業種と商材を選ぶだけ。5ステップメソッドに基づくトークスクリプトをAIが自動生成",
+    badge: "AI生成",
+    icon: "script",
+  },
+  {
+    slug: "objection-handbook",
+    name: "反論切り返しトーク集",
+    description: "「高い」「検討します」「必要ない」—よくある断り文句30パターンへの実践的な切り返しトーク",
+    badge: "30パターン",
+    icon: "shield",
+  },
+  {
+    slug: "closing-calculator",
+    name: "クロージング率計算",
+    description: "商談数・成約数を入力して成約率を自動計算。業種別ベンチマークと比較して改善点を発見",
+    badge: "ベンチマーク付き",
+    icon: "calculator",
+  },
+];
+
 const serviceCategories = [
   {
     title: "AIロープレ",
@@ -82,12 +113,6 @@ const serviceCategories = [
     desc: "商談前に5フェーズの準備シートを記入するだけで、ヒアリング漏れやクロージングの抜けを防止。商談の質が格段に上がります。",
     href: "/worksheet",
     image: "/images/cards/worksheet.png",
-  },
-  {
-    title: "無料営業ツール",
-    desc: "営業力診断テスト、トークスクリプト自動生成、断り文句への切り返し集など、すぐに使える無料ツールを多数用意。",
-    href: "/tools",
-    image: "/images/cards/tools.png",
   },
   {
     title: "ブログ",
@@ -156,6 +181,24 @@ function CheckIcon() {
       <path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z" />
     </svg>
   );
+}
+
+/* ─── Tool Icons ─── */
+
+function ToolIcon({ icon }: { icon: string }) {
+  const p = { className: "h-7 w-7", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true as const };
+  switch (icon) {
+    case "quiz":
+      return <svg {...p}><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z" /></svg>;
+    case "script":
+      return <svg {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="M16 13H8" /><path d="M16 17H8" /><path d="M10 9H8" /></svg>;
+    case "shield":
+      return <svg {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>;
+    case "calculator":
+      return <svg {...p}><rect x="4" y="2" width="16" height="20" rx="2" /><path d="M8 6h8" /><path d="M8 10h8" /><path d="M8 14h4" /><path d="M8 18h4" /><path d="M16 14h.01" /><path d="M16 18h.01" /></svg>;
+    default:
+      return null;
+  }
 }
 
 /* ─── Industry Icons ─── */
@@ -312,20 +355,18 @@ export default function Home() {
             営業心理学に基づく5ステップの「型」を、24時間いつでも反復練習。
           </p>
 
-          {/* Single Primary CTA */}
-          <div className="flex flex-col items-center gap-4" data-hero-cta>
-            <PrimaryCTA />
-            <p className="text-sm text-white/50">
-              &#10003; 無料で体験&ensp;&#10003; 登録不要&ensp;&#10003; 1分で最初の商談開始
-            </p>
-          </div>
-
-          {/* Secondary text link */}
-          <p className="mt-4 text-sm text-white/60">
-            まずは学習コースから →{" "}
-            <Link href="/learn" className="underline decoration-white/40 underline-offset-4 transition-colors hover:text-white hover:decoration-white">
-              コースを見る
+          {/* Dual CTAs: Learn + Roleplay */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4" data-hero-cta>
+            <Link
+              href="/learn"
+              className="inline-flex h-14 items-center justify-center rounded-xl border-2 border-white/40 px-8 text-base font-bold text-white transition hover:bg-white/10 hover:border-white/60 sm:min-w-[220px]"
+            >
+              まず型を学ぶ
             </Link>
+            <PrimaryCTA />
+          </div>
+          <p className="mt-4 text-sm text-white/50">
+            &#10003; 無料で体験&ensp;&#10003; 登録不要&ensp;&#10003; 1分で最初の商談開始
           </p>
 
           {/* Stats */}
@@ -492,30 +533,83 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          5. 5-STEP METHOD
+          5. FREE TOOLS SHOWCASE
+      ═══════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+        <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.03] via-transparent to-transparent" aria-hidden="true" />
+        <div className="blob blob-teal" style={{ width: 280, height: 280, bottom: -40, right: -80 }} />
+        <div className="relative z-10 mx-auto max-w-5xl">
+          <div className="mb-6 text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent">
+              完全無料・登録不要
+            </span>
+          </div>
+          <h2 className="mb-2 text-center text-2xl font-bold text-foreground sm:text-3xl">
+            今すぐ使える無料営業ツール
+          </h2>
+          <p className="mb-12 text-center text-sm text-muted sm:text-base">
+            メアド不要。ブラウザだけで営業力を鍛える
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+            {freeTools.map((tool) => (
+              <Link
+                key={tool.slug}
+                href={`/tools/${tool.slug}`}
+                className="group relative overflow-hidden rounded-2xl border border-card-border bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10"
+              >
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent to-emerald-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
+                    <ToolIcon icon={tool.icon} />
+                  </div>
+                  <span className="flex-shrink-0 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+                    {tool.badge}
+                  </span>
+                </div>
+                <p className="mt-4 text-base font-bold text-foreground">{tool.name}</p>
+                <p className="mt-1 text-sm leading-relaxed text-muted">{tool.description}</p>
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  今すぐ使う
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </Link>
+            ))}
+          </div>
+          <p className="mt-8 text-center">
+            <Link href="/tools" className="text-sm font-medium text-accent transition hover:underline">
+              すべてのツールを見る →
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          6. 5-STEP METHOD
       ═══════════════════════════════════════════════ */}
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-6 mb-10">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
-            トップ営業マンが無意識にやっている5つのステップ
+            1,600件の商談から生まれた営業の型
           </h2>
           <p className="mb-2 text-center text-sm font-medium text-accent">
-            4年半・1,600件の現場経験を体系化した営業の型
+            5つのステップを、初級→中級→上級の22レッスンで段階的に習得
           </p>
           <p className="text-center text-sm text-muted sm:text-base">
-            この流れを身につければ、どんな商材でも商談の型ができる
+            アプローチからクロージング・反論処理まで、どんな商材でも使える型が身につく
           </p>
         </div>
         <MethodLevelCards />
       </section>
 
       {/* ═══════════════════════════════════════════════
-          6. SERVICE CATEGORIES
+          7. SERVICE CATEGORIES
       ═══════════════════════════════════════════════ */}
       <section className="px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-5xl">
           <h2 className="mb-12 text-center text-2xl font-bold text-foreground sm:text-3xl">
-            あなたの営業力を上げる5つの武器
+            営業力を鍛えるサービス
           </h2>
           <div className="flip-cards">
             {serviceCategories.map((cat) => (
@@ -541,7 +635,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          7. BETA TEST CTA
+          8. BETA TEST CTA
       ═══════════════════════════════════════════════ */}
       <section className="px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-3xl text-center">
@@ -577,7 +671,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          8. FAQ
+          9. FAQ
       ═══════════════════════════════════════════════ */}
       <section className="relative overflow-hidden px-6 py-16 sm:py-24">
         <div className="blob blob-cream" style={{ width: 250, height: 250, bottom: -40, left: -60 }} />
@@ -610,7 +704,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          9. FINAL CTA
+          10. FINAL CTA
       ═══════════════════════════════════════════════ */}
       <section className="relative overflow-hidden px-6 py-16 sm:py-24">
         <div className="blob blob-teal" style={{ width: 400, height: 400, top: -100, left: "30%" }} />

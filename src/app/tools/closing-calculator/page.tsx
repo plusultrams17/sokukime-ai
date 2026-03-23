@@ -63,13 +63,22 @@ export default function ClosingCalculatorPage() {
         </div>
       </section>
 
-      <section className="px-6 py-16 sm:py-20">
+      {/* Value Props */}
+      <section className="px-6 py-10 sm:py-14">
         <div className="mx-auto max-w-3xl">
-          <h2 className="mb-6 text-2xl font-bold text-foreground sm:text-3xl">成約率を正しく把握することの重要性</h2>
-          <div className="space-y-4 text-sm text-muted leading-relaxed sm:text-base">
-            <p>営業の世界では「KPIを測定していない=改善ができない」と言われます。成約率（クロージング率）は営業パフォーマンスの最も基本的な指標であり、この数字を正確に把握することが改善の第一歩です。</p>
-            <p>成約率はアポイントから提案への移行率と、提案から成約への移行率に分解できます。どちらのステップで落ちているかを特定することで、ヒアリング力の強化が必要なのか、クロージング力の強化が必要なのかが明確になります。</p>
-            <p>数値で課題が見えたら、<Link href="/roleplay" className="text-accent hover:underline">AIロープレ</Link>で弱点を集中練習しましょう。<Link href="/tools/sales-quiz" className="text-accent hover:underline">営業力診断テスト</Link>と合わせて使うと、定量面・定性面の両方からスキルを把握できます。</p>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">3つ入力</p>
+              <p className="text-xs text-muted">アポ・提案・成約数</p>
+            </div>
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">ファネル可視化</p>
+              <p className="text-xs text-muted">どこで落ちてるか一目</p>
+            </div>
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">業種別比較</p>
+              <p className="text-xs text-muted">ベンチマークと対比</p>
+            </div>
           </div>
         </div>
       </section>
@@ -100,18 +109,23 @@ export default function ClosingCalculatorPage() {
         </div>
       </section>
 
-      {/* Tips */}
+      {/* Tips (collapsible) */}
       <section className="px-6 pb-16 sm:pb-24">
         <div className="mx-auto max-w-3xl">
-          <h2 className="mb-6 text-xl font-bold text-foreground text-center">成約率を上げる5つの方法</h2>
-          <div className="space-y-4">
-            {tips.map((tip, i) => (
-              <div key={i} className="flex gap-4 rounded-xl bg-white border border-card-border p-4">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent">{i + 1}</span>
-                <div><p className="font-bold text-foreground text-sm">{tip.title}</p><p className="text-sm text-muted mt-1">{tip.desc}</p></div>
-              </div>
-            ))}
-          </div>
+          <details className="group rounded-2xl border border-card-border bg-white shadow-sm">
+            <summary className="flex cursor-pointer items-center justify-between px-6 py-5 text-base font-bold text-foreground [&::-webkit-details-marker]:hidden list-none sm:text-lg">
+              <span>成約率を上げる5つの方法</span>
+              <svg className="h-5 w-5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            </summary>
+            <div className="space-y-3 border-t border-card-border px-6 pb-6 pt-4">
+              {tips.map((tip, i) => (
+                <div key={i} className="flex gap-4 rounded-xl bg-background p-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent">{i + 1}</span>
+                  <div><p className="text-sm font-bold text-foreground">{tip.title}</p><p className="mt-0.5 text-sm text-muted">{tip.desc}</p></div>
+                </div>
+              ))}
+            </div>
+          </details>
         </div>
       </section>
 

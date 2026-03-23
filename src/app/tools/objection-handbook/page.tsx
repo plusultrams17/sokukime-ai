@@ -125,13 +125,22 @@ export default function ObjectionHandbookPage() {
         </div>
       </section>
 
-      <section className="px-6 py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="mb-6 text-2xl font-bold text-foreground sm:text-3xl">反論処理が成約率を決める</h2>
-          <div className="space-y-4 text-sm text-muted leading-relaxed sm:text-base">
-            <p>営業において、お客様の「反論」は決してネガティブなものではありません。反論があるということは、少なからず興味があるということ。反論を適切に処理できるかどうかが、成約率を大きく左右します。</p>
-            <p>反論処理の基本は「共感→確認→提案」の3ステップです。まずお客様の気持ちに寄り添い、具体的な懸念を確認し、その懸念を解消する提案を行います。この流れを身につけるだけで、「検討します」で終わっていた商談が一気に前進します。</p>
-            <p>このトーク集で学んだ切り返しパターンは、<Link href="/roleplay" className="text-accent hover:underline">AIロープレ</Link>で実践練習するのが最も効果的です。知識として知っているだけでなく、実際の商談で自然に使えるレベルまで体に染み込ませましょう。</p>
+      {/* Value Props */}
+      <section className="px-6 py-10 sm:py-14">
+        <div className="mx-auto max-w-4xl">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">30パターン</p>
+              <p className="text-xs text-muted">よくある断り文句を網羅</p>
+            </div>
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">6カテゴリ</p>
+              <p className="text-xs text-muted">価格・時期・比較など</p>
+            </div>
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">実践トーク付</p>
+              <p className="text-xs text-muted">そのまま使える例文</p>
+            </div>
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 
 const INDUSTRIES = ["保険", "不動産", "リフォーム", "外壁塗装", "太陽光", "自動車", "人材紹介", "IT/SaaS", "広告", "医療機器", "印刷", "ブライダル", "その他"];
@@ -53,6 +53,15 @@ function generateScript(industry: string, product: string, target: string): Scri
   };
 }
 
+function CopyIcon({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+      <rect x="9" y="9" width="13" height="13" rx="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </svg>
+  );
+}
+
 export function ScriptGeneratorClient() {
   const [industry, setIndustry] = useState("");
   const [product, setProduct] = useState("");
@@ -60,16 +69,29 @@ export function ScriptGeneratorClient() {
   const [script, setScript] = useState<ScriptData | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [sectionCopied, setSectionCopied] = useState(-1);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   const handleGenerate = () => {
     if (!industry || !product || !target) return;
     setScript(generateScript(industry, product, target));
     setActiveTab(0);
+    setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
   };
+
+  const handleSample = () => {
+    setIndustry("保険");
+    setProduct("生命保険");
+    setTarget("個人（一般家庭）");
+    setScript(generateScript("保険", "生命保険", "個人（一般家庭）"));
+    setActiveTab(0);
+    setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+  };
+
+  const sections = script ? [script.approach, script.hearing, script.presentation, script.closing, script.objection] : [];
 
   const getFullScript = () => {
     if (!script) return "";
-    const sections = [script.approach, script.hearing, script.presentation, script.closing, script.objection];
     return STEP_NAMES.map((name, i) => `【${name}】\n${sections[i].join("\n\n")}`).join("\n\n---\n\n");
   };
 
@@ -79,72 +101,130 @@ export function ScriptGeneratorClient() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleSectionCopy = async (text: string, index: number) => {
+    await navigator.clipboard.writeText(text);
+    setSectionCopied(index);
+    setTimeout(() => setSectionCopied(-1), 2000);
+  };
+
   return (
     <div className="space-y-6">
       {/* Input Form */}
-      <div className="rounded-2xl bg-white border border-card-border shadow-sm p-6 sm:p-8">
-        <h3 className="text-base font-bold text-foreground mb-6">スクリプト生成条件</h3>
+      <div className="rounded-2xl border border-card-border bg-white p-6 shadow-sm sm:p-8">
+        <h3 className="mb-6 text-base font-bold text-foreground">スクリプト生成条件</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">業種 <span className="text-red-500">*</span></label>
+            <label className="mb-1 block text-sm font-medium text-foreground">業種 <span className="text-red-500">*</span></label>
             <select value={industry} onChange={(e) => setIndustry(e.target.value)} className="w-full rounded-xl border border-card-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-accent">
               <option value="">選択してください</option>
               {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">商材名 <span className="text-red-500">*</span></label>
+            <label className="mb-1 block text-sm font-medium text-foreground">商材名 <span className="text-red-500">*</span></label>
             <input type="text" value={product} onChange={(e) => setProduct(e.target.value)} placeholder="例: 生命保険" className="w-full rounded-xl border border-card-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-accent" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">ターゲット <span className="text-red-500">*</span></label>
+            <label className="mb-1 block text-sm font-medium text-foreground">ターゲット <span className="text-red-500">*</span></label>
             <select value={target} onChange={(e) => setTarget(e.target.value)} className="w-full rounded-xl border border-card-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-accent">
               <option value="">選択してください</option>
               {TARGETS.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
         </div>
-        <div className="mt-6 text-center">
-          <button onClick={handleGenerate} disabled={!industry || !product || !target} className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed">
+        <div className="mt-6 flex flex-col items-center gap-3">
+          <button onClick={handleGenerate} disabled={!industry || !product || !target} className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40">
             スクリプトを生成する
           </button>
+          {!script && (
+            <button onClick={handleSample} className="text-sm text-accent transition hover:underline">
+              まずはサンプルを見る →
+            </button>
+          )}
         </div>
       </div>
 
       {/* Generated Script */}
       {script && (
-        <div className="rounded-2xl bg-white border border-card-border shadow-sm overflow-hidden animate-fade-in-up">
-          {/* Tabs */}
-          <div className="flex overflow-x-auto border-b border-card-border">
-            {STEP_NAMES.map((name, i) => (
-              <button key={name} onClick={() => setActiveTab(i)} className={`flex-1 min-w-[100px] px-4 py-3 text-sm font-medium transition whitespace-nowrap ${activeTab === i ? "text-white" : "text-foreground hover:bg-gray-50"}`} style={activeTab === i ? { backgroundColor: STEP_COLORS[i] } : undefined}>
-                {name}
+        <div ref={resultRef} className="animate-fade-in-up overflow-hidden rounded-2xl border border-card-border bg-white shadow-sm">
+          {/* Step Progress */}
+          <div className="border-b border-card-border bg-background/50 px-4 py-3 sm:px-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {STEP_NAMES.map((name, i) => (
+                  <button
+                    key={name}
+                    onClick={() => setActiveTab(i)}
+                    className="flex items-center gap-1 rounded-full px-2.5 py-1.5 text-xs font-medium transition sm:px-3 sm:text-sm"
+                    style={activeTab === i
+                      ? { backgroundColor: STEP_COLORS[i], color: "white" }
+                      : { color: "#6b7280" }
+                    }
+                  >
+                    <span className="hidden sm:inline">{i + 1}.</span>
+                    <span className="sm:hidden">{i + 1}</span>
+                    <span className="hidden sm:inline">{name}</span>
+                  </button>
+                ))}
+              </div>
+              <button onClick={handleCopy} className="inline-flex items-center gap-1 rounded-lg border border-card-border px-3 py-1.5 text-xs font-medium text-muted transition hover:bg-gray-50">
+                <CopyIcon />
+                {copied ? "OK!" : "全文"}
               </button>
-            ))}
+            </div>
+            {/* Mobile: show active step name */}
+            <p className="mt-1.5 text-xs font-medium sm:hidden" style={{ color: STEP_COLORS[activeTab] }}>
+              {STEP_NAMES[activeTab]}
+            </p>
           </div>
 
           {/* Content */}
-          <div className="p-6 sm:p-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-foreground" style={{ color: STEP_COLORS[activeTab] }}>
-                Step {activeTab + 1}: {STEP_NAMES[activeTab]}
-              </h3>
-              <button onClick={handleCopy} className="inline-flex items-center gap-1 rounded-lg border border-card-border px-3 py-1.5 text-xs font-medium text-muted transition hover:bg-gray-50">
-                {copied ? "✓ コピーしました" : "全文コピー"}
-              </button>
-            </div>
-            <div className="space-y-4">
-              {[script.approach, script.hearing, script.presentation, script.closing, script.objection][activeTab].map((text, i) => (
-                <div key={i} className="rounded-xl bg-background p-4 text-sm text-foreground leading-relaxed whitespace-pre-line">
+          <div className="p-5 sm:p-8">
+            <div className="space-y-3">
+              {sections[activeTab].map((text, i) => (
+                <div key={i} className="group relative rounded-xl bg-background p-4 text-sm leading-relaxed text-foreground whitespace-pre-line">
                   {text}
+                  <button
+                    onClick={() => handleSectionCopy(text, activeTab * 10 + i)}
+                    className="absolute right-2 top-2 rounded-md border border-card-border bg-white p-1.5 text-muted opacity-0 transition hover:text-accent group-hover:opacity-100"
+                    title="コピー"
+                  >
+                    {sectionCopied === activeTab * 10 + i
+                      ? <svg className="h-3.5 w-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      : <CopyIcon />
+                    }
+                  </button>
                 </div>
               ))}
+            </div>
+
+            {/* Next step navigation */}
+            <div className="mt-6 flex items-center justify-between">
+              <button
+                onClick={() => setActiveTab(Math.max(0, activeTab - 1))}
+                disabled={activeTab === 0}
+                className="inline-flex items-center gap-1 text-sm font-medium text-muted transition hover:text-foreground disabled:invisible"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                {activeTab > 0 ? STEP_NAMES[activeTab - 1] : ""}
+              </button>
+              <span className="text-xs text-muted">{activeTab + 1} / {STEP_NAMES.length}</span>
+              <button
+                onClick={() => setActiveTab(Math.min(4, activeTab + 1))}
+                disabled={activeTab === 4}
+                className="inline-flex items-center gap-1 text-sm font-medium transition hover:text-foreground disabled:invisible"
+                style={{ color: activeTab < 4 ? STEP_COLORS[activeTab + 1] : undefined }}
+              >
+                {activeTab < 4 ? STEP_NAMES[activeTab + 1] : ""}
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
             </div>
           </div>
 
           {/* CTA */}
           <div className="border-t border-card-border bg-accent/5 p-6 text-center">
-            <p className="text-sm text-muted mb-3">このスクリプトをAIロープレで実践してみましょう</p>
+            <p className="mb-1 text-sm font-medium text-foreground">台本を覚えたら、次はAIロープレで実践</p>
+            <p className="mb-4 text-xs text-muted">台本 × 実践 = 生きたトーク力が身につく</p>
             <Link href="/roleplay" className="inline-flex h-10 items-center justify-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover">
               AIロープレで練習する
             </Link>

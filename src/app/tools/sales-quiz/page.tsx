@@ -45,14 +45,22 @@ export default function SalesQuizPage() {
         </div>
       </section>
 
-      {/* SEO Content */}
-      <section className="px-6 py-16 sm:py-20">
+      {/* Value Props */}
+      <section className="px-6 py-10 sm:py-14">
         <div className="mx-auto max-w-3xl">
-          <h2 className="mb-6 text-2xl font-bold text-foreground sm:text-3xl">なぜ営業力の「見える化」が重要なのか</h2>
-          <div className="space-y-4 text-sm text-muted leading-relaxed sm:text-base">
-            <p>多くの営業パーソンは、自分の強みと弱みを正確に把握できていません。「なんとなく商談がうまくいかない」と感じていても、具体的にどのスキルが不足しているかがわからないため、効果的な改善ができないのです。</p>
-            <p>この営業力診断テストは、成約5ステップメソッド（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）に基づいて、あなたの営業スキルを客観的に評価します。各項目のスコアを可視化することで、優先的に強化すべきポイントが明確になります。</p>
-            <p>診断結果で弱点が見つかったら、<Link href="/roleplay" className="text-accent hover:underline">AIロープレ</Link>でその分野を集中練習するのが効果的です。また、<Link href="/tools/script-generator" className="text-accent hover:underline">トークスクリプト生成</Link>で営業の型を作り、<Link href="/tools/objection-handbook" className="text-accent hover:underline">反論切り返しトーク集</Link>で対処法を学ぶことで、総合的なスキルアップが可能です。</p>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">10問</p>
+              <p className="text-xs text-muted">約3分で完了</p>
+            </div>
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">5項目</p>
+              <p className="text-xs text-muted">営業スキルを採点</p>
+            </div>
+            <div className="rounded-2xl border border-card-border bg-white p-4 text-center">
+              <p className="text-lg font-bold text-accent">S〜D</p>
+              <p className="text-xs text-muted">ランクで弱点判明</p>
+            </div>
           </div>
         </div>
       </section>

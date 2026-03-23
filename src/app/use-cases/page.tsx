@@ -167,7 +167,7 @@ export default function UseCasesPage() {
                 {/* Example */}
                 <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
                   <div className="mb-3 text-xs font-semibold text-accent">
-                    活用事例
+                    想定される活用シーン
                   </div>
                   <div className="space-y-2 text-sm">
                     <div>
@@ -179,7 +179,7 @@ export default function UseCasesPage() {
                       {uc.example.product}
                     </div>
                     <div>
-                      <span className="text-muted">成果:</span>{" "}
+                      <span className="text-muted">期待できる効果:</span>{" "}
                       {uc.example.result}
                     </div>
                   </div>
@@ -213,6 +213,27 @@ export default function UseCasesPage() {
                 {industry.name}
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Team / Enterprise CTA */}
+      <section className="border-t border-card-border px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <div className="rounded-2xl border border-accent/20 bg-accent/5 p-8 text-center">
+            <h2 className="mb-2 text-xl font-bold">
+              チームでの導入をご検討ですか？
+            </h2>
+            <p className="mb-6 text-sm text-muted leading-relaxed">
+              営業チーム全員の「型」を統一し、スコアで成長を可視化。<br />
+              法人向けプランの詳細やカスタマイズについてご相談いただけます。
+            </p>
+            <a
+              href="mailto:seiyaku.coach.ai@gmail.com?subject=法人導入のお問い合わせ"
+              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent px-8 text-sm font-bold text-accent transition hover:bg-accent hover:text-white"
+            >
+              法人導入のお問い合わせ
+            </a>
           </div>
         </div>
       </section>

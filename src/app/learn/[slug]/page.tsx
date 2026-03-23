@@ -591,12 +591,25 @@ function QuizSection({
               ? "よくできました。復習して満点を目指しましょう。"
               : "もう一度理論を確認してからチャレンジしてみましょう。"}
         </p>
-        <button
-          onClick={onRetry}
-          className="text-sm font-semibold text-accent hover:underline"
-        >
-          もう一度挑戦する
-        </button>
+        <div className="space-y-3">
+          <div>
+            <Link
+              href="/roleplay"
+              className="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold text-white transition hover:opacity-90"
+              style={{ backgroundColor: color }}
+            >
+              学んだ技術をAIロープレで実践する →
+            </Link>
+          </div>
+          <div>
+            <button
+              onClick={onRetry}
+              className="text-sm font-semibold text-accent hover:underline"
+            >
+              もう一度挑戦する
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

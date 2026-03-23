@@ -492,9 +492,9 @@ export default function RoleplayPage() {
             )}
             {usage && usage.plan === "pro" && (
               <div className="flex items-center gap-2">
-                {phase === "setup" && usage.totalSessions !== undefined && (
+                {phase === "setup" && usage.totalSessions !== undefined && usage.totalSessions > 0 && (
                   <div style={isPixarPhase ? { fontSize: '0.68em', fontWeight: 700, color: '#6a6560' } : undefined} className={isPixarPhase ? '' : 'text-[11px] text-muted'}>
-                    累計 {usage.totalSessions || 0} 回ロープレ実施
+                    累計 {usage.totalSessions} 回ロープレ実施
                   </div>
                 )}
                 <div
@@ -528,9 +528,25 @@ export default function RoleplayPage() {
               <h1 className="mb-1 text-2xl font-extrabold" style={{ color: '#4d4c4a' }}>
                 ロープレ設定
               </h1>
-              <p className="text-sm font-semibold" style={{ color: '#8a8680' }}>
+              <p className="text-sm font-semibold" style={{ color: '#8a8680', marginBottom: '0.8em' }}>
                 営業シーンを設定して、AIとロープレを始めましょう
               </p>
+              <Link
+                href="/learn"
+                className="mx-auto inline-flex items-center gap-2 rounded-full px-4 py-2 transition hover:opacity-80"
+                style={{
+                  background: '#e8dfd0',
+                  border: '0.12em solid #c4b9a8',
+                  color: '#6a6560',
+                  fontWeight: 700,
+                  fontSize: '0.78em',
+                  textDecoration: 'none',
+                }}
+              >
+                <span style={{ fontSize: '1.1em' }}>📖</span>
+                まず学習コースで「型」を学ぶと効果UP
+                <span style={{ color: '#f48a58', fontWeight: 800 }}>→</span>
+              </Link>
             </div>
 
             {/* ── あなた（営業マン）Card ── */}

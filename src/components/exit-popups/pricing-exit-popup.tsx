@@ -13,7 +13,7 @@ const POPUP_ID = "pricing-exit";
  * - Redirects to free roleplay instead of paid checkout (Foot-in-the-Door —
  *   small initial commitment leads to larger ones later)
  * - "まだ迷っていますか？" acknowledges hesitation with empathy
- * - Testimonial provides social proof (Bandwagon Effect)
+ * - Value highlights reinforce core benefits
  * - "気に入らなければ、それまでです" reduces Regret Aversion
  */
 export function PricingExitPopup() {
@@ -42,21 +42,20 @@ export function PricingExitPopup() {
             気に入らなければ、それまでです。
           </p>
 
-          {/* Testimonial — Social Proof */}
-          <div className="mb-6 rounded-xl border border-card-border bg-background p-4">
-            <div className="mb-3 flex items-start justify-between">
-              <div>
-                <p className="text-sm font-bold text-foreground">T.S.</p>
-                <p className="text-xs text-muted">不動産営業 / 入社2年目</p>
-              </div>
-              <div className="flex flex-col items-center rounded-lg bg-accent/10 px-2.5 py-1">
-                <span className="text-[10px] text-muted">スコア</span>
-                <span className="text-base font-bold text-accent">78</span>
-              </div>
+          {/* Value highlights */}
+          <div className="mb-6 space-y-2 rounded-xl border border-card-border bg-background p-4 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-accent">&#10003;</span>
+              <span className="text-foreground">AIがリアルなお客さん役を演じます</span>
             </div>
-            <p className="text-sm leading-relaxed text-muted">
-              &ldquo;毎日練習できるから、クロージングに自信がついた。&rdquo;
-            </p>
+            <div className="flex items-center gap-2">
+              <span className="text-accent">&#10003;</span>
+              <span className="text-foreground">成約スコアで弱点を可視化</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-accent">&#10003;</span>
+              <span className="text-foreground">何回失敗しても恥ずかしくない</span>
+            </div>
           </div>
 
           {/* Risk removal */}

@@ -44,13 +44,36 @@ export default function ScriptGeneratorPage() {
         </div>
       </section>
 
-      <section className="px-6 py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="mb-6 text-2xl font-bold text-foreground sm:text-3xl">営業トークスクリプトが成約率を上げる理由</h2>
-          <div className="space-y-4 text-sm text-muted leading-relaxed sm:text-base">
-            <p>トップ営業マンとそうでない営業マンの最大の違いは「商談の型」を持っているかどうかです。トークスクリプト（営業台本）は、成功パターンを再現可能な形に落とし込んだものです。</p>
-            <p>スクリプトがあることで、商談の流れを事前にイメージでき、各フェーズで何を話すべきかが明確になります。特にアプローチの最初の30秒、ヒアリングでの深掘り質問、クロージングの決め台詞は、事前に準備しているかどうかで結果が大きく変わります。</p>
-            <p>生成したスクリプトは<Link href="/roleplay" className="text-accent hover:underline">AIロープレ</Link>で実践練習するのがおすすめです。台本を覚えるだけでなく、AIのリアルな反応に対応することで「生きたトーク力」が身につきます。</p>
+      <section className="px-6 py-10 sm:py-14">
+        <div className="mx-auto max-w-4xl">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="flex items-center gap-4 rounded-2xl border border-card-border bg-white p-5">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
+                <svg className="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
+              </div>
+              <div>
+                <p className="text-lg font-bold text-foreground">成約率UP</p>
+                <p className="text-xs text-muted">「型」があるだけで結果が変わる</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 rounded-2xl border border-card-border bg-white p-5">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
+                <svg className="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+              </div>
+              <div>
+                <p className="text-lg font-bold text-foreground">約1分で完成</p>
+                <p className="text-xs text-muted">3つ選ぶだけで台本が完成</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 rounded-2xl border border-card-border bg-white p-5">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
+                <svg className="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
+              </div>
+              <div>
+                <p className="text-lg font-bold text-foreground">全5ステップ対応</p>
+                <p className="text-xs text-muted">アプローチ〜反論処理まで網羅</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -61,24 +84,29 @@ export default function ScriptGeneratorPage() {
         </div>
       </section>
 
-      {/* 5-Step Explanation */}
+      {/* 5-Step Explanation (collapsed) */}
       <section className="px-6 pb-16 sm:pb-24">
         <div className="mx-auto max-w-3xl">
-          <h2 className="mb-6 text-xl font-bold text-foreground text-center">トークスクリプトの5ステップ構成</h2>
-          <div className="space-y-4">
-            {[
-              { step: "Step 1", name: "アプローチ", desc: "信頼を構築し、商談の土台を作る。自己紹介・訪問目的・アイスブレイク。", color: "#0F6E56" },
-              { step: "Step 2", name: "ヒアリング", desc: "質問でニーズを引き出し、課題を明確にする。現状・課題・理想を深掘り。", color: "#185FA5" },
-              { step: "Step 3", name: "プレゼン", desc: "課題に対する解決策をベネフィット中心で提案。特徴ではなく価値を伝える。", color: "#534AB7" },
-              { step: "Step 4", name: "クロージング", desc: "テストクロージングで温度感を確認し、決断を後押し。", color: "#993C1D" },
-              { step: "Step 5", name: "反論処理", desc: "想定される反論への切り返しを事前に準備。共感→確認→提案の流れ。", color: "#A32D2D" },
-            ].map((s) => (
-              <div key={s.step} className="flex gap-4 rounded-xl bg-white border border-card-border p-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ backgroundColor: s.color }}>{s.step.replace("Step ", "")}</span>
-                <div><p className="font-bold text-foreground text-sm">{s.name}</p><p className="text-sm text-muted mt-1">{s.desc}</p></div>
-              </div>
-            ))}
-          </div>
+          <details className="group rounded-2xl border border-card-border bg-white shadow-sm">
+            <summary className="flex cursor-pointer items-center justify-between px-6 py-5 text-base font-bold text-foreground [&::-webkit-details-marker]:hidden list-none sm:text-lg">
+              <span>トークスクリプトの5ステップ構成とは？</span>
+              <svg className="h-5 w-5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            </summary>
+            <div className="space-y-3 border-t border-card-border px-6 pb-6 pt-4">
+              {[
+                { num: "1", name: "アプローチ", desc: "信頼を構築し、商談の土台を作る。自己紹介・訪問目的・アイスブレイク。", color: "#0F6E56" },
+                { num: "2", name: "ヒアリング", desc: "質問でニーズを引き出し、課題を明確にする。現状・課題・理想を深掘り。", color: "#185FA5" },
+                { num: "3", name: "プレゼン", desc: "課題に対する解決策をベネフィット中心で提案。特徴ではなく価値を伝える。", color: "#534AB7" },
+                { num: "4", name: "クロージング", desc: "テストクロージングで温度感を確認し、決断を後押し。", color: "#993C1D" },
+                { num: "5", name: "反論処理", desc: "想定される反論への切り返しを事前に準備。共感→確認→提案の流れ。", color: "#A32D2D" },
+              ].map((s) => (
+                <div key={s.num} className="flex gap-4 rounded-xl bg-background p-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ backgroundColor: s.color }}>{s.num}</span>
+                  <div><p className="text-sm font-bold text-foreground">{s.name}</p><p className="mt-0.5 text-sm text-muted">{s.desc}</p></div>
+                </div>
+              ))}
+            </div>
+          </details>
         </div>
       </section>
 

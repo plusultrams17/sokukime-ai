@@ -26,20 +26,6 @@ const comparisons = [
   { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "毎日・無制限・24時間", icon: "🔥", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
-const testimonials = [
-  {
-    name: "T.S.",
-    role: "不動産営業 / 入社2年目",
-    text: "毎日練習できるから、クロージングに自信がついた。",
-    score: "78",
-  },
-  {
-    name: "M.K.",
-    role: "保険営業 / マネージャー",
-    text: "チームの営業力を底上げする練習ツールとして活用しています。",
-    score: "85",
-  },
-];
 
 const faqItems = [
   {
@@ -433,45 +419,6 @@ export default function PricingPage() {
             ※一般的な市場価格の参考値です。実際の価格はサービス提供者により異なります。
           </p>
         </div>
-
-        {/* Testimonials Section — コメントアウト（案A）
-         * ベータテスト段階のため、実際の有料ユーザーの声が集まるまで非表示。
-         * 有料ユーザーのレビューが集まったら、このセクションを復活させてください。
-         */}
-        {/*
-        <div className="mt-20">
-          <h2 className="mb-8 text-center text-2xl font-bold">
-            利用者の声
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            {testimonials.map((t) => (
-              <div
-                key={t.name}
-                className="rounded-2xl border border-card-border bg-card p-6"
-              >
-                <div className="mb-4 flex items-start justify-between">
-                  <div>
-                    <p className="font-bold">{t.name}</p>
-                    <p className="text-sm text-muted">{t.role}</p>
-                  </div>
-                  <div className="flex flex-col items-center rounded-lg bg-accent/10 px-3 py-1.5">
-                    <span className="text-xs text-muted">スコア</span>
-                    <span className="text-lg font-bold text-accent">
-                      {t.score}
-                    </span>
-                  </div>
-                </div>
-                <p className="text-sm leading-relaxed text-muted">
-                  &ldquo;{t.text}&rdquo;
-                </p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-4 text-center text-xs text-muted">
-            ※個人の感想であり、効果を保証するものではありません
-          </p>
-        </div>
-        */}
 
         {/* Dynamic User Reviews — 承認済みレビューがあれば自動表示 */}
         <UserReviews />
