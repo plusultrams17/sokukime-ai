@@ -1,0 +1,231 @@
+/* ── Pixar Card (Roleplay Setup) — standalone import ── */
+
+.pixar-setup {
+  --pixar-dark: #4d4c4a !important;
+  --pixar-cream: #f5f1e8 !important;
+  --pixar-cream-shadow: #d8d2c6 !important;
+  --pixar-inset: #b3ac9f !important;
+  background-color: #f0e4d4 !important;
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif !important;
+}
+
+.pixar-card {
+  position: relative !important;
+  background-color: var(--pixar-cream, #f5f1e8) !important;
+  border-radius: 1.5em !important;
+  padding: 1.2em !important;
+  border: 0.2em solid var(--pixar-dark, #4d4c4a) !important;
+  box-shadow: 0.5em 0.5em 0 var(--pixar-dark, #4d4c4a) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.pixar-avatar {
+  width: 3.5em !important;
+  height: 3.5em !important;
+  border-radius: 50% !important;
+  border: 0.2em solid var(--pixar-dark, #4d4c4a) !important;
+  box-shadow: 0.15em 0.15em 0 var(--pixar-dark, #4d4c4a) !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.5em !important;
+  transition: transform 0.3s ease;
+}
+
+.pixar-avatar--sales {
+  background: linear-gradient(45deg, #f9a86d, #f48a58) !important;
+}
+
+.pixar-avatar--customer {
+  background: linear-gradient(45deg, #5c99e2, #8cb9e8) !important;
+}
+
+.pixar-username {
+  margin: 0 0 0 0.8em !important;
+  font-size: 1.15em !important;
+  font-weight: 700 !important;
+  color: var(--pixar-dark, #4d4c4a) !important;
+}
+
+.pixar-content {
+  background-color: var(--pixar-cream-shadow, #d8d2c6) !important;
+  border-radius: 1em !important;
+  padding: 1em !important;
+  border: 0.2em solid var(--pixar-dark, #4d4c4a) !important;
+  box-shadow: inset 0.15em 0.15em 0 var(--pixar-inset, #b3ac9f) !important;
+}
+
+.pixar-input {
+  width: 100% !important;
+  border-radius: 0.6em !important;
+  padding: 0.6em 0.8em !important;
+  font-size: 0.9em !important;
+  font-weight: 600 !important;
+  background: var(--pixar-cream, #f5f1e8) !important;
+  border: 0.15em solid var(--pixar-dark, #4d4c4a) !important;
+  color: var(--pixar-dark, #4d4c4a) !important;
+  outline: none !important;
+  font-family: inherit !important;
+}
+
+.pixar-input::placeholder {
+  color: #a09a90 !important;
+  font-weight: 500 !important;
+}
+
+.pixar-label {
+  display: block !important;
+  font-size: 0.78em !important;
+  font-weight: 700 !important;
+  color: #6a6560 !important;
+  margin-bottom: 0.4em !important;
+}
+
+.pixar-tag {
+  background: var(--pixar-cream, #f5f1e8) !important;
+  border: 0.12em solid var(--pixar-dark, #4d4c4a) !important;
+  border-radius: 2em !important;
+  padding: 0.35em 0.75em !important;
+  font-size: 0.78em !important;
+  font-weight: 700 !important;
+  color: #6a6560 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+}
+
+.pixar-option {
+  border-radius: 0.7em !important;
+  padding: 0.5em 0.8em !important;
+  font-weight: 700 !important;
+  border: 0.15em solid var(--pixar-dark, #4d4c4a) !important;
+  cursor: pointer !important;
+  background: var(--pixar-cream, #f5f1e8) !important;
+  color: var(--pixar-dark, #4d4c4a) !important;
+  font-family: inherit !important;
+}
+
+.pixar-option--active-sales {
+  background: #f48a58 !important;
+  color: #fff !important;
+  box-shadow: 0.12em 0.12em 0 #c4693d !important;
+}
+
+.pixar-option--active-customer {
+  background: #5c99e2 !important;
+  color: #fff !important;
+  box-shadow: 0.12em 0.12em 0 #3b76c0 !important;
+}
+
+.pixar-persona {
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: 0.7em !important;
+  padding: 0.55em 0.7em !important;
+  font-weight: 700 !important;
+  border: 0.15em solid var(--pixar-dark, #4d4c4a) !important;
+  cursor: pointer !important;
+  background: var(--pixar-cream, #f5f1e8) !important;
+  color: var(--pixar-dark, #4d4c4a) !important;
+  font-family: inherit !important;
+  text-align: left !important;
+}
+
+.pixar-persona--active {
+  background: #5c99e2 !important;
+  color: #fff !important;
+  box-shadow: 0.12em 0.12em 0 #3b76c0 !important;
+}
+
+.pixar-start-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  background: #61c470 !important;
+  border: 0.2em solid var(--pixar-dark, #4d4c4a) !important;
+  border-radius: 1em !important;
+  padding: 0.7em 1em !important;
+  font-size: 1.1em !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  box-shadow: 0 0.2em 0 #45a253, 0 0.4em 0 var(--pixar-dark, #4d4c4a) !important;
+  font-family: inherit !important;
+}
+
+.pixar-start-btn:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+.pixar-tab {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.3em !important;
+  background: var(--pixar-cream, #f5f1e8) !important;
+  border: 0.12em solid var(--pixar-dark, #4d4c4a) !important;
+  border-radius: 0.6em !important;
+  padding: 0.35em 0.65em !important;
+  font-size: 0.78em !important;
+  font-weight: 700 !important;
+  color: #6a6560 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+}
+
+.pixar-tab--active-sales {
+  background: #f48a58 !important;
+  color: #fff !important;
+  box-shadow: 0.08em 0.08em 0 #c4693d !important;
+}
+
+.pixar-tab--active-customer {
+  background: #5c99e2 !important;
+  color: #fff !important;
+  box-shadow: 0.08em 0.08em 0 #3b76c0 !important;
+}
+
+.pixar-textarea {
+  width: 100% !important;
+  border-radius: 0.6em !important;
+  padding: 0.6em 0.8em !important;
+  font-size: 0.85em !important;
+  font-weight: 600 !important;
+  background: var(--pixar-cream, #f5f1e8) !important;
+  border: 0.15em solid var(--pixar-dark, #4d4c4a) !important;
+  color: var(--pixar-dark, #4d4c4a) !important;
+  outline: none !important;
+  font-family: inherit !important;
+  resize: vertical !important;
+  min-height: 3.5em !important;
+}
+
+.pixar-textarea::placeholder {
+  color: #a09a90 !important;
+  font-weight: 500 !important;
+}
+
+.pixar-upload-area {
+  width: 100% !important;
+  border: 0.15em dashed var(--pixar-dark, #4d4c4a) !important;
+  border-radius: 0.6em !important;
+  padding: 1em !important;
+  text-align: center !important;
+  background: var(--pixar-cream, #f5f1e8) !important;
+  cursor: pointer !important;
+}
+
+.pixar-file-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5em !important;
+  padding: 0.5em 0.8em !important;
+  border-radius: 0.6em !important;
+  background: var(--pixar-cream, #f5f1e8) !important;
+  border: 0.12em solid var(--pixar-dark, #4d4c4a) !important;
+  font-size: 0.82em !important;
+  font-weight: 600 !important;
+  color: var(--pixar-dark, #4d4c4a) !important;
+}
