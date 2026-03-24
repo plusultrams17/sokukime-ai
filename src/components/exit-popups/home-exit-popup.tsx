@@ -72,11 +72,6 @@ export function HomeExitPopup() {
             まず営業の型を学んでみる &rarr;
           </Link>
 
-          {/* Social proof — Bandwagon Effect */}
-          <p className="mt-3 text-center text-xs text-muted">
-            今月 128人 が営業力診断を受けました
-          </p>
-
           {/* Decline */}
           <button
             onClick={dismiss}

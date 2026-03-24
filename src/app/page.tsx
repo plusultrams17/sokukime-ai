@@ -694,7 +694,7 @@ export default function Home() {
           <p className="mb-10 text-sm text-muted sm:text-base">
             まずは1回、AIと商談してみてください。
             <br />
-            「これ、うちの後輩にやらせたい」そんな声をいただいています。
+            3分のロープレで、あなたの営業力がスコアでわかります。
           </p>
           <div className="plan">
             <div className="inner">

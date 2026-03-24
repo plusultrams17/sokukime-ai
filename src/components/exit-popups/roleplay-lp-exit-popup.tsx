@@ -54,10 +54,6 @@ export function RoleplayLpExitPopup() {
             無料でAIとロープレする
           </Link>
 
-          <p className="mt-3 text-center text-xs text-muted">
-            今月 128人 がAIロープレを体験しました
-          </p>
-
           <button
             onClick={dismiss}
             className="mt-4 block w-full text-center text-sm text-muted transition hover:text-foreground"
