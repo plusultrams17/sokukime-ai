@@ -222,12 +222,20 @@ export default function FeaturesPage() {
           <p className="mb-8 text-sm text-muted">
             クレジットカード不要。1日1回無料でAIロープレを体験できます。
           </p>
-          <Link
-            href="/roleplay"
-            className="inline-flex h-14 items-center justify-center rounded-xl bg-accent px-10 text-lg font-bold text-white transition hover:bg-accent-hover"
-          >
-            無料で始める
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/learn"
+              className="inline-flex h-14 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-8 text-base font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
+            >
+              まず営業の型を学ぶ
+            </Link>
+            <Link
+              href="/roleplay"
+              className="inline-flex h-14 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover sm:min-w-[220px]"
+            >
+              無料で始める
+            </Link>
+          </div>
         </div>
       </section>
 

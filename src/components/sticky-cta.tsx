@@ -59,19 +59,27 @@ export function StickyCTA({
             {subtitle}
           </span>
         </div>
-        <Link
-          href={ctaHref}
-          onClick={(e) => {
-            trackCTAClick(trackingId, "sticky_cta", ctaHref);
-            if (onCtaClick) {
-              e.preventDefault();
-              onCtaClick();
-            }
-          }}
-          className="flex h-10 w-full items-center justify-center rounded-xl bg-accent px-5 text-sm font-bold text-white shadow-sm transition hover:bg-accent-hover sm:w-auto"
-        >
-          {ctaText}
-        </Link>
+        <div className="flex w-full items-center justify-center gap-3 sm:w-auto">
+          <Link
+            href="/learn"
+            className="hidden text-xs font-bold text-accent transition hover:underline sm:inline-flex"
+          >
+            営業の型を学ぶ
+          </Link>
+          <Link
+            href={ctaHref}
+            onClick={(e) => {
+              trackCTAClick(trackingId, "sticky_cta", ctaHref);
+              if (onCtaClick) {
+                e.preventDefault();
+                onCtaClick();
+              }
+            }}
+            className="flex h-10 w-full items-center justify-center rounded-xl bg-accent px-5 text-sm font-bold text-white shadow-sm transition hover:bg-accent-hover sm:w-auto"
+          >
+            {ctaText}
+          </Link>
+        </div>
       </div>
     </div>
   );

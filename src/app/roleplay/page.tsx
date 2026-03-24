@@ -1,5 +1,6 @@
 "use client";
 
+import "./pixar.css";
 import { Suspense, useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";

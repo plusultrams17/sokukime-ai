@@ -106,6 +106,13 @@ export function Header() {
             </Link>
           ))}
           <div className="mobile-menu__divider" />
+          <Link
+            href="/learn"
+            className="mobile-menu__cta-secondary"
+            onClick={() => setOpen(false)}
+          >
+            まず営業の型を学ぶ
+          </Link>
           {isLoggedIn ? (
             <Link
               href="/roleplay"

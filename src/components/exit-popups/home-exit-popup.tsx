@@ -63,6 +63,15 @@ export function HomeExitPopup() {
             無料で営業力を診断する &rarr;
           </Link>
 
+          {/* Learn link */}
+          <Link
+            href="/learn"
+            className="mt-3 block w-full text-center text-sm font-medium text-accent transition hover:underline"
+            onClick={() => markPopupDismissed(POPUP_ID)}
+          >
+            まず営業の型を学んでみる &rarr;
+          </Link>
+
           {/* Social proof — Bandwagon Effect */}
           <p className="mt-3 text-center text-xs text-muted">
             今月 128人 が営業力診断を受けました

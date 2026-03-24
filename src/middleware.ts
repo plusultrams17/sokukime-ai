@@ -2,6 +2,19 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
+  // If an OAuth code lands on a non-callback page, redirect to /auth/callback
+  // Only for page routes (not API routes) as a safety net
+  const code = request.nextUrl.searchParams.get("code");
+  if (
+    code &&
+    request.nextUrl.pathname !== "/auth/callback" &&
+    !request.nextUrl.pathname.startsWith("/api/")
+  ) {
+    const callbackUrl = request.nextUrl.clone();
+    callbackUrl.pathname = "/auth/callback";
+    return NextResponse.redirect(callbackUrl);
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -42,6 +55,9 @@ export async function middleware(request: NextRequest) {
     if (user && (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/signup")) {
       const url = request.nextUrl.clone();
       url.pathname = "/roleplay";
+      // Strip error/auth params — user is already authenticated
+      url.searchParams.delete("error");
+      url.searchParams.delete("code");
       return NextResponse.redirect(url);
     }
 

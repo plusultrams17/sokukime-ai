@@ -2404,6 +2404,24 @@ body {
   margin: 0.5rem 0;
 }
 
+.mobile-menu__cta-secondary {
+  display: block;
+  text-align: center;
+  padding: 0.65rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--accent);
+  border: 2px solid var(--accent, #1B6B5A);
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mobile-menu__cta-secondary:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
 .mobile-menu__cta {
   text-align: center;
   margin-top: 0.25rem;

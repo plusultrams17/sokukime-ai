@@ -443,15 +443,23 @@ export default function PricingPage() {
 
         {/* Bottom CTA */}
         <div className="mt-20 text-center">
-          <p className="mb-4 text-muted">
+          <p className="mb-6 text-muted">
             営業研修1回の費用で、1ヶ月間無制限にロープレできます
           </p>
-          <Link
-            href="/roleplay"
-            className="text-sm text-accent hover:underline"
-          >
-            まずは無料で試してみる →
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/learn"
+              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
+            >
+              まず営業の型を学ぶ
+            </Link>
+            <Link
+              href="/roleplay"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover sm:min-w-[220px]"
+            >
+              無料でロープレを始める
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -465,12 +473,20 @@ export default function PricingPage() {
         <p className="mb-3 text-xs text-muted">
           リスクゼロで営業力を鍛えよう
         </p>
-        <Link
-          href="/roleplay"
-          className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
-        >
-          無料で始める
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/learn"
+            className="text-xs font-bold text-accent transition hover:underline"
+          >
+            型を学ぶ
+          </Link>
+          <Link
+            href="/roleplay"
+            className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
+          >
+            無料で始める
+          </Link>
+        </div>
       </ScrollSlideIn>
     </div>
   );

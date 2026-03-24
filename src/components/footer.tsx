@@ -36,11 +36,12 @@ export function Footer() {
           <div>
             <h4 className="mb-3 text-sm font-semibold text-foreground">プロダクト</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted">
+              <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
+              <Link href="/roleplay" className="transition hover:text-foreground">AIロープレ</Link>
               <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
               <Link href="/features" className="transition hover:text-foreground">機能紹介</Link>
               <Link href="/tools" className="transition hover:text-foreground">無料ツール</Link>
               <Link href="/industry" className="transition hover:text-foreground">業種別ロープレ</Link>
-              <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
               <Link href="/use-cases" className="transition hover:text-foreground">活用シーン</Link>
               <Link href="/blog" className="transition hover:text-foreground">ブログ</Link>
             </nav>

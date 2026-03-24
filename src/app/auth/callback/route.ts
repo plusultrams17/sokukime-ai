@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { trySendOnboardingEmail } from "@/lib/email";
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
@@ -23,6 +24,13 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
+      // Exchange failed — check if user already has a valid session (re-login attempt)
+      const { data: { user: existingUser } } = await supabase.auth.getUser();
+      if (existingUser) {
+        // Already authenticated, just redirect to destination
+        return NextResponse.redirect(`${origin}${redirect}`);
+      }
+      console.error("[auth/callback] exchangeCodeForSession failed:", error.message);
       return NextResponse.redirect(
         `${origin}/login?error=${encodeURIComponent("認証に失敗しました。もう一度お試しください。")}`
       );
@@ -60,6 +68,11 @@ export async function GET(request: NextRequest) {
             } catch {
               // Ignore referral errors
             }
+          }
+
+          // Send welcome email (fire-and-forget)
+          if (user.email) {
+            trySendOnboardingEmail(supabase, user.id, user.email, "welcome");
           }
 
           // First-time user welcome

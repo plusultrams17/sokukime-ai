@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getUsageStatus, recordUsage } from "@/lib/usage";
+import { trySendOnboardingEmail } from "@/lib/email";
 
 const UNVERIFIED_USAGE_LIMIT = 3;
 
@@ -53,6 +54,20 @@ export async function POST() {
   }
 
   await recordUsage(supabase, user.id);
+
+  // Send onboarding emails based on total roleplay count (fire-and-forget)
+  if (user.email) {
+    const { count: totalCount } = await supabase
+      .from("usage_records")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id);
+
+    if (totalCount === 1) {
+      trySendOnboardingEmail(supabase, user.id, user.email, "first_roleplay");
+    } else if (totalCount === 3) {
+      trySendOnboardingEmail(supabase, user.id, user.email, "third_roleplay");
+    }
+  }
 
   const updatedStatus = await getUsageStatus(supabase, user.id);
   return NextResponse.json(updatedStatus);

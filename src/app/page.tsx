@@ -818,12 +818,20 @@ export default function Home() {
         <p className="mb-3 text-xs text-muted">
           AIが3分であなたの営業力をスコアリングします
         </p>
-        <Link
-          href="/roleplay"
-          className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
-        >
-          無料で営業力を診断する
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/learn"
+            className="text-xs font-bold text-accent transition hover:underline"
+          >
+            型を学ぶ
+          </Link>
+          <Link
+            href="/roleplay"
+            className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
+          >
+            無料で営業力を診断する
+          </Link>
+        </div>
       </ScrollSlideIn>
     </div>
   );

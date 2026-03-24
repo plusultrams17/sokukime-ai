@@ -235,3 +235,16 @@ CREATE TABLE public.post_payment_surveys (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 -- API route uses service role key (bypasses RLS). No public policies needed.
+
+-- =============================================
+-- オンボーディングメール送信記録
+-- =============================================
+CREATE TABLE public.onboarding_emails (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  email_type TEXT NOT NULL CHECK (email_type IN ('welcome', 'first_roleplay', 'third_roleplay')),
+  sent_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, email_type)
+);
+CREATE INDEX idx_onboarding_emails_user ON onboarding_emails(user_id);
+-- API route uses service role key (bypasses RLS). No public policies needed.
