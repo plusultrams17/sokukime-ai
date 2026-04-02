@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { trySendOnboardingEmail } from "@/lib/email";
 
@@ -67,6 +68,23 @@ export async function GET(request: NextRequest) {
               }
             } catch {
               // Ignore referral errors
+            }
+          }
+
+          // Activate reverse trial — 7-day free Pro access
+          // Uses service role to bypass RLS for profile update
+          const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+          const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          if (supabaseUrl && supabaseServiceKey) {
+            try {
+              const admin = createAdminClient(supabaseUrl, supabaseServiceKey);
+              const trialEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+              await admin.from("profiles").update({
+                plan: "pro",
+                trial_ends_at: trialEnd,
+              }).eq("id", user.id);
+            } catch {
+              // Trial activation failure should not block signup
             }
           }
 

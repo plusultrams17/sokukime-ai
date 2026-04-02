@@ -22,7 +22,7 @@ interface CooldownData {
 
 const COOLDOWN_HOURS = 24;
 const DISMISS_THRESHOLD = 3;
-const LONG_COOLDOWN_DAYS = 7;
+const LONG_COOLDOWN_DAYS = 1;
 
 function getData(): CooldownData {
   if (typeof window === "undefined") {
@@ -93,6 +93,14 @@ export function recordPaywallDismissed() {
   }
 
   saveData(data);
+}
+
+/**
+ * Check if paywall modal is in cooldown (but banner can still show).
+ */
+export function isInPaywallCooldown(): boolean {
+  const data = getData();
+  return !!(data.cooldownUntil && Date.now() < data.cooldownUntil);
 }
 
 /**

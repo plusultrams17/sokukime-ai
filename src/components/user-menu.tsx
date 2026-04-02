@@ -111,11 +111,46 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
           </div>
 
           <Link
+            href="/dashboard"
+            onClick={() => setOpen(false)}
+            className="flex w-full items-center rounded-lg px-3 py-2 text-sm text-muted transition hover:bg-card-border hover:text-foreground"
+          >
+            マイダッシュボード
+          </Link>
+
+          <Link
             href="/pricing"
             onClick={() => setOpen(false)}
             className="flex w-full items-center rounded-lg px-3 py-2 text-sm text-muted transition hover:bg-card-border hover:text-foreground"
           >
             料金プラン
+          </Link>
+
+          <Link
+            href="/referral"
+            onClick={() => setOpen(false)}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted transition hover:bg-card-border hover:text-foreground"
+          >
+            友達を紹介
+            <span className="rounded-full bg-green-500/10 px-1.5 py-0.5 text-[10px] font-bold text-green-500">
+              ¥1,000 OFF
+            </span>
+          </Link>
+
+          <Link
+            href="/settings"
+            onClick={() => setOpen(false)}
+            className="flex w-full items-center rounded-lg px-3 py-2 text-sm text-muted transition hover:bg-card-border hover:text-foreground"
+          >
+            設定
+          </Link>
+
+          <Link
+            href="/changelog"
+            onClick={() => setOpen(false)}
+            className="flex w-full items-center rounded-lg px-3 py-2 text-sm text-muted transition hover:bg-card-border hover:text-foreground"
+          >
+            更新情報
           </Link>
 
           {plan === "pro" && (

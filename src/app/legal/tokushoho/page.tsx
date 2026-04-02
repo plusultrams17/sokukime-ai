@@ -34,18 +34,21 @@ export default function TokushohoPage() {
             />
             <Row
               label="販売URL"
-              value="https://seiyaku-coach.vercel.app"
+              value="https://seiyaku-coach.com"
             />
             <Row
               label="販売価格"
               value={
                 <>
                   <div>無料プラン: 0円</div>
-                  <div>
-                    Proプラン: 月額2,980円（税込）
-                  </div>
+                  <div>Proプラン（月払い）: 月額2,980円（税込）</div>
+                  <div>Proプラン（年払い）: 年額29,800円（税込・実質月額約2,483円）</div>
                 </>
               }
+            />
+            <Row
+              label="無料トライアル"
+              value="Proプラン初回お申込み時に7日間の無料トライアルをご利用いただけます。トライアル期間中はいつでもキャンセル可能で、キャンセルした場合は課金されません。トライアル終了後に自動的に有料プランに移行します。"
             />
             <Row
               label="商品代金以外の必要料金"
@@ -57,7 +60,7 @@ export default function TokushohoPage() {
             />
             <Row
               label="支払い時期"
-              value="Proプラン申込時に初月分を即時決済。以降毎月自動更新時に課金。"
+              value="Proプラン申込時に7日間の無料トライアル開始。トライアル終了後に初回課金。以降は月払い：毎月自動更新時に課金、年払い：毎年自動更新時に課金。"
             />
             <Row
               label="サービス提供時期"

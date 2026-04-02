@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { StickyCTA } from "@/components/sticky-cta";
 import { JsonLd } from "@/components/json-ld";
+import { ToolUpsellCTA } from "@/components/tool-upsell-cta";
 import { HandbookFilter } from "./handbook-filter";
 
 export const metadata: Metadata = {
@@ -162,6 +163,12 @@ export default function ObjectionHandbookPage() {
             <span className="orbit-dots"><span /><span /><span /><span /></span>
             <span className="corners"><span /><span /><span /><span /></span>
           </Link>
+        </div>
+      </section>
+
+      <section className="px-6 pb-16">
+        <div className="mx-auto max-w-3xl">
+          <ToolUpsellCTA />
         </div>
       </section>
 

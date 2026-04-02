@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -22,6 +22,14 @@ function LoginForm() {
 
   const [error, setError] = useState(searchParams.get("error") || "");
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [stats, setStats] = useState<{ totalUsers: number; totalSessions: number } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then((res) => res.json())
+      .then((data) => { if (data.totalUsers > 0) setStats(data); })
+      .catch(() => {});
+  }, []);
 
   async function handleGoogleLogin() {
     setError("");
@@ -56,8 +64,12 @@ function LoginForm() {
       <div className="rounded-2xl border border-card-border bg-card p-6 space-y-4">
         <h2 className="text-lg font-bold text-center">ログイン / 新規登録</h2>
         <p className="text-xs text-muted text-center">
-          Googleアカウントで簡単にログインできます
+          Googleアカウントで10秒で始められます
         </p>
+        <div className="rounded-lg bg-accent/10 border border-accent/20 px-3 py-2 text-center">
+          <p className="text-xs font-bold text-accent">Proプラン 7日間無料トライアル実施中</p>
+          <p className="text-[10px] text-muted mt-0.5">無料登録後、いつでもProへアップグレード可能</p>
+        </div>
 
         {error && (
           <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
@@ -91,6 +103,11 @@ function LoginForm() {
         </div>
       </div>
 
+      {stats && (
+        <p className="text-center text-xs text-muted">
+          <span className="font-bold text-foreground">{stats.totalUsers.toLocaleString()}人</span>のユーザーが利用中・累計<span className="font-bold text-foreground">{stats.totalSessions.toLocaleString()}回</span>のロープレ実績
+        </p>
+      )}
       <p className="text-center text-xs text-muted">
         Googleアカウントでログインすると、初回は自動的にアカウントが作成されます。
       </p>

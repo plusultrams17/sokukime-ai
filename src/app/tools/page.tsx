@@ -59,7 +59,7 @@ const tools = [
 ];
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
 export default function ToolsPage() {
   const jsonLdData = {
@@ -165,6 +165,31 @@ export default function ToolsPage() {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pro Upsell */}
+      <section className="px-6 pb-8">
+        <div className="mx-auto max-w-3xl">
+          <div className="rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-8 text-center">
+            <h2 className="mb-2 text-xl font-bold text-foreground sm:text-2xl">
+              ツールで見つけた課題を<span className="text-accent">Proプラン</span>で克服
+            </h2>
+            <p className="mb-4 text-sm text-muted leading-relaxed">
+              無料ツールでわかった弱点を、無制限AIロープレで集中練習。
+              <br className="hidden sm:block" />
+              全5カテゴリの詳細スコア＋AIアドバイスで最短でスキルアップ。
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/pricing"
+                className="inline-flex h-11 items-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
+              >
+                7日間無料でProを試す
+              </Link>
+              <span className="text-xs text-muted">¥2,980/月 ・ いつでも解約OK</span>
+            </div>
           </div>
         </div>
       </section>

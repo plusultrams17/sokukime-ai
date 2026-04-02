@@ -294,3 +294,36 @@ export function trackReferralCodeCopied() {
 export function trackReferralShareClicked(platform: string) {
   pushEvent("referral_share_clicked", { platform });
 }
+
+export function trackScoreShared(params: { platform: string; score: number; scoreId?: string }) {
+  pushEvent("score_shared", params);
+}
+
+// ─── Aha Moment ─────────────────────────────────────
+
+/**
+ * Track "aha moment" — when user's score improves from previous session.
+ * Based on Facebook's "7 friends in 10 days" activation metric (Chamath Palihapitiya).
+ * This is the key activation event that predicts long-term retention.
+ */
+export function trackAhaMoment(params: {
+  previousScore: number;
+  newScore: number;
+  improvement: number;
+  sessionCount: number;
+}) {
+  pushEvent("aha_moment_score_improved", {
+    previous_score: params.previousScore,
+    new_score: params.newScore,
+    improvement: params.improvement,
+    session_count: params.sessionCount,
+  });
+
+  // Also track in engagement DB for server-side analysis
+  trackEngagementEvent("aha_moment", {
+    previousScore: params.previousScore,
+    newScore: params.newScore,
+    improvement: params.improvement,
+    sessionCount: params.sessionCount,
+  });
+}

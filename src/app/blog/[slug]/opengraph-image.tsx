@@ -168,7 +168,7 @@ export default async function OgImage({
               fontWeight: 600,
             }}
           >
-            seiyaku-coach.vercel.app
+            seiyaku-coach.com
           </div>
         </div>
       </div>

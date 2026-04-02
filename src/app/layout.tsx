@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics, MicrosoftClarity } from "@/components/analytics";
 import { ScrollDepthTracker } from "@/components/scroll-depth-tracker";
 import { JsonLd } from "@/components/json-ld";
+import { CookieConsent } from "@/components/cookie-consent";
+import { PromoBanner } from "@/components/promo-banner";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -17,7 +19,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -55,6 +57,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: SITE_URL,
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
   },
 };
 
@@ -71,6 +76,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <MicrosoftClarity />
         <ScrollDepthTracker />
+        <PromoBanner />
         <JsonLd
           data={{
             "@context": "https://schema.org",
@@ -85,6 +91,12 @@ export default function RootLayout({
                 logo: {
                   "@type": "ImageObject",
                   url: `${SITE_URL}/favicon.ico`,
+                },
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  email: "support@seiyaku-coach.com",
+                  contactType: "customer support",
+                  availableLanguage: "Japanese",
                 },
               },
               {
@@ -101,6 +113,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <CookieConsent />
         <Analytics />
         <SpeedInsights />
       </body>

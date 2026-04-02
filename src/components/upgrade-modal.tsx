@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { trackCTAClick, trackCheckoutStarted } from "@/lib/tracking";
 
@@ -23,6 +23,17 @@ export function UpgradeModal({
   trigger = "limit",
 }: UpgradeModalProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [billing, setBilling] = useState<"monthly" | "annual">("annual");
+  const [stats, setStats] = useState<{ totalUsers: number; totalSessions: number } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.totalUsers > 0) setStats(data);
+      })
+      .catch(() => {});
+  }, []);
 
   if (!open) return null;
 
@@ -31,7 +42,11 @@ export function UpgradeModal({
     trackCTAClick("upgrade_modal_pro", "upgrade_modal", "/api/stripe/checkout");
     trackCheckoutStarted();
     try {
-      const res = await fetch("/api/stripe/checkout", { method: "POST" });
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ billing }),
+      });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -84,24 +99,24 @@ export function UpgradeModal({
         {trigger === "limit" && (
           <>
             <h2 className="mb-2 text-center text-xl font-bold">
-              本日のロープレ上限に達しました
+              このまま練習を止めますか？
             </h2>
             <p className="mb-5 text-center text-sm text-muted">
-              Proプランなら回数無制限。
+              明日まで待つと、今日の練習で掴んだ感覚が薄れます。
               <br />
-              練習量が成約率を変えます。
+              <span className="font-medium text-foreground">Proなら今すぐ続きを練習できます。</span>
             </p>
           </>
         )}
         {trigger === "score" && (
           <>
             <h2 className="mb-2 text-center text-xl font-bold">
-              もっとスコアを伸ばしませんか？
+              あと少しでスコアが伸びるのに、ここで止めますか？
             </h2>
             <p className="mb-5 text-center text-sm text-muted">
-              Proユーザーの平均：初月68点 → 3ヶ月後85点
+              Proなら全5カテゴリの弱点がわかり、
               <br />
-              毎日3回以上練習する人のスコアは平均2.3倍速く改善
+              <span className="font-medium text-foreground">集中練習でスコアが2倍速く改善します。</span>
             </p>
           </>
         )}
@@ -136,6 +151,31 @@ export function UpgradeModal({
           </div>
         </div>
 
+        {/* Billing toggle */}
+        <div className="mb-3 flex items-center justify-center gap-1 rounded-xl bg-background p-1">
+          <button
+            onClick={() => setBilling("monthly")}
+            className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+              billing === "monthly"
+                ? "bg-card text-foreground shadow-sm"
+                : "text-muted hover:text-foreground"
+            }`}
+          >
+            月払い
+          </button>
+          <button
+            onClick={() => setBilling("annual")}
+            className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+              billing === "annual"
+                ? "bg-card text-foreground shadow-sm"
+                : "text-muted hover:text-foreground"
+            }`}
+          >
+            年払い
+            <span className="ml-1 text-green-500">2ヶ月無料</span>
+          </button>
+        </div>
+
         {/* Price comparison */}
         <div className="mb-4 rounded-xl border border-accent/30 bg-accent/5 p-4">
           <div className="mb-2 flex items-center justify-between">
@@ -144,15 +184,30 @@ export function UpgradeModal({
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm font-bold text-accent">成約コーチ AI Pro</span>
-            <span className="text-lg font-bold text-accent">
-              ¥2,980<span className="text-xs font-normal text-muted">/月</span>
-            </span>
+            {billing === "monthly" ? (
+              <span className="text-lg font-bold text-accent">
+                ¥2,980<span className="text-xs font-normal text-muted">/月</span>
+              </span>
+            ) : (
+              <div className="text-right">
+                <span className="text-lg font-bold text-accent">
+                  ¥29,800<span className="text-xs font-normal text-muted">/年</span>
+                </span>
+                <div className="text-[10px] text-green-500">実質¥2,483/月</div>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="mb-4 text-center text-xs text-muted">
+        <div className="mb-3 text-center text-xs text-muted">
           いつでも解約OK・即日反映・違約金なし
         </div>
+
+        {stats && (
+          <div className="mb-4 text-center text-xs text-muted">
+            <span className="font-bold text-foreground">{stats.totalUsers.toLocaleString()}人</span>が利用中・累計<span className="font-bold text-foreground">{stats.totalSessions.toLocaleString()}回</span>のロープレ実績
+          </div>
+        )}
 
         {/* CTA */}
         <div className="flex flex-col gap-3">
@@ -161,16 +216,16 @@ export function UpgradeModal({
             disabled={isLoading}
             className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
           >
-            {isLoading ? "処理中..." : "Proプランにアップグレード"}
+            {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
           </button>
           <div className="text-center text-[11px] text-muted">
-            ✓ いつでも解約OK ✓ Stripe安全決済
+            今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで全機能無料 ・ いつでも解約OK
           </div>
           <button
             onClick={onClose}
             className="text-sm text-muted transition hover:text-foreground"
           >
-            {trigger === "limit" ? "明日また練習する" : "今はスキップ"}
+            {trigger === "limit" ? "明日まで練習を止める" : "今はスキップ"}
           </button>
           <Link
             href="/pricing"

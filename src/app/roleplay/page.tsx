@@ -25,6 +25,7 @@ import {
   trackScoreView,
   trackUpgradePromptShown,
   trackUpgradePromptClicked,
+  trackAhaMoment,
 } from "@/lib/tracking";
 import { trackCheckoutComplete } from "@/lib/tracking";
 import { PostPaymentSurvey } from "@/components/post-payment-survey";
@@ -60,17 +61,51 @@ function UpgradeToast() {
     if (searchParams.get("upgraded") === "true") {
       setShow(true);
       trackCheckoutComplete({});
-      const timer = setTimeout(() => setShow(false), 5000);
-      return () => clearTimeout(timer);
     }
   }, [searchParams]);
 
   if (!show) return null;
 
   return (
-    <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 animate-fade-in-up">
-      <div className="rounded-xl border border-green-500/30 bg-green-500/10 px-6 py-3 text-sm font-medium text-green-400 shadow-xl">
-        🎉 Proプランにアップグレードしました！無制限でロープレを楽しめます
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in-up">
+      <div className="mx-4 w-full max-w-md rounded-2xl border border-green-500/30 bg-card p-8 shadow-2xl">
+        <div className="mb-4 text-center text-4xl">🎉</div>
+        <h2 className="mb-2 text-center text-xl font-bold text-green-400">
+          Proプランへようこそ！
+        </h2>
+        <p className="mb-6 text-center text-sm text-muted">
+          無制限ロープレ・全5カテゴリ詳細スコア・AI改善アドバイスが使えます
+        </p>
+
+        <div className="mb-6 space-y-3 rounded-xl border border-card-border bg-card p-4">
+          <p className="text-xs font-bold text-muted">まずこの3ステップで効果を最大化：</p>
+          <div className="flex items-start gap-3">
+            <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">1</span>
+            <p className="text-sm text-muted">3回ロープレして現在地のスコアを把握する</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">2</span>
+            <p className="text-sm text-muted">一番低いカテゴリを集中的に練習する</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">3</span>
+            <p className="text-sm text-muted">毎日ロープレしてスコアの伸びをダッシュボードで追跡</p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setShow(false)}
+          className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover"
+        >
+          さっそくロープレを始める
+        </button>
+
+        <a
+          href="/referral"
+          className="mt-3 block text-center text-xs text-accent/70 hover:text-accent transition"
+        >
+          友達に紹介して ¥1,000 OFF を受け取る →
+        </a>
       </div>
     </div>
   );
@@ -140,7 +175,7 @@ export default function RoleplayPage() {
   const [customerIndustry, setCustomerIndustry] = useState("");
   const [scene, setScene] = useState("visit");
   const [difficulty, setDifficulty] = useState("friendly");
-  const [score, setScore] = useState<ScoreResult | null>(null);
+  const [score, setScore] = useState<(ScoreResult & { scoreId?: string | null }) | null>(null);
 
   const [usage, setUsage] = useState<UsageStatus | null>(null);
   const [isGuest, setIsGuest] = useState(true);
@@ -491,11 +526,21 @@ export default function RoleplayPage() {
                 </span>
               </div>
             )}
+            {/* Streak counter */}
+            {usage && usage.streak !== undefined && usage.streak >= 2 && phase === "setup" && (
+              <div
+                style={isPixarPhase ? { border: '0.12em solid #4d4c4a', borderRadius: '2em', padding: '0.2em 0.6em', fontSize: '0.72em', fontWeight: 800, background: '#f5f1e8', color: '#f48a58' } : undefined}
+                className={isPixarPhase ? '' : 'rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent'}
+                title="連続練習日数"
+              >
+                🔥 {usage.streak}日連続
+              </div>
+            )}
             {usage && usage.plan === "pro" && (
               <div className="flex items-center gap-2">
                 {phase === "setup" && usage.totalSessions !== undefined && usage.totalSessions > 0 && (
                   <div style={isPixarPhase ? { fontSize: '0.68em', fontWeight: 700, color: '#6a6560' } : undefined} className={isPixarPhase ? '' : 'text-[11px] text-muted'}>
-                    累計 {usage.totalSessions} 回ロープレ実施
+                    累計 {usage.totalSessions} 回
                   </div>
                 )}
                 <div
@@ -870,16 +915,23 @@ export default function RoleplayPage() {
 
             {/* Daily Limit Banner for Free Users */}
             {usage && usage.plan === "free" && !usage.canStart && (
-              <div className="pixar-card" style={{ borderColor: '#e65e5e', background: '#fdf2f2' }}>
+              <div className="pixar-card" style={{ borderColor: '#f48a58', background: 'linear-gradient(135deg, #fff8f3, #fdf2f2)' }}>
                 <div className="text-center">
-                  <div style={{ fontSize: '2em', marginBottom: '0.3em' }}>⏰</div>
-                  <p style={{ fontSize: '1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.3em' }}>
-                    本日の無料ロープレは終了しました
+                  <div style={{ fontSize: '2em', marginBottom: '0.3em' }}>🔥</div>
+                  <p style={{ fontSize: '1.1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.2em' }}>
+                    今日のロープレは終了 — でもまだ伸びしろがあります
                   </p>
-                  <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '1em', lineHeight: 1.6 }}>
-                    Proプランなら<span style={{ color: '#f48a58', fontWeight: 800 }}>無制限</span>に練習できます。<br />
-                    毎日の反復練習で、営業力を飛躍的に向上させましょう。
+                  <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
+                    毎日3回以上ロープレする営業マンは<span style={{ color: '#f48a58', fontWeight: 800 }}>スコアが平均20点UP</span>。<br />
+                    Proなら無制限に練習でき、全5カテゴリの詳細フィードバックも見れます。
                   </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5em', marginBottom: '0.5em' }}>
+                    <div style={{ display: 'flex', gap: '0.8em', fontSize: '0.72em', color: '#6a6560' }}>
+                      <span>✓ 無制限ロープレ</span>
+                      <span>✓ 全スコア開放</span>
+                      <span>✓ AI改善アドバイス</span>
+                    </div>
+                  </div>
                   <a
                     href="/pricing"
                     onClick={() => {
@@ -889,22 +941,22 @@ export default function RoleplayPage() {
                       display: 'inline-flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      height: '2.8em',
-                      padding: '0 1.5em',
+                      height: '3em',
+                      padding: '0 2em',
                       borderRadius: '2em',
                       background: '#f48a58',
                       color: '#fff',
                       fontWeight: 800,
-                      fontSize: '0.9em',
+                      fontSize: '0.95em',
                       textDecoration: 'none',
                       border: '0.12em solid #c4693d',
                       boxShadow: '0.12em 0.12em 0 #c4693d',
                     }}
                   >
-                    Proプランを見る →
+                    7日間無料でProを試す →
                   </a>
                   <p style={{ fontSize: '0.72em', color: '#a09a90', marginTop: '0.5em' }}>
-                    ¥2,980/月 ・ いつでも解約OK
+                    7日間完全無料 → ¥2,980/月 ・ いつでも解約OK ・ 経費精算OK
                   </p>
                 </div>
               </div>
@@ -941,6 +993,16 @@ export default function RoleplayPage() {
             trackScoreView({ industry, difficulty, totalScore: result.overall });
             trackEngagementEvent("roleplay_complete", { score: result.overall });
             trackEngagementEvent("score_view");
+            // Aha moment detection: score improved from previous session
+            const prevScore = (result as unknown as Record<string, unknown>).previousScore as number | undefined;
+            if (prevScore != null && result.overall > prevScore) {
+              trackAhaMoment({
+                previousScore: prevScore,
+                newScore: result.overall,
+                improvement: result.overall - prevScore,
+                sessionCount: usage?.totalSessions || 0,
+              });
+            }
             const categoryScores: Record<string, number> = {};
             result.categories?.forEach((c: { name: string; score: number }) => {
               const key = c.name;
@@ -1097,6 +1159,9 @@ function AuthGateContent({
                   </span>
                   <span className="text-2xl font-black text-muted/30">/ 100</span>
                 </div>
+                <div className="mt-1 text-sm font-bold text-muted">
+                  ランク: {previewScore.overall >= 90 ? "S" : previewScore.overall >= 80 ? "A" : previewScore.overall >= 70 ? "B" : previewScore.overall >= 60 ? "C" : previewScore.overall >= 40 ? "D" : "E"}
+                </div>
               </div>
 
               <div className="relative my-6">
@@ -1105,34 +1170,48 @@ function AuthGateContent({
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="rounded-full border border-card-border bg-card/80 px-4 py-2 text-xs font-medium text-muted backdrop-blur-sm">
-                    🔒 詳細を見るにはGoogleログイン
+                    🔒 5カテゴリの詳細分析を見る
                   </div>
                 </div>
               </div>
 
-              <p className="mb-6 text-sm text-muted">
-                詳細なフィードバックと改善アドバイスを見るには、
-                <br />
-                Googleアカウントでログインしてください
-              </p>
+              {/* Value prop before login */}
+              <div className="mb-5 rounded-xl border border-accent/20 bg-accent/5 p-4 text-left">
+                <p className="mb-2 text-xs font-bold text-accent">ログインで見れる内容：</p>
+                <ul className="space-y-1 text-xs text-muted">
+                  <li>✓ 5カテゴリ別の詳細スコア＆レーダーチャート</li>
+                  <li>✓ カテゴリごとの改善ポイント</li>
+                  <li>✓ スコア履歴の保存＆推移グラフ</li>
+                  <li>✓ 毎日1回の無料ロープレ（Proなら無制限）</li>
+                </ul>
+              </div>
+
+              <div className="mb-4 flex flex-wrap justify-center gap-3 text-[11px] text-muted">
+                <span>✓ 完全無料・クレジットカード不要</span>
+                <span>✓ Googleアカウントで10秒で完了</span>
+              </div>
             </>
           ) : (
             <>
               <div className="mb-4 text-5xl">📊</div>
-              <p className="mb-6 text-sm text-muted">
-                診断結果を見るには、Googleアカウントでログインしてください
+              <p className="mb-4 text-sm text-muted">
+                あなたの営業スコアが算出されました。結果を見るにはログインしてください。
               </p>
               {pendingTurnCount > 0 && (
                 <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3">
                   <div className="text-sm text-muted">
                     あなたの営業トーク <span className="font-bold text-accent">{pendingTurnCount}ターン</span> を
-                    AIが分析中...
+                    AIが分析完了
                   </div>
                   <div className="mt-1 text-xs text-muted">
                     ログイン後すぐに結果をお見せします
                   </div>
                 </div>
               )}
+              <div className="mb-4 flex flex-wrap justify-center gap-3 text-[11px] text-muted">
+                <span>✓ 完全無料・クレジットカード不要</span>
+                <span>✓ 10秒で登録完了</span>
+              </div>
             </>
           )}
 
@@ -1157,10 +1236,16 @@ function AuthGateContent({
               </>
             )}
           </button>
+          <Link
+            href="/login?redirect=/roleplay?showScore=true"
+            className="mt-2 block text-center text-xs text-muted transition hover:text-accent"
+          >
+            メールアドレスでログイン →
+          </Link>
         </div>
 
         <p className="text-xs text-muted">
-          Googleアカウントでログインすると、初回は自動的にアカウントが作成されます。
+          ログインすると初回は自動的にアカウントが作成されます。
         </p>
       </div>
     </div>

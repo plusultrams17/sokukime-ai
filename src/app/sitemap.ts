@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { getAllBlogPosts } from "@/lib/blog";
+import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 import { getAllIndustrySlugs } from "@/data/industries";
+import { getAllLessons } from "@/lib/lessons";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -17,6 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
     },
     {
       url: `${baseUrl}/signup`,
@@ -103,6 +110,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
+      url: `${baseUrl}/dashboard`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/tools`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/lp/roleplay`,
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -119,6 +138,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/enterprise`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/program`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/changelog`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/settings`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.3,
     },
   ];
 
@@ -144,5 +187,52 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...staticPages, ...blogEntries, ...industryEntries];
+  // Tool pages — high-intent SEO traffic
+  const toolEntries: MetadataRoute.Sitemap = [
+    "sales-quiz",
+    "script-generator",
+    "objection-handbook",
+    "closing-calculator",
+  ].map((slug) => ({
+    url: `${baseUrl}/tools/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  // Learning lesson pages — long-tail SEO
+  const lessonEntries: MetadataRoute.Sitemap = getAllLessons().map((lesson) => ({
+    url: `${baseUrl}/learn/${lesson.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  // Exam page
+  const examEntry: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/learn/exam`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
+  ];
+
+  // Blog tag pages
+  const tagEntries: MetadataRoute.Sitemap = getAllTags().map((tag) => ({
+    url: `${baseUrl}/blog/tag/${encodeURIComponent(tag)}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.5,
+  }));
+
+  return [
+    ...staticPages,
+    ...blogEntries,
+    ...tagEntries,
+    ...industryEntries,
+    ...toolEntries,
+    ...lessonEntries,
+    ...examEntry,
+  ];
 }

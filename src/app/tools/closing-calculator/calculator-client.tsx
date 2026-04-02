@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { ToolUpsellCTA } from "@/components/tool-upsell-cta";
+import { ToolEmailGate } from "@/components/tool-email-gate";
 
 export function ClosingCalculatorClient() {
   const [appointments, setAppointments] = useState("");
   const [proposals, setProposals] = useState("");
   const [deals, setDeals] = useState("");
   const [dealSize, setDealSize] = useState("");
+  const [emailUnlocked, setEmailUnlocked] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("tool_email_captured") === "true") {
+      setEmailUnlocked(true);
+    }
+  }, []);
 
   const appt = parseInt(appointments) || 0;
   const prop = parseInt(proposals) || 0;
@@ -124,14 +133,27 @@ export function ClosingCalculatorClient() {
             </div>
           )}
 
-          {/* Weak Point */}
-          <div className="mt-6 rounded-xl border-2 border-orange-200 bg-orange-50 p-4">
-            <p className="text-sm font-bold text-foreground mb-1">💡 改善ポイント: {weakPoint.stage}が低め</p>
-            <p className="text-sm text-muted mb-3">{weakPoint.advice}</p>
-            <Link href="/roleplay" className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent-hover">
-              AIロープレで練習する
-            </Link>
-          </div>
+          {/* Weak Point — gated behind email */}
+          {!emailUnlocked ? (
+            <div className="mt-6">
+              <ToolEmailGate toolName="closing-calculator" onUnlock={() => setEmailUnlocked(true)} />
+            </div>
+          ) : (
+            <>
+              <div className="mt-6 rounded-xl border-2 border-orange-200 bg-orange-50 p-4">
+                <p className="text-sm font-bold text-foreground mb-1">改善ポイント: {weakPoint.stage}が低め</p>
+                <p className="text-sm text-muted mb-3">{weakPoint.advice}</p>
+                <Link href="/roleplay" className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent-hover">
+                  AIロープレで練習する
+                </Link>
+              </div>
+
+              {/* Pro Upsell */}
+              <div className="mt-6">
+                <ToolUpsellCTA />
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

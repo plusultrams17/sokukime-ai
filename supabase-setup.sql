@@ -22,6 +22,19 @@ CREATE TABLE public.usage_records (
 );
 CREATE INDEX idx_usage_user_date ON usage_records(user_id, used_date);
 
+-- ロープレスコア履歴（ダッシュボード用）
+CREATE TABLE public.roleplay_scores (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  overall_score INT NOT NULL,
+  category_scores JSONB NOT NULL DEFAULT '[]',
+  difficulty TEXT,
+  industry TEXT,
+  scene TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_scores_user_date ON roleplay_scores(user_id, created_at DESC);
+
 -- ユーザー作成時に自動でprofileを作るトリガー
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
@@ -48,11 +61,14 @@ CREATE POLICY "Users insert own usage" ON usage_records FOR INSERT WITH CHECK (a
 -- 解約防止 + 紹介プログラム用テーブル
 -- =============================================
 
--- profilesにカラム追加（一時停止・エンゲージメント管理）
+-- profilesにカラム追加（一時停止・エンゲージメント管理・リバーストライアル）
 ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS pause_start TIMESTAMPTZ,
   ADD COLUMN IF NOT EXISTS pause_resume_date TIMESTAMPTZ,
-  ADD COLUMN IF NOT EXISTS engagement_score INTEGER DEFAULT 0;
+  ADD COLUMN IF NOT EXISTS engagement_score INTEGER DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS email_unsubscribed BOOLEAN DEFAULT FALSE,
+  ADD COLUMN IF NOT EXISTS email_notifications BOOLEAN DEFAULT TRUE,
+  ADD COLUMN IF NOT EXISTS trial_ends_at TIMESTAMPTZ;
 
 -- 解約理由ログ（分析・改善用）
 CREATE TABLE public.cancel_reasons (
@@ -242,9 +258,146 @@ CREATE TABLE public.post_payment_surveys (
 CREATE TABLE public.onboarding_emails (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  email_type TEXT NOT NULL CHECK (email_type IN ('welcome', 'first_roleplay', 'third_roleplay')),
+  email_type TEXT NOT NULL,
   sent_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id, email_type)
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 CREATE INDEX idx_onboarding_emails_user ON onboarding_emails(user_id);
+CREATE INDEX idx_onboarding_emails_user_type ON onboarding_emails(user_id, email_type);
 -- API route uses service role key (bypasses RLS). No public policies needed.
+
+-- If table already exists with old CHECK constraint, run this migration:
+-- ALTER TABLE onboarding_emails DROP CONSTRAINT IF EXISTS onboarding_emails_email_type_check;
+-- ALTER TABLE onboarding_emails DROP CONSTRAINT IF EXISTS onboarding_emails_user_id_email_type_key;
+-- CREATE INDEX IF NOT EXISTS idx_onboarding_emails_user_type ON onboarding_emails(user_id, email_type);
+
+-- =============================================
+-- NPS (Net Promoter Score) 回答記録
+-- =============================================
+CREATE TABLE IF NOT EXISTS public.nps_responses (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  score INT NOT NULL CHECK (score >= 0 AND score <= 10),
+  category TEXT NOT NULL CHECK (category IN ('detractor', 'passive', 'promoter')),
+  feedback TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_nps_responses_user ON nps_responses(user_id);
+CREATE INDEX IF NOT EXISTS idx_nps_responses_category ON nps_responses(category);
+-- API route uses service role key (bypasses RLS). No public policies needed.
+
+-- =============================================
+-- A/Bテスト基盤
+-- =============================================
+
+-- A/Bテスト定義
+CREATE TABLE IF NOT EXISTS public.ab_tests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  test_name TEXT NOT NULL UNIQUE,
+  email_type TEXT NOT NULL,
+  variants JSONB NOT NULL DEFAULT '[]',
+  traffic_split JSONB NOT NULL DEFAULT '{"control": 50, "variant": 50}',
+  is_active BOOLEAN DEFAULT true,
+  winner TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  ended_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS idx_ab_tests_active ON ab_tests(is_active, email_type);
+
+-- onboarding_emailsにA/Bバリアント追跡カラム追加
+ALTER TABLE public.onboarding_emails
+  ADD COLUMN IF NOT EXISTS ab_test_id UUID REFERENCES ab_tests(id),
+  ADD COLUMN IF NOT EXISTS ab_variant TEXT;
+
+-- A/Bテスト結果（開封・クリック等のコンバージョン追跡）
+CREATE TABLE IF NOT EXISTS public.ab_test_conversions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  ab_test_id UUID NOT NULL REFERENCES ab_tests(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  variant TEXT NOT NULL,
+  conversion_type TEXT NOT NULL CHECK (conversion_type IN ('sent', 'opened', 'clicked', 'converted')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_ab_conversions_test ON ab_test_conversions(ab_test_id, variant);
+
+-- =============================================
+-- ヘルススコア履歴（予測的チャーン検知用）
+-- =============================================
+CREATE TABLE IF NOT EXISTS public.health_score_history (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  score INTEGER NOT NULL,
+  recency_score INTEGER NOT NULL,
+  frequency_score INTEGER NOT NULL,
+  breadth_score INTEGER NOT NULL,
+  improvement_score INTEGER NOT NULL,
+  risk_level TEXT NOT NULL CHECK (risk_level IN ('healthy', 'at_risk', 'critical')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_health_history_user ON health_score_history(user_id, created_at DESC);
+
+-- =============================================
+-- Cronログ監視
+-- =============================================
+CREATE TABLE IF NOT EXISTS public.cron_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_name TEXT NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('success', 'partial_failure', 'failure')),
+  duration_ms INTEGER NOT NULL,
+  results JSONB NOT NULL DEFAULT '{}',
+  error_details TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_cron_logs_job ON cron_logs(job_name, created_at DESC);
+
+-- =============================================
+-- CRM Webhookイベントログ
+-- =============================================
+CREATE TABLE IF NOT EXISTS public.crm_webhook_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_type TEXT NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  payload JSONB NOT NULL DEFAULT '{}',
+  status TEXT NOT NULL CHECK (status IN ('sent', 'failed', 'skipped')),
+  response_code INTEGER,
+  error_message TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_crm_webhook_event ON crm_webhook_logs(event_type, created_at DESC);
+
+-- =============================================
+-- 教材プログラム購入記録
+-- =============================================
+CREATE TABLE IF NOT EXISTS public.program_purchases (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  program_slug TEXT NOT NULL DEFAULT 'five-step-master',
+  stripe_payment_intent_id TEXT UNIQUE,
+  stripe_checkout_session_id TEXT,
+  amount INTEGER NOT NULL,
+  currency TEXT NOT NULL DEFAULT 'jpy',
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'refunded')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  completed_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS idx_program_purchases_user ON program_purchases(user_id);
+CREATE INDEX IF NOT EXISTS idx_program_purchases_stripe ON program_purchases(stripe_payment_intent_id);
+
+ALTER TABLE program_purchases ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users read own program purchases" ON program_purchases FOR SELECT USING (auth.uid() = user_id);
+-- Insert/update handled by service role key in webhook
+
+-- =============================================
+-- 高度なダニング（Stripeリトライ追跡）
+-- =============================================
+CREATE TABLE IF NOT EXISTS public.dunning_attempts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  stripe_invoice_id TEXT NOT NULL,
+  attempt_number INTEGER NOT NULL DEFAULT 1,
+  amount INTEGER NOT NULL,
+  failure_reason TEXT,
+  next_retry_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_dunning_user ON dunning_attempts(user_id, created_at DESC);

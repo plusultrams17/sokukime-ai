@@ -9,6 +9,7 @@ import { trackCTAClick, trackCheckoutStarted, trackPricingPageView, trackCheckou
 import { PricingExitPopup } from "@/components/exit-popups/pricing-exit-popup";
 import { UserReviews } from "@/components/user-reviews";
 import { ScrollSlideIn } from "@/components/scroll-slide-in";
+import { getActivePromotion } from "@/lib/promotions";
 
 const features = [
   { name: "AIロープレ", free: "1日1回", pro: "無制限" },
@@ -20,10 +21,11 @@ const features = [
 ];
 
 const comparisons = [
+  { name: "法人向けAIロープレ", cost: "¥100,000〜", frequency: "法人契約のみ・見積もり必要", icon: "🤖", image: "/images/misc/comparison-training.png" },
   { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", icon: "🏢", image: "/images/misc/comparison-training.png" },
   { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", icon: "👔", image: "/images/misc/comparison-consulting.png" },
   { name: "先輩にロープレ依頼", cost: "時給換算 ¥3,000〜", frequency: "週1回（相手の都合次第）", icon: "👥", image: "/images/misc/comparison-senpai.png" },
-  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "毎日・無制限・24時間", icon: "🔥", image: "/images/misc/comparison-ai-pro.png", highlight: true },
+  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "毎日・無制限・24時間・個人で即開始", icon: "🔥", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
 
@@ -36,7 +38,7 @@ const faqItems = [
   {
     question: "支払い方法は？",
     answer:
-      "クレジットカード（Visa, Mastercard, JCB, American Express）でお支払いいただけます。Stripeによる安全な決済システムを使用しています。",
+      "クレジットカード（Visa, Mastercard, JCB, American Express）およびコンビニ決済（セブン-イレブン、ローソン、ファミリーマート等）に対応しています。Stripeによる安全な決済システムを使用しています。",
   },
   {
     question: "無料プランに制限はありますか？",
@@ -64,9 +66,14 @@ const faqItems = [
       "はい。Stripeの決済管理画面から領収書をダウンロードいただけます。法人利用の場合は経費精算にもご利用いただけます。",
   },
   {
+    question: "7日間の無料トライアルとは？",
+    answer:
+      "Proプランに申し込むと、最初の7日間は無料で全機能をお試しいただけます。トライアル期間中にいつでもキャンセル可能で、キャンセルすれば一切課金されません。",
+  },
+  {
     question: "返金はできますか？",
     answer:
-      "デジタルコンテンツの性質上、サービス提供開始後の返金は行っておりません。解約後は請求期間の終了まで利用可能です。",
+      "7日間の無料トライアルで全機能をお試しいただけるため、トライアル期間中のキャンセルがおすすめです。トライアル後の返金は行っておりませんが、解約後は請求期間の終了まで利用可能です。",
   },
   {
     question: "複数のデバイスで使えますか？",
@@ -78,6 +85,9 @@ const faqItems = [
 export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [billing, setBilling] = useState<"monthly" | "annual">("annual");
+  const [promoCode, setPromoCode] = useState("");
+  const [promoOpen, setPromoOpen] = useState(false);
+  const [activePromo] = useState(() => getActivePromotion());
 
   useEffect(() => {
     trackPricingPageView({});
@@ -87,6 +97,10 @@ export default function PricingPage() {
   const annualPrice = 29800;
   const annualMonthly = Math.round(annualPrice / 12);
   const savingsMonths = 2;
+  // Tax-inclusive prices (Japan law requires 総額表示 since 2021-04-01)
+  const monthlyTaxInc = Math.round(monthlyPrice * 1.1);
+  const annualTaxInc = Math.round(annualPrice * 1.1);
+  const annualMonthlyTaxInc = Math.round(annualTaxInc / 12);
 
   async function handleUpgrade() {
     setIsLoading(true);
@@ -97,7 +111,7 @@ export default function PricingPage() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ billing }),
+        body: JSON.stringify({ billing, ...(promoCode ? { promoCode } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -111,7 +125,7 @@ export default function PricingPage() {
     setIsLoading(false);
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
   const pricingJsonLd = {
     "@context": "https://schema.org",
@@ -126,37 +140,44 @@ export default function PricingPage() {
           "@type": "Organization",
           name: "成約コーチ AI",
         },
-        offers: [
-          {
-            "@type": "Offer",
-            name: "無料プラン",
-            price: "0",
-            priceCurrency: "JPY",
-            description: "AIロープレ1日1回・成約スコア1カテゴリ",
-            availability: "https://schema.org/InStock",
-            url: `${siteUrl}/pricing`,
-          },
-          {
-            "@type": "Offer",
-            name: "Proプラン（月額）",
-            price: "2980",
-            priceCurrency: "JPY",
-            description: "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス",
-            availability: "https://schema.org/InStock",
-            url: `${siteUrl}/pricing`,
-            priceValidUntil: "2026-12-31",
-          },
-          {
-            "@type": "Offer",
-            name: "Proプラン（年額）",
-            price: "29800",
-            priceCurrency: "JPY",
-            description: "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス（2ヶ月分おトク）",
-            availability: "https://schema.org/InStock",
-            url: `${siteUrl}/pricing`,
-            priceValidUntil: "2026-12-31",
-          },
-        ],
+        offers: {
+          "@type": "AggregateOffer",
+          lowPrice: "0",
+          highPrice: "29800",
+          priceCurrency: "JPY",
+          offerCount: 3,
+          offers: [
+            {
+              "@type": "Offer",
+              name: "無料プラン",
+              price: "0",
+              priceCurrency: "JPY",
+              description: "AIロープレ1日1回・成約スコア1カテゴリ",
+              availability: "https://schema.org/InStock",
+              url: `${siteUrl}/pricing`,
+            },
+            {
+              "@type": "Offer",
+              name: "Proプラン（月額）",
+              price: "2980",
+              priceCurrency: "JPY",
+              description: "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス",
+              availability: "https://schema.org/InStock",
+              url: `${siteUrl}/pricing`,
+              priceValidUntil: "2026-12-31",
+            },
+            {
+              "@type": "Offer",
+              name: "Proプラン（年額）",
+              price: "29800",
+              priceCurrency: "JPY",
+              description: "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス（2ヶ月分おトク）",
+              availability: "https://schema.org/InStock",
+              url: `${siteUrl}/pricing`,
+              priceValidUntil: "2026-12-31",
+            },
+          ],
+        },
       },
       {
         "@type": "FAQPage",
@@ -233,11 +254,36 @@ export default function PricingPage() {
         <div className="mb-10 text-center">
           <h1 className="mb-4 text-4xl font-bold">料金プラン</h1>
           <p className="text-lg text-muted">
-            無料で始めて、もっと練習したくなったらProへ
+            7日間無料で全機能を体験。もっと練習したくなったらProへ
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-sm text-muted leading-relaxed">
             成約コーチ AIは無料プラン（1日1回AIロープレ）とProプラン（月額¥2,980で無制限AIロープレ）の2プランを提供。従来の営業研修（1回¥50,000〜）と比較して月額¥2,980で無制限に練習でき、いつでも解約可能です。
           </p>
+        </div>
+
+        {/* Objection Handling */}
+        <div className="mb-12 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border border-card-border bg-card p-5 text-center">
+            <div className="mb-2 text-2xl">🤔</div>
+            <p className="mb-1 text-sm font-bold">効果があるか不安？</p>
+            <p className="text-xs text-muted leading-relaxed">
+              成約5ステップメソッドに基づくAI評価で、練習するほどスコアが向上。まず無料で1回試して、あなたのスコアを確認してみてください。
+            </p>
+          </div>
+          <div className="rounded-xl border border-card-border bg-card p-5 text-center">
+            <div className="mb-2 text-2xl">⏰</div>
+            <p className="mb-1 text-sm font-bold">時間がない？</p>
+            <p className="text-xs text-muted leading-relaxed">
+              1回のロープレはたった3〜5分。通勤中・昼休み・寝る前の隙間時間でOK。チーム研修のように日程調整する必要もありません。
+            </p>
+          </div>
+          <div className="rounded-xl border border-card-border bg-card p-5 text-center">
+            <div className="mb-2 text-2xl">💰</div>
+            <p className="mb-1 text-sm font-bold">本当にいつでも辞められる？</p>
+            <p className="text-xs text-muted leading-relaxed">
+              7日間の無料トライアル中はいつでもキャンセル可能。課金後も1クリックで即解約、違約金・手数料は一切ありません。
+            </p>
+          </div>
         </div>
 
         {/* Billing Toggle */}
@@ -284,10 +330,13 @@ export default function PricingPage() {
 
             <Link
               href="/roleplay"
-              className="flex h-12 w-full items-center justify-center rounded-xl border border-card-border text-base font-bold text-muted transition hover:border-accent hover:text-foreground"
+              className="flex h-10 w-full items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:border-accent/50 hover:text-foreground"
             >
               無料で始める
             </Link>
+            <p className="mt-2 text-center text-[11px] text-accent/60">
+              Proの7日間無料トライアルもあります →
+            </p>
 
             <div className="mt-8 space-y-4">
               {features.map((f) => (
@@ -337,21 +386,72 @@ export default function PricingPage() {
                   </>
                 )}
               </div>
+              <p className="mt-1 text-xs text-muted">
+                {billing === "annual"
+                  ? `税込 ¥${annualMonthlyTaxInc.toLocaleString()}/月（年額 ¥${annualTaxInc.toLocaleString()}）`
+                  : `税込 ¥${monthlyTaxInc.toLocaleString()}/月`}
+              </p>
               <p className="mt-2 text-sm text-muted">
                 本気で営業力を鍛えたい方に
               </p>
             </div>
+
+            {/* Campaign Notice — auto-applied at checkout */}
+            {activePromo && billing === "monthly" && (
+              <div className="mb-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-2.5 text-center">
+                <p className="text-xs font-bold text-accent">
+                  {activePromo.name}適用中
+                </p>
+                <p className="text-[11px] text-muted">
+                  トライアル後の初月 ¥{activePromo.discountPrice.toLocaleString()}
+                  <span className="ml-1 line-through">¥{activePromo.originalPrice.toLocaleString()}</span>
+                  （自動適用）
+                </p>
+              </div>
+            )}
 
             <button
               onClick={handleUpgrade}
               disabled={isLoading}
               className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
             >
-              {isLoading ? "処理中..." : billing === "annual" ? "年額プランに申し込む" : "Proプランに申し込む"}
+              {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
             </button>
             <p className="mt-3 text-center text-[11px] text-muted">
-              いつでも解約OK・即日反映・違約金なし
+              今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで無料 → その後{billing === "annual" ? `¥${annualMonthlyTaxInc.toLocaleString()}/月（税込）` : `¥${monthlyTaxInc.toLocaleString()}/月（税込）`}
+              ・いつでも解約OK
             </p>
+            <p className="mt-1 text-center text-[11px] text-accent/70">
+              1回のロープレあたり約¥99 — コーヒー1杯以下
+            </p>
+
+            {/* Promo Code Input */}
+            <div className="mt-4 text-center">
+              {!promoOpen ? (
+                <button
+                  onClick={() => setPromoOpen(true)}
+                  className="text-xs text-muted transition hover:text-accent"
+                >
+                  プロモコードをお持ちですか？
+                </button>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                    placeholder="コードを入力"
+                    className="h-9 flex-1 rounded-lg border border-card-border bg-background px-3 text-sm text-foreground placeholder:text-muted/50 focus:border-accent focus:outline-none"
+                  />
+                  <button
+                    onClick={() => { setPromoOpen(false); setPromoCode(""); }}
+                    className="text-xs text-muted hover:text-foreground"
+                  >
+                    閉じる
+                  </button>
+                </div>
+              )}
+            </div>
 
             <div className="mt-8 space-y-4">
               {features.map((f) => (
@@ -368,12 +468,15 @@ export default function PricingPage() {
         </div>
 
         {/* Guarantee Badge */}
-        <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted">
-          <span>🛡️</span>
-          <span>
-            いつでも解約OK・Stripe安全決済・クレジットカード各社対応
-          </span>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted">
+          <span className="flex items-center gap-1">🛡️ いつでも解約OK</span>
+          <span className="flex items-center gap-1">🔒 Stripe安全決済</span>
+          <span className="flex items-center gap-1">🏪 コンビニ決済対応</span>
+          <span className="flex items-center gap-1">🧾 経費精算・領収書OK</span>
         </div>
+        <p className="mt-2 text-center text-xs text-muted">
+          上司の承認不要 — 個人で今すぐ始められます。法人払いにも対応。
+        </p>
 
         {/* ROI Comparison Section */}
         <div className="mt-20">
@@ -423,22 +526,128 @@ export default function PricingPage() {
         {/* Dynamic User Reviews — 承認済みレビューがあれば自動表示 */}
         <UserReviews />
 
+        {/* Team / Corporate Plan */}
+        <div className="mt-20 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-8 sm:p-12">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="mb-2 text-sm font-medium text-accent">
+              法人・チーム向け
+            </p>
+            <h2 className="mb-4 text-2xl font-bold">
+              チームの営業力を底上げしませんか？
+            </h2>
+            <p className="mb-6 text-sm text-muted leading-relaxed">
+              営業チーム全員のスキルを均一に底上げ。個別の営業研修（1回5万円〜）と比べて
+              <strong>1/10以下のコスト</strong>で、毎日の実践練習環境を提供します。
+            </p>
+
+            <div className="mb-8 grid gap-4 sm:grid-cols-3">
+              <div className="rounded-xl border border-card-border bg-card p-4">
+                <p className="mb-1 text-2xl font-bold text-accent">無制限</p>
+                <p className="text-xs text-muted">全メンバーのロープレ回数</p>
+              </div>
+              <div className="rounded-xl border border-card-border bg-card p-4">
+                <p className="mb-1 text-2xl font-bold text-accent">5名〜</p>
+                <p className="text-xs text-muted">チームプラン対応人数</p>
+              </div>
+              <div className="rounded-xl border border-card-border bg-card p-4">
+                <p className="mb-1 text-2xl font-bold text-accent">請求書OK</p>
+                <p className="text-xs text-muted">経費精算・法人払い対応</p>
+              </div>
+            </div>
+
+            <div className="mb-4 rounded-xl bg-card border border-card-border p-4 text-left">
+              <p className="mb-2 text-sm font-bold">法人プランに含まれる機能</p>
+              <ul className="grid gap-1 text-sm text-muted sm:grid-cols-2">
+                <li>&#10003; 全メンバー無制限ロープレ</li>
+                <li>&#10003; 全5カテゴリの詳細スコア</li>
+                <li>&#10003; AI改善アドバイス</li>
+                <li>&#10003; チーム管理ダッシュボード</li>
+                <li>&#10003; メンバー別スコア推移</li>
+                <li>&#10003; 請求書払い対応</li>
+              </ul>
+            </div>
+
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
+              <a
+                href="mailto:support@seiyaku-coach.com?subject=法人プランのお問い合わせ&body=会社名：%0Aご担当者名：%0A利用予定人数：%0Aご質問・ご要望：%0A"
+                className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent bg-transparent px-8 text-base font-bold text-accent transition hover:bg-accent/10"
+              >
+                法人プランについて問い合わせる
+              </a>
+              <Link
+                href="/enterprise"
+                className="inline-flex h-12 items-center justify-center rounded-xl border border-card-border px-8 text-sm font-medium text-muted transition hover:text-foreground hover:border-accent/30"
+              >
+                法人導入の詳細を見る →
+              </Link>
+            </div>
+            <p className="mt-3 text-xs text-muted">
+              稟議書テンプレート付き ・ ご利用人数に応じたお見積もり（最短当日対応）
+            </p>
+          </div>
+        </div>
+
         {/* FAQ */}
         <div className="mt-20">
           <h2 className="mb-8 text-center text-2xl font-bold">
             よくある質問
           </h2>
-          <div className="space-y-4">
-            {faqItems.map((item) => (
-              <div
-                key={item.question}
-                className="rounded-xl border border-card-border bg-card p-6"
-              >
-                <h3 className="mb-2 font-bold">{item.question}</h3>
-                <p className="text-sm text-muted">{item.answer}</p>
-              </div>
+          <div className="space-y-3">
+            {faqItems.map((item, i) => (
+              <details key={item.question} className="group rounded-xl border border-card-border bg-card" open={i === 0}>
+                <summary className="flex cursor-pointer items-center justify-between px-6 py-5 text-sm font-bold text-foreground [&::-webkit-details-marker]:hidden list-none">
+                  <span>{item.question}</span>
+                  <svg
+                    className="h-5 w-5 flex-shrink-0 text-muted transition-transform duration-200 group-open:rotate-180"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <div className="border-t border-card-border px-6 pb-5 pt-4 text-sm leading-relaxed text-muted">
+                  {item.answer}
+                </div>
+              </details>
             ))}
           </div>
+        </div>
+
+        {/* Referral CTA */}
+        <div className="mt-12 rounded-xl border border-green-500/20 bg-green-500/5 p-6 text-center">
+          <p className="mb-1 text-sm font-bold">友達紹介で ¥1,000 OFF</p>
+          <p className="mb-3 text-xs text-muted">
+            紹介した友達もあなたも、初月 ¥1,000 割引。紹介コードを共有するだけ。
+          </p>
+          <Link
+            href="/referral"
+            className="inline-flex h-9 items-center rounded-lg border border-green-500/30 px-4 text-xs font-bold text-green-600 transition hover:bg-green-500/10"
+          >
+            紹介プログラムを見る →
+          </Link>
+        </div>
+
+        {/* Program Cross-sell */}
+        <div className="mt-12 rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 sm:p-8 text-center">
+          <p className="mb-2 text-sm font-medium text-accent">買い切り教材もあります</p>
+          <h3 className="mb-3 text-xl font-bold text-foreground">
+            成約5ステップ完全攻略プログラム
+          </h3>
+          <p className="mb-4 text-sm text-muted leading-relaxed">
+            22レッスン+反論切り返しテンプレート+トークスクリプトがすべてセット。
+            <br className="hidden sm:block" />
+            一度購入すれば無期限でアクセスできる買い切り型の教材です。
+          </p>
+          <div className="mb-4 flex items-center justify-center gap-2">
+            <span className="text-sm text-muted line-through">¥14,800</span>
+            <span className="text-2xl font-bold text-accent">¥9,800</span>
+            <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">先着30名</span>
+          </div>
+          <Link
+            href="/program"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-accent px-7 text-sm font-bold text-white transition hover:bg-accent-hover"
+          >
+            プログラムの詳細を見る
+          </Link>
         </div>
 
         {/* Bottom CTA */}

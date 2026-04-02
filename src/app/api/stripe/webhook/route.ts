@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
+import { sendTransactionalEmail, sendTrialEmail } from "@/lib/email";
+import { sendCRMEvent } from "@/lib/crm-webhook";
 
 /** Send server-side event to GA4 via Measurement Protocol */
 async function sendGA4Event(
@@ -61,8 +63,53 @@ export async function POST(request: NextRequest) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
-      const subscriptionId = session.subscription as string;
       const customerId = session.customer as string;
+
+      // ── One-time program purchase ──
+      if (session.mode === "payment" && session.metadata?.product_type === "program") {
+        const userId = session.metadata.supabase_user_id;
+        const programSlug = session.metadata.program_slug || "five-step-master";
+        const paymentIntentId = session.payment_intent as string;
+
+        await supabaseAdmin.from("program_purchases").insert({
+          user_id: userId,
+          program_slug: programSlug,
+          stripe_payment_intent_id: paymentIntentId,
+          stripe_checkout_session_id: session.id,
+          amount: session.amount_total || 0,
+          currency: session.currency || "jpy",
+          status: "completed",
+          completed_at: new Date().toISOString(),
+        });
+
+        // Send purchase confirmation email
+        const { data: buyerProfile } = await supabaseAdmin
+          .from("profiles")
+          .select("id, email")
+          .eq("id", userId)
+          .single();
+
+        if (buyerProfile?.email) {
+          sendTransactionalEmail(buyerProfile.email, "program_purchased", buyerProfile.id);
+          sendCRMEvent(supabaseAdmin, "user.program_purchased", buyerProfile.id, buyerProfile.email, "free", {
+            program_slug: programSlug,
+            amount: session.amount_total,
+          });
+        }
+
+        // Track via GA4
+        sendGA4Event(customerId, "program_purchased", {
+          program: programSlug,
+          price: session.amount_total || 0,
+          currency: "JPY",
+          transaction_id: paymentIntentId,
+        });
+
+        break;
+      }
+
+      // ── Subscription checkout (existing logic) ──
+      const subscriptionId = session.subscription as string;
 
       await supabaseAdmin
         .from("profiles")
@@ -73,20 +120,34 @@ export async function POST(request: NextRequest) {
         })
         .eq("stripe_customer_id", customerId);
 
-      // Track purchase via GA4 Measurement Protocol
+      // Track purchase via GA4 Measurement Protocol (use actual amount from session)
+      const amountTotal = session.amount_total ? session.amount_total : 0;
       sendGA4Event(customerId, "purchase_completed", {
         plan: "pro",
-        price: 2980,
+        price: amountTotal,
         currency: "JPY",
         transaction_id: subscriptionId,
+        billing_interval: amountTotal > 10000 ? "annual" : "monthly",
       });
 
-      // 紹介報酬の処理: 新規Pro変換ユーザーが被紹介者かチェック
-      const { data: profile } = await supabaseAdmin
+      // Send Pro welcome email
+      const { data: newProProfile } = await supabaseAdmin
         .from("profiles")
-        .select("id")
+        .select("id, email")
         .eq("stripe_customer_id", customerId)
         .single();
+
+      if (newProProfile?.email) {
+        sendTransactionalEmail(newProProfile.email, "pro_welcome", newProProfile.id);
+        // CRM event for Pro conversion
+        sendCRMEvent(supabaseAdmin, "user.pro_conversion", newProProfile.id, newProProfile.email, "pro", {
+          amount: amountTotal,
+          billing_interval: amountTotal > 10000 ? "annual" : "monthly",
+        });
+      }
+
+      // 紹介報酬の処理: 新規Pro変換ユーザーが被紹介者かチェック
+      const profile = newProProfile;
 
       if (profile) {
         const { data: referral } = await supabaseAdmin
@@ -106,10 +167,10 @@ export async function POST(request: NextRequest) {
             })
             .eq("id", referral.id);
 
-          // 紹介者にクーポンを適用
+          // 紹介者にクーポンを適用 & 通知
           const { data: referrerProfile } = await supabaseAdmin
             .from("profiles")
-            .select("stripe_subscription_id")
+            .select("id, email, stripe_subscription_id")
             .eq("id", referral.referrer_id)
             .single();
 
@@ -141,6 +202,11 @@ export async function POST(request: NextRequest) {
                   rewarded_at: new Date().toISOString(),
                 })
                 .eq("id", referral.id);
+
+              // 紹介者に報酬通知メールを送信
+              if (referrerProfile.email) {
+                sendTransactionalEmail(referrerProfile.email, "referral_reward", referrerProfile.id);
+              }
             } catch (err) {
               console.error("Referral reward error:", err);
             }
@@ -200,6 +266,24 @@ export async function POST(request: NextRequest) {
         })
         .eq("stripe_customer_id", customerId);
 
+      // Send win-back email on cancellation
+      const { data: canceledProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("id, email")
+        .eq("stripe_customer_id", customerId)
+        .single();
+
+      if (canceledProfile?.email) {
+        sendTransactionalEmail(canceledProfile.email, "subscription_canceled", canceledProfile.id);
+        // Record cancellation email send time (used by win-back cron to calculate Day 7/30)
+        await supabaseAdmin.from("onboarding_emails").insert({
+          user_id: canceledProfile.id,
+          email_type: "subscription_canceled",
+        });
+        // CRM event for cancellation
+        sendCRMEvent(supabaseAdmin, "user.cancellation", canceledProfile.id, canceledProfile.email, "free");
+      }
+
       break;
     }
 
@@ -211,6 +295,196 @@ export async function POST(request: NextRequest) {
         .from("profiles")
         .update({ subscription_status: "past_due" })
         .eq("stripe_customer_id", customerId);
+
+      // Send dunning email to recover involuntary churn
+      const { data: failedProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("id, email")
+        .eq("stripe_customer_id", customerId)
+        .single();
+
+      if (failedProfile?.email) {
+        // Advanced dunning: track retry attempts
+        const attemptCount = invoice.attempt_count || 1;
+        const nextRetryAt = invoice.next_payment_attempt
+          ? new Date(invoice.next_payment_attempt * 1000).toISOString()
+          : null;
+
+        await supabaseAdmin.from("dunning_attempts").insert({
+          user_id: failedProfile.id,
+          stripe_invoice_id: invoice.id,
+          attempt_number: attemptCount,
+          amount: invoice.amount_due || 0,
+          failure_reason: invoice.last_finalization_error?.message || "unknown",
+          next_retry_at: nextRetryAt,
+        });
+
+        // Only send first payment_failed email (avoid spam on Stripe retries)
+        const { data: alreadyRecorded } = await supabaseAdmin
+          .from("onboarding_emails")
+          .select("id")
+          .eq("user_id", failedProfile.id)
+          .eq("email_type", "payment_failed")
+          .limit(1);
+
+        if (!alreadyRecorded || alreadyRecorded.length === 0) {
+          sendTransactionalEmail(failedProfile.email, "payment_failed", failedProfile.id);
+          await supabaseAdmin.from("onboarding_emails").insert({
+            user_id: failedProfile.id,
+            email_type: "payment_failed",
+          });
+        }
+
+        // CRM event for payment failure
+        sendCRMEvent(supabaseAdmin, "user.payment_failed", failedProfile.id, failedProfile.email, "pro", {
+          attempt_number: attemptCount,
+          amount: invoice.amount_due,
+          next_retry_at: nextRetryAt,
+        });
+      }
+
+      break;
+    }
+
+    case "checkout.session.expired": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const customerId = session.customer as string;
+
+      if (customerId) {
+        const { data: abandonedProfile } = await supabaseAdmin
+          .from("profiles")
+          .select("id, email, plan")
+          .eq("stripe_customer_id", customerId)
+          .single();
+
+        // Only send if the user is still on free plan (didn't complete checkout elsewhere)
+        if (abandonedProfile?.email && abandonedProfile.plan === "free") {
+          // Check if we already sent this email recently (within 7 days)
+          const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+          const { data: alreadySent } = await supabaseAdmin
+            .from("onboarding_emails")
+            .select("id")
+            .eq("user_id", abandonedProfile.id)
+            .eq("email_type", "checkout_abandoned")
+            .gte("created_at", sevenDaysAgo.toISOString())
+            .limit(1);
+
+          if (!alreadySent || alreadySent.length === 0) {
+            sendTransactionalEmail(abandonedProfile.email, "checkout_abandoned", abandonedProfile.id);
+            await supabaseAdmin.from("onboarding_emails").insert({
+              user_id: abandonedProfile.id,
+              email_type: "checkout_abandoned",
+            });
+          }
+        }
+      }
+
+      break;
+    }
+
+    case "customer.subscription.trial_will_end": {
+      const subscription = event.data.object as Stripe.Subscription;
+      const customerId = subscription.customer as string;
+
+      const { data: trialProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("id, email, email_unsubscribed")
+        .eq("stripe_customer_id", customerId)
+        .single();
+
+      if (trialProfile?.email && !trialProfile.email_unsubscribed) {
+        const { data: alreadySent } = await supabaseAdmin
+          .from("onboarding_emails")
+          .select("id")
+          .eq("user_id", trialProfile.id)
+          .eq("email_type", "trial_expiring_3days")
+          .limit(1);
+
+        if (!alreadySent || alreadySent.length === 0) {
+          sendTrialEmail(trialProfile.email, "trial_expiring_3days", trialProfile.id);
+          await supabaseAdmin.from("onboarding_emails").insert({
+            user_id: trialProfile.id,
+            email_type: "trial_expiring_3days",
+          });
+        }
+      }
+
+      break;
+    }
+
+    case "invoice.payment_action_required": {
+      const invoice = event.data.object as Stripe.Invoice;
+      const customerId = invoice.customer as string;
+
+      const { data: actionProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("id, email")
+        .eq("stripe_customer_id", customerId)
+        .single();
+
+      if (actionProfile?.email) {
+        sendTransactionalEmail(actionProfile.email, "payment_failed", actionProfile.id);
+      }
+
+      break;
+    }
+
+    case "invoice.paid": {
+      const invoice = event.data.object as Stripe.Invoice;
+      const customerId = invoice.customer as string;
+
+      // Clear past_due status when payment succeeds (recovery from dunning)
+      const { data: wasRecovered } = await supabaseAdmin
+        .from("profiles")
+        .select("id, email")
+        .eq("stripe_customer_id", customerId)
+        .eq("subscription_status", "past_due")
+        .single();
+
+      await supabaseAdmin
+        .from("profiles")
+        .update({ subscription_status: "active", plan: "pro" })
+        .eq("stripe_customer_id", customerId)
+        .eq("subscription_status", "past_due");
+
+      // Clean up dunning email records so they don't block future dunning cycles
+      const { data: recoveredProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("id, email")
+        .eq("stripe_customer_id", customerId)
+        .single();
+
+      if (recoveredProfile) {
+        await supabaseAdmin
+          .from("onboarding_emails")
+          .delete()
+          .eq("user_id", recoveredProfile.id)
+          .in("email_type", ["payment_failed", "payment_failed_day4", "payment_failed_day7"]);
+
+        // Clean up dunning attempts on successful payment
+        await supabaseAdmin
+          .from("dunning_attempts")
+          .delete()
+          .eq("user_id", recoveredProfile.id)
+          .eq("stripe_invoice_id", invoice.id);
+
+        // CRM event for payment recovered (only if was actually past_due)
+        if (wasRecovered?.email) {
+          sendCRMEvent(supabaseAdmin, "user.payment_recovered", recoveredProfile.id, wasRecovered.email, "pro", {
+            recovered_amount: invoice.amount_paid,
+          });
+        }
+      }
+
+      // Track renewal via GA4
+      const invoiceAmount = invoice.amount_paid || 0;
+      if (invoiceAmount > 0) {
+        sendGA4Event(customerId, "subscription_renewed", {
+          plan: "pro",
+          price: invoiceAmount,
+          currency: "JPY",
+        });
+      }
 
       break;
     }

@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 /* ─── SEO Metadata ─── */
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
 export const metadata: Metadata = {
   title:
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       "営業心理学から体系化した成約5ステップメソッド。22レッスン・3レベル構成の営業学習プログラム。",
   },
   alternates: {
-    canonical: `${SITE_URL}/lp/learn`,
+    canonical: `${SITE_URL}/learn`,
   },
 };
 

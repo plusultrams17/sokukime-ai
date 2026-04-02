@@ -10,12 +10,14 @@ const navLinks = [
   { href: "/tools", label: "無料ツール" },
   { href: "/industry", label: "業種別" },
   { href: "/learn", label: "学習" },
+  { href: "/program", label: "教材" },
   { href: "/blog", label: "ブログ" },
   { href: "/pricing", label: "料金プラン" },
 ];
 
 export function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [plan, setPlan] = useState<"free" | "pro">("free");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -23,6 +25,16 @@ export function Header() {
     if (!supabase) return;
     supabase.auth.getUser().then(({ data: { user } }) => {
       setIsLoggedIn(!!user);
+      if (user) {
+        supabase
+          .from("profiles")
+          .select("plan")
+          .eq("id", user.id)
+          .single()
+          .then(({ data }) => {
+            if (data?.plan) setPlan(data.plan as "free" | "pro");
+          });
+      }
     });
   }, []);
 
@@ -71,9 +83,19 @@ export function Header() {
               ログイン
             </Link>
           )}
-          <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_signup", "header", "/roleplay")}>
-            <span>無料で試す</span>
-          </Link>
+          {isLoggedIn && plan === "free" ? (
+            <Link href="/pricing" className="nav-btn" onClick={() => trackCTAClick("header_upgrade", "header", "/pricing")}>
+              <span>Proにアップグレード</span>
+            </Link>
+          ) : isLoggedIn && plan === "pro" ? (
+            <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_roleplay", "header", "/roleplay")}>
+              <span>ロープレを始める</span>
+            </Link>
+          ) : (
+            <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_signup", "header", "/roleplay")}>
+              <span>無料で試す</span>
+            </Link>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -113,7 +135,24 @@ export function Header() {
           >
             まず営業の型を学ぶ
           </Link>
-          {isLoggedIn ? (
+          {isLoggedIn && plan === "free" ? (
+            <>
+              <Link
+                href="/pricing"
+                className="nav-btn mobile-menu__cta"
+                onClick={() => { setOpen(false); trackCTAClick("header_upgrade_mobile", "mobile_menu", "/pricing"); }}
+              >
+                <span>Proにアップグレード</span>
+              </Link>
+              <Link
+                href="/roleplay"
+                className="mobile-menu__link"
+                onClick={() => setOpen(false)}
+              >
+                無料ロープレを試す
+              </Link>
+            </>
+          ) : isLoggedIn && plan === "pro" ? (
             <Link
               href="/roleplay"
               className="nav-btn mobile-menu__cta"

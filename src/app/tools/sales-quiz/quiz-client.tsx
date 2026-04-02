@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ToolUpsellCTA } from "@/components/tool-upsell-cta";
+import { ToolEmailGate } from "@/components/tool-email-gate";
 
 type Category = "アプローチ" | "ヒアリング" | "プレゼン" | "クロージング" | "反論処理";
 
@@ -150,6 +152,13 @@ export function SalesQuizClient() {
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
+  const [emailUnlocked, setEmailUnlocked] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("tool_email_captured") === "true") {
+      setEmailUnlocked(true);
+    }
+  }, []);
 
   const handleAnswer = (score: number) => {
     setSelected(score);
@@ -274,45 +283,76 @@ export function SalesQuizClient() {
         <p className="text-sm text-muted">{grade.desc}</p>
       </div>
 
-      {/* Category Breakdown */}
-      <div className="rounded-2xl bg-white border border-card-border shadow-sm p-6 sm:p-8">
-        <h3 className="text-base font-bold text-foreground mb-6">カテゴリ別スコア</h3>
-        <div className="space-y-4">
-          {(Object.entries(categoryScores) as [Category, number][]).map(([cat, score]) => {
-            const maxScore = 8;
-            const pct = (score / maxScore) * 100;
-            const color = CATEGORY_COLORS[cat];
-            return (
-              <div key={cat}>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="font-medium text-foreground">{cat}</span>
-                  <span className="text-muted">{score} / {maxScore}</span>
-                </div>
-                <div className="h-3 rounded-full bg-gray-100">
-                  <div
-                    className="h-3 rounded-full transition-all duration-700"
-                    style={{ width: `${pct}%`, backgroundColor: color }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      {/* Email gate or detailed results */}
+      {!emailUnlocked ? (
+        <ToolEmailGate toolName="sales-quiz" onUnlock={() => setEmailUnlocked(true)} />
+      ) : (
+        <>
+          {/* Category Breakdown */}
+          <div className="rounded-2xl bg-white border border-card-border shadow-sm p-6 sm:p-8">
+            <h3 className="text-base font-bold text-foreground mb-6">カテゴリ別スコア</h3>
+            <div className="space-y-4">
+              {(Object.entries(categoryScores) as [Category, number][]).map(([cat, score]) => {
+                const maxScore = 8;
+                const pct = (score / maxScore) * 100;
+                const color = CATEGORY_COLORS[cat];
+                return (
+                  <div key={cat}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium text-foreground">{cat}</span>
+                      <span className="text-muted">{score} / {maxScore}</span>
+                    </div>
+                    <div className="h-3 rounded-full bg-gray-100">
+                      <div
+                        className="h-3 rounded-full transition-all duration-700"
+                        style={{ width: `${pct}%`, backgroundColor: color }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
-      {/* Weak Point */}
-      <div className="rounded-2xl border-2 border-orange-200 bg-orange-50 p-6">
-        <h3 className="text-base font-bold text-foreground mb-2">
-          💡 重点改善ポイント: {weakest[0]}
-        </h3>
-        <p className="text-sm text-muted mb-4">
-          {weakest[0]}のスコアが最も低くなっています。この分野を集中的に練習することで、全体の成約率が大きく改善する可能性があります。
+          {/* Weak Point */}
+          <div className="rounded-2xl border-2 border-orange-200 bg-orange-50 p-6">
+            <h3 className="text-base font-bold text-foreground mb-2">
+              重点改善ポイント: {weakest[0]}
+            </h3>
+            <p className="text-sm text-muted mb-4">
+              {weakest[0]}のスコアが最も低くなっています。この分野を集中的に練習することで、全体の成約率が大きく改善する可能性があります。
+            </p>
+            <Link
+              href="/roleplay"
+              className="inline-flex h-10 items-center justify-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
+            >
+              AIロープレで{weakest[0]}を練習する
+            </Link>
+          </div>
+        </>
+      )}
+
+      {/* Program CTA */}
+      <div className="rounded-2xl border-2 border-accent bg-accent/5 p-6 sm:p-8 text-center">
+        <p className="mb-2 text-sm font-medium text-accent">
+          スコアを伸ばしたい方へ
         </p>
+        <h3 className="mb-3 text-xl font-bold text-foreground">
+          成約5ステップ完全攻略プログラム
+        </h3>
+        <p className="mb-4 text-sm text-muted leading-relaxed">
+          22レッスンで営業の「型」を体系的に習得。弱点を集中的に改善し、成約率を引き上げるための実践プログラムです。
+        </p>
+        <div className="mb-4 flex items-center justify-center gap-2">
+          <span className="text-sm text-muted line-through">¥14,800</span>
+          <span className="text-2xl font-bold text-accent">¥9,800</span>
+          <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">先着30名</span>
+        </div>
         <Link
-          href="/roleplay"
-          className="inline-flex h-10 items-center justify-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
+          href="/program"
+          className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
         >
-          AIロープレで{weakest[0]}を練習する
+          プログラムの詳細を見る
         </Link>
       </div>
 
@@ -331,6 +371,9 @@ export function SalesQuizClient() {
           もう一度診断する
         </button>
       </div>
+
+      {/* Pro Upsell */}
+      <ToolUpsellCTA />
     </div>
   );
 }

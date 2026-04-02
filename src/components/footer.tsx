@@ -38,12 +38,17 @@ export function Footer() {
             <nav className="flex flex-col gap-2 text-sm text-muted">
               <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
               <Link href="/roleplay" className="transition hover:text-foreground">AIロープレ</Link>
+              <Link href="/dashboard" className="transition hover:text-foreground">マイダッシュボード</Link>
               <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
+              <Link href="/program" className="transition hover:text-foreground">教材プログラム</Link>
               <Link href="/features" className="transition hover:text-foreground">機能紹介</Link>
               <Link href="/tools" className="transition hover:text-foreground">無料ツール</Link>
               <Link href="/industry" className="transition hover:text-foreground">業種別ロープレ</Link>
               <Link href="/use-cases" className="transition hover:text-foreground">活用シーン</Link>
+              <Link href="/enterprise" className="transition hover:text-foreground">法人導入</Link>
               <Link href="/blog" className="transition hover:text-foreground">ブログ</Link>
+              <Link href="/faq" className="transition hover:text-foreground">よくある質問</Link>
+              <Link href="/changelog" className="transition hover:text-foreground">更新履歴</Link>
             </nav>
           </div>
           {/* Industries */}

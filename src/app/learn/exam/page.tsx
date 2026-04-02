@@ -549,6 +549,33 @@ export default function ExamPage() {
                 </div>
               )}
 
+              {/* Pro CTA after pass */}
+              {passed && (
+                <div className="border border-accent/30 bg-accent/5 rounded-xl p-6 mb-8">
+                  <p className="text-sm font-bold text-foreground mb-2">
+                    学習完了！次はAIロープレで実践しましょう
+                  </p>
+                  <p className="text-xs text-muted mb-4 leading-relaxed">
+                    メソッドを学んだ今が、一番伸びるタイミングです。<br />
+                    Proプランなら無制限でAIロープレ＆詳細スコアが使えます。
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      href="/roleplay"
+                      className="inline-block bg-accent text-white text-sm font-bold px-6 py-2.5 rounded-lg hover:bg-accent-hover transition"
+                    >
+                      AIロープレで実践する →
+                    </Link>
+                    <Link
+                      href="/pricing"
+                      className="inline-block border border-accent/40 text-accent text-sm font-bold px-6 py-2.5 rounded-lg hover:bg-accent/10 transition"
+                    >
+                      Pro 7日間無料トライアル
+                    </Link>
+                  </div>
+                </div>
+              )}
+
               {/* Actions */}
               <div className="flex items-center gap-4">
                 <button

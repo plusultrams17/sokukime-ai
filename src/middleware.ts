@@ -61,6 +61,15 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
+    // Protect authenticated-only routes — redirect to login if not signed in
+    const protectedPaths = ["/dashboard", "/referral", "/settings"];
+    if (!user && protectedPaths.some((p) => request.nextUrl.pathname === p)) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("redirect", request.nextUrl.pathname);
+      return NextResponse.redirect(url);
+    }
+
     return supabaseResponse;
   } catch {
     // If middleware fails, allow the request to proceed

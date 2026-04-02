@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getUsageStatus } from "@/lib/usage";
+import { getUsageStatus, getStreak } from "@/lib/usage";
 
 export async function GET() {
   const supabase = await createClient();
@@ -23,8 +23,12 @@ export async function GET() {
       .eq("user_id", user.id),
   ]);
 
+  // Pass plan to getStreak for Pro Streak Shield feature
+  const streak = await getStreak(supabase, user.id, status.plan);
+
   return NextResponse.json({
     ...status,
     totalSessions: totalResult.count || 0,
+    streak,
   });
 }

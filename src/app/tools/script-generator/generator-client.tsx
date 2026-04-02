@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { ToolUpsellCTA } from "@/components/tool-upsell-cta";
+import { ToolEmailGate } from "@/components/tool-email-gate";
 
 const INDUSTRIES = ["保険", "不動産", "リフォーム", "外壁塗装", "太陽光", "自動車", "人材紹介", "IT/SaaS", "広告", "医療機器", "印刷", "ブライダル", "その他"];
 const TARGETS = ["個人（一般家庭）", "個人（富裕層）", "法人（中小企業）", "法人（大企業）"];
@@ -70,7 +72,14 @@ export function ScriptGeneratorClient() {
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied] = useState(false);
   const [sectionCopied, setSectionCopied] = useState(-1);
+  const [emailUnlocked, setEmailUnlocked] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("tool_email_captured") === "true") {
+      setEmailUnlocked(true);
+    }
+  }, []);
 
   const handleGenerate = () => {
     if (!industry || !product || !target) return;
@@ -180,23 +189,27 @@ export function ScriptGeneratorClient() {
 
           {/* Content */}
           <div className="p-5 sm:p-8">
-            <div className="space-y-3">
-              {sections[activeTab].map((text, i) => (
-                <div key={i} className="group relative rounded-xl bg-background p-4 text-sm leading-relaxed text-foreground whitespace-pre-line">
-                  {text}
-                  <button
-                    onClick={() => handleSectionCopy(text, activeTab * 10 + i)}
-                    className="absolute right-2 top-2 rounded-md border border-card-border bg-white p-1.5 text-muted opacity-0 transition hover:text-accent group-hover:opacity-100"
-                    title="コピー"
-                  >
-                    {sectionCopied === activeTab * 10 + i
-                      ? <svg className="h-3.5 w-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                      : <CopyIcon />
-                    }
-                  </button>
-                </div>
-              ))}
-            </div>
+            {!emailUnlocked && activeTab >= 2 ? (
+              <ToolEmailGate toolName="script-generator" onUnlock={() => setEmailUnlocked(true)} />
+            ) : (
+              <div className="space-y-3">
+                {sections[activeTab].map((text, i) => (
+                  <div key={i} className="group relative rounded-xl bg-background p-4 text-sm leading-relaxed text-foreground whitespace-pre-line">
+                    {text}
+                    <button
+                      onClick={() => handleSectionCopy(text, activeTab * 10 + i)}
+                      className="absolute right-2 top-2 rounded-md border border-card-border bg-white p-1.5 text-muted opacity-0 transition hover:text-accent group-hover:opacity-100"
+                      title="コピー"
+                    >
+                      {sectionCopied === activeTab * 10 + i
+                        ? <svg className="h-3.5 w-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        : <CopyIcon />
+                      }
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Next step navigation */}
             <div className="mt-6 flex items-center justify-between">
@@ -231,6 +244,9 @@ export function ScriptGeneratorClient() {
           </div>
         </div>
       )}
+
+      {/* Pro Upsell after script generation */}
+      {script && <ToolUpsellCTA />}
     </div>
   );
 }

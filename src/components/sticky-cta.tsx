@@ -66,19 +66,22 @@ export function StickyCTA({
           >
             営業の型を学ぶ
           </Link>
-          <Link
-            href={ctaHref}
-            onClick={(e) => {
-              trackCTAClick(trackingId, "sticky_cta", ctaHref);
-              if (onCtaClick) {
-                e.preventDefault();
-                onCtaClick();
-              }
-            }}
-            className="flex h-10 w-full items-center justify-center rounded-xl bg-accent px-5 text-sm font-bold text-white shadow-sm transition hover:bg-accent-hover sm:w-auto"
-          >
-            {ctaText}
-          </Link>
+          <div className="flex flex-col items-center sm:flex-row sm:gap-3">
+            <span className="mb-1 text-[10px] text-muted sm:hidden">無料で体験</span>
+            <Link
+              href={ctaHref}
+              onClick={(e) => {
+                trackCTAClick(trackingId, "sticky_cta", ctaHref);
+                if (onCtaClick) {
+                  e.preventDefault();
+                  onCtaClick();
+                }
+              }}
+              className="flex h-10 w-full items-center justify-center rounded-xl bg-accent px-5 text-sm font-bold text-white shadow-sm transition hover:bg-accent-hover sm:w-auto"
+            >
+              {ctaText}
+            </Link>
+          </div>
         </div>
       </div>
     </div>

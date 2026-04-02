@@ -1,11 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Script from "next/script";
+import { getConsentStatus } from "@/components/cookie-consent";
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export function GoogleAnalytics() {
-  if (!GA_MEASUREMENT_ID) {
+  const [consented, setConsented] = useState(false);
+
+  useEffect(() => {
+    setConsented(getConsentStatus() === "accepted");
+  }, []);
+
+  if (!GA_MEASUREMENT_ID || !consented) {
     return null;
   }
 
@@ -30,7 +38,13 @@ export function GoogleAnalytics() {
 const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
 
 export function MicrosoftClarity() {
-  if (!CLARITY_PROJECT_ID) {
+  const [consented, setConsented] = useState(false);
+
+  useEffect(() => {
+    setConsented(getConsentStatus() === "accepted");
+  }, []);
+
+  if (!CLARITY_PROJECT_ID || !consented) {
     return null;
   }
 

@@ -21,7 +21,7 @@ export function VideoJsonLd({
   embedUrl,
 }: VideoJsonLdProps) {
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
   return (
     <JsonLd

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
-import { getAllBlogPosts } from "@/lib/blog";
+import { getAllBlogPosts, getAllTags } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "営業ロープレ・クロージング練習のノウハウ",
@@ -14,7 +14,8 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getAllBlogPosts();
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+  const allTags = getAllTags();
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
   return (
     <div className="min-h-screen bg-background">
@@ -66,6 +67,23 @@ export default function BlogPage() {
           <p className="mx-auto mt-6 max-w-3xl text-sm text-muted leading-relaxed text-left">
             営業ロープレの練習方法、クロージングテクニック、反論処理の切り返しトーク、成約率を上げるメソッドなど、現場で使える営業ノウハウを体系的に解説。AI活用の最新トレンドから、営業心理学に基づく実践的なテクニックまで、あなたの営業力を鍛える記事をお届けします。
           </p>
+        </div>
+      </section>
+
+      {/* Tag Cloud */}
+      <section className="px-6 pb-8">
+        <div className="mx-auto max-w-4xl">
+          <div className="flex flex-wrap gap-2">
+            {allTags.map((tag) => (
+              <Link
+                key={tag}
+                href={`/blog/tag/${encodeURIComponent(tag)}`}
+                className="rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent transition hover:bg-accent/20"
+              >
+                {tag}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

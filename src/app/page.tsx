@@ -8,6 +8,8 @@ import { MethodLevelCards } from "@/components/method-level-cards";
 import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
 import { HomeExitPopup } from "@/components/exit-popups/home-exit-popup";
 import { ScrollSlideIn } from "@/components/scroll-slide-in";
+import { SocialProofStats } from "@/components/social-proof-stats";
+import { UserReviews } from "@/components/user-reviews";
 
 /* ─── Data ─── */
 
@@ -126,6 +128,12 @@ const serviceCategories = [
     image: "/images/cards/worksheet.png",
   },
   {
+    title: "教材プログラム",
+    desc: "成約5ステップ完全攻略プログラム。22レッスンで営業の型を体系的に習得。買い切りで何度でも復習可能。",
+    href: "/program",
+    image: "/images/cards/tools.png",
+  },
+  {
     title: "無料ツール",
     desc: "営業力診断テスト・トークスクリプト生成・反論切り返しトーク集・クロージング率計算。登録不要で今すぐ使えます。",
     href: "/tools",
@@ -139,7 +147,7 @@ const serviceCategories = [
   },
 ];
 
-const betaFeatures = [
+const freeFeatures = [
   "22レッスンで営業の型を学ぶ",
   "AIロープレ（1日1回無料）",
   "成約スコアリング",
@@ -181,7 +189,7 @@ const faqs = [
   },
   {
     q: "法人・チームでの利用は可能ですか？",
-    a: "現在はベータテスト期間中のため個人向けのプランのみですが、法人向けプランも準備中です。チームでの研修利用をご検討の方は、お問い合わせください。",
+    a: "現在は個人向けのプランのみですが、法人向けプランも準備中です。チームでの研修利用をご検討の方は、お問い合わせください。",
   },
   {
     q: "対応言語は日本語のみですか？",
@@ -270,7 +278,7 @@ function PrimaryCTA({ className = "", text = "今すぐAIと商談してみる",
 
 export default function Home() {
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -372,19 +380,21 @@ export default function Home() {
             営業心理学に基づく5ステップの「型」を、24時間いつでも反復練習。
           </p>
 
-          {/* Dual CTAs: Learn + Roleplay */}
+          {/* Dual CTAs: Roleplay primary, Learn secondary */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4" data-hero-cta>
+            <PrimaryCTA text="無料でAIと商談してみる" />
             <Link
               href="/learn"
-              className="inline-flex h-14 items-center justify-center rounded-xl bg-white px-8 text-base font-bold text-gray-900 shadow-lg transition hover:bg-white/90 sm:min-w-[240px]"
+              className="inline-flex h-14 items-center justify-center rounded-xl border-2 border-white/30 px-8 text-base font-medium text-white/80 transition hover:bg-white/10 hover:text-white sm:min-w-[220px]"
             >
               まず営業の型を学ぶ（5分）
             </Link>
-            <PrimaryCTA text="すぐにAIと商談する" />
           </div>
           <p className="mt-4 text-sm text-white/50">
             &#10003; 無料で体験&ensp;&#10003; 登録不要&ensp;&#10003; 1分で最初の商談開始
           </p>
+
+          <SocialProofStats />
 
           {/* Stats */}
           <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
@@ -427,7 +437,7 @@ export default function Home() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
             </span>
-            ベータテスト中 — 先着100名無料ご招待
+            無料プランで今すぐ始められます
           </div>
         </div>
       </section>
@@ -653,6 +663,51 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
+          6.5 PROGRAM CTA
+      ═══════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+        <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.04] via-accent/[0.02] to-transparent" aria-hidden="true" />
+        <div className="relative z-10 mx-auto max-w-4xl">
+          <div className="rounded-3xl border-2 border-accent/30 bg-white p-8 sm:p-12 text-center shadow-lg shadow-accent/5">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+              買い切り教材
+            </div>
+            <h2 className="mb-3 text-2xl font-bold text-foreground sm:text-3xl">
+              成約5ステップ完全攻略プログラム
+            </h2>
+            <p className="mx-auto mb-6 max-w-2xl text-sm text-muted leading-relaxed sm:text-base">
+              22レッスンで営業の「型」を体系的に習得。アプローチからクロージング・反論処理まで、
+              <br className="hidden sm:block" />
+              どんな商材でも使える実践メソッドを身につけましょう。
+            </p>
+            <div className="mb-6 flex items-center justify-center gap-3">
+              <span className="text-lg text-muted line-through">¥14,800</span>
+              <span className="text-3xl font-bold text-accent sm:text-4xl">¥9,800</span>
+              <span className="rounded-full bg-accent/10 px-3 py-1 text-sm font-bold text-accent">先着30名</span>
+            </div>
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <Link
+                href="/program"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
+              >
+                プログラムの詳細を見る
+              </Link>
+              <Link
+                href="/learn"
+                className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 px-8 text-base font-bold text-accent transition hover:bg-accent/5"
+              >
+                まず無料レッスンを試す
+              </Link>
+            </div>
+            <p className="mt-4 text-xs text-muted">
+              &#10003; 買い切り・追加費用なし &#10003; 22レッスン完全収録 &#10003; AIロープレ連動
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
           7. SERVICE CATEGORIES
       ═══════════════════════════════════════════════ */}
       <section className="px-6 py-16 sm:py-20">
@@ -684,12 +739,12 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          8. BETA TEST CTA
+          8. FREE PLAN CTA
       ═══════════════════════════════════════════════ */}
       <section className="px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">
-            今なら全機能を無料で体験できます
+            まずは無料で体験してみませんか？
           </h2>
           <p className="mb-10 text-sm text-muted sm:text-base">
             まずは1回、AIと商談してみてください。
@@ -699,12 +754,12 @@ export default function Home() {
           <div className="plan">
             <div className="inner">
               <span className="pricing">
-                <span>無料 <small>ベータ版</small></span>
+                <span>¥0 <small>/月</small></span>
               </span>
-              <p className="title">ベータテストプラン</p>
-              <p className="info">ベータ期間中はすべての機能が無料。ご意見・ご感想をお待ちしています。</p>
+              <p className="title">無料プラン</p>
+              <p className="info">登録するだけで、毎日1回AIロープレ＆スコアリングが使えます。</p>
               <ul className="features">
-                {betaFeatures.map((feat) => (
+                {freeFeatures.map((feat) => (
                   <li key={feat}>
                     <span className="icon"><CheckIcon /></span>
                     <span>{feat}</span>
@@ -717,11 +772,32 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Pro anchoring — Tversky & Kahneman anchoring effect */}
+          <div className="mt-6 rounded-xl border border-card-border/60 bg-white/50 px-6 py-4">
+            <p className="mb-1 text-xs text-muted">さらに上を目指すなら</p>
+            <div className="flex items-center justify-center gap-3 text-sm">
+              <span className="text-muted line-through">営業研修1回 ¥50,000〜</span>
+              <span className="font-bold text-accent">→ Pro ¥2,980/月で無制限</span>
+            </div>
+            <Link href="/pricing" className="mt-2 block text-center text-xs font-medium text-accent transition hover:underline">
+              料金プランを見る →
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════
-          9. FAQ
+          9. TESTIMONIALS (Social Proof — Cialdini)
+      ═══════════════════════════════════════════════ */}
+      <section className="px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl">
+          <UserReviews />
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          10. FAQ
       ═══════════════════════════════════════════════ */}
       <section className="relative overflow-hidden px-6 py-16 sm:py-24">
         <div className="blob blob-cream" style={{ width: 250, height: 250, bottom: -40, left: -60 }} />
@@ -754,7 +830,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          10. FINAL CTA
+          11. FINAL CTA
       ═══════════════════════════════════════════════ */}
       <section className="relative overflow-hidden px-6 py-16 sm:py-24">
         <div className="blob blob-teal" style={{ width: 400, height: 400, top: -100, left: "30%" }} />

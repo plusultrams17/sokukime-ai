@@ -42,6 +42,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // 重複防止：過去30日以内に引き止めオファーを受けたかチェック
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const { data: recentOffer } = await supabase
+    .from("cancel_reasons")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("outcome", "accepted")
+    .gte("created_at", thirtyDaysAgo)
+    .limit(1);
+
+  if (recentOffer && recentOffer.length > 0) {
+    return NextResponse.json(
+      { error: "最近オファーを利用済みです", alreadyUsed: true },
+      { status: 409 }
+    );
+  }
+
   const stripe = getStripe();
   let stripeCouponId: string | null = null;
 

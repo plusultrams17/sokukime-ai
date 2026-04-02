@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
+import { BlogEmailCapture } from "@/components/blog-email-capture";
+import { ShareButtons } from "@/components/share-buttons";
 import { getBlogPost, getAllBlogPosts } from "@/lib/blog";
+import { BlogExitPopup } from "@/components/exit-popups/blog-exit-popup";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -25,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
   return {
     title: post.title,
@@ -50,6 +53,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/** Tag overlap score for related post ranking */
+function getTagOverlap(tagsA: string[], tagsB: string[]): number {
+  return tagsA.filter((t) => tagsB.includes(t)).length;
+}
+
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getBlogPost(slug);
@@ -59,12 +67,20 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const allPosts = getAllBlogPosts();
+
+  // Related posts: rank by tag overlap, then recency
   const relatedPosts = allPosts
     .filter((p) => p.slug !== post.slug)
-    .slice(0, 2);
+    .map((p) => ({ ...p, overlap: getTagOverlap(post.tags, p.tags) }))
+    .sort((a, b) => {
+      if (b.overlap !== a.overlap) return b.overlap - a.overlap;
+      return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+    })
+    .slice(0, 3);
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const articleUrl = `${siteUrl}/blog/${post.slug}`;
 
   const blogJsonLd = {
     "@context": "https://schema.org",
@@ -137,12 +153,13 @@ export default async function BlogPostPage({ params }: Props) {
           {/* Tags */}
           <div className="mb-4 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-medium text-accent"
+                href={`/blog/tag/${encodeURIComponent(tag)}`}
+                className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-medium text-accent transition hover:bg-accent/20"
               >
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
 
@@ -151,31 +168,34 @@ export default async function BlogPostPage({ params }: Props) {
             {post.title}
           </h1>
 
-          {/* Meta */}
-          <div className="mb-10 flex flex-wrap items-center gap-4 border-b border-card-border pb-6 text-sm text-muted">
-            <div className="flex items-center gap-2">
-              <span className="text-base">🔥</span>
-              <span className="font-medium text-foreground">成約コーチ AI</span>
-            </div>
-            <time dateTime={post.publishedAt}>
-              {new Date(post.publishedAt).toLocaleDateString("ja-JP", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-              {" 公開"}
-            </time>
-            {post.updatedAt && (
-              <time dateTime={post.updatedAt}>
-                {new Date(post.updatedAt).toLocaleDateString("ja-JP", {
+          {/* Meta + Share */}
+          <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-card-border pb-6 text-sm text-muted">
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-base">🔥</span>
+                <span className="font-medium text-foreground">成約コーチ AI</span>
+              </div>
+              <time dateTime={post.publishedAt}>
+                {new Date(post.publishedAt).toLocaleDateString("ja-JP", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
-                {" 更新"}
+                {" 公開"}
               </time>
-            )}
-            <span>{post.readingTime}分で読める</span>
+              {post.updatedAt && (
+                <time dateTime={post.updatedAt}>
+                  {new Date(post.updatedAt).toLocaleDateString("ja-JP", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  {" 更新"}
+                </time>
+              )}
+              <span>{post.readingTime}分で読める</span>
+            </div>
+            <ShareButtons url={articleUrl} title={post.title} />
           </div>
 
           {/* Article Content */}
@@ -183,8 +203,21 @@ export default async function BlogPostPage({ params }: Props) {
             className="blog-content"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
+
+          {/* Share (bottom) */}
+          <div className="mt-10 flex items-center justify-between border-t border-card-border pt-6">
+            <span className="text-sm text-muted">この記事が役に立ったら共有してください</span>
+            <ShareButtons url={articleUrl} title={post.title} />
+          </div>
         </div>
       </article>
+
+      {/* Email Capture */}
+      <section className="px-6">
+        <div className="mx-auto max-w-3xl">
+          <BlogEmailCapture />
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="border-t border-card-border px-6 py-16">
@@ -198,12 +231,20 @@ export default async function BlogPostPage({ params }: Props) {
               <br className="hidden sm:block" />
               記事で学んだテクニックを実践して、本番で成約できる営業力を身につけましょう。
             </p>
-            <Link
-              href="/roleplay"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
-            >
-              無料でロープレを始める
-            </Link>
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <Link
+                href="/learn"
+                className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-8 text-base font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50"
+              >
+                まず営業の型を学ぶ
+              </Link>
+              <Link
+                href="/roleplay"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
+              >
+                無料でロープレを始める
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -213,7 +254,7 @@ export default async function BlogPostPage({ params }: Props) {
         <section className="border-t border-card-border px-6 py-16">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-8 text-2xl font-bold">関連記事</h2>
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {relatedPosts.map((related) => (
                 <Link
                   key={related.slug}
@@ -244,6 +285,7 @@ export default async function BlogPostPage({ params }: Props) {
       )}
 
       <Footer />
+      <BlogExitPopup />
     </div>
   );
 }

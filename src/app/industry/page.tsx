@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
 export default function IndustryIndexPage() {
   const jsonLdData = {

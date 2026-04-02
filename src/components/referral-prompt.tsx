@@ -14,7 +14,7 @@ export function ReferralPrompt({ score }: ReferralPromptProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (score < 80) return;
+    if (score < 70) return;
 
     // 非表示期間中かチェック
     const dismissed = localStorage.getItem(DISMISS_KEY);

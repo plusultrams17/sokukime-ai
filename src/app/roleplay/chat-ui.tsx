@@ -33,7 +33,7 @@ interface ChatUIProps {
   customerType: string;
   productContext?: string;
   customerContext?: string;
-  onFinish: (score: ScoreResult) => void;
+  onFinish: (score: ScoreResult & { scoreId?: string | null }) => void;
   isGuest?: boolean;
   onAuthGate?: (messages: Message[], previewScore?: ScoreResult) => void;
 }

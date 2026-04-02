@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { getPersona } from "@/lib/personas";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」AIです。
 ユーザーが営業マンとして商談の練習をしています。以下のルールに従ってリアルなお客さんを演じてください。
@@ -25,6 +27,24 @@ const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」
 
 export async function POST(request: NextRequest) {
   try {
+    // Auth check: require logged-in user to prevent API abuse
+    const supabase = await createClient();
+    if (!supabase) {
+      return NextResponse.json({ message: getDefaultResponse() }, { status: 200 });
+    }
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const rl = checkRateLimit(`chat:${user.id}`, 30);
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: "リクエストが多すぎます。しばらくお待ちください。" },
+        { status: 429, headers: { "Retry-After": String(Math.ceil(rl.resetMs / 1000)) } }
+      );
+    }
+
     const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext } =
       await request.json();
 

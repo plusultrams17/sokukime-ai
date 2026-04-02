@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 /* ─── SEO Metadata ─── */
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
 export const metadata: Metadata = {
   title: "AI営業分析ワークシート | 商談準備・振り返りツール",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
       "商談前の準備と商談後の振り返りをAIがサポート。営業の勝ちパターンを可視化する分析ワークシート。",
   },
   alternates: {
-    canonical: `${SITE_URL}/lp/worksheet`,
+    canonical: `${SITE_URL}/worksheet`,
   },
 };
 

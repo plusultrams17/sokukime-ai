@@ -5,10 +5,10 @@ import Link from "next/link";
 import { RadarChart } from "@/components/radar-chart";
 import { ReferralPrompt } from "@/components/referral-prompt";
 import type { ScoreResult } from "./page";
-import { trackCTAClick, trackUpgradePromptShown, trackUpgradePromptClicked } from "@/lib/tracking";
+import { trackCTAClick, trackUpgradePromptShown, trackUpgradePromptClicked, trackScoreShared } from "@/lib/tracking";
 
 interface ScoreCardProps {
-  score: ScoreResult;
+  score: ScoreResult & { scoreId?: string | null; previousScore?: number | null };
   onRetry: () => void;
   plan?: "free" | "pro";
   onUpgrade?: () => void;
@@ -40,9 +40,25 @@ function getGrade(score: number) {
 // Number of categories visible to free users
 const FREE_VISIBLE_CATEGORIES = 1;
 
+/** Map scoring categories to learn page course levels */
+const CATEGORY_LEARN_LINK: Record<string, { href: string; label: string }> = {
+  "アプローチ": { href: "/learn#beginner", label: "初級コースで復習" },
+  "ヒアリング": { href: "/learn#beginner", label: "初級コースで復習" },
+  "プレゼン": { href: "/learn#beginner", label: "初級コースで復習" },
+  "クロージング": { href: "/learn#intermediate", label: "中級コースで復習" },
+  "反論処理": { href: "/learn#advanced", label: "上級コースで復習" },
+};
+
 export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
-  const shareText = `成約コーチ AIでスコア${score.overall}点（ランク${getGrade(score.overall)}）を獲得しました！ #成約コーチAI #営業ロープレ`;
-  const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+  // Use score-specific share page if scoreId is available (shows OG image with actual score)
+  const scorePageUrl = score.scoreId
+    ? `https://seiyaku-coach.com/score-share/${score.scoreId}`
+    : "https://seiyaku-coach.com";
+
+  const shareText = `成約コーチ AIで営業ロープレしたらスコア${score.overall}点（ランク${getGrade(score.overall)}）だった。AIコーチのフィードバックが的確すぎる… #成約コーチAI #営業 #営業ロープレ`;
+  const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(scorePageUrl)}`;
+  const lineShareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(scorePageUrl)}&text=${encodeURIComponent(`営業ロープレAIでスコア${score.overall}点取った！無料で試せるよ`)}`;
+  const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(scorePageUrl)}`;
 
   const isFree = plan === "free";
   const visibleCategories = isFree
@@ -69,6 +85,19 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
   return (
     <div className="flex flex-1 items-start justify-center overflow-y-auto px-4 py-12">
       <div className="w-full max-w-2xl animate-fade-in-up">
+        {/* Score Improvement Celebration */}
+        {score.previousScore != null && score.overall > score.previousScore && (
+          <div className="mb-4 rounded-2xl border border-green-500/20 bg-green-500/5 px-5 py-4 text-center animate-fade-in-up">
+            <div className="text-2xl mb-1">📈</div>
+            <div className="text-sm font-bold text-green-500">
+              +{score.overall - score.previousScore}点アップ！前回 {score.previousScore}点 → 今回 {score.overall}点
+            </div>
+            <div className="text-xs text-muted mt-1">
+              練習の成果が出ています。この調子で続けましょう！
+            </div>
+          </div>
+        )}
+
         {/* Overall Score */}
         <div className="mb-8 rounded-2xl border border-card-border bg-card p-8 text-center">
           <div className="mb-2 text-sm text-muted">営業スコア</div>
@@ -112,6 +141,14 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                   />
                 </div>
                 <p className="text-xs leading-relaxed text-muted">{cat.feedback}</p>
+                {cat.score < 60 && CATEGORY_LEARN_LINK[cat.name] && (
+                  <Link
+                    href={CATEGORY_LEARN_LINK[cat.name].href}
+                    className="mt-1 inline-block text-xs text-accent hover:underline"
+                  >
+                    {CATEGORY_LEARN_LINK[cat.name].label} →
+                  </Link>
+                )}
               </div>
             ))}
           </div>
@@ -154,10 +191,10 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                     🔒
                   </div>
                   <p className="mb-1 text-sm font-bold">
-                    残り{lockedCategories.length}カテゴリの詳細スコア
+                    残り{lockedCategories.length}カテゴリの詳細スコアとAI改善アドバイス
                   </p>
                   <p className="mb-4 text-xs text-muted">
-                    タップしてProプランで全スコアを確認
+                    弱点を特定して集中的に改善 — 7日間無料で試せます
                   </p>
                   <span className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition group-hover:bg-accent-hover">
                     Proで全スコアを見る
@@ -286,6 +323,25 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           </div>
         )}
 
+        {/* Session Summary — Peak-End Rule: end positively (Kahneman 1993) */}
+        {visibleCategories.length > 0 && (
+          <div className="mb-6 rounded-2xl border border-card-border bg-card p-5">
+            <p className="mb-2 text-sm font-bold">今回のセッションまとめ</p>
+            <div className="flex items-start gap-3 mb-2">
+              <span className="text-green-500 mt-0.5">💪</span>
+              <p className="text-sm text-muted">
+                一番良かったカテゴリ: <span className="font-bold text-foreground">
+                  {[...visibleCategories].sort((a, b) => b.score - a.score)[0]?.name}
+                  （{[...visibleCategories].sort((a, b) => b.score - a.score)[0]?.score}点）
+                </span>
+              </p>
+            </div>
+            <p className="text-xs text-muted">
+              繰り返し練習することで営業の「型」が体に染みつきます。次回は弱点カテゴリを意識して挑戦してみましょう。
+            </p>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="flex flex-col gap-3 sm:flex-row">
           <button
@@ -295,22 +351,49 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
             }}
             className="flex h-12 flex-1 items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover"
           >
-            🔄 もう一度ロープレする
+            もう一度ロープレする
           </button>
-          <a
-            href={shareUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-12 flex-1 items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:text-foreground"
-          >
-            𝕏 でシェアする
-          </a>
           <Link
-            href="/"
+            href="/learn"
             className="flex h-12 flex-1 items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:text-foreground"
           >
-            トップに戻る
+            営業の型を復習する
           </Link>
+        </div>
+
+        {/* Share buttons — prominent placement drives organic growth */}
+        <div className="mt-6 rounded-2xl border border-card-border bg-card p-5 text-center">
+          <p className="mb-1 text-sm font-bold">スコアを同僚にシェアしよう</p>
+          <p className="mb-3 text-xs text-muted">一緒に練習する仲間がいると、スコアの伸びが加速します</p>
+          <div className="flex items-center justify-center gap-3">
+            <a
+              href={shareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackScoreShared({ platform: "twitter", score: score.overall, scoreId: score.scoreId || undefined })}
+              className="flex h-10 items-center justify-center rounded-lg bg-black px-5 text-sm font-bold text-white transition hover:bg-black/80"
+            >
+              𝕏 でシェア
+            </a>
+            <a
+              href={lineShareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackScoreShared({ platform: "line", score: score.overall, scoreId: score.scoreId || undefined })}
+              className="flex h-10 items-center justify-center rounded-lg bg-[#06C755] px-5 text-sm font-bold text-white transition hover:bg-[#05b34c]"
+            >
+              LINE
+            </a>
+            <a
+              href={linkedInShareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackScoreShared({ platform: "linkedin", score: score.overall, scoreId: score.scoreId || undefined })}
+              className="flex h-10 items-center justify-center rounded-lg bg-[#0077B5] px-5 text-sm font-bold text-white transition hover:bg-[#006399]"
+            >
+              LinkedIn
+            </a>
+          </div>
         </div>
 
         {/* Upgrade CTA for free users - bottom */}
@@ -329,10 +412,10 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
               }}
               className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
             >
-              Proプランにアップグレード ¥2,980/月
+              7日間無料で全機能を試す
             </button>
             <p className="mt-2 text-[11px] text-muted">
-              いつでも解約OK・Stripe安全決済
+              7日間完全無料 → ¥2,980/月・いつでも解約OK
             </p>
           </div>
         )}
@@ -346,8 +429,8 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
       {/* フィードバックフォーム */}
       <FeedbackForm roleplayScore={score.overall} />
 
-      {/* 紹介プロンプト（スコア80点以上で表示） */}
-      {!isFree && <ReferralPrompt score={score.overall} />}
+      {/* 紹介プロンプト（スコア70点以上で表示） */}
+      <ReferralPrompt score={score.overall} />
     </div>
   );
 }

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/script-generator" },
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
 export default function ScriptGeneratorPage() {
   const jsonLdData = {

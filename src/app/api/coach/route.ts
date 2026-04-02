@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { getPersona } from "@/lib/personas";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const COACH_PROMPT = `あなたは「成約5ステップメソッド」の営業コーチAIです。
 営業ロープレの会話を見て、営業マンにリアルタイムでアドバイスします。
@@ -61,6 +63,24 @@ const COACH_PROMPT = `あなたは「成約5ステップメソッド」の営業
 - 会話の流れから今どのステップにいるか正確に判断する`;
 
 export async function POST(request: NextRequest) {
+  // Auth check: require logged-in user to prevent API abuse
+  const supabase = await createClient();
+  if (!supabase) {
+    return NextResponse.json(generateFallbackCoach([]));
+  }
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const rl = checkRateLimit(`coach:${user.id}`, 10);
+  if (!rl.success) {
+    return NextResponse.json(
+      { error: "リクエストが多すぎます。しばらくお待ちください。" },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(rl.resetMs / 1000)) } }
+    );
+  }
+
   const { messages, industry, product, customerType, scene, difficulty, productContext, customerContext } = await request.json();
   try {
     const apiKey = process.env.OPENAI_API_KEY;

@@ -439,7 +439,7 @@ function LpPrimaryCTA({ text = "今すぐAIとロープレする", className = "
 
 export default function RoleplayLP() {
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
 
   const jsonLdData = {
     "@context": "https://schema.org",
