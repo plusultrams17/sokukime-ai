@@ -140,12 +140,67 @@ export default function DashboardPage() {
     );
   }
 
-  if (error || !data) {
+  if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-sm text-muted mb-4">{error || "データがありません"}</p>
+          <p className="text-sm text-muted mb-4">{error}</p>
           <Link href="/roleplay" className="text-sm text-accent hover:underline">ロープレを始める</Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="w-full max-w-md text-center">
+          <div className="mb-6 text-5xl">🎯</div>
+          <h2 className="mb-3 text-xl font-bold text-foreground">まだデータがありません</h2>
+          <p className="mb-6 text-sm text-muted leading-relaxed">
+            最初のロープレを完了すると、ここにあなたの営業力データが表示されます。
+            <br />3分で最初のスコアがわかります。
+          </p>
+          <div className="mb-6 rounded-xl border border-card-border bg-card p-5 text-left">
+            <p className="mb-3 text-xs font-bold text-muted">おすすめの始め方：</p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">1</span>
+                <div>
+                  <p className="text-sm font-medium text-foreground">営業の型を学ぶ（5分）</p>
+                  <p className="text-xs text-muted">22レッスンで基本を把握</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">2</span>
+                <div>
+                  <p className="text-sm font-medium text-foreground">AIとロープレ（3分）</p>
+                  <p className="text-xs text-muted">あなたの商材でリアルな営業練習</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">3</span>
+                <div>
+                  <p className="text-sm font-medium text-foreground">スコアで弱点を発見</p>
+                  <p className="text-xs text-muted">5カテゴリの定量評価で改善点が明確に</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Link
+              href="/learn"
+              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 px-6 text-sm font-bold text-accent transition hover:bg-accent/5"
+            >
+              まず型を学ぶ
+            </Link>
+            <Link
+              href="/roleplay"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
+            >
+              すぐにロープレを始める
+            </Link>
+          </div>
         </div>
       </div>
     );

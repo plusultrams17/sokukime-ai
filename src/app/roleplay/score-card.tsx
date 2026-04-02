@@ -85,6 +85,20 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
   return (
     <div className="flex flex-1 items-start justify-center overflow-y-auto px-4 py-12">
       <div className="w-full max-w-2xl animate-fade-in-up">
+        {/* First Session Celebration — 競合失敗分析: 初回体験の弱さが離脱の最大要因 */}
+        {score.previousScore == null && (
+          <div className="mb-4 rounded-2xl border border-accent/20 bg-accent/5 px-5 py-4 text-center animate-fade-in-up">
+            <div className="text-2xl mb-1">🎉</div>
+            <div className="text-sm font-bold text-foreground">
+              初めてのスコアが出ました！
+            </div>
+            <div className="text-xs text-muted mt-1 leading-relaxed">
+              これがあなたの出発点です。練習を重ねるほどスコアは上がります。
+              <br />まずは3回ロープレして、弱点パターンを把握しましょう。
+            </div>
+          </div>
+        )}
+
         {/* Score Improvement Celebration */}
         {score.previousScore != null && score.overall > score.previousScore && (
           <div className="mb-4 rounded-2xl border border-green-500/20 bg-green-500/5 px-5 py-4 text-center animate-fade-in-up">
@@ -415,7 +429,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
               7日間無料で全機能を試す
             </button>
             <p className="mt-2 text-[11px] text-muted">
-              7日間完全無料 → ¥2,980/月・いつでも解約OK
+              🛡️ 14日間スコア改善保証・いつでも解約OK・違約金なし
             </p>
           </div>
         )}

@@ -172,6 +172,10 @@ const faqs = [
     a: "はい、いつでも解約可能です。解約後も現在の請求期間の終了まで利用できます。",
   },
   {
+    q: "効果がなかったら返金できますか？",
+    a: "はい。14日間スコア改善保証があります。Proプランで14日間毎日ロープレしてもスコアが改善しない場合、全額返金します（14日間で7回以上の実施が条件）。",
+  },
+  {
     q: "スマートフォンでも使えますか？",
     a: "はい。ブラウザから利用でき、スマートフォン・タブレット・PCすべてに対応しています。",
   },
@@ -780,7 +784,10 @@ export default function Home() {
               <span className="text-muted line-through">営業研修1回 ¥50,000〜</span>
               <span className="font-bold text-accent">→ Pro ¥2,980/月で無制限</span>
             </div>
-            <Link href="/pricing" className="mt-2 block text-center text-xs font-medium text-accent transition hover:underline">
+            <p className="mt-2 text-center text-xs text-muted">
+              🛡️ 14日間スコア改善保証付き — 効果がなければ全額返金
+            </p>
+            <Link href="/pricing" className="mt-1 block text-center text-xs font-medium text-accent transition hover:underline">
               料金プランを見る →
             </Link>
           </div>
@@ -859,19 +866,19 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Trust badges */}
+          {/* Trust badges — 競合失敗分析: 保証がないと離脱率が跳ね上がる */}
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs text-muted sm:gap-6">
+            <span className="inline-flex items-center gap-1.5">
+              <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              14日間スコア改善保証
+            </span>
             <span className="inline-flex items-center gap-1.5">
               <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
               SSL暗号化通信
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              データ安全保護
             </span>
             <span className="inline-flex items-center gap-1.5">
               <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">

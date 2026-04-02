@@ -73,7 +73,7 @@ const faqItems = [
   {
     question: "返金はできますか？",
     answer:
-      "7日間の無料トライアルで全機能をお試しいただけるため、トライアル期間中のキャンセルがおすすめです。トライアル後の返金は行っておりませんが、解約後は請求期間の終了まで利用可能です。",
+      "はい。14日間スコア改善保証があります。Proプランに登録後14日間毎日ロープレを続けてもスコアが改善しない場合、全額返金いたします（14日間で7回以上のロープレ実施が条件）。また、7日間の無料トライアル中はいつでもキャンセル可能で、一切課金されません。",
   },
   {
     question: "複数のデバイスで使えますか？",
@@ -467,9 +467,24 @@ export default function PricingPage() {
           </div>
         </div>
 
+        {/* Score Improvement Guarantee — 競合失敗分析: 返金保証がないのは最大のコンバージョンキラー */}
+        <div className="mt-8 rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 text-center">
+          <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent text-xl text-white">
+            🛡️
+          </div>
+          <h3 className="mb-2 text-lg font-bold text-foreground">14日間スコア改善保証</h3>
+          <p className="mx-auto max-w-md text-sm leading-relaxed text-muted">
+            Proプランで14日間毎日練習してもスコアが改善しない場合、<strong className="text-foreground">全額返金</strong>します。
+            メソッドの効果に自信があるからこその保証です。
+          </p>
+          <p className="mt-2 text-xs text-muted">
+            ※ 14日間で7回以上のロープレ実施が条件
+          </p>
+        </div>
+
         {/* Guarantee Badge */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted">
-          <span className="flex items-center gap-1">🛡️ いつでも解約OK</span>
+          <span className="flex items-center gap-1">🛡️ 14日間スコア改善保証</span>
           <span className="flex items-center gap-1">🔒 Stripe安全決済</span>
           <span className="flex items-center gap-1">🏪 コンビニ決済対応</span>
           <span className="flex items-center gap-1">🧾 経費精算・領収書OK</span>

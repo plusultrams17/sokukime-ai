@@ -181,6 +181,79 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Founder Credibility — 競合失敗分析: 信頼性の欠如が最大の離脱要因 */}
+      <section className="border-t border-card-border px-6 py-20">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-8 text-2xl font-bold">開発の背景</h2>
+          <div className="rounded-2xl border border-card-border bg-card p-6 sm:p-8">
+            <div className="mb-6 flex items-start gap-4">
+              <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-2xl">
+                👨‍💻
+              </div>
+              <div>
+                <p className="text-lg font-bold text-foreground">成約コーチ AI 開発チーム</p>
+                <p className="text-sm text-muted">営業現場の課題をテクノロジーで解決する</p>
+              </div>
+            </div>
+            <div className="space-y-4 text-sm leading-relaxed text-muted">
+              <p>
+                成約コーチ AIは、<strong className="text-foreground">「営業の練習環境がない」</strong>という現場の声から生まれました。
+              </p>
+              <p>
+                営業研修は1回5万円以上が相場。しかも月1回の集合研修では、
+                <strong className="text-foreground">87%の内容が30日以内に忘れられる</strong>
+                というデータがあります（ES Research調べ）。
+                先輩へのロープレ依頼も、相手の時間を奪う負い目があり、十分な回数をこなせないのが現実です。
+              </p>
+              <p>
+                成約5ステップメソッドは、営業心理学の研究と現場で実証された営業手法を体系化したものです。
+                アプローチ・ヒアリング・プレゼン・クロージング・反論処理の5段階を、
+                <strong className="text-foreground">AIコーチが定量的に評価</strong>することで、
+                「何が足りないか」を明確にします。
+              </p>
+              <p>
+                私たちは、すべての営業パーソンが<strong className="text-foreground">場所・時間・費用の制約なく</strong>、
+                質の高い練習ができる環境を提供することを目指しています。
+              </p>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-xl border border-card-border bg-background p-4 text-center">
+                <p className="text-2xl font-bold text-accent">22</p>
+                <p className="text-xs text-muted">体系化されたレッスン</p>
+              </div>
+              <div className="rounded-xl border border-card-border bg-background p-4 text-center">
+                <p className="text-2xl font-bold text-accent">5</p>
+                <p className="text-xs text-muted">営業心理学ベースのステップ</p>
+              </div>
+              <div className="rounded-xl border border-card-border bg-background p-4 text-center">
+                <p className="text-2xl font-bold text-accent">24h</p>
+                <p className="text-xs text-muted">いつでも練習可能</p>
+              </div>
+            </div>
+          </div>
+
+          {/* 成果保証 — 競合で欠けていた最大のポイント */}
+          <div className="mt-8 rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 sm:p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-accent text-xl text-white">
+                🛡️
+              </div>
+              <div>
+                <h3 className="mb-2 text-lg font-bold text-foreground">スコア改善保証</h3>
+                <p className="text-sm leading-relaxed text-muted">
+                  Proプランをご利用いただき、14日間毎日ロープレを続けてもスコアが改善しない場合、
+                  <strong className="text-foreground">全額返金</strong>いたします。
+                  私たちはメソッドの効果に自信があるからこそ、この保証をお約束します。
+                </p>
+                <p className="mt-2 text-xs text-muted">
+                  ※ 14日間で7回以上のロープレ実施が条件です。詳細は利用規約をご確認ください。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Values */}
       <section className="border-t border-card-border px-6 py-20">
         <div className="mx-auto max-w-3xl">
