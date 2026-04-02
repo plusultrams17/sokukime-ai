@@ -42,6 +42,7 @@ export async function GET() {
     const latestScore = overallScores.length > 0 ? overallScores[0] : 0;
     const previousScore = overallScores.length > 1 ? overallScores[1] : null;
     const scoreTrend = previousScore !== null ? latestScore - previousScore : 0;
+    const firstScore = overallScores.length > 0 ? overallScores[overallScores.length - 1] : null;
 
     // Calculate weakest category from latest score
     let weakestCategory: { name: string; score: number } | null = null;
@@ -76,6 +77,7 @@ export async function GET() {
       avgScore,
       latestScore,
       scoreTrend,
+      firstScore,
       weakestCategory,
       history,
       plan: profile?.plan || "free",

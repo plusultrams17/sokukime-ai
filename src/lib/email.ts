@@ -1276,6 +1276,47 @@ function predictiveChurnEmail(unsubscribeUrl?: string): { subject: string; html:
   };
 }
 
+/** Streak milestone celebration email — 競合失敗分析: 習慣形成メールがDAUを20-30%向上 */
+function streakMilestoneEmail(unsubscribeUrl?: string): { subject: string; html: string } {
+  return {
+    subject: "🔥 ストリーク達成おめでとうございます！",
+    html: `
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
+<div style="max-width:560px;margin:0 auto;padding:32px 16px">
+  <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
+    <div style="text-align:center;font-size:48px;margin:0 0 16px">🔥</div>
+    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">連続練習記録を更新中！</h1>
+    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
+      毎日の練習を続けているあなたは、本当に素晴らしいです。<br>
+      研究によると、<strong>毎日練習を続ける営業マンは、週1回の人より3倍速くスコアが伸びます。</strong>
+    </p>
+    <div style="background:#fff7ed;border-radius:8px;padding:16px;margin:0 0 16px">
+      <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>ストリーク継続のコツ</strong></p>
+      <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
+        <li>毎日同じ時間に練習する（習慣化）</li>
+        <li>通勤中や昼休みの5分でOK</li>
+        <li>弱点カテゴリに絞って短く集中</li>
+      </ul>
+    </div>
+    <div style="text-align:center;margin:0 0 16px">
+      <a href="${APP_URL}/roleplay" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
+        今日もロープレする →
+      </a>
+    </div>
+    <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
+      ダッシュボードでストリーク記録を確認できます
+    </p>
+  </div>
+  ${emailFooter(unsubscribeUrl)}
+</div>
+</body>
+</html>`,
+  };
+}
+
 /** Cron failure alert email for admin */
 function cronFailureAlertEmail(data: AdminAlertData): { subject: string; html: string } {
   const nowStr = new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
@@ -1542,7 +1583,7 @@ function programPurchasedEmail(unsubscribeUrl?: string): { subject: string; html
 export type OnboardingEmailType = "welcome" | "first_roleplay" | "third_roleplay";
 export type TransactionalEmailType = "payment_failed" | "payment_failed_day4" | "payment_failed_day7" | "subscription_canceled" | "pro_welcome" | "pro_onboarding_day1" | "pro_onboarding_day3" | "pro_onboarding_day7" | "pause_resuming_3days" | "referral_reward" | "winback_7days" | "winback_30days" | "checkout_abandoned" | "weekly_digest" | "program_purchased";
 export type TrialEmailType = "trial_expiring_3days" | "trial_expiring_1day" | "trial_expiring_6days" | "trial_expired";
-export type EngagementEmailType = "inactive_reminder" | "no_roleplay_day3" | "power_user_upgrade" | "referral_nudge" | "nps_survey" | "at_risk_intervention" | "monthly_to_annual" | "predictive_churn";
+export type EngagementEmailType = "inactive_reminder" | "no_roleplay_day3" | "power_user_upgrade" | "referral_nudge" | "nps_survey" | "at_risk_intervention" | "monthly_to_annual" | "predictive_churn" | "streak_milestone";
 
 const EMAIL_TEMPLATES: Record<OnboardingEmailType, (unsubscribeUrl?: string) => { subject: string; html: string }> = {
   welcome: welcomeEmail,
@@ -1584,6 +1625,7 @@ const ENGAGEMENT_TEMPLATES: Record<EngagementEmailType, (unsubscribeUrl?: string
   at_risk_intervention: atRiskInterventionEmail,
   monthly_to_annual: monthlyToAnnualEmail,
   predictive_churn: predictiveChurnEmail,
+  streak_milestone: streakMilestoneEmail,
 };
 
 // ── Sending Logic ──

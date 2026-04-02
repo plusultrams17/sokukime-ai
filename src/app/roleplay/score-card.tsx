@@ -40,6 +40,30 @@ function getGrade(score: number) {
 // Number of categories visible to free users
 const FREE_VISIBLE_CATEGORIES = 1;
 
+/** Actionable technique tips per category — 競合失敗分析: generic feedback kills retention */
+const CATEGORY_NEXT_STEP: Record<string, { lowTip: string; midTip: string }> = {
+  "アプローチ": {
+    lowTip: "次回は最初に「今日お話を聞いて良ければ前向きに検討いただけますか？」とゴール共有してみましょう",
+    midTip: "褒め→共感の流れは良い調子です。次はゴール共有の精度を上げましょう",
+  },
+  "ヒアリング": {
+    lowTip: "「〜で悩んでいる方が多いですが、○○さんは？」と第三者話法で質問してみましょう",
+    midTip: "質問力は伸びています。表面回答→本質課題への深掘りを意識しましょう",
+  },
+  "プレゼン": {
+    lowTip: "特徴→「だから」→ベネフィットの変換を練習。「○○だから、△△さんにとっては〜」",
+    midTip: "ベネフィット訴求ができています。お客さんの課題に紐づける精度を高めましょう",
+  },
+  "クロージング": {
+    lowTip: "「どうされますか？」はNG。「ぜひ始めましょう」と言い切る練習をしましょう",
+    midTip: "提案の言い切りは良い調子。社会的証明（他のお客様の事例）も加えましょう",
+  },
+  "反論処理": {
+    lowTip: "「考えます」→ 共感→確認→根拠提示→行動促進の4ステップで切り返しましょう",
+    midTip: "切り返しの基本はできています。根拠の具体性（数字・事例）を強化しましょう",
+  },
+};
+
 /** Map scoring categories to learn page course levels */
 const CATEGORY_LEARN_LINK: Record<string, { href: string; label: string }> = {
   "アプローチ": { href: "/learn#beginner", label: "初級コースで復習" },
@@ -155,6 +179,16 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                   />
                 </div>
                 <p className="text-xs leading-relaxed text-muted">{cat.feedback}</p>
+                {CATEGORY_NEXT_STEP[cat.name] && (
+                  <div className="mt-1.5 rounded-lg border border-accent/10 bg-accent/5 px-3 py-2">
+                    <p className="text-xs font-bold text-accent">
+                      {cat.score < 60 ? "💡 次回のアクション:" : "✅ 次のステップ:"}
+                    </p>
+                    <p className="text-xs text-muted leading-relaxed">
+                      {cat.score < 60 ? CATEGORY_NEXT_STEP[cat.name].lowTip : CATEGORY_NEXT_STEP[cat.name].midTip}
+                    </p>
+                  </div>
+                )}
                 {cat.score < 60 && CATEGORY_LEARN_LINK[cat.name] && (
                   <Link
                     href={CATEGORY_LEARN_LINK[cat.name].href}
@@ -355,6 +389,27 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
             </p>
           </div>
         )}
+
+        {/* Weakest Category Focus — 競合失敗分析: 弱点フォーカスが改善速度を2倍に */}
+        {score.categories.length > 1 && (() => {
+          const weakest = [...score.categories].sort((a, b) => a.score - b.score)[0];
+          return weakest && weakest.score < 70 ? (
+            <div className="mb-4 rounded-2xl border border-accent/20 bg-accent/5 p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">🎯</span>
+                <span className="text-sm font-bold text-accent">次の練習で意識するポイント</span>
+              </div>
+              <p className="text-sm text-foreground mb-1">
+                <strong>{weakest.name}</strong>（{weakest.score}点）を重点的に練習すると、総合スコアが最も伸びやすくなります。
+              </p>
+              {CATEGORY_NEXT_STEP[weakest.name] && (
+                <p className="text-xs text-muted leading-relaxed">
+                  {weakest.score < 60 ? CATEGORY_NEXT_STEP[weakest.name].lowTip : CATEGORY_NEXT_STEP[weakest.name].midTip}
+                </p>
+              )}
+            </div>
+          ) : null;
+        })()}
 
         {/* Actions */}
         <div className="flex flex-col gap-3 sm:flex-row">

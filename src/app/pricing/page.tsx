@@ -89,8 +89,17 @@ export default function PricingPage() {
   const [promoOpen, setPromoOpen] = useState(false);
   const [activePromo] = useState(() => getActivePromotion());
 
+  const [trialDays, setTrialDays] = useState<number | null>(null);
+
   useEffect(() => {
     trackPricingPageView({});
+    // Check trial status for countdown display
+    fetch("/api/dashboard")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.trialDaysRemaining) setTrialDays(data.trialDaysRemaining);
+      })
+      .catch(() => {});
   }, []);
 
   const monthlyPrice = 2980;
@@ -250,6 +259,23 @@ export default function PricingPage() {
       </header>
 
       <div className="mx-auto max-w-4xl px-6 py-20">
+        {/* Trial Countdown Banner — 競合失敗分析: urgency drives 15-25% more conversions */}
+        {trialDays !== null && trialDays > 0 && (
+          <div className="mb-8 rounded-xl border-2 border-accent/40 bg-accent/5 px-5 py-4 text-center animate-fade-in-up">
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-2xl">⏰</span>
+              <div>
+                <div className="text-sm font-bold text-accent">
+                  無料トライアル残り{trialDays}日
+                </div>
+                <div className="text-xs text-muted">
+                  {trialDays <= 2 ? "間もなく終了します。今すぐProプランに登録して全機能を維持しましょう" : "トライアル中に全機能を試して、効果を実感してください"}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Pricing Section Title */}
         <div className="mb-10 text-center">
           <h1 className="mb-4 text-4xl font-bold">料金プラン</h1>

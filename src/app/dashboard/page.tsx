@@ -12,6 +12,7 @@ interface DashboardData {
   avgScore: number;
   latestScore: number;
   scoreTrend: number;
+  firstScore: number | null;
   weakestCategory: { name: string; score: number } | null;
   history: { score: number; date: string; difficulty: string }[];
   plan: "free" | "pro";
@@ -420,6 +421,40 @@ export default function DashboardPage() {
             )}
           </div>
         </div>
+
+        {/* Improvement from first score — 競合失敗分析: 進捗の可視化がリテンションの鍵 */}
+        {hasScores && data.firstScore !== null && data.totalScored >= 2 && data.latestScore !== data.firstScore && (
+          <div className={`mb-6 rounded-xl border px-5 py-4 ${
+            data.latestScore > data.firstScore
+              ? "border-green-500/20 bg-green-500/5"
+              : "border-card-border bg-card"
+          }`}>
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">{data.latestScore > data.firstScore ? "📈" : "📊"}</span>
+              <div className="flex-1">
+                <div className={`text-sm font-bold ${data.latestScore > data.firstScore ? "text-green-500" : "text-muted"}`}>
+                  初回から{data.latestScore > data.firstScore ? "+" : ""}{data.latestScore - data.firstScore}点の{data.latestScore > data.firstScore ? "成長" : "変化"}
+                </div>
+                <div className="text-xs text-muted">
+                  初回 {data.firstScore}点 → 最新 {data.latestScore}点
+                  {data.latestScore > data.firstScore && data.firstScore > 0 && (
+                    <span className="ml-2 font-medium text-green-500">
+                      ({Math.round(((data.latestScore - data.firstScore) / data.firstScore) * 100)}%改善)
+                    </span>
+                  )}
+                </div>
+              </div>
+              {data.latestScore > data.firstScore && (
+                <div className="text-right">
+                  <div className="text-lg font-black text-green-500">
+                    +{data.latestScore - data.firstScore}
+                  </div>
+                  <div className="text-[10px] text-muted">pts</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Score History Chart */}
         {hasScores && data.history.length > 0 && (

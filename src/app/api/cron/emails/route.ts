@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
   const now = new Date();
   const cronStartTime = Date.now();
-  const results = { trial_6days: 0, trial_3days: 0, trial_1day: 0, trial_expired: 0, inactive: 0, no_roleplay: 0, pause_resume: 0, dunning_day4: 0, dunning_day7: 0, winback_7d: 0, winback_30d: 0, power_user: 0, referral_nudge: 0, pro_day1: 0, pro_day3: 0, pro_day7: 0, weekly_digest: 0, nps_survey: 0, at_risk: 0, monthly_to_annual: 0, reverse_trial_expired: 0, admin_weekly: 0, admin_alerts: 0, predictive_churn: 0, health_scores_recorded: 0, crm_events: 0, ab_tests_applied: 0, errors: 0 };
+  const results = { trial_6days: 0, trial_3days: 0, trial_1day: 0, trial_expired: 0, inactive: 0, no_roleplay: 0, pause_resume: 0, dunning_day4: 0, dunning_day7: 0, winback_7d: 0, winback_30d: 0, power_user: 0, referral_nudge: 0, streak_milestone: 0, pro_day1: 0, pro_day3: 0, pro_day7: 0, weekly_digest: 0, nps_survey: 0, at_risk: 0, monthly_to_annual: 0, reverse_trial_expired: 0, admin_weekly: 0, admin_alerts: 0, predictive_churn: 0, health_scores_recorded: 0, crm_events: 0, ab_tests_applied: 0, errors: 0 };
 
   // ── 1. Trial expiring emails ──
   // Find users with subscription_status = 'trialing'
@@ -575,6 +575,63 @@ export async function GET(request: NextRequest) {
         if (sent) {
           await supabase.from("onboarding_emails").insert({ user_id: user.id, email_type: "referral_nudge" });
           results.referral_nudge++;
+        }
+      } catch {
+        results.errors++;
+      }
+    }
+  }
+
+  // ── 9.5. Streak milestone emails (3, 7, 14, 30 day streaks) ──
+  // Celebrate and reinforce daily practice habit
+  const STREAK_MILESTONES = [3, 7, 14, 30];
+  const { data: allActiveUsers } = await supabase
+    .from("profiles")
+    .select("id, email, email_unsubscribed")
+    .not("email", "is", null);
+
+  if (allActiveUsers) {
+    for (const user of allActiveUsers) {
+      if (!user.email || user.email_unsubscribed) continue;
+      try {
+        // Get user's current streak from usage records
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        let streak = 0;
+        const checkDate = new Date(now);
+        for (let i = 0; i < 31; i++) {
+          const dayStr = checkDate.toISOString().split("T")[0];
+          const { count } = await supabase
+            .from("usage_records")
+            .select("id", { count: "exact", head: true })
+            .eq("user_id", user.id)
+            .gte("created_at", dayStr + "T00:00:00")
+            .lt("created_at", dayStr + "T23:59:59");
+          if (count && count > 0) {
+            streak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+          } else {
+            break;
+          }
+        }
+
+        // Check if streak hits a milestone
+        if (STREAK_MILESTONES.includes(streak)) {
+          const milestoneKey = `streak_milestone_${streak}`;
+          const { data: alreadySent } = await supabase
+            .from("onboarding_emails")
+            .select("id")
+            .eq("user_id", user.id)
+            .eq("email_type", milestoneKey)
+            .limit(1);
+
+          if (!alreadySent || alreadySent.length === 0) {
+            const sent = await sendEngagementEmail(user.email, "streak_milestone", user.id);
+            if (sent) {
+              await supabase.from("onboarding_emails").insert({ user_id: user.id, email_type: milestoneKey });
+              results.streak_milestone++;
+            }
+          }
         }
       } catch {
         results.errors++;

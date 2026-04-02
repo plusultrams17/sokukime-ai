@@ -210,6 +210,26 @@ export default function RoleplayPage() {
 
   const productSuggestions = ["外壁塗装", "法人向けクラウドサービス", "学習塾の入会", "生命保険", "太陽光パネル"];
 
+  // Industry-specific quick-start templates — 競合失敗分析: 92%がカスタマイズされた練習を好む
+  const INDUSTRY_TEMPLATES = [
+    { label: "🏠 不動産", product: "新築マンション", customerType: "individual", industry: "住宅購入検討者", scene: "visit", difficulty: "cautious", desc: "マンション・戸建て" },
+    { label: "🛡️ 保険", product: "生命保険", customerType: "individual", industry: "保険見直し検討中", scene: "visit", difficulty: "friendly", desc: "生命・損害保険" },
+    { label: "☁️ IT・SaaS", product: "法人向けクラウドサービス", customerType: "manager", industry: "IT企業", scene: "phone", difficulty: "cautious", desc: "法人ソフトウェア" },
+    { label: "🏗️ リフォーム", product: "外壁塗装", customerType: "individual", industry: "戸建て住宅オーナー", scene: "visit", difficulty: "skeptical", desc: "外壁・屋根・水回り" },
+    { label: "📚 教育", product: "学習塾の入会", customerType: "individual", industry: "子育て世帯", scene: "inbound", difficulty: "friendly", desc: "塾・習い事" },
+    { label: "☀️ エネルギー", product: "太陽光パネル", customerType: "individual", industry: "戸建て住宅オーナー", scene: "phone", difficulty: "silent", desc: "太陽光・蓄電池" },
+    { label: "🚗 自動車", product: "新車販売", customerType: "individual", industry: "車買い替え検討者", scene: "inbound", difficulty: "talkative", desc: "新車・中古車" },
+    { label: "💼 人材", product: "求人広告", customerType: "owner", industry: "中小企業", scene: "phone", difficulty: "low-energy", desc: "求人・人材紹介" },
+  ];
+
+  function applyTemplate(t: typeof INDUSTRY_TEMPLATES[number]) {
+    setProduct(t.product);
+    setCustomerType(t.customerType);
+    setCustomerIndustry(t.industry);
+    setScene(t.scene);
+    setDifficulty(t.difficulty);
+  }
+
   const handleWelcome = useCallback(() => {
     setShowWelcome(true);
   }, []);
@@ -593,6 +613,32 @@ export default function RoleplayPage() {
                 まず学習コースで「型」を学ぶと効果UP
                 <span style={{ color: '#f48a58', fontWeight: 800 }}>→</span>
               </Link>
+            </div>
+
+            {/* Quick Start by Industry — 60秒で最初のロープレ開始 */}
+            <div className="pixar-card" style={{ background: '#f8f3ea', borderColor: '#d4cabb' }}>
+              <div className="mb-3 flex items-center gap-2">
+                <span style={{ fontSize: '1.2em' }}>⚡</span>
+                <span style={{ fontSize: '0.9em', fontWeight: 800, color: '#4d4c4a' }}>業種別クイックスタート</span>
+                <span style={{ fontSize: '0.68em', color: '#a09a90', fontWeight: 600 }}>ワンタップで設定完了</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {INDUSTRY_TEMPLATES.map((t) => (
+                  <button
+                    key={t.label}
+                    type="button"
+                    onClick={() => applyTemplate(t)}
+                    className="pixar-option text-left transition-transform active:scale-95"
+                    style={{ padding: '0.5em 0.6em' }}
+                  >
+                    <div style={{ fontSize: '0.88em', fontWeight: 800 }}>{t.label}</div>
+                    <div style={{ fontSize: '0.68em', opacity: 0.6 }}>{t.desc}</div>
+                  </button>
+                ))}
+              </div>
+              <p style={{ fontSize: '0.68em', color: '#a09a90', marginTop: '0.5em', textAlign: 'center' }}>
+                タップで設定が自動入力されます。下のフォームで自由に変更もOK
+              </p>
             </div>
 
             {/* ── あなた（営業マン）Card ── */}
