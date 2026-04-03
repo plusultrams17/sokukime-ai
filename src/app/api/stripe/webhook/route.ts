@@ -108,6 +108,22 @@ export async function POST(request: NextRequest) {
         break;
       }
 
+      // ── Team plan checkout ──
+      if (session.metadata?.plan_type === "team" && session.metadata?.org_id) {
+        const orgId = session.metadata.org_id;
+        const subscriptionId = session.subscription as string;
+
+        await supabaseAdmin
+          .from("organizations")
+          .update({
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscriptionId,
+          })
+          .eq("id", orgId);
+
+        break;
+      }
+
       // ── Subscription checkout (existing logic) ──
       const subscriptionId = session.subscription as string;
 
@@ -256,6 +272,15 @@ export async function POST(request: NextRequest) {
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription;
       const customerId = subscription.customer as string;
+
+      // Check if this is a team plan subscription
+      if (subscription.metadata?.plan_type === "team" && subscription.metadata?.org_id) {
+        await supabaseAdmin
+          .from("organizations")
+          .update({ stripe_subscription_id: null })
+          .eq("id", subscription.metadata.org_id);
+        break;
+      }
 
       await supabaseAdmin
         .from("profiles")

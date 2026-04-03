@@ -62,7 +62,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Protect authenticated-only routes — redirect to login if not signed in
-    const protectedPaths = ["/dashboard", "/referral", "/settings"];
+    const protectedPaths = ["/dashboard", "/referral", "/settings", "/insights"];
     if (!user && protectedPaths.some((p) => request.nextUrl.pathname === p)) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";

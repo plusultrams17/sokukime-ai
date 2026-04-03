@@ -63,13 +63,22 @@ export function PricingExitPopup() {
             &#10003; 登録不要　&#10003; 完全無料　&#10003; 60秒で開始
           </p>
 
-          {/* CTA — free roleplay (NOT paid checkout) */}
+          {/* CTA — free learn primary */}
           <Link
-            href="/roleplay"
+            href="/learn"
             className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover"
             onClick={() => markPopupDismissed(POPUP_ID)}
           >
-            無料でAIロープレを体験
+            まず無料で営業の型を学ぶ
+          </Link>
+
+          {/* Roleplay secondary */}
+          <Link
+            href="/roleplay"
+            className="mt-3 block w-full text-center text-sm font-medium text-accent transition hover:underline"
+            onClick={() => markPopupDismissed(POPUP_ID)}
+          >
+            学んだらAIで練習する &rarr;
           </Link>
 
           {/* Decline */}

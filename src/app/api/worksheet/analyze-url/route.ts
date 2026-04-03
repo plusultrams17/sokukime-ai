@@ -1,4 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
+
+let anthropicClient: Anthropic | null = null;
+function getAnthropicClient(): Anthropic | null {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+  if (!anthropicClient) {
+    anthropicClient = new Anthropic({ apiKey });
+  }
+  return anthropicClient;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,8 +36,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
+    const client = getAnthropicClient();
+    if (!client) {
       return NextResponse.json(
         { error: "AI機能が設定されていません" },
         { status: 500 },
@@ -78,21 +89,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Ask OpenAI to extract product info
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: 500,
-        temperature: 0.3,
-        messages: [
-          {
-            role: "system",
-            content: `あなたはWebページの内容から商材・サービス情報を抽出する専門家です。
+    // Ask Anthropic to extract product info
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 500,
+      system: `あなたはWebページの内容から商材・サービス情報を抽出する専門家です。
 以下のJSON形式で情報を抽出してください。情報が見つからない場合は空文字にしてください。
 
 {
@@ -106,25 +107,15 @@ export async function POST(request: NextRequest) {
 }
 
 JSONのみを返してください。`,
-          },
-          {
-            role: "user",
-            content: `以下のWebページの内容から商材情報を抽出してください:\n\nURL: ${parsedUrl.toString()}\n\n--- ページ内容 ---\n${textContent}`,
-          },
-        ],
-      }),
+      messages: [
+        {
+          role: "user",
+          content: `以下のWebページの内容から商材情報を抽出してください:\n\nURL: ${parsedUrl.toString()}\n\n--- ページ内容 ---\n${textContent}`,
+        },
+      ],
     });
 
-    if (!response.ok) {
-      console.error("OpenAI API error:", await response.text());
-      return NextResponse.json(
-        { error: "AI分析に失敗しました" },
-        { status: 500 },
-      );
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "";
+    const content = response.content[0]?.type === "text" ? response.content[0].text : "";
     const jsonMatch = content.match(/\{[\s\S]*\}/);
 
     if (!jsonMatch) {

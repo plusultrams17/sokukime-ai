@@ -123,22 +123,22 @@ export default function IndustryIndexPage() {
             業種・商材を入力するだけで、AIがリアルなお客さん役を演じます。
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/learn"
-              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
-            >
-              まず営業の型を学ぶ
-            </Link>
-            <Link href="/roleplay" className="morph-btn">
+            <Link href="/learn" className="morph-btn">
               <span className="btn-fill" />
               <span className="shadow" />
               <span className="btn-text">
-                {"無料でAIロープレを始める".split("").map((char, i) => (
+                {"無料で営業の型を学ぶ".split("").map((char, i) => (
                   <span key={i} style={{ "--i": i } as React.CSSProperties}>{char}</span>
                 ))}
               </span>
               <span className="orbit-dots"><span /><span /><span /><span /></span>
               <span className="corners"><span /><span /><span /><span /></span>
+            </Link>
+            <Link
+              href="/roleplay"
+              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
+            >
+              学んだらAIで練習する
             </Link>
           </div>
           <p className="mt-4 text-sm text-muted">

@@ -1,4 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { getTeamMembership } from "@/lib/team";
 
 export const FREE_DAILY_LIMIT = 1;
 
@@ -26,8 +27,16 @@ export async function getUsageStatus(
       .eq("used_date", today),
   ]);
 
-  const plan = (profileResult.data?.plan || "free") as "free" | "pro";
+  let plan = (profileResult.data?.plan || "free") as "free" | "pro";
   const used = usageResult.count || 0;
+
+  // Team members get Pro-equivalent access
+  if (plan !== "pro") {
+    const team = await getTeamMembership(supabase, userId);
+    if (team) {
+      plan = "pro";
+    }
+  }
 
   if (plan === "pro") {
     return { used, limit: Infinity, canStart: true, plan };

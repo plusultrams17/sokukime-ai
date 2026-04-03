@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getPersona } from "@/lib/personas";
 import { checkRateLimit } from "@/lib/rate-limit";
+import Anthropic from "@anthropic-ai/sdk";
 
 const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」AIです。
 ユーザーが営業マンとして商談の練習をしています。以下のルールに従ってリアルなお客さんを演じてください。
@@ -24,6 +25,16 @@ const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」
 - 自然な会話として返答してください
 - 日本語の口語体で話してください
 - ペルソナの指示に従って返答の長さ・トーンを調整してください`;
+
+let anthropicClient: Anthropic | null = null;
+function getAnthropicClient(): Anthropic | null {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+  if (!anthropicClient) {
+    anthropicClient = new Anthropic({ apiKey });
+  }
+  return anthropicClient;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -48,8 +59,8 @@ export async function POST(request: NextRequest) {
     const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext } =
       await request.json();
 
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
+    const client = getAnthropicClient();
+    if (!client) {
       return NextResponse.json(
         { message: getDefaultResponse() },
         { status: 200 }
@@ -100,40 +111,23 @@ ${b2bContext}${productInfo}${customerInfo}
 - お客さんのタイプ: ${persona?.label || "慎重なお客さん"}
 ${isB2B ? `- 取引タイプ: B2B（法人取引）─ 営業マンの「${product}」を、あなたの「${industry}」事業に導入するかの商談` : `- 取引タイプ: B2C（個人取引）─ 営業マンの「${product}」を個人のお客さんに提案`}`;
 
-    const openaiMessages = [
-      { role: "system", content: systemContent },
-      ...messages.map((m: { role: string; content: string }) => ({
-        role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
-        content: m.content,
-      })),
-    ];
+    // Convert messages for Anthropic format (no system in messages array)
+    const anthropicMessages = messages.map((m: { role: string; content: string }) => ({
+      role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
+      content: m.content,
+    }));
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: 300,
-        messages: openaiMessages,
-      }),
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 300,
+      system: systemContent,
+      messages: anthropicMessages,
     });
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("OpenAI API error:", errText);
-      return NextResponse.json(
-        { message: getDefaultResponse() },
-        { status: 200 }
-      );
-    }
-
-    const data = await response.json();
     const assistantMessage =
-      data.choices?.[0]?.message?.content ||
-      getDefaultResponse();
+      response.content[0]?.type === "text"
+        ? response.content[0].text
+        : getDefaultResponse();
 
     return NextResponse.json({ message: assistantMessage });
   } catch (error) {

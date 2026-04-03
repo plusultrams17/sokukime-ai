@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+video/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -23,6 +24,16 @@
 # misc
 .DS_Store
 *.pem
+*.pdf
+
+# claude/agent skills
+.agent/
+.agents/
+.claude/skills/
+skills-lock.json
+
+# video project deps
+video/node_modules
 
 # debug
 npm-debug.log*

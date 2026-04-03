@@ -12,6 +12,7 @@ import { LessonScene } from "@/components/lesson-scenes";
 import { PdfExportButton } from "@/components/pdf/PdfExportButton";
 import LessonPdfContent from "@/components/pdf/LessonPdfContent";
 import { InlineWorksheet } from "@/components/inline-worksheet";
+import { isLessonFree, FREE_LESSON_SLUGS } from "@/lib/lessons/access";
 
 const TABS = ["理論", "トーク例", "確認クイズ", "実践練習"];
 
@@ -104,6 +105,8 @@ export default function LessonPage() {
   const { prev, next } = getAdjacentLessons(slug);
 
   const [activeTab, setActiveTab] = useState(0);
+  const [purchased, setPurchased] = useState(false);
+  const [statusLoaded, setStatusLoaded] = useState(false);
 
   // Quiz state
   const [currentQ, setCurrentQ] = useState(0);
@@ -111,6 +114,17 @@ export default function LessonPage() {
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
+
+  // Check purchase status
+  useEffect(() => {
+    fetch("/api/program/status")
+      .then((r) => r.json())
+      .then((d) => {
+        setPurchased(d.purchased);
+        setStatusLoaded(true);
+      })
+      .catch(() => setStatusLoaded(true));
+  }, []);
 
   // Reset quiz when slug changes
   useEffect(() => {
@@ -121,6 +135,9 @@ export default function LessonPage() {
     setScore(0);
     setQuizCompleted(false);
   }, [slug]);
+
+  const free = isLessonFree(slug);
+  const locked = statusLoaded && !free && !purchased;
 
   const markCompleted = useCallback(
     (finalScore: number) => {
@@ -145,6 +162,94 @@ export default function LessonPage() {
           <Link href="/learn" className="text-accent hover:underline text-sm">
             学習コースに戻る
           </Link>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show purchase gate for locked lessons
+  if (locked) {
+    const freeLessons = FREE_LESSON_SLUGS.map((s) => getLessonBySlug(s)).filter(Boolean);
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="pt-24 px-6 pb-20">
+          <div className="mx-auto max-w-3xl">
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-sm text-muted mb-8">
+              <Link href="/learn" className="hover:text-foreground hover:underline transition">
+                学習コース
+              </Link>
+              <span className="text-gray-300">/</span>
+              <span style={{ color: LEVEL_COLORS[lesson.level] }} className="font-medium">
+                {lesson.levelLabel}
+              </span>
+              <span className="text-gray-300">/</span>
+              <span className="text-foreground">Lesson {lesson.order}</span>
+            </nav>
+
+            {/* Lesson header (visible) */}
+            <div className="mb-8 rounded-2xl overflow-hidden border border-card-border">
+              <div className="w-full relative">
+                <LessonScene slug={slug} />
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <span className="text-5xl">🔒</span>
+                </div>
+              </div>
+              <div className="p-5 sm:p-6">
+                <p
+                  className="text-xs font-bold tracking-widest uppercase mb-2"
+                  style={{ color: LEVEL_COLORS[lesson.level] }}
+                >
+                  Lesson {lesson.order}
+                </p>
+                <h1 className="text-2xl font-bold text-foreground sm:text-3xl mb-2">
+                  {lesson.title}
+                </h1>
+                <p className="text-base text-muted">{lesson.description}</p>
+              </div>
+            </div>
+
+            {/* Purchase gate */}
+            <div className="border border-gray-200 rounded-xl p-8 text-center mb-10">
+              <span className="text-4xl mb-4 block">🔒</span>
+              <h2 className="text-lg font-bold text-foreground mb-2">
+                このレッスンはプログラム購入後にご利用いただけます
+              </h2>
+              <p className="text-sm text-muted mb-6 max-w-md mx-auto">
+                教材プログラム（全22レッスン＋認定試験）を購入すると、すべてのレッスンにアクセスできます。
+              </p>
+              <Link
+                href="/program"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
+              >
+                教材プログラムを購入する
+              </Link>
+            </div>
+
+            {/* Free lessons intro */}
+            <div className="border-t border-gray-200 pt-8">
+              <h3 className="text-sm font-bold text-foreground mb-4">
+                無料で学べるレッスン
+              </h3>
+              <div className="space-y-2">
+                {freeLessons.map((fl) => fl && (
+                  <Link
+                    key={fl.slug}
+                    href={`/learn/${fl.slug}`}
+                    className="flex items-center gap-3 py-3 border-b border-gray-100 text-sm text-muted hover:text-foreground transition group"
+                  >
+                    <span className="text-xs font-bold text-gray-400 w-5 text-right">
+                      {fl.order}
+                    </span>
+                    <span className="group-hover:underline">{fl.title}</span>
+                    <span className="ml-auto text-xs text-green-600 font-medium">無料</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
         <Footer />
       </div>
@@ -368,16 +473,20 @@ export default function LessonPage() {
                     </p>
 
                     <div className="border-t border-gray-200 pt-6 space-y-4">
+                      <div className="rounded-xl bg-accent/5 border border-accent/20 p-4 mb-4">
+                        <p className="text-sm font-bold text-accent mb-1">学んだらすぐ実践!</p>
+                        <p className="text-xs text-muted">レッスンで学んだテクニックをAIロープレで実践練習しましょう。実践することで「型」が身体に染みつきます。</p>
+                      </div>
                       <Link
                         href="/roleplay"
                         className="flex items-center justify-between py-3 border-b border-gray-100 group"
                       >
                         <div>
                           <p className="text-sm font-bold text-foreground group-hover:underline">
-                            AIロープレで練習する
+                            このレッスンで学んだ「{lesson.title}」をAI相手に実践してみる
                           </p>
                           <p className="text-xs text-muted mt-0.5">
-                            学んだ技術をAI相手に実践
+                            AIロープレで実践練習
                           </p>
                         </div>
                         <svg

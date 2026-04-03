@@ -14,11 +14,11 @@ interface StickyCTAProps {
 }
 
 export function StickyCTA({
-  ctaText = "今すぐAIと商談してみる",
-  ctaHref = "/roleplay",
-  subtitle = "無料で体験できます",
+  ctaText = "無料で営業の型を学ぶ",
+  ctaHref = "/learn",
+  subtitle = "22レッスンで営業の型を習得",
   brandName = "成約コーチ AI",
-  trackingId = "sticky_roleplay",
+  trackingId = "sticky_learn",
   onCtaClick,
 }: StickyCTAProps) {
   const [pastHero, setPastHero] = useState(false);
@@ -61,15 +61,17 @@ export function StickyCTA({
         </div>
         <div className="flex w-full items-center justify-center gap-3 sm:w-auto">
           <Link
-            href="/learn"
+            href="/roleplay"
+            scroll={true}
             className="hidden text-xs font-bold text-accent transition hover:underline sm:inline-flex"
           >
-            営業の型を学ぶ
+            AIで練習する
           </Link>
           <div className="flex flex-col items-center sm:flex-row sm:gap-3">
-            <span className="mb-1 text-[10px] text-muted sm:hidden">無料で体験</span>
+            <span className="mb-1 text-[10px] text-muted sm:hidden">5分で1レッスン完了 ・ 登録不要</span>
             <Link
               href={ctaHref}
+              scroll={true}
               onClick={(e) => {
                 trackCTAClick(trackingId, "sticky_cta", ctaHref);
                 if (onCtaClick) {

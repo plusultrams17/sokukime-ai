@@ -238,17 +238,11 @@ export default function ToolsPage() {
             診断結果やスクリプトを活かして、AIと実践的な営業練習を始めましょう。
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/learn"
-              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
-            >
-              まず営業の型を学ぶ
-            </Link>
-            <Link href="/roleplay" className="morph-btn">
+            <Link href="/learn" className="morph-btn">
               <span className="btn-fill" />
               <span className="shadow" />
               <span className="btn-text">
-                {"今すぐAIと商談してみる".split("").map((char, i) => (
+                {"無料で営業の型を学ぶ".split("").map((char, i) => (
                   <span key={i} style={{ "--i": i } as React.CSSProperties}>
                     {char}
                   </span>
@@ -266,6 +260,12 @@ export default function ToolsPage() {
                 <span />
                 <span />
               </span>
+            </Link>
+            <Link
+              href="/roleplay"
+              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
+            >
+              学んだらAIで練習する
             </Link>
           </div>
         </div>

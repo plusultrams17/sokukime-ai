@@ -5,6 +5,8 @@ import { useState, useEffect, useMemo } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getAllLessons } from "@/lib/lessons";
+import { FREE_LESSON_SLUGS } from "@/lib/lessons/access";
+import { getLessonBySlug } from "@/lib/lessons";
 
 const TOTAL_QUESTIONS = 20;
 const PASS_THRESHOLD = 0.8;
@@ -89,12 +91,21 @@ export default function ExamPage() {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
+  const [purchased, setPurchased] = useState(false);
+  const [statusLoaded, setStatusLoaded] = useState(false);
 
   const allLessons = useMemo(() => getAllLessons(), []);
   const totalLessons = allLessons.length;
 
   useEffect(() => {
     setProgress(getProgress());
+    fetch("/api/program/status")
+      .then((r) => r.json())
+      .then((d) => {
+        setPurchased(d.purchased);
+        setStatusLoaded(true);
+      })
+      .catch(() => setStatusLoaded(true));
   }, []);
 
   const completedCount = progress.completedLessons.length;
@@ -200,8 +211,55 @@ export default function ExamPage() {
             <span className="text-foreground">認定試験</span>
           </nav>
 
+          {/* ── Purchase Gate ── */}
+          {statusLoaded && !purchased && (
+            <div>
+              <div className="border border-gray-200 rounded-xl p-8 text-center mb-10">
+                <span className="text-4xl mb-4 block">🔒</span>
+                <h2 className="text-lg font-bold text-foreground mb-2">
+                  認定試験はプログラム購入後にご利用いただけます
+                </h2>
+                <p className="text-sm text-muted mb-6 max-w-md mx-auto">
+                  教材プログラム（全22レッスン＋認定試験）を購入すると、認定試験を受験できます。
+                </p>
+                <Link
+                  href="/program"
+                  className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
+                >
+                  教材プログラムを購入する
+                </Link>
+              </div>
+
+              {/* Free lessons intro */}
+              <div className="border-t border-gray-200 pt-8">
+                <h3 className="text-sm font-bold text-foreground mb-4">
+                  無料で学べるレッスン
+                </h3>
+                <div className="space-y-2">
+                  {FREE_LESSON_SLUGS.map((s) => {
+                    const fl = getLessonBySlug(s);
+                    if (!fl) return null;
+                    return (
+                      <Link
+                        key={fl.slug}
+                        href={`/learn/${fl.slug}`}
+                        className="flex items-center gap-3 py-3 border-b border-gray-100 text-sm text-muted hover:text-foreground transition group"
+                      >
+                        <span className="text-xs font-bold text-gray-400 w-5 text-right">
+                          {fl.order}
+                        </span>
+                        <span className="group-hover:underline">{fl.title}</span>
+                        <span className="ml-auto text-xs text-green-600 font-medium">無料</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* ── Intro State ── */}
-          {examState === "intro" && (
+          {purchased && examState === "intro" && (
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">
                 認定試験
@@ -344,7 +402,7 @@ export default function ExamPage() {
           )}
 
           {/* ── In Progress State ── */}
-          {examState === "inProgress" && questions.length > 0 && (
+          {purchased && examState === "inProgress" && questions.length > 0 && (
             <div>
               {/* Progress */}
               <div className="mb-8">
@@ -430,7 +488,7 @@ export default function ExamPage() {
           )}
 
           {/* ── Result State ── */}
-          {examState === "result" && (
+          {purchased && examState === "result" && (
             <div>
               {/* Score */}
               <div className="border-b border-gray-200 pb-8 mb-8">

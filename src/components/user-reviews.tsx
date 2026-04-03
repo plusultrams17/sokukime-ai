@@ -28,7 +28,8 @@ export function UserReviews() {
   if (loading || reviews.length === 0) return null;
 
   return (
-    <div className="mt-20">
+    <section className="px-6 py-16 sm:py-20">
+      <div className="mx-auto max-w-4xl">
       <h2 className="mb-8 text-center text-2xl font-bold">利用者の声</h2>
       <div className="grid gap-6 md:grid-cols-2">
         {reviews.map((r, i) => (
@@ -56,6 +57,7 @@ export function UserReviews() {
           </div>
         ))}
       </div>
-    </div>
+      </div>
+    </section>
   );
 }

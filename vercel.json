@@ -3,6 +3,14 @@
     {
       "path": "/api/cron/emails",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/insights",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/kpi-snapshot",
+      "schedule": "0 1 1 * *"
     }
   ]
 }

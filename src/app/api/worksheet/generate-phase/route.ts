@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
 
 const PHASE_PROMPTS: Record<number, string> = {
   0: `以下の業種の営業マンが使える「信頼構築シート」の内容を生成してください。
@@ -153,6 +154,16 @@ const PHASE_MAX_TOKENS: Record<number, number> = {
   4: 2500,
 };
 
+let anthropicClient: Anthropic | null = null;
+function getAnthropicClient(): Anthropic | null {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+  if (!anthropicClient) {
+    anthropicClient = new Anthropic({ apiKey });
+  }
+  return anthropicClient;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { industry, phase, productInfo, targetInfo } = await request.json();
@@ -164,10 +175,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
+    const client = getAnthropicClient();
+    if (!client) {
       return NextResponse.json(
-        { error: "OpenAI API key not configured" },
+        { error: "AI API key not configured" },
         { status: 500 },
       );
     }
@@ -180,42 +191,25 @@ export async function POST(request: NextRequest) {
       ? `\n【ターゲット（営業先）情報】\n企業名: ${targetInfo.targetCompanyName || "不明"}\n業種: ${targetInfo.targetIndustry || "不明"}\n担当者役職: ${targetInfo.targetPosition || "不明"}\n企業規模: ${targetInfo.targetScale || "不明"}\n想定ニーズ: ${targetInfo.targetNeeds || "不明"}\n想定予算: ${targetInfo.targetBudget || "不明"}\n導入時期: ${targetInfo.targetTimeline || "不明"}`
       : "";
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: PHASE_MAX_TOKENS[phase] || 1000,
-        temperature: 0.7,
-        messages: [
-          {
-            role: "system",
-            content: `あなたは営業のプロフェッショナルです。営業準備ワークシートの内容を生成してください。
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: PHASE_MAX_TOKENS[phase] || 1000,
+      system: `あなたは営業のプロフェッショナルです。営業準備ワークシートの内容を生成してください。
 - 各項目は具体的でリアルな内容にしてください
 - その業種ならではの表現を使ってください
 - ターゲット情報がある場合は、そのターゲット企業・担当者に合わせた具体的な内容にしてください
 - previewはそのまま商談で使えるトーク例にしてください
 - 必ず指定されたJSON形式で返してください
 - JSON以外のテキストは出力しないでください`,
-          },
-          {
-            role: "user",
-            content: `業種・商材: ${industry}${detailContext}${targetContext}\n\n${PHASE_PROMPTS[phase]}`,
-          },
-        ],
-      }),
+      messages: [
+        {
+          role: "user",
+          content: `業種・商材: ${industry}${detailContext}${targetContext}\n\n${PHASE_PROMPTS[phase]}`,
+        },
+      ],
     });
 
-    if (!response.ok) {
-      console.error("OpenAI API error:", await response.text());
-      return NextResponse.json({ error: "AI generation failed" }, { status: 500 });
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "";
+    const content = response.content[0]?.type === "text" ? response.content[0].text : "";
     const jsonMatch = content.match(/\{[\s\S]*\}/);
 
     if (!jsonMatch) {

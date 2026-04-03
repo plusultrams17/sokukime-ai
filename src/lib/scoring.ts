@@ -1,3 +1,5 @@
+import Anthropic from "@anthropic-ai/sdk";
+
 export interface ScoreInput {
   messages: { role: string; content: string }[];
   industry: string;
@@ -140,6 +142,16 @@ export function generateFallbackScore(): ScoreResult {
   };
 }
 
+let anthropicClient: Anthropic | null = null;
+function getAnthropicClient(): Anthropic | null {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+  if (!anthropicClient) {
+    anthropicClient = new Anthropic({ apiKey });
+  }
+  return anthropicClient;
+}
+
 export async function scoreConversation(input: ScoreInput): Promise<ScoreResult> {
   const { getPersona } = await import("@/lib/personas");
   const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext } = input;
@@ -152,28 +164,22 @@ export async function scoreConversation(input: ScoreInput): Promise<ScoreResult>
     )
     .join("\n\n");
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
+  const client = getAnthropicClient();
+  if (!client) {
     return generateFallbackScore();
   }
 
   const isBusiness = customerType === "owner" || customerType === "manager" || customerType === "staff";
   const isB2B = isBusiness && industry && industry !== customerType;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      max_tokens: 1500,
-      messages: [
-        { role: "system", content: SCORING_PROMPT },
-        {
-          role: "user",
-          content: `以下の営業ロープレ会話を採点してください。
+  const response = await client.messages.create({
+    model: "claude-sonnet-4-20250514",
+    max_tokens: 1500,
+    system: SCORING_PROMPT,
+    messages: [
+      {
+        role: "user",
+        content: `以下の営業ロープレ会話を採点してください。
 
 【シナリオ情報】
 業種: ${industry}
@@ -190,18 +196,11 @@ ${conversationText}
 --- 会話ここまで ---
 
 上記の会話を成約5ステップメソッドで採点し、JSON形式で返してください。`,
-        },
-      ],
-    }),
+      },
+    ],
   });
 
-  if (!response.ok) {
-    console.error("Scoring API error:", await response.text());
-    return generateFallbackScore();
-  }
-
-  const data = await response.json();
-  const text = data.choices?.[0]?.message?.content || "";
+  const text = response.content[0]?.type === "text" ? response.content[0].text : "";
 
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (jsonMatch) {

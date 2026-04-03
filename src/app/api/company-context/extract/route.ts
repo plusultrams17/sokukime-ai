@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
 
 const EXTRACT_PROMPT = `あなたは営業コンサルタントです。与えられた情報から会社・商材の基本情報を抽出してください。
 
@@ -35,13 +36,23 @@ function extractTextFromHtml(html: string): string {
     .slice(0, 5000);
 }
 
+let anthropicClient: Anthropic | null = null;
+function getAnthropicClient(): Anthropic | null {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+  if (!anthropicClient) {
+    anthropicClient = new Anthropic({ apiKey });
+  }
+  return anthropicClient;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { url, documentText } = body;
 
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
+    const client = getAnthropicClient();
+    if (!client) {
       return NextResponse.json(
         { error: "AI機能が設定されていません" },
         { status: 500 },
@@ -109,33 +120,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: 800,
-        temperature: 0.3,
-        messages: [
-          { role: "system", content: EXTRACT_PROMPT },
-          { role: "user", content: context },
-        ],
-      }),
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 800,
+      system: EXTRACT_PROMPT,
+      messages: [
+        { role: "user", content: context },
+      ],
     });
 
-    if (!response.ok) {
-      console.error("OpenAI API error:", await response.text());
-      return NextResponse.json(
-        { error: "AI抽出に失敗しました" },
-        { status: 500 },
-      );
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "";
+    const content = response.content[0]?.type === "text" ? response.content[0].text : "";
     const jsonMatch = content.match(/\{[\s\S]*\}/);
 
     if (!jsonMatch) {

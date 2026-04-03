@@ -43,6 +43,7 @@ export function Footer() {
               <Link href="/program" className="transition hover:text-foreground">教材プログラム</Link>
               <Link href="/features" className="transition hover:text-foreground">機能紹介</Link>
               <Link href="/tools" className="transition hover:text-foreground">無料ツール</Link>
+              <Link href="/insights" className="transition hover:text-foreground">業界インサイト</Link>
               <Link href="/industry" className="transition hover:text-foreground">業種別ロープレ</Link>
               <Link href="/use-cases" className="transition hover:text-foreground">活用シーン</Link>
               <Link href="/enterprise" className="transition hover:text-foreground">法人導入</Link>

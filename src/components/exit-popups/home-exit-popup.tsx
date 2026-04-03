@@ -41,35 +41,35 @@ export function HomeExitPopup() {
             id="home-exit-heading"
             className="mb-2 text-center text-xl font-bold text-foreground"
           >
-            あなたの営業力、何点か知っていますか？
+            まだ1つもレッスンを見ていませんか？
           </h2>
 
           {/* Body — specific promise */}
           <p className="mb-2 text-center text-sm text-muted">
-            たった3分のAIロープレで、5項目のスコアがわかります。
+            たった5分で、明日の商談から使える「型」が1つ身につきます。
           </p>
 
           {/* Trust badges — Zero-Price Effect */}
           <p className="mb-6 text-center text-xs text-muted">
-            &#10003; 登録不要　&#10003; 完全無料
+            &#10003; 登録不要　&#10003; 完全無料　&#10003; 22レッスン
           </p>
 
-          {/* CTA */}
+          {/* CTA — Learn primary */}
           <Link
-            href="/roleplay"
+            href="/learn"
             className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover"
             onClick={() => markPopupDismissed(POPUP_ID)}
           >
-            無料で営業力を診断する &rarr;
+            無料で営業の型を学ぶ &rarr;
           </Link>
 
-          {/* Learn link */}
+          {/* Roleplay secondary */}
           <Link
-            href="/learn"
+            href="/roleplay"
             className="mt-3 block w-full text-center text-sm font-medium text-accent transition hover:underline"
             onClick={() => markPopupDismissed(POPUP_ID)}
           >
-            まず営業の型を学んでみる &rarr;
+            学んだらAIで練習する &rarr;
           </Link>
 
           {/* Decline */}

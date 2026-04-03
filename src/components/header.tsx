@@ -7,10 +7,10 @@ import { UserMenu } from "@/components/user-menu";
 import { trackCTAClick } from "@/lib/tracking";
 
 const navLinks = [
-  { href: "/tools", label: "無料ツール" },
-  { href: "/industry", label: "業種別" },
-  { href: "/learn", label: "学習" },
+  { href: "/learn", label: "学習コース" },
   { href: "/program", label: "教材" },
+  { href: "/industry", label: "業種別" },
+  { href: "/tools", label: "無料ツール" },
   { href: "/blog", label: "ブログ" },
   { href: "/pricing", label: "料金プラン" },
 ];
@@ -18,6 +18,7 @@ const navLinks = [
 export function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [plan, setPlan] = useState<"free" | "pro">("free");
+  const [isTeamMember, setIsTeamMember] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -33,6 +34,16 @@ export function Header() {
           .single()
           .then(({ data }) => {
             if (data?.plan) setPlan(data.plan as "free" | "pro");
+          });
+        // Check team membership
+        supabase
+          .from("team_members")
+          .select("id")
+          .eq("user_id", user.id)
+          .limit(1)
+          .maybeSingle()
+          .then(({ data }) => {
+            if (data) setIsTeamMember(true);
           });
       }
     });
@@ -76,6 +87,11 @@ export function Header() {
 
         {/* Desktop nav — auth (right aligned) */}
         <div className="hidden items-center gap-4 lg:flex">
+          {isLoggedIn && isTeamMember && (
+            <Link href="/team" className="header-link">
+              チーム
+            </Link>
+          )}
           {isLoggedIn ? (
             <UserMenu />
           ) : (
@@ -92,8 +108,8 @@ export function Header() {
               <span>ロープレを始める</span>
             </Link>
           ) : (
-            <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_signup", "header", "/roleplay")}>
-              <span>無料で試す</span>
+            <Link href="/learn" className="nav-btn" onClick={() => trackCTAClick("header_learn", "header", "/learn")}>
+              <span>無料で学ぶ</span>
             </Link>
           )}
         </div>
@@ -127,6 +143,15 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {isLoggedIn && isTeamMember && (
+            <Link
+              href="/team"
+              className="mobile-menu__link"
+              onClick={() => setOpen(false)}
+            >
+              チーム管理
+            </Link>
+          )}
           <div className="mobile-menu__divider" />
           <Link
             href="/learn"
@@ -149,7 +174,7 @@ export function Header() {
                 className="mobile-menu__link"
                 onClick={() => setOpen(false)}
               >
-                無料ロープレを試す
+                学んだらAIで練習
               </Link>
             </>
           ) : isLoggedIn && plan === "pro" ? (
@@ -170,11 +195,11 @@ export function Header() {
                 ログイン
               </Link>
               <Link
-                href="/roleplay"
+                href="/learn"
                 className="nav-btn mobile-menu__cta"
                 onClick={() => setOpen(false)}
               >
-                <span>無料で試す</span>
+                <span>無料で学ぶ</span>
               </Link>
             </>
           )}

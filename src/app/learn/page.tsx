@@ -9,6 +9,7 @@ import { LessonScene } from "@/components/lesson-scenes";
 import { PdfExportButton } from "@/components/pdf/PdfExportButton";
 import WorksheetPdfContent from "@/components/pdf/WorksheetPdfContent";
 import { loadCompanyContext, hasCompanyContext } from "@/lib/company-context";
+import { isLessonFree } from "@/lib/lessons/access";
 
 interface Progress {
   completedLessons: string[];
@@ -63,9 +64,14 @@ export default function LearnPage() {
     quizScores: {},
   });
   const [activeCard, setActiveCard] = useState<string | null>(null);
+  const [purchased, setPurchased] = useState(false);
 
   useEffect(() => {
     setProgress(getProgress());
+    fetch("/api/program/status")
+      .then((r) => r.json())
+      .then((d) => setPurchased(d.purchased))
+      .catch(() => {});
   }, []);
 
   const handleCardTap = useCallback(
@@ -181,18 +187,29 @@ export default function LearnPage() {
                     const isCompleted =
                       progress.completedLessons.includes(lesson.slug);
                     const score = progress.quizScores[lesson.slug];
+                    const free = isLessonFree(lesson.slug);
+                    const locked = !free && !purchased;
 
                     return (
                       <Link
                         key={lesson.slug}
-                        href={`/learn/${lesson.slug}`}
-                        onClick={(e) => handleCardTap(e, lesson.slug)}
-                        className={`lesson-card${activeCard === lesson.slug ? " is-active" : ""}`}
+                        href={locked ? "/program" : `/learn/${lesson.slug}`}
+                        onClick={(e) => {
+                          if (!locked) handleCardTap(e, lesson.slug);
+                        }}
+                        className={`lesson-card${activeCard === lesson.slug ? " is-active" : ""}${locked ? " pointer-events-auto" : ""}`}
                       >
                         {/* Scene illustration (fills entire card) */}
                         <div className="lesson-card__figure">
                           <LessonScene slug={lesson.slug} />
                         </div>
+
+                        {/* Lock overlay for paid lessons */}
+                        {locked && (
+                          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 rounded-[inherit]">
+                            <span className="text-3xl">🔒</span>
+                          </div>
+                        )}
 
                         {/* Badge: always visible */}
                         <span
@@ -203,7 +220,7 @@ export default function LearnPage() {
                         </span>
 
                         {/* Score: always visible */}
-                        {score !== undefined && (
+                        {score !== undefined && !locked && (
                           <span
                             className="lesson-card__score"
                             style={{ color: level.color }}
@@ -213,7 +230,7 @@ export default function LearnPage() {
                         )}
 
                         {/* Completed check */}
-                        {isCompleted && (
+                        {isCompleted && !locked && (
                           <div
                             className="lesson-card__check"
                             style={{ backgroundColor: level.color }}
@@ -234,14 +251,16 @@ export default function LearnPage() {
                         )}
 
                         {/* Detail overlay: appears on hover/tap */}
-                        <div className="lesson-card__overlay">
-                          <p className="lesson-card__title">
-                            {lesson.title}
-                          </p>
-                          <p className="lesson-card__desc">
-                            {lesson.description}
-                          </p>
-                        </div>
+                        {!locked && (
+                          <div className="lesson-card__overlay">
+                            <p className="lesson-card__title">
+                              {lesson.title}
+                            </p>
+                            <p className="lesson-card__desc">
+                              {lesson.description}
+                            </p>
+                          </div>
+                        )}
                       </Link>
                     );
                   })}
@@ -255,7 +274,7 @@ export default function LearnPage() {
       {/* Certification Exam */}
       <section className="px-6 pb-8">
         <div className="mx-auto max-w-5xl">
-          <ExamCard progress={progress} />
+          <ExamCard progress={progress} purchased={purchased} />
         </div>
       </section>
 
@@ -364,11 +383,43 @@ export default function LearnPage() {
 
 /* ── Exam Section ─────────────────────────────── */
 
-function ExamCard({ progress }: { progress: Progress }) {
+function ExamCard({ progress, purchased }: { progress: Progress; purchased: boolean }) {
   const totalLessons = getAllLessons().length;
   const completedCount = progress.completedLessons.length;
   const allCompleted = completedCount >= totalLessons;
   const remaining = totalLessons - completedCount;
+
+  if (!purchased) {
+    return (
+      <div className="border-t-2 border-accent pt-8 relative">
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-white/80 rounded-xl">
+          <span className="text-4xl mb-3">🔒</span>
+          <p className="text-sm font-bold text-foreground mb-2">
+            認定試験はプログラム購入後にご利用いただけます
+          </p>
+          <Link
+            href="/program"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-hover"
+          >
+            教材プログラムを購入する
+          </Link>
+        </div>
+        <div className="opacity-30 pointer-events-none">
+          <div className="flex items-baseline gap-2 mb-1">
+            <span className="text-xs font-bold tracking-widest uppercase text-accent">
+              認定試験
+            </span>
+          </div>
+          <h2 className="text-xl font-bold text-foreground mb-2">
+            成約メソッド認定試験
+          </h2>
+          <p className="text-sm text-muted leading-relaxed mb-4">
+            全レッスンの学習を完了し、認定試験に合格して認定証を取得しましょう。
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="border-t-2 border-accent pt-8">

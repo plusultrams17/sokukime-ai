@@ -75,10 +75,10 @@ export default function PrivacyPage() {
             url="https://stripe.com/jp/privacy"
           />
           <ThirdParty
-            name="OpenAI"
+            name="Anthropic"
             purpose="AIロープレ・コーチング・スコアリング"
             data="ロープレ中の会話テキスト（匿名化された状態で送信）"
-            url="https://openai.com/privacy"
+            url="https://www.anthropic.com/privacy"
           />
           <ThirdParty
             name="Google Analytics"

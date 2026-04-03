@@ -175,7 +175,17 @@ export default function AdminDashboard() {
 
       <div className="mx-auto max-w-6xl px-6 py-8">
         <h1 className="mb-2 text-2xl font-bold">Revenue Dashboard</h1>
-        <p className="mb-8 text-sm text-muted">収益・ユーザー・自動化メトリクスの一覧</p>
+        <p className="mb-4 text-sm text-muted">収益・ユーザー・自動化メトリクスの一覧</p>
+
+        {/* Quick Links */}
+        <div className="mb-8">
+          <Link
+            href={`/admin/kpi#${secret}`}
+            className="inline-flex items-center gap-2 rounded-lg bg-accent/10 px-4 py-2.5 text-sm font-bold text-accent transition hover:bg-accent/20"
+          >
+            KPI Analytics Dashboard →
+          </Link>
+        </div>
 
         {/* Revenue */}
         <h2 className="mb-3 text-sm font-bold text-accent">Revenue</h2>
@@ -270,7 +280,7 @@ export default function AdminDashboard() {
             { name: "Cancel Flow + Save Offer", status: "active", desc: "一時停止/割引/理由収集" },
             { name: "GA4 + Engagement Tracking", status: "active", desc: "30+ custom events" },
             { name: "Cookie Consent", status: "active", desc: "APPI準拠" },
-            { name: "Rate Limiting", status: "active", desc: "OpenAI コスト保護" },
+            { name: "Rate Limiting", status: "active", desc: "AI API コスト保護" },
             { name: "Social Proof Stats", status: "active", desc: "動的ユーザー数表示" },
             { name: "Score Sharing (X/LINE/LinkedIn)", status: "active", desc: "バイラル拡散" },
             { name: "Exit Popups", status: "active", desc: "離脱防止" },

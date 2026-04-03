@@ -12,12 +12,13 @@ import { ScrollSlideIn } from "@/components/scroll-slide-in";
 import { getActivePromotion } from "@/lib/promotions";
 
 const features = [
+  { name: "学習コース（22レッスン）", free: "全レッスン", pro: "全レッスン" },
+  { name: "業種別トークスクリプト", free: "一部閲覧", pro: "全業種対応" },
+  { name: "切り返し話法テンプレート", free: "基本パターン", pro: "30パターン" },
   { name: "AIロープレ", free: "1日1回", pro: "無制限" },
   { name: "詳細スコア", free: "1カテゴリ", pro: "全5カテゴリ" },
   { name: "AI改善アドバイス", free: "−", pro: "✓" },
   { name: "リアルタイムコーチ", free: "✓", pro: "✓" },
-  { name: "営業シーン選択", free: "✓", pro: "✓" },
-  { name: "難易度選択", free: "✓", pro: "✓" },
 ];
 
 const comparisons = [
@@ -25,7 +26,7 @@ const comparisons = [
   { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", icon: "🏢", image: "/images/misc/comparison-training.png" },
   { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", icon: "👔", image: "/images/misc/comparison-consulting.png" },
   { name: "先輩にロープレ依頼", cost: "時給換算 ¥3,000〜", frequency: "週1回（相手の都合次第）", icon: "👥", image: "/images/misc/comparison-senpai.png" },
-  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "毎日・無制限・24時間・個人で即開始", icon: "🔥", image: "/images/misc/comparison-ai-pro.png", highlight: true },
+  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "22レッスン+全業種コンテンツ+無制限AI練習・24時間・個人で即開始", icon: "🔥", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
 
@@ -43,7 +44,7 @@ const faqItems = [
   {
     question: "無料プランに制限はありますか？",
     answer:
-      "無料プランは1日1回のロープレ制限があり、スコアは1カテゴリのみ詳細表示されます。Proプランでは全5カテゴリの詳細スコアとAI改善アドバイスが表示されます。",
+      "無料プランでも22レッスンの学習コースは全て受講できます。業種別コンテンツは一部制限があり、AIロープレは1日1回までです。Proプランでは全業種コンテンツと無制限AIロープレが使えます。",
   },
   {
     question: "無料プランからProへの切り替えはすぐにできますか？",
@@ -53,7 +54,7 @@ const faqItems = [
   {
     question: "Proプランで何が変わりますか？",
     answer:
-      "ロープレ回数が無制限になり、全5カテゴリの詳細スコアとAI改善アドバイスが表示されます。1日に何度でも繰り返し練習でき、短期間でスキルアップを実感できます。",
+      "全8業種のトークスクリプト・切り返し話法テンプレート（30パターン）が使い放題になり、AIロープレも無制限。全5カテゴリの詳細スコアとAI改善アドバイスで、短期間でスキルアップを実感できます。",
   },
   {
     question: "年額プランはありますか？",
@@ -79,6 +80,11 @@ const faqItems = [
     question: "複数のデバイスで使えますか？",
     answer:
       "はい。同一アカウントでPC・スマートフォン・タブレットからご利用いただけます。",
+  },
+  {
+    question: "法人チームプランとは？",
+    answer:
+      "月額¥20,000（税抜）で5名までのチームメンバーが全員Proプランと同等の機能を利用できます。チーム管理ダッシュボードからメンバーの招待・管理が可能です。カード決済のほか、請求書払いにも対応しています。",
   },
 ];
 
@@ -161,7 +167,7 @@ export default function PricingPage() {
               name: "無料プラン",
               price: "0",
               priceCurrency: "JPY",
-              description: "AIロープレ1日1回・成約スコア1カテゴリ",
+              description: "22レッスン学習コース・業種別トークスクリプト・AIロープレ1日1回・成約スコア1カテゴリ",
               availability: "https://schema.org/InStock",
               url: `${siteUrl}/pricing`,
             },
@@ -250,10 +256,10 @@ export default function PricingPage() {
             </span>
           </Link>
           <Link
-            href="/roleplay"
+            href="/learn"
             className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover"
           >
-            ロープレを始める
+            無料で学ぶ
           </Link>
         </div>
       </header>
@@ -280,10 +286,10 @@ export default function PricingPage() {
         <div className="mb-10 text-center">
           <h1 className="mb-4 text-4xl font-bold">料金プラン</h1>
           <p className="text-lg text-muted">
-            7日間無料で全機能を体験。もっと練習したくなったらProへ
+            営業の「型」を学んで、AIで実践。もっと上を目指すならProへ
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-sm text-muted leading-relaxed">
-            成約コーチ AIは無料プラン（1日1回AIロープレ）とProプラン（月額¥2,980で無制限AIロープレ）の2プランを提供。従来の営業研修（1回¥50,000〜）と比較して月額¥2,980で無制限に練習でき、いつでも解約可能です。
+            成約コーチ AIは22レッスンの学習コースと業種別コンテンツを無料で提供。Proプラン（月額¥2,980）なら全業種のトークスクリプト・切り返し話法テンプレート・無制限AIロープレ練習が使い放題。いつでも解約可能です。
           </p>
         </div>
 
@@ -293,7 +299,7 @@ export default function PricingPage() {
             <div className="mb-2 text-2xl">🤔</div>
             <p className="mb-1 text-sm font-bold">効果があるか不安？</p>
             <p className="text-xs text-muted leading-relaxed">
-              成約5ステップメソッドに基づくAI評価で、練習するほどスコアが向上。まず無料で1回試して、あなたのスコアを確認してみてください。
+              営業心理学に基づく22レッスンで体系的に学習。業種別トークスクリプトですぐ現場で使えます。まず無料レッスンを1つ試してみてください。
             </p>
           </div>
           <div className="rounded-xl border border-card-border bg-card p-5 text-center">
@@ -355,7 +361,7 @@ export default function PricingPage() {
             </div>
 
             <Link
-              href="/roleplay"
+              href="/learn"
               className="flex h-10 w-full items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:border-accent/50 hover:text-foreground"
             >
               無料で始める
@@ -373,7 +379,7 @@ export default function PricingPage() {
                   <span className="text-muted">{f.name}</span>
                   <span
                     className={
-                      f.free === "−" || f.free === "1日1回" || f.free === "1カテゴリ"
+                      f.free === "−" || f.free === "1日1回" || f.free === "1カテゴリ" || f.free === "一部閲覧" || f.free === "基本パターン"
                         ? "text-muted"
                         : "text-foreground"
                     }
@@ -418,7 +424,7 @@ export default function PricingPage() {
                   : `税込 ¥${monthlyTaxInc.toLocaleString()}/月`}
               </p>
               <p className="mt-2 text-sm text-muted">
-                本気で営業力を鍛えたい方に
+                全コンテンツ+無制限AIロープレで本気のスキルアップ
               </p>
             </div>
 
@@ -568,8 +574,11 @@ export default function PricingPage() {
         <UserReviews />
 
         {/* Team / Corporate Plan */}
-        <div className="mt-20 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-8 sm:p-12">
+        <div className="mt-20 rounded-2xl border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-transparent p-8 sm:p-12">
           <div className="mx-auto max-w-2xl text-center">
+            <div className="mb-3 inline-flex rounded-full bg-accent px-4 py-1 text-xs font-bold text-white">
+              新登場
+            </div>
             <p className="mb-2 text-sm font-medium text-accent">
               法人・チーム向け
             </p>
@@ -581,13 +590,22 @@ export default function PricingPage() {
               <strong>1/10以下のコスト</strong>で、毎日の実践練習環境を提供します。
             </p>
 
+            {/* Team Plan Price */}
+            <div className="mb-6">
+              <span className="text-4xl font-bold text-accent">¥20,000</span>
+              <span className="text-muted">/月（税抜）</span>
+              <p className="mt-1 text-xs text-muted">
+                税込 ¥22,000/月 ・ 5名まで ・ 1人あたり¥4,000/月
+              </p>
+            </div>
+
             <div className="mb-8 grid gap-4 sm:grid-cols-3">
               <div className="rounded-xl border border-card-border bg-card p-4">
                 <p className="mb-1 text-2xl font-bold text-accent">無制限</p>
                 <p className="text-xs text-muted">全メンバーのロープレ回数</p>
               </div>
               <div className="rounded-xl border border-card-border bg-card p-4">
-                <p className="mb-1 text-2xl font-bold text-accent">5名〜</p>
+                <p className="mb-1 text-2xl font-bold text-accent">5名</p>
                 <p className="text-xs text-muted">チームプラン対応人数</p>
               </div>
               <div className="rounded-xl border border-card-border bg-card p-4">
@@ -596,34 +614,34 @@ export default function PricingPage() {
               </div>
             </div>
 
-            <div className="mb-4 rounded-xl bg-card border border-card-border p-4 text-left">
+            <div className="mb-6 rounded-xl bg-card border border-card-border p-4 text-left">
               <p className="mb-2 text-sm font-bold">法人プランに含まれる機能</p>
               <ul className="grid gap-1 text-sm text-muted sm:grid-cols-2">
                 <li>&#10003; 全メンバー無制限ロープレ</li>
                 <li>&#10003; 全5カテゴリの詳細スコア</li>
                 <li>&#10003; AI改善アドバイス</li>
                 <li>&#10003; チーム管理ダッシュボード</li>
-                <li>&#10003; メンバー別スコア推移</li>
+                <li>&#10003; メンバー招待・管理</li>
                 <li>&#10003; 請求書払い対応</li>
               </ul>
             </div>
 
-            <div className="flex flex-col items-center gap-3 sm:flex-row">
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <Link
+                href="/team"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
+              >
+                チームプランを始める
+              </Link>
               <a
                 href="mailto:support@seiyaku-coach.com?subject=法人プランのお問い合わせ&body=会社名：%0Aご担当者名：%0A利用予定人数：%0Aご質問・ご要望：%0A"
                 className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent bg-transparent px-8 text-base font-bold text-accent transition hover:bg-accent/10"
               >
-                法人プランについて問い合わせる
+                問い合わせる
               </a>
-              <Link
-                href="/enterprise"
-                className="inline-flex h-12 items-center justify-center rounded-xl border border-card-border px-8 text-sm font-medium text-muted transition hover:text-foreground hover:border-accent/30"
-              >
-                法人導入の詳細を見る →
-              </Link>
             </div>
             <p className="mt-3 text-xs text-muted">
-              稟議書テンプレート付き ・ ご利用人数に応じたお見積もり（最短当日対応）
+              稟議書テンプレート付き ・ いつでも解約OK ・ カード決済 or 請求書払い
             </p>
           </div>
         </div>
@@ -694,20 +712,20 @@ export default function PricingPage() {
         {/* Bottom CTA */}
         <div className="mt-20 text-center">
           <p className="mb-6 text-muted">
-            営業研修1回の費用で、1ヶ月間無制限にロープレできます
+            営業研修1回の費用で、22レッスン+全業種コンテンツ+無制限AI練習が使い放題
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/learn"
-              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover sm:min-w-[220px]"
             >
-              まず営業の型を学ぶ
+              無料で営業の型を学ぶ
             </Link>
             <Link
               href="/roleplay"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover sm:min-w-[220px]"
+              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
             >
-              無料でロープレを始める
+              学んだらAIで練習する
             </Link>
           </div>
         </div>
@@ -718,23 +736,23 @@ export default function PricingPage() {
       <PricingExitPopup />
       <ScrollSlideIn sessionKey="pricing-slide-in" scrollThreshold={0.4}>
         <p className="mb-2 text-sm font-bold text-foreground">
-          まずは無料で体験
+          まずは無料で学ぶ
         </p>
         <p className="mb-3 text-xs text-muted">
-          リスクゼロで営業力を鍛えよう
+          5分で最初のレッスンが完了
         </p>
         <div className="flex items-center gap-3">
           <Link
             href="/learn"
-            className="text-xs font-bold text-accent transition hover:underline"
+            className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
           >
-            型を学ぶ
+            無料で学ぶ
           </Link>
           <Link
             href="/roleplay"
-            className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
+            className="text-xs font-bold text-accent transition hover:underline"
           >
-            無料で始める
+            AIで練習する
           </Link>
         </div>
       </ScrollSlideIn>

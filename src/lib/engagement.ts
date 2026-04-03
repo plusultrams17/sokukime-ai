@@ -8,7 +8,11 @@ export type EngagementEventType =
   | "coach_view"
   | "login"
   | "billing_visit"
-  | "settings_visit";
+  | "settings_visit"
+  | "insight_view"
+  | "insight_save"
+  | "insight_convert"
+  | "insight_share";
 
 export interface UserAchievements {
   totalSessions: number;
@@ -151,4 +155,25 @@ export async function getUserAchievements(
   }
 
   return { totalSessions, bestScore, scoreTrend, averageScore, daysSinceSignup };
+}
+
+export type FunnelStepType =
+  | "visit"
+  | "signup"
+  | "first_roleplay"
+  | "second_roleplay"
+  | "pricing_view"
+  | "checkout_start"
+  | "payment_complete";
+
+/** コンバージョンファネルにステップを記録 */
+export async function trackFunnelStep(
+  supabase: SupabaseClient,
+  userId: string | null,
+  step: FunnelStepType
+) {
+  return supabase.from("conversion_funnel").insert({
+    user_id: userId,
+    step,
+  });
 }

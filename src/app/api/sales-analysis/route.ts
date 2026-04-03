@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
 
 const ANALYSIS_PROMPT = `あなたは成約5ステップメソッドの専門コンサルタントです。
 与えられた商材・サービス情報を分析し、営業現場で即座に使える武器を作成してください。
@@ -53,13 +54,23 @@ function extractTextFromHtml(html: string): string {
     .slice(0, 4000);
 }
 
+let anthropicClient: Anthropic | null = null;
+function getAnthropicClient(): Anthropic | null {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+  if (!anthropicClient) {
+    anthropicClient = new Anthropic({ apiKey });
+  }
+  return anthropicClient;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { url, productName, industry } = body;
 
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
+    const client = getAnthropicClient();
+    if (!client) {
       return NextResponse.json(
         { error: "AI機能が設定されていません" },
         { status: 500 },
@@ -129,33 +140,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: 1500,
-        temperature: 0.7,
-        messages: [
-          { role: "system", content: ANALYSIS_PROMPT },
-          { role: "user", content: productContext },
-        ],
-      }),
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1500,
+      system: ANALYSIS_PROMPT,
+      messages: [
+        { role: "user", content: productContext },
+      ],
     });
 
-    if (!response.ok) {
-      console.error("OpenAI API error:", await response.text());
-      return NextResponse.json(
-        { error: "AI分析に失敗しました" },
-        { status: 500 },
-      );
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "";
+    const content = response.content[0]?.type === "text" ? response.content[0].text : "";
     const jsonMatch = content.match(/\{[\s\S]*\}/);
 
     if (!jsonMatch) {

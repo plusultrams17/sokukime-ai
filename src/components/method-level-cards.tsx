@@ -76,6 +76,7 @@ export function MethodLevelCards() {
           <Link
             key={level.key}
             href={`/learn#${level.key}`}
+            scroll={true}
             className="method-level-card group"
             style={
               {

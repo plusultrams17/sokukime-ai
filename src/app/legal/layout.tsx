@@ -14,10 +14,10 @@ export default function LegalLayout({
             <span className="text-lg font-bold">成約コーチ AI</span>
           </Link>
           <Link
-            href="/pricing"
+            href="/learn"
             className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover"
           >
-            無料で試す
+            無料で学ぶ
           </Link>
         </div>
       </header>

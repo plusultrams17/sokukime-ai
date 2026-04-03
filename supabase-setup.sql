@@ -401,3 +401,260 @@ CREATE TABLE IF NOT EXISTS public.dunning_attempts (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 CREATE INDEX IF NOT EXISTS idx_dunning_user ON dunning_attempts(user_id, created_at DESC);
+
+-- =============================================
+-- 業界インサイト（Industry Insights）
+-- =============================================
+
+-- インサイト記事マスター
+CREATE TABLE IF NOT EXISTS public.insights (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  source_type TEXT NOT NULL CHECK (source_type IN ('google_news', 'semantic_scholar')),
+  source_id TEXT NOT NULL UNIQUE,
+  source_url TEXT,
+  title_original TEXT NOT NULL,
+  title_ja TEXT,
+  summary_ja TEXT,
+  sales_angle TEXT,
+  industries TEXT[] NOT NULL DEFAULT '{}',
+  published_date TIMESTAMPTZ,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'archived')),
+  metadata JSONB DEFAULT '{}'
+);
+CREATE INDEX IF NOT EXISTS idx_insights_published ON insights(published_date DESC);
+CREATE INDEX IF NOT EXISTS idx_insights_industries ON insights USING GIN(industries);
+CREATE INDEX IF NOT EXISTS idx_insights_status ON insights(status, published_date DESC);
+
+ALTER TABLE insights ENABLE ROW LEVEL SECURITY;
+-- All authenticated users can read active insights
+CREATE POLICY "Authenticated users read active insights" ON insights
+  FOR SELECT USING (auth.role() = 'authenticated' AND status = 'active');
+
+-- ユーザー業界設定
+CREATE TABLE IF NOT EXISTS public.user_industry_preferences (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL UNIQUE REFERENCES profiles(id) ON DELETE CASCADE,
+  primary_industry TEXT NOT NULL,
+  secondary_industries TEXT[] NOT NULL DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE user_industry_preferences ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users read own industry preferences" ON user_industry_preferences
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users insert own industry preferences" ON user_industry_preferences
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users update own industry preferences" ON user_industry_preferences
+  FOR UPDATE USING (auth.uid() = user_id);
+
+-- インサイトインタラクション（閲覧・保存・変換・共有追跡）
+CREATE TABLE IF NOT EXISTS public.insight_interactions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  insight_id UUID NOT NULL REFERENCES insights(id) ON DELETE CASCADE,
+  action TEXT NOT NULL CHECK (action IN ('view', 'save', 'unsave', 'convert', 'share')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_insight_interactions_user ON insight_interactions(user_id, action);
+CREATE INDEX IF NOT EXISTS idx_insight_interactions_insight ON insight_interactions(insight_id);
+
+ALTER TABLE insight_interactions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users read own insight interactions" ON insight_interactions
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users insert own insight interactions" ON insight_interactions
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- インサイト利用制限（Freeユーザー: 3回/日）
+CREATE TABLE IF NOT EXISTS public.insight_usage (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  used_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  action TEXT NOT NULL DEFAULT 'view',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_insight_usage_user_date ON insight_usage(user_id, used_date);
+
+ALTER TABLE insight_usage ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users read own insight usage" ON insight_usage
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users insert own insight usage" ON insight_usage
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- セールストーク変換キャッシュ
+CREATE TABLE IF NOT EXISTS public.sales_talk_cache (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  insight_id UUID NOT NULL REFERENCES insights(id) ON DELETE CASCADE,
+  industry_slug TEXT NOT NULL,
+  product_hash TEXT NOT NULL,
+  talk_script TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(insight_id, industry_slug, product_hash)
+);
+CREATE INDEX IF NOT EXISTS idx_sales_talk_cache_lookup ON sales_talk_cache(insight_id, industry_slug);
+
+ALTER TABLE sales_talk_cache ENABLE ROW LEVEL SECURITY;
+-- All authenticated users can read cache (shared resource)
+CREATE POLICY "Authenticated users read sales talk cache" ON sales_talk_cache
+  FOR SELECT USING (auth.role() = 'authenticated');
+
+-- =============================================
+-- 法人チームプラン（Organizations & Team Members）
+-- =============================================
+
+-- 組織テーブル
+CREATE TABLE IF NOT EXISTS public.organizations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  owner_id UUID REFERENCES auth.users(id),
+  stripe_customer_id TEXT,
+  stripe_subscription_id TEXT,
+  plan_type TEXT DEFAULT 'team' CHECK (plan_type IN ('team')),
+  max_members INTEGER DEFAULT 5,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- チームメンバー
+CREATE TABLE IF NOT EXISTS public.team_members (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  org_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id),
+  role TEXT DEFAULT 'member' CHECK (role IN ('owner', 'admin', 'member')),
+  joined_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(org_id, user_id)
+);
+
+-- 招待
+CREATE TABLE IF NOT EXISTS public.team_invitations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  org_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  token TEXT UNIQUE NOT NULL,
+  role TEXT DEFAULT 'member',
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'expired')),
+  invited_by UUID REFERENCES auth.users(id),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  expires_at TIMESTAMPTZ DEFAULT (now() + interval '7 days')
+);
+
+-- インデックス
+CREATE INDEX IF NOT EXISTS idx_team_members_org ON team_members(org_id);
+CREATE INDEX IF NOT EXISTS idx_team_members_user ON team_members(user_id);
+CREATE INDEX IF NOT EXISTS idx_team_invitations_token ON team_invitations(token);
+CREATE INDEX IF NOT EXISTS idx_team_invitations_org ON team_invitations(org_id);
+
+-- RLS
+ALTER TABLE organizations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE team_invitations ENABLE ROW LEVEL SECURITY;
+
+-- Organizations: owner can do everything, members can read
+CREATE POLICY "Org owner full access" ON organizations
+  FOR ALL USING (auth.uid() = owner_id);
+CREATE POLICY "Team members read org" ON organizations
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM team_members
+      WHERE team_members.org_id = organizations.id
+      AND team_members.user_id = auth.uid()
+    )
+  );
+
+-- Team members: org owner/admin can manage, members can read own org
+CREATE POLICY "Team members read own org members" ON team_members
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM team_members AS tm
+      WHERE tm.org_id = team_members.org_id
+      AND tm.user_id = auth.uid()
+    )
+  );
+CREATE POLICY "Org owner manages members" ON team_members
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM organizations
+      WHERE organizations.id = team_members.org_id
+      AND organizations.owner_id = auth.uid()
+    )
+  );
+CREATE POLICY "Org admin manages members" ON team_members
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM team_members AS tm
+      WHERE tm.org_id = team_members.org_id
+      AND tm.user_id = auth.uid()
+      AND tm.role IN ('owner', 'admin')
+    )
+  );
+
+-- Invitations: org owner/admin can manage, anyone can read by token
+CREATE POLICY "Org owner manages invitations" ON team_invitations
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM organizations
+      WHERE organizations.id = team_invitations.org_id
+      AND organizations.owner_id = auth.uid()
+    )
+  );
+CREATE POLICY "Org admin manages invitations" ON team_invitations
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM team_members
+      WHERE team_members.org_id = team_invitations.org_id
+      AND team_members.user_id = auth.uid()
+      AND team_members.role IN ('owner', 'admin')
+    )
+  );
+CREATE POLICY "Anyone can read invitation by token" ON team_invitations
+  FOR SELECT USING (true);
+
+-- ヘルパー関数: ユーザーがチームメンバーかどうかを返す（Pro相当アクセス判定用）
+CREATE OR REPLACE FUNCTION public.is_team_member(check_user_id UUID)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.team_members tm
+    JOIN public.organizations o ON o.id = tm.org_id
+    WHERE tm.user_id = check_user_id
+    AND o.stripe_subscription_id IS NOT NULL
+  );
+END;
+$$;
+
+-- =============================================
+-- KPI分析ダッシュボード
+-- =============================================
+
+-- 月次KPIスナップショット
+CREATE TABLE IF NOT EXISTS public.monthly_kpi_snapshots (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  month DATE NOT NULL UNIQUE,
+  mau INTEGER DEFAULT 0,
+  mrr INTEGER DEFAULT 0,
+  churn_rate DECIMAL(5,2) DEFAULT 0,
+  cvr DECIMAL(5,2) DEFAULT 0,
+  ltv INTEGER DEFAULT 0,
+  nps_score DECIMAL(4,1) DEFAULT 0,
+  free_users INTEGER DEFAULT 0,
+  pro_users INTEGER DEFAULT 0,
+  new_signups INTEGER DEFAULT 0,
+  churned_users INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- コンバージョンファネル
+CREATE TABLE IF NOT EXISTS public.conversion_funnel (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  step TEXT NOT NULL CHECK (step IN ('visit', 'signup', 'first_roleplay', 'second_roleplay', 'pricing_view', 'checkout_start', 'payment_complete')),
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_conversion_funnel_step ON conversion_funnel(step, created_at);
+CREATE INDEX IF NOT EXISTS idx_conversion_funnel_user ON conversion_funnel(user_id);
+
+-- RLS for KPI tables (admin-only via service role key)
+-- No public policies needed — accessed via service role key in API routes

@@ -104,10 +104,10 @@ export default async function ScoreSharePage(
             成約コーチ AI
           </Link>
           <Link
-            href="/roleplay"
+            href="/learn"
             className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover"
           >
-            無料で試す
+            無料で学ぶ
           </Link>
         </div>
       </header>
