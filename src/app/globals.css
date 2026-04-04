@@ -11,6 +11,8 @@
   --blob-teal: #E0F2ED;
   --blob-cream: #FDF0D5;
   --blob-pink: #FCE8E8;
+  --lp-cta: #d7000e;
+  --lp-cta-hover: #b5000b;
 }
 
 @theme inline {
@@ -26,11 +28,77 @@
   --color-blob-pink: var(--blob-pink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-lp-cta: var(--lp-cta);
+  --color-lp-cta-hover: var(--lp-cta-hover);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* ── LP (BizReach-style) ── */
+
+@keyframes lp-shine {
+  0% { left: -100%; }
+  20% { left: 100%; }
+  100% { left: 100%; }
+}
+
+.lp-cta-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  padding: 0 48px;
+  background-color: var(--lp-cta);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: background-color 0.2s ease;
+}
+
+.lp-cta-btn:hover { background-color: var(--lp-cta-hover); }
+
+.lp-cta-btn::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: skewX(-25deg);
+  animation: lp-shine 3s infinite;
+}
+
+.lp-highlight {
+  background: linear-gradient(transparent 60%, rgba(215,0,14,0.15) 60%);
+}
+
+.lp-highlight-strong {
+  background: linear-gradient(transparent -10%, rgba(215,0,14,0.25) 60%);
+}
+
+.lp-section {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+
+.lp-heading {
+  font-family: var(--font-serif-jp), "YuMincho", "Hiragino Mincho ProN", serif;
+  font-weight: 900;
+  color: var(--foreground);
+  font-size: 28px;
+  line-height: 1.5;
+}
+
+@media (min-width: 640px) {
+  .lp-section { padding: 100px 40px; }
+  .lp-heading { font-size: 38px; }
 }
 
 /* ── Loader (line-draw animation) ── */

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Serif_JP } from "next/font/google";
 import { GoogleAnalytics, MicrosoftClarity } from "@/components/analytics";
 import { ScrollDepthTracker } from "@/components/scroll-depth-tracker";
 import { JsonLd } from "@/components/json-ld";
@@ -17,6 +17,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const notoSerifJP = Noto_Serif_JP({
+  variable: "--font-serif-jp",
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
+  display: "swap",
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
@@ -71,7 +78,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${notoSerifJP.variable} font-sans antialiased`}
       >
         <GoogleAnalytics />
         <MicrosoftClarity />
