@@ -4,12 +4,24 @@ import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
 import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
 
-/* ─── Reusable CTA Button ─── */
+/* ─── Reusable CTA Buttons ─── */
 
 function CTAButton({ className = "" }: { className?: string }) {
   return (
-    <Link href="/learn" scroll={true} className={`lp-cta-btn ${className}`}>
-      無料で営業の型を学ぶ
+    <Link href="/try-roleplay" scroll={true} className={`lp-cta-btn ${className}`}>
+      今すぐAIロープレを体験
+    </Link>
+  );
+}
+
+function SecondaryCTA({ className = "" }: { className?: string }) {
+  return (
+    <Link
+      href="/learn"
+      scroll={true}
+      className={`lp-cta-secondary ${className}`}
+    >
+      まず営業の型を学ぶ →
     </Link>
   );
 }
@@ -73,9 +85,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="lp-page min-h-screen bg-background">
       <JsonLd data={jsonLdData} />
-      <Header />
+      <Header minimal />
 
       {/* SEO */}
       <h1 className="sr-only">
@@ -88,36 +100,133 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════
           1. HERO — Text overlaid on full-width visual
       ═══════════════════════════════════════════════ */}
-      <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#e8e6e1", minHeight: "100dvh" }}>
+      <section
+        className="relative -mt-16 w-full overflow-hidden"
+        style={{ backgroundColor: "#1a1a1a", minHeight: "100dvh" }}
+      >
         {/* Background image — bottom-aligned so mountain/path stays low */}
         <Image
           src="/hero-visual.png"
           alt="営業の道を歩むビジネスパーソン — 成約への旅路"
           fill
           priority
-          className="object-cover object-bottom"
+          className="object-cover object-bottom opacity-60"
         />
 
-        {/* Text overlay — split: heading top, CTA bottom */}
-        <div className="relative z-10 flex flex-col justify-between px-6 pt-32 pb-10 sm:pt-40 sm:pb-16" style={{ minHeight: "100dvh" }}>
-          {/* Heading — top */}
-          <div className="text-center">
-            <p className="lp-heading mb-6" style={{ fontSize: "clamp(28px, 5vw, 44px)" }}>
-              売れる営業には、<span className="lp-highlight">「型」</span>がある。
+        {/* Gradient overlay — ensures text readability over any image */}
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.7) 100%)",
+          }}
+        />
+
+        {/* Content — vertically centered with CTA close to heading */}
+        <div
+          className="relative z-10 flex flex-col items-center justify-center px-6 pt-24 pb-24 sm:pt-28 sm:pb-28"
+          style={{ minHeight: "100dvh" }}
+        >
+          <div className="mx-auto w-full max-w-3xl text-center">
+            {/* Tag line */}
+            <p
+              className="mb-4 text-xs font-bold tracking-[0.2em] uppercase sm:mb-5 sm:text-sm"
+              style={{ color: "#f97316" }}
+            >
+              業種別営業学習プログラム
             </p>
-            <p className="mx-auto max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+
+            {/* Main heading */}
+            <p
+              className="lp-heading mb-5 leading-[1.3] text-white sm:mb-7"
+              style={{
+                fontSize: "clamp(30px, 6vw, 52px)",
+                textShadow: "0 2px 20px rgba(0,0,0,0.3)",
+              }}
+            >
+              売れる営業には、
+              <br className="sm:hidden" />
+              <span className="lp-highlight-hero">「型」</span>がある。
+            </p>
+
+            {/* Sub heading */}
+            <p
+              className="mx-auto mb-10 max-w-lg text-sm leading-relaxed sm:mb-12 sm:text-base lg:text-lg"
+              style={{
+                color: "rgba(255,255,255,0.85)",
+                textShadow: "0 1px 8px rgba(0,0,0,0.2)",
+              }}
+            >
               営業心理学に基づく「成約5ステップメソッド」を、
               <br className="hidden sm:block" />
               22レッスンで体系的に学べるプログラムです。
             </p>
+
+            {/* CTA */}
+            <div className="mb-3 flex flex-col items-center gap-3">
+              <CTAButton className="hero-cta-btn" />
+              <SecondaryCTA className="lp-cta-secondary--hero" />
+            </div>
+
+            {/* Trust signals */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
+              {["登録不要", "3分で体験完了", "クレカ不要"].map((text) => (
+                <span
+                  key={text}
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm"
+                  style={{ color: "rgba(255,255,255,0.7)" }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    className="shrink-0"
+                    aria-hidden="true"
+                  >
+                    <circle cx="7" cy="7" r="7" fill="rgba(249,115,22,0.2)" />
+                    <path
+                      d="M4 7.2L6.2 9.4L10 5"
+                      stroke="#f97316"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  {text}
+                </span>
+              ))}
+            </div>
           </div>
 
-          {/* CTA — bottom */}
-          <div className="text-center">
-            <CTAButton />
-            <p className="mt-5 text-sm text-muted">
-              登録不要・22レッスン無料・5分で開始
-            </p>
+          {/* Scroll indicator — bottom of viewport */}
+          <div
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 sm:bottom-10"
+            aria-hidden="true"
+          >
+            <div className="hero-scroll-indicator flex flex-col items-center gap-1">
+              <span
+                className="text-[10px] tracking-widest uppercase"
+                style={{ color: "rgba(255,255,255,0.4)" }}
+              >
+                Scroll
+              </span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                style={{ color: "rgba(255,255,255,0.4)" }}
+              >
+                <path
+                  d="M10 4v10m0 0l-4-4m4 4l4-4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </section>
@@ -125,7 +234,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════
           2. 課題共感
       ═══════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#e8e6e1" }}>
+      <section style={{ backgroundColor: "#f7f8ea" }}>
         <div className="lp-section pb-0">
           <p className="lp-heading text-center" style={{ marginBottom: "-30px" }}>
             営業の<span className="lp-highlight">「型」</span>を学んだ人の変化
@@ -157,6 +266,10 @@ export default function Home() {
               </div>
             ))}
           </div>
+          {/* Citation */}
+          <p className="absolute bottom-3 left-4 text-xs text-muted/70 sm:bottom-6 sm:left-8">
+            ※自社プラットフォームデータに基づく（2024年）
+          </p>
         </div>
       </section>
 
@@ -173,28 +286,29 @@ export default function Home() {
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
             <Image
               src="/learn-visual.png"
-              alt="学ぶ — 5分のレッスンで営業心理学の「型」を理解。22レッスンを段階的に進められる"
+              alt="学ぶ — 5分のレッスンで営業心理学の「型」を理解"
               width={600}
               height={600}
               className="w-full"
             />
             <Image
               src="/try-visual.png"
-              alt="試す — 学んだ話法をAIロープレで即実践。あなたの業種に合わせたお客さん役が相手"
+              alt="試す — 学んだ話法をAIロープレで即実践"
               width={600}
               height={600}
               className="w-full"
             />
             <Image
               src="/grow-visual.png"
-              alt="伸びる — 成約スコアで弱点が一目瞭然。練習するたびに数字で成長を実感できる"
+              alt="伸びる — 成約スコアで弱点が一目瞭然"
               width={600}
               height={600}
               className="w-full"
             />
           </div>
-          <div className="mt-12">
+          <div className="mt-12 flex flex-col items-center gap-3">
             <CTAButton />
+            <SecondaryCTA />
           </div>
         </div>
       </section>
@@ -203,7 +317,7 @@ export default function Home() {
           4. 社会的証明
       ═══════════════════════════════════════════════ */}
       <section style={{ backgroundColor: "#e8e6e1" }}>
-        <div className="lp-section text-center">
+        <div className="lp-section pt-6 text-center">
           <p className="lp-heading mb-8">
             体験者の声
           </p>
@@ -236,28 +350,37 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════
           5. 最終CTA
       ═══════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#e8e6e1" }}>
+      <section className="border-t border-card-border bg-white">
         <div className="lp-section text-center">
           <p className="lp-heading mb-6">
             「なんとなく」の営業を
             <br />
             今日で終わりにしませんか？
           </p>
-          <div className="mb-8">
+          <div className="mb-8 flex flex-col items-center gap-3">
             <CTAButton />
+            <SecondaryCTA />
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted">
             <span>登録不要</span>
             <span className="hidden sm:inline text-card-border">|</span>
-            <span>14日間スコア改善保証</span>
+            <span>3分で体験完了</span>
             <span className="hidden sm:inline text-card-border">|</span>
             <span>いつでも退会OK</span>
+          </div>
+          {/* Pro plan anchoring */}
+          <div className="mt-8 mx-auto max-w-md rounded-lg border border-card-border bg-background px-6 py-4">
+            <p className="text-xs text-muted mb-1">さらに本格的に学びたい方へ</p>
+            <p className="text-sm font-bold text-foreground">
+              Proプラン <span style={{ color: "var(--lp-cta)" }}>¥2,980</span><span className="text-muted font-normal">/月</span>
+            </p>
+            <p className="text-xs text-muted mt-1">全業種トークスクリプト・AIロープレ無制限・認定試験</p>
           </div>
         </div>
       </section>
 
       {/* ── Inline Footer ── */}
-      <footer className="px-6 py-10 text-center text-xs text-muted" style={{ backgroundColor: "#e8e6e1" }}>
+      <footer className="border-t border-card-border bg-white px-6 py-10 text-center text-xs text-muted">
         <nav className="mb-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
           <Link href="/roleplay" className="transition hover:text-foreground">AIロープレ</Link>

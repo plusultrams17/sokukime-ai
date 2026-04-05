@@ -43,10 +43,18 @@ export async function POST(request: NextRequest) {
       const { data: inserted } = await supabase.from("roleplay_scores").insert({
         user_id: user.id,
         overall_score: result.overall,
-        category_scores: result.categories.map((c: { name: string; score: number }) => ({ name: c.name, score: c.score })),
+        category_scores: result.categories.map((c: { name: string; score: number; feedback: string }) => ({
+          name: c.name, score: c.score, feedback: c.feedback,
+        })),
+        summary: result.summary || null,
+        strengths: result.strengths || [],
+        improvements: result.improvements || [],
         difficulty: input.difficulty || null,
         industry: input.industry || null,
         scene: input.scene || null,
+        customer_type: input.customerType || null,
+        product: input.product || null,
+        conversation_log: input.messages || null,
       }).select("id").single();
       if (inserted) scoreId = inserted.id;
     } catch {

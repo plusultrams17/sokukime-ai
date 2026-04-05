@@ -138,7 +138,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const extracted = JSON.parse(jsonMatch[0]);
+    let extracted: unknown;
+    try {
+      extracted = JSON.parse(jsonMatch[0]);
+    } catch (e) {
+      console.error("Invalid JSON from LLM (target-context/extract):", e);
+      return NextResponse.json(
+        { error: "情報の抽出に失敗しました" },
+        { status: 500 },
+      );
+    }
     return NextResponse.json({ extracted });
   } catch (error) {
     console.error("Target context extraction error:", error);

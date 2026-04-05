@@ -28,12 +28,35 @@ CREATE TABLE public.roleplay_scores (
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   overall_score INT NOT NULL,
   category_scores JSONB NOT NULL DEFAULT '[]',
+  summary TEXT,                           -- AI総評
+  strengths JSONB DEFAULT '[]',           -- 良かった点のリスト
+  improvements JSONB DEFAULT '[]',        -- 改善点のリスト
   difficulty TEXT,
   industry TEXT,
   scene TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  customer_type TEXT,                     -- 顧客タイプ（individual/owner/manager/staff）
+  product TEXT,                           -- 商材名
+  conversation_log JSONB,                 -- 会話ログ [{role, content}, ...]
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 CREATE INDEX idx_scores_user_date ON roleplay_scores(user_id, created_at DESC);
+CREATE INDEX idx_scores_industry ON roleplay_scores(industry) WHERE industry IS NOT NULL;
+CREATE INDEX idx_scores_difficulty ON roleplay_scores(difficulty) WHERE difficulty IS NOT NULL;
+CREATE INDEX idx_scores_user_industry ON roleplay_scores(user_id, industry, created_at DESC);
+
+-- updated_at 自動更新トリガー（汎用関数）
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_roleplay_scores_updated_at
+  BEFORE UPDATE ON public.roleplay_scores
+  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ユーザー作成時に自動でprofileを作るトリガー
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -51,11 +74,19 @@ CREATE TRIGGER on_auth_user_created
 -- RLS（Row Level Security）
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE usage_records ENABLE ROW LEVEL SECURITY;
+ALTER TABLE roleplay_scores ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users read own profile" ON profiles FOR SELECT USING (auth.uid() = id);
 CREATE POLICY "Users update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
 CREATE POLICY "Users read own usage" ON usage_records FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users insert own usage" ON usage_records FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- roleplay_scores RLS policies
+CREATE POLICY "Users can read own scores" ON roleplay_scores FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own scores" ON roleplay_scores FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own scores" ON roleplay_scores FOR UPDATE USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+-- DELETE policy intentionally omitted to prevent score history deletion
+-- Share link (/api/score/[id]) uses service role key to bypass RLS
 
 -- =============================================
 -- 解約防止 + 紹介プログラム用テーブル
@@ -658,3 +689,58 @@ CREATE INDEX IF NOT EXISTS idx_conversion_funnel_user ON conversion_funnel(user_
 
 -- RLS for KPI tables (admin-only via service role key)
 -- No public policies needed — accessed via service role key in API routes
+
+-- =============================================
+-- スコア統計ヘルパー関数
+-- =============================================
+
+-- ユーザーの直近N件のスコア平均を取得
+CREATE OR REPLACE FUNCTION public.get_user_avg_score(
+  target_user_id UUID,
+  last_n INTEGER DEFAULT 10
+)
+RETURNS NUMERIC
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  avg_val NUMERIC;
+BEGIN
+  SELECT AVG(overall_score) INTO avg_val
+  FROM (
+    SELECT overall_score
+    FROM public.roleplay_scores
+    WHERE user_id = target_user_id
+    ORDER BY created_at DESC
+    LIMIT last_n
+  ) AS recent;
+  RETURN COALESCE(avg_val, 0);
+END;
+$$;
+
+-- ユーザーのカテゴリ別平均スコアを取得（弱点分析用）
+CREATE OR REPLACE FUNCTION public.get_user_category_averages(
+  target_user_id UUID,
+  last_n INTEGER DEFAULT 10
+)
+RETURNS TABLE(category_name TEXT, avg_score NUMERIC)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    cat->>'name' AS category_name,
+    ROUND(AVG((cat->>'score')::NUMERIC), 1) AS avg_score
+  FROM (
+    SELECT category_scores
+    FROM public.roleplay_scores
+    WHERE user_id = target_user_id
+    ORDER BY created_at DESC
+    LIMIT last_n
+  ) AS recent,
+  LATERAL jsonb_array_elements(recent.category_scores) AS cat
+  GROUP BY cat->>'name'
+  ORDER BY avg_score ASC;
+END;
+$$;

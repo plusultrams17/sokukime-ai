@@ -13,11 +13,16 @@ export async function GET(_request: NextRequest) {
     }
 
     // Get user plan
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("plan")
       .eq("id", user.id)
       .single();
+
+    if (profileError) {
+      console.error("Profile query failed (insights/usage):", profileError);
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
 
     const plan = profile?.plan || "free";
 

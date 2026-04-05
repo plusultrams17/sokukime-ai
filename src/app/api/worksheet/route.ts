@@ -130,7 +130,16 @@ JSONのみを返してください。説明文は不要です。`;
       );
     }
 
-    const parsed = JSON.parse(jsonMatch[0]);
+    let parsed: { items?: unknown[]; phraseKeyword?: string };
+    try {
+      parsed = JSON.parse(jsonMatch[0]);
+    } catch (e) {
+      console.error("Invalid JSON from LLM (worksheet):", e);
+      return NextResponse.json(
+        { error: "Invalid AI response" },
+        { status: 500 },
+      );
+    }
     const items = (parsed.items || []).slice(0, itemCount);
 
     return NextResponse.json({

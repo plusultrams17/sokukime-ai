@@ -3,10 +3,16 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { trySendOnboardingEmail } from "@/lib/email";
 
+// Validate that a redirect path is internal only (prevent open redirect)
+function isValidRedirect(path: string): boolean {
+  return path.startsWith("/") && !path.startsWith("//") && !path.includes("://");
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const redirect = searchParams.get("redirect") || "/roleplay";
+  const redirectParam = searchParams.get("redirect") || "/roleplay";
+  const redirect = isValidRedirect(redirectParam) ? redirectParam : "/roleplay";
   const refCode = searchParams.get("ref");
 
   if (!code) {

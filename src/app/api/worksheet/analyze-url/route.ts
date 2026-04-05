@@ -125,7 +125,16 @@ JSONのみを返してください。`,
       );
     }
 
-    const productInfo = JSON.parse(jsonMatch[0]);
+    let productInfo: unknown;
+    try {
+      productInfo = JSON.parse(jsonMatch[0]);
+    } catch (e) {
+      console.error("Invalid JSON from LLM (worksheet/analyze-url):", e);
+      return NextResponse.json(
+        { error: "ページの分析に失敗しました" },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json({ productInfo });
   } catch (error) {

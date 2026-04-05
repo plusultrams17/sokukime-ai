@@ -15,7 +15,7 @@ const navLinks = [
   { href: "/pricing", label: "料金プラン" },
 ];
 
-export function Header() {
+export function Header({ minimal = false }: { minimal?: boolean }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [plan, setPlan] = useState<"free" | "pro">("free");
   const [isTeamMember, setIsTeamMember] = useState(false);
@@ -55,156 +55,157 @@ export function Header() {
       <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="header-logo">
-            <path d="M8 38c2-1 5-2 9-2s7 1 9 3" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M17 36c2-1.5 4-2 6-1.5 2.5 0.8 4 2.5 5 4.5 0.8 1.5 0.5 3-0.5 4s-2.5 1.5-4 1" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M56 38c-2-1-5-2-9-2s-7 1-9 3" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M47 36c-2-1.5-4-2-6-1.5-2.5 0.8-4 2.5-5 4.5-0.8 1.5-0.5 3 0.5 4s2.5 1.5 4 1" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M27 39c1.5-2 3.5-3 5-3s3.5 1 5 3c1 1.5 1 3 0 4s-2.5 1.5-5 1.5-4-0.5-5-1.5-1-2.5 0-4z" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M25.5 38.5c1-1 2-1.2 3-0.8 1.2 0.4 1.8 1.5 1.5 2.8" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-            <path d="M38.5 38.5c-1-1-2-1.2-3-0.8-1.2 0.4-1.8 1.5-1.5 2.8" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-            <circle cx="32" cy="24" r="2" fill="var(--accent)" opacity="0.7" />
-            <circle cx="24" cy="27" r="1.3" fill="var(--accent)" opacity="0.6" />
-            <circle cx="40" cy="27" r="1.3" fill="var(--accent)" opacity="0.6" />
-            <path d="M32 28v-5" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-            <path d="M27 30l-2-3" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-            <path d="M37 30l2-3" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-          </svg>
-          <span className="header-wave-text" aria-label="成約コーチ AI">
-            <span className="header-wave-text__outline">成約コーチ AI</span>
-            <span className="header-wave-text__fill">成約コーチ AI</span>
+          <span className="text-xl font-black tracking-tight text-foreground" style={{ fontFamily: "var(--font-serif-jp), 'YuMincho', 'Hiragino Mincho ProN', serif" }}>
+            成約コーチ<span style={{ color: "var(--lp-cta)" }}>AI</span>
           </span>
         </Link>
 
-        {/* Desktop nav — links */}
-        <nav className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="header-link">
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        {/* Desktop nav — links (hide when minimal) */}
+        {!minimal && (
+          <nav className="hidden items-center gap-6 lg:flex">
+            {navLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="header-link">
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        )}
 
         {/* Desktop nav — auth (right aligned) */}
         <div className="hidden items-center gap-4 lg:flex">
-          {isLoggedIn && isTeamMember && (
+          {!minimal && isLoggedIn && isTeamMember && (
             <Link href="/team" className="header-link">
               チーム
             </Link>
           )}
-          {isLoggedIn ? (
-            <UserMenu />
-          ) : (
-            <Link href="/login" className="header-link">
-              ログイン
-            </Link>
-          )}
-          {isLoggedIn && plan === "free" ? (
-            <Link href="/pricing" className="nav-btn" onClick={() => trackCTAClick("header_upgrade", "header", "/pricing")}>
-              <span>Proにアップグレード</span>
-            </Link>
-          ) : isLoggedIn && plan === "pro" ? (
-            <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_roleplay", "header", "/roleplay")}>
-              <span>ロープレを始める</span>
-            </Link>
-          ) : (
+          {isLoggedIn && <UserMenu />}
+          {minimal ? (
             <Link href="/learn" className="nav-btn" onClick={() => trackCTAClick("header_learn", "header", "/learn")}>
               <span>無料で学ぶ</span>
             </Link>
+          ) : (
+            <>
+              {!isLoggedIn && (
+                <Link href="/login" className="header-link">
+                  ログイン
+                </Link>
+              )}
+              {isLoggedIn && plan === "free" ? (
+                <Link href="/pricing" className="nav-btn" onClick={() => trackCTAClick("header_upgrade", "header", "/pricing")}>
+                  <span>Proにアップグレード</span>
+                </Link>
+              ) : isLoggedIn && plan === "pro" ? (
+                <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_roleplay", "header", "/roleplay")}>
+                  <span>ロープレを始める</span>
+                </Link>
+              ) : (
+                <Link href="/learn" className="nav-btn" onClick={() => trackCTAClick("header_learn", "header", "/learn")}>
+                  <span>無料で学ぶ</span>
+                </Link>
+              )}
+            </>
           )}
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          type="button"
-          className="hamburger lg:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label="メニュー"
-          aria-expanded={open}
-        >
-          <span className={`hamburger__line ${open ? "hamburger__line--open" : ""}`} />
-          <span className={`hamburger__line ${open ? "hamburger__line--open" : ""}`} />
-          <span className={`hamburger__line ${open ? "hamburger__line--open" : ""}`} />
-        </button>
+        {/* Mobile — hide hamburger when minimal, show CTA instead */}
+        {minimal ? (
+          <Link href="/learn" className="nav-btn lg:hidden" onClick={() => trackCTAClick("header_learn_mobile", "header", "/learn")}>
+            <span>無料で学ぶ</span>
+          </Link>
+        ) : (
+          <button
+            type="button"
+            className="hamburger lg:hidden"
+            onClick={() => setOpen(!open)}
+            aria-label="メニュー"
+            aria-expanded={open}
+          >
+            <span className={`hamburger__line ${open ? "hamburger__line--open" : ""}`} />
+            <span className={`hamburger__line ${open ? "hamburger__line--open" : ""}`} />
+            <span className={`hamburger__line ${open ? "hamburger__line--open" : ""}`} />
+          </button>
+        )}
       </div>
 
-      {/* Mobile menu overlay */}
-      <div
-        className={`mobile-menu lg:hidden ${open ? "mobile-menu--open" : ""}`}
-      >
-        <nav className="mobile-menu__nav">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="mobile-menu__link"
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-          {isLoggedIn && isTeamMember && (
-            <Link
-              href="/team"
-              className="mobile-menu__link"
-              onClick={() => setOpen(false)}
-            >
-              チーム管理
-            </Link>
-          )}
-          <div className="mobile-menu__divider" />
-          <Link
-            href="/learn"
-            className="mobile-menu__cta-secondary"
-            onClick={() => setOpen(false)}
-          >
-            まず営業の型を学ぶ
-          </Link>
-          {isLoggedIn && plan === "free" ? (
-            <>
+      {/* Mobile menu overlay (hidden when minimal) */}
+      {!minimal && (
+        <div
+          className={`mobile-menu lg:hidden ${open ? "mobile-menu--open" : ""}`}
+        >
+          <nav className="mobile-menu__nav">
+            {navLinks.map((link) => (
               <Link
-                href="/pricing"
-                className="nav-btn mobile-menu__cta"
-                onClick={() => { setOpen(false); trackCTAClick("header_upgrade_mobile", "mobile_menu", "/pricing"); }}
+                key={link.href}
+                href={link.href}
+                className="mobile-menu__link"
+                onClick={() => setOpen(false)}
               >
-                <span>Proにアップグレード</span>
+                {link.label}
               </Link>
+            ))}
+            {isLoggedIn && isTeamMember && (
+              <Link
+                href="/team"
+                className="mobile-menu__link"
+                onClick={() => setOpen(false)}
+              >
+                チーム管理
+              </Link>
+            )}
+            <div className="mobile-menu__divider" />
+            <Link
+              href="/learn"
+              className="mobile-menu__cta-secondary"
+              onClick={() => setOpen(false)}
+            >
+              まず営業の型を学ぶ
+            </Link>
+            {isLoggedIn && plan === "free" ? (
+              <>
+                <Link
+                  href="/pricing"
+                  className="nav-btn mobile-menu__cta"
+                  onClick={() => { setOpen(false); trackCTAClick("header_upgrade_mobile", "mobile_menu", "/pricing"); }}
+                >
+                  <span>Proにアップグレード</span>
+                </Link>
+                <Link
+                  href="/roleplay"
+                  className="mobile-menu__link"
+                  onClick={() => setOpen(false)}
+                >
+                  学んだらAIで練習
+                </Link>
+              </>
+            ) : isLoggedIn && plan === "pro" ? (
               <Link
                 href="/roleplay"
-                className="mobile-menu__link"
-                onClick={() => setOpen(false)}
-              >
-                学んだらAIで練習
-              </Link>
-            </>
-          ) : isLoggedIn && plan === "pro" ? (
-            <Link
-              href="/roleplay"
-              className="nav-btn mobile-menu__cta"
-              onClick={() => setOpen(false)}
-            >
-              <span>ロープレを始める</span>
-            </Link>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                className="mobile-menu__link"
-                onClick={() => setOpen(false)}
-              >
-                ログイン
-              </Link>
-              <Link
-                href="/learn"
                 className="nav-btn mobile-menu__cta"
                 onClick={() => setOpen(false)}
               >
-                <span>無料で学ぶ</span>
+                <span>ロープレを始める</span>
               </Link>
-            </>
-          )}
-        </nav>
-      </div>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="mobile-menu__link"
+                  onClick={() => setOpen(false)}
+                >
+                  ログイン
+                </Link>
+                <Link
+                  href="/learn"
+                  className="nav-btn mobile-menu__cta"
+                  onClick={() => setOpen(false)}
+                >
+                  <span>無料で学ぶ</span>
+                </Link>
+              </>
+            )}
+          </nav>
+        </div>
+      )}
     </header>
     {/* Spacer to offset fixed header height */}
     <div className="h-16" />

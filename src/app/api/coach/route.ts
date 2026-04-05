@@ -136,7 +136,12 @@ ${customerContext ? `\n【お客さんのペルソナ詳細】\n${customerContex
     const text = response.content[0]?.type === "text" ? response.content[0].text : "";
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      return NextResponse.json(JSON.parse(jsonMatch[0]));
+      try {
+        return NextResponse.json(JSON.parse(jsonMatch[0]));
+      } catch (e) {
+        console.error("Invalid JSON from LLM (coach):", e);
+        return NextResponse.json(generateFallbackCoach(messages));
+      }
     }
 
     return NextResponse.json(generateFallbackCoach(messages));

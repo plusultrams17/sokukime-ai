@@ -19,7 +19,7 @@ export async function GET(
 
   const { data, error } = await supabase
     .from("roleplay_scores")
-    .select("id, overall_score, category_scores, difficulty, industry, scene, created_at")
+    .select("id, overall_score, category_scores, summary, strengths, improvements, difficulty, industry, scene, customer_type, product, created_at")
     .eq("id", id)
     .single();
 
@@ -31,9 +31,14 @@ export async function GET(
     id: data.id,
     overall: data.overall_score,
     categories: data.category_scores,
+    summary: data.summary,
+    strengths: data.strengths,
+    improvements: data.improvements,
     difficulty: data.difficulty,
     industry: data.industry,
     scene: data.scene,
+    customerType: data.customer_type,
+    product: data.product,
     createdAt: data.created_at,
   });
 }

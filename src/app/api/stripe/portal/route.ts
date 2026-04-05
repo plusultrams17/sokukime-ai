@@ -16,11 +16,16 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("stripe_customer_id")
     .eq("id", user.id)
     .single();
+
+  if (profileError) {
+    console.error("Profile query failed (stripe/portal):", profileError);
+    return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+  }
 
   if (!profile?.stripe_customer_id) {
     return NextResponse.json(

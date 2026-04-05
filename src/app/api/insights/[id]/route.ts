@@ -18,11 +18,16 @@ export async function GET(
     const { id } = await params;
 
     // Check Free user daily view limit
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("plan")
       .eq("id", user.id)
       .single();
+
+    if (profileError) {
+      console.error("Profile query failed (insights/[id]):", profileError);
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
 
     if (profile?.plan !== "pro") {
       const today = new Date().toISOString().split("T")[0];

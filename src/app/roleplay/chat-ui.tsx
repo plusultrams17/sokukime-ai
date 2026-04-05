@@ -36,6 +36,10 @@ interface ChatUIProps {
   onFinish: (score: ScoreResult & { scoreId?: string | null }) => void;
   isGuest?: boolean;
   onAuthGate?: (messages: Message[], previewScore?: ScoreResult) => void;
+  /** Override the chat API endpoint (e.g. "/api/chat/guest" for unauthenticated guests) */
+  chatEndpoint?: string;
+  /** Override the score API endpoint (e.g. "/api/score/guest" for unauthenticated guests) */
+  scoreEndpoint?: string;
 }
 
 const STEPS = [
@@ -66,7 +70,7 @@ const STEP_LESSON_MAP: Record<number, { slug: string; label: string }> = {
   5: { slug: "rebuttal-pattern", label: "切り返しの型（共通フレームワーク）" },
 };
 
-export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, onFinish, isGuest, onAuthGate }: ChatUIProps) {
+export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, onFinish, isGuest, onAuthGate, chatEndpoint = "/api/chat", scoreEndpoint = "/api/score" }: ChatUIProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -117,8 +121,9 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene, difficulty, productContext, customerContext }),
       });
+      if (!res.ok) return; // Keep previous coach data (e.g. guest gets 401)
       const data = await res.json();
-      setCoach(data);
+      if (data?.currentStep) setCoach(data);
     } catch {
       // Keep previous coach data
     }
@@ -141,7 +146,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
 
     // Fetch customer response
     const [chatRes] = await Promise.all([
-      fetch("/api/chat", {
+      fetch(chatEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -197,7 +202,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
     }
     setIsScoring(true);
     try {
-      const res = await fetch("/api/score", {
+      const res = await fetch(scoreEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType, productContext, customerContext }),

@@ -24,11 +24,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Pro plan only
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("plan")
       .eq("id", user.id)
       .single();
+
+    if (profileError) {
+      console.error("Profile query failed (insights/convert):", profileError);
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
 
     if (profile?.plan !== "pro") {
       return NextResponse.json({ error: "Pro plan required" }, { status: 403 });
@@ -116,7 +121,13 @@ JSON形式で返してください:
       return NextResponse.json({ error: "AI generation failed" }, { status: 500 });
     }
 
-    const parsed = JSON.parse(jsonMatch[0]);
+    let parsed: { patterns?: unknown };
+    try {
+      parsed = JSON.parse(jsonMatch[0]);
+    } catch (e) {
+      console.error("Invalid JSON from LLM (insights/convert):", e);
+      return NextResponse.json({ error: "AI generation failed" }, { status: 500 });
+    }
     const patterns = parsed.patterns || parsed;
 
     // Cache the result

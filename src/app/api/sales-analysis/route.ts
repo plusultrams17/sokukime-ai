@@ -159,7 +159,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const analysis = JSON.parse(jsonMatch[0]);
+    let analysis: unknown;
+    try {
+      analysis = JSON.parse(jsonMatch[0]);
+    } catch (e) {
+      console.error("Invalid JSON from LLM (sales-analysis):", e);
+      return NextResponse.json(
+        { error: "分析結果の生成に失敗しました" },
+        { status: 500 },
+      );
+    }
     return NextResponse.json({ analysis });
   } catch (error) {
     console.error("Sales analysis error:", error);

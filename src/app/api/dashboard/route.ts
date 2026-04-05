@@ -29,6 +29,10 @@ export async function GET() {
 
     // Fetch plan + trial info, then streak with plan info for Streak Shield
     const profileResult = await supabase.from("profiles").select("plan, trial_ends_at, stripe_subscription_id").eq("id", user.id).single();
+    if (profileResult.error) {
+      console.error("Profile query failed (dashboard):", profileResult.error);
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
     const profile = profileResult.data;
     const plan = (profile?.plan || "free") as "free" | "pro";
     const streak = await getStreak(supabase, user.id, plan);

@@ -216,7 +216,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid AI response" }, { status: 500 });
     }
 
-    return NextResponse.json(JSON.parse(jsonMatch[0]));
+    try {
+      return NextResponse.json(JSON.parse(jsonMatch[0]));
+    } catch (e) {
+      console.error("Invalid JSON from LLM (worksheet/generate-phase):", e);
+      return NextResponse.json({ error: "Invalid AI response" }, { status: 500 });
+    }
   } catch (error) {
     console.error("Phase generation error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

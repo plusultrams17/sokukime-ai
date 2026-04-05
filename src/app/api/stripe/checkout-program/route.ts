@@ -18,11 +18,16 @@ export async function POST() {
     }
 
     // Get or create Stripe customer
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("stripe_customer_id, email")
       .eq("id", user.id)
       .single();
+
+    if (profileError) {
+      console.error("Profile query failed (stripe/checkout-program):", profileError);
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
 
     let customerId = profile?.stripe_customer_id;
 

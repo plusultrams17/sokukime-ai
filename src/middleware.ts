@@ -1,6 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+// Validate that a redirect path is internal only (prevent open redirect)
+function isValidRedirect(path: string): boolean {
+  return path.startsWith("/") && !path.startsWith("//") && !path.includes("://");
+}
+
 export async function middleware(request: NextRequest) {
   // If an OAuth code lands on a non-callback page, redirect to /auth/callback
   // Only for page routes (not API routes) as a safety net
@@ -54,10 +59,13 @@ export async function middleware(request: NextRequest) {
     // Redirect authenticated users away from login/signup
     if (user && (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/signup")) {
       const url = request.nextUrl.clone();
-      url.pathname = "/roleplay";
-      // Strip error/auth params — user is already authenticated
+      // If a valid internal redirect was requested, honor it; else go to /roleplay
+      const requestedRedirect = request.nextUrl.searchParams.get("redirect");
+      url.pathname = requestedRedirect && isValidRedirect(requestedRedirect) ? requestedRedirect : "/roleplay";
+      // Strip error/auth/redirect params — user is already authenticated
       url.searchParams.delete("error");
       url.searchParams.delete("code");
+      url.searchParams.delete("redirect");
       return NextResponse.redirect(url);
     }
 
@@ -66,7 +74,9 @@ export async function middleware(request: NextRequest) {
     if (!user && protectedPaths.some((p) => request.nextUrl.pathname === p)) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
-      url.searchParams.set("redirect", request.nextUrl.pathname);
+      // request.nextUrl.pathname is server-derived so always internal, but validate for defense-in-depth
+      const target = request.nextUrl.pathname;
+      url.searchParams.set("redirect", isValidRedirect(target) ? target : "/roleplay");
       return NextResponse.redirect(url);
     }
 
