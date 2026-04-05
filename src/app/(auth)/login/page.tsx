@@ -22,6 +22,7 @@ function LoginForm() {
 
   const [error, setError] = useState(searchParams.get("error") || "");
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
   const [stats, setStats] = useState<{ totalUsers: number; totalSessions: number } | null>(null);
 
   useEffect(() => {
@@ -64,11 +65,18 @@ function LoginForm() {
       <div className="rounded-2xl border border-card-border bg-card p-6 space-y-4">
         <h2 className="text-lg font-bold text-center">ログイン / 新規登録</h2>
         <p className="text-xs text-muted text-center">
-          Googleアカウントで10秒で始められます
+          10秒で始められます
         </p>
-        <div className="rounded-lg bg-accent/10 border border-accent/20 px-3 py-2 text-center">
-          <p className="text-xs font-bold text-accent">Proプラン 7日間無料トライアル実施中</p>
-          <p className="text-[10px] text-muted mt-0.5">無料登録後、いつでもProへアップグレード可能</p>
+
+        {/* 7日間無料トライアル訴求（強化版） */}
+        <div className="rounded-xl border-2 border-accent bg-gradient-to-br from-accent/10 to-accent/5 px-5 py-4 text-center">
+          <div className="text-2xl mb-1" aria-hidden="true">✨</div>
+          <p className="text-base font-extrabold text-accent mb-1">
+            Proの全機能を <span className="text-lg">7日間無料</span> で試せる
+          </p>
+          <p className="text-[11px] text-muted">
+            登録だけで開始・いつでもキャンセル可能・カード不要
+          </p>
         </div>
 
         {error && (
@@ -77,29 +85,68 @@ function LoginForm() {
           </div>
         )}
 
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          disabled={isGoogleLoading}
-          className="flex h-14 w-full items-center justify-center gap-3 rounded-xl border-2 border-accent bg-accent/5 text-sm font-bold text-accent transition hover:bg-accent/10 disabled:opacity-60"
-        >
-          {isGoogleLoading ? (
-            "接続中..."
-          ) : (
-            <>
-              <GoogleIcon />
-              Googleで続ける
-            </>
-          )}
-        </button>
+        {/* 認証ボタン群（Google と Email を同等サイズで並列表示） */}
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={isGoogleLoading}
+            className="flex h-14 w-full items-center justify-center gap-3 rounded-xl border-2 border-accent bg-accent/5 text-sm font-bold text-accent transition hover:bg-accent/10 disabled:opacity-60"
+          >
+            {isGoogleLoading ? (
+              "接続中..."
+            ) : (
+              <>
+                <GoogleIcon />
+                Googleで続ける
+              </>
+            )}
+          </button>
 
-        <div className="rounded-xl border border-card-border bg-card/50 p-4 space-y-2">
-          <div className="text-xs font-medium text-muted mb-2">無料アカウントに含まれるもの:</div>
-          {["AIロープレ（1日1回）", "成約5ステップ採点", "リアルタイムAIコーチ", "クレジットカード不要"].map(item => (
-            <div key={item} className="flex items-center gap-2 text-xs text-muted">
-              <span className="text-accent">✓</span> {item}
+          {/* OR 区切り線 */}
+          <div className="flex items-center gap-3 my-1 text-[11px] text-muted">
+            <div className="flex-1 h-px bg-card-border" aria-hidden="true"></div>
+            <span>または</span>
+            <div className="flex-1 h-px bg-card-border" aria-hidden="true"></div>
+          </div>
+
+          {/* Email登録ボタン（Googleと同等サイズ） */}
+          <button
+            type="button"
+            onClick={() => setShowEmailForm((prev) => !prev)}
+            aria-expanded={showEmailForm}
+            className="flex h-14 w-full items-center justify-center gap-2 rounded-xl border-2 border-card-border bg-card text-sm font-bold text-foreground transition hover:border-accent hover:text-accent"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="M3 7l9 6 9-6"/>
+            </svg>
+            メールアドレスで続ける
+          </button>
+
+          {showEmailForm && (
+            <div className="rounded-lg border border-card-border bg-card/50 px-4 py-3 text-xs text-muted text-center">
+              メール登録は現在準備中です。Googleアカウントでのご登録をご利用ください。
             </div>
-          ))}
+          )}
+        </div>
+
+        {/* Free Plan 価値訴求（強化版） */}
+        <div className="rounded-xl border border-card-border bg-card/50 p-4 space-y-2">
+          <div className="text-xs font-bold text-foreground mb-2">無料アカウントに含まれるもの:</div>
+          <ul className="space-y-1.5">
+            {[
+              "毎日1回のAIロープレ（3日で現在地のスコアが確定）",
+              "5カテゴリ別の詳細スコアリング",
+              "リアルタイムAIコーチング",
+              "クレジットカード不要",
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-2 text-xs text-muted leading-relaxed">
+                <span className="text-accent mt-0.5" aria-hidden="true">✓</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 

@@ -170,6 +170,9 @@ import { CUSTOMER_PERSONAS } from "@/lib/personas";
 
 export default function RoleplayPage() {
   const [phase, setPhase] = useState<RoleplayPhase>("setup");
+  const [setupMode, setSetupMode] = useState<"simple" | "detailed">("simple");
+  const [hasAutoSwitched, setHasAutoSwitched] = useState(false);
+  const [pendingAutoStart, setPendingAutoStart] = useState(false);
   const [product, setProduct] = useState("");
   const [customerType, setCustomerType] = useState("individual");
   const [customerIndustry, setCustomerIndustry] = useState("");
@@ -222,10 +225,88 @@ export default function RoleplayPage() {
     { label: "💼 人材", product: "求人広告", customerType: "owner", industry: "中小企業", scene: "phone", difficulty: "low-energy", desc: "求人・人材紹介" },
   ];
 
+  // Phase 1 simple-mode templates — 初回ユーザー向けのワンタップ開始
+  const PHASE1_TEMPLATES = [
+    {
+      id: "painting",
+      name: "訪販リフォーム",
+      icon: "🏠",
+      product: "外壁塗装",
+      scene: "visit",
+      customerType: "individual",
+      customerIndustry: "戸建て住宅オーナー",
+      difficulty: "cautious",
+      description: "40代夫婦に外壁塗装を訪問営業",
+    },
+    {
+      id: "insurance",
+      name: "保険営業",
+      icon: "🛡️",
+      product: "医療保険",
+      scene: "phone",
+      customerType: "individual",
+      customerIndustry: "保険見直し検討中",
+      difficulty: "skeptical",
+      description: "30代に医療保険を電話で提案",
+    },
+    {
+      id: "real_estate",
+      name: "不動産営業",
+      icon: "🏢",
+      product: "新築マンション",
+      scene: "visit",
+      customerType: "individual",
+      customerIndustry: "住宅購入検討者",
+      difficulty: "cautious",
+      description: "30代夫婦にマンションを接客",
+    },
+    {
+      id: "car",
+      name: "自動車営業",
+      icon: "🚗",
+      product: "新車（ファミリーカー）",
+      scene: "inbound",
+      customerType: "individual",
+      customerIndustry: "車買い替え検討者",
+      difficulty: "talkative",
+      description: "家族連れに新車を提案",
+    },
+    {
+      id: "saas",
+      name: "SaaS営業",
+      icon: "💼",
+      product: "業務効率化SaaS",
+      scene: "phone",
+      customerType: "owner",
+      customerIndustry: "中小企業",
+      difficulty: "cautious",
+      description: "中小企業オーナーにSaaS導入提案",
+    },
+    {
+      id: "web",
+      name: "Web制作営業",
+      icon: "🎨",
+      product: "コーポレートサイト制作",
+      scene: "visit",
+      customerType: "owner",
+      customerIndustry: "個人事業主",
+      difficulty: "cautious",
+      description: "個人事業主にサイト制作提案",
+    },
+  ];
+
   function applyTemplate(t: typeof INDUSTRY_TEMPLATES[number]) {
     setProduct(t.product);
     setCustomerType(t.customerType);
     setCustomerIndustry(t.industry);
+    setScene(t.scene);
+    setDifficulty(t.difficulty);
+  }
+
+  function applyPhase1Template(t: typeof PHASE1_TEMPLATES[number]) {
+    setProduct(t.product);
+    setCustomerType(t.customerType);
+    setCustomerIndustry(t.customerIndustry);
     setScene(t.scene);
     setDifficulty(t.difficulty);
   }
@@ -341,6 +422,34 @@ export default function RoleplayPage() {
       }
     });
   }, []);
+
+  // Auto-start roleplay after a Phase 1 template is applied (state must be flushed first)
+  useEffect(() => {
+    if (!pendingAutoStart) return;
+    if (!product.trim()) return;
+    setPendingAutoStart(false);
+    handleStartRoleplay();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingAutoStart, product]);
+
+  // Auto-switch setup mode based on user history — initial users see simple mode, returners see detailed
+  useEffect(() => {
+    if (hasAutoSwitched) return;
+    // Guest users always start with simple mode (already default)
+    if (isGuest) {
+      setHasAutoSwitched(true);
+      return;
+    }
+    // Wait until usage is loaded for logged-in users
+    if (usage === null) return;
+    const totalSessions = usage.totalSessions ?? 0;
+    if (totalSessions === 0) {
+      setSetupMode("simple");
+    } else {
+      setSetupMode("detailed");
+    }
+    setHasAutoSwitched(true);
+  }, [usage, isGuest, hasAutoSwitched]);
 
   // Handle returning from login with showScore param
   const handleShowScore = useCallback(async () => {
@@ -585,21 +694,163 @@ export default function RoleplayPage() {
         </div>
       </header>
 
-      {/* Setup Phase — Pixar Card Style */}
-      {phase === "setup" && (
+      {/* Setup Phase — Simple Mode (Phase 1) */}
+      {phase === "setup" && setupMode === "simple" && (
         <div className="pixar-setup flex flex-1 items-center justify-center px-4 py-8">
-          <div className="w-full max-w-lg space-y-6">
+          <div className="w-full max-w-3xl space-y-6">
             {/* Title */}
             <div className="text-center">
               <h1 className="mb-1 text-2xl font-extrabold" style={{ color: '#4d4c4a' }}>
-                ロープレ設定
+                業種を選ぶだけで、すぐ始められます
               </h1>
               <p className="text-sm font-semibold" style={{ color: '#8a8680', marginBottom: '0.8em' }}>
-                営業シーンを設定して、AIとロープレを始めましょう
+                あなたの業種をタップすると、3秒でロープレ開始
               </p>
+            </div>
+
+            {/* Phase 1: Industry Templates Grid — モバイル1カラム / タブレット2カラム / PC3カラム */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {PHASE1_TEMPLATES.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => {
+                    applyPhase1Template(t);
+                    // Signal auto-start; the effect will fire once state is flushed
+                    setPendingAutoStart(true);
+                  }}
+                  disabled={isCheckingUsage || (usage !== null && usage.plan === "free" && !usage.canStart)}
+                  className="pixar-card text-left transition-transform active:scale-[0.98] hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{
+                    padding: '1.1em 1em',
+                    background: '#fdfaf3',
+                    borderColor: '#d4cabb',
+                    cursor: 'pointer',
+                  }}
+                  aria-label={`${t.name}のロープレを開始: ${t.description}`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        fontSize: '2rem',
+                        lineHeight: 1,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {t.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div
+                        style={{
+                          fontSize: '1.1rem',
+                          fontWeight: 800,
+                          color: '#4d4c4a',
+                          marginBottom: '0.25em',
+                          lineHeight: 1.3,
+                        }}
+                      >
+                        {t.name}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.85rem',
+                          color: '#6a6560',
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {t.description}
+                      </div>
+                      <div
+                        style={{
+                          marginTop: '0.6em',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.3em',
+                          fontSize: '0.75rem',
+                          fontWeight: 800,
+                          color: '#f48a58',
+                        }}
+                      >
+                        タップで開始 <span aria-hidden="true">→</span>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Daily Limit Banner for Free Users (simple mode) */}
+            {usage && usage.plan === "free" && !usage.canStart && (
+              <div className="pixar-card" style={{ borderColor: '#f48a58', background: 'linear-gradient(135deg, #fff8f3, #fdf2f2)' }}>
+                <div className="text-center">
+                  <div style={{ fontSize: '2em', marginBottom: '0.3em' }}>🔥</div>
+                  <p style={{ fontSize: '1.1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.2em' }}>
+                    今日のロープレは終了 — でもまだ伸びしろがあります
+                  </p>
+                  <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
+                    毎日3回以上ロープレする営業マンは<span style={{ color: '#f48a58', fontWeight: 800 }}>スコアが平均20点UP</span>。<br />
+                    Proなら無制限に練習できます。
+                  </p>
+                  <a
+                    href="/pricing"
+                    onClick={() => {
+                      trackUpgradePromptClicked({ trigger: "daily_limit_banner" });
+                    }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: '3em',
+                      padding: '0 2em',
+                      borderRadius: '2em',
+                      background: '#f48a58',
+                      color: '#fff',
+                      fontWeight: 800,
+                      fontSize: '0.95em',
+                      textDecoration: 'none',
+                      border: '0.12em solid #c4693d',
+                      boxShadow: '0.12em 0.12em 0 #c4693d',
+                    }}
+                  >
+                    7日間無料でProを試す →
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* Loading state */}
+            {isCheckingUsage && (
+              <div className="text-center" style={{ fontSize: '0.85em', color: '#6a6560', fontWeight: 700 }}>
+                確認中...
+              </div>
+            )}
+
+            {/* Switch to detailed mode */}
+            <div className="text-center pt-2">
+              <button
+                type="button"
+                onClick={() => setSetupMode("detailed")}
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 transition hover:opacity-80"
+                style={{
+                  background: 'transparent',
+                  border: '0.12em solid #c4b9a8',
+                  color: '#6a6560',
+                  fontWeight: 700,
+                  fontSize: '0.8em',
+                  cursor: 'pointer',
+                }}
+              >
+                <span aria-hidden="true">⚙️</span>
+                もっと詳しく設定したい方はこちら
+              </button>
+            </div>
+
+            {/* Learn course link */}
+            <div className="text-center">
               <Link
                 href="/learn"
-                className="mx-auto inline-flex items-center gap-2 rounded-full px-4 py-2 transition hover:opacity-80"
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2 transition hover:opacity-80"
                 style={{
                   background: '#e8dfd0',
                   border: '0.12em solid #c4b9a8',
@@ -613,6 +864,57 @@ export default function RoleplayPage() {
                 まず学習コースで「型」を学ぶと効果UP
                 <span style={{ color: '#f48a58', fontWeight: 800 }}>→</span>
               </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Setup Phase — Detailed Mode (Phase 2) — Pixar Card Style */}
+      {phase === "setup" && setupMode === "detailed" && (
+        <div className="pixar-setup flex flex-1 items-center justify-center px-4 py-8">
+          <div className="w-full max-w-lg space-y-6">
+            {/* Title */}
+            <div className="text-center">
+              <h1 className="mb-1 text-2xl font-extrabold" style={{ color: '#4d4c4a' }}>
+                ロープレ設定
+              </h1>
+              <p className="text-sm font-semibold" style={{ color: '#8a8680', marginBottom: '0.8em' }}>
+                営業シーンを設定して、AIとロープレを始めましょう
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSetupMode("simple")}
+                  className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 transition hover:opacity-80"
+                  style={{
+                    background: '#e8dfd0',
+                    border: '0.12em solid #c4b9a8',
+                    color: '#6a6560',
+                    fontWeight: 700,
+                    fontSize: '0.78em',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <span aria-hidden="true">←</span>
+                  シンプルモードに戻る
+                </button>
+                <Link
+                  href="/learn"
+                  className="inline-flex items-center gap-2 rounded-full px-4 py-2 transition hover:opacity-80"
+                  style={{
+                    background: '#e8dfd0',
+                    border: '0.12em solid #c4b9a8',
+                    color: '#6a6560',
+                    fontWeight: 700,
+                    fontSize: '0.78em',
+                    textDecoration: 'none',
+                  }}
+                >
+                  <span style={{ fontSize: '1.1em' }}>📖</span>
+                  学習コース
+                  <span style={{ color: '#f48a58', fontWeight: 800 }}>→</span>
+                </Link>
+              </div>
             </div>
 
             {/* Quick Start by Industry — 60秒で最初のロープレ開始 */}

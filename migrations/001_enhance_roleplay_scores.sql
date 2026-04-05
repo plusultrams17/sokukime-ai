@@ -1,31 +1,60 @@
 -- =============================================
--- Migration: roleplay_scores テーブル強化
--- 目的: RLS有効化 + 不足カラム追加 + ポリシー設定
--- Supabase SQL Editor で実行してください
+-- Migration: roleplay_scores テーブル作成 + 強化（冪等版）
+-- 目的: 新規環境でも既存環境でも安全に動作する統合マイグレーション
+-- Supabase SQL Editor で実行してください（何度実行しても安全）
 -- =============================================
 
 -- =============================================
--- 1. 不足カラムの追加
+-- 0. 依存関係チェック: profiles テーブルが存在するか
+-- =============================================
+-- profiles テーブルは roleplay_scores の外部キー先として必須
+-- 存在しない場合は最小限の定義で作成する
+
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  plan TEXT NOT NULL DEFAULT 'free' CHECK (plan IN ('free', 'pro')),
+  stripe_customer_id TEXT UNIQUE,
+  stripe_subscription_id TEXT,
+  subscription_status TEXT DEFAULT 'none',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- =============================================
+-- 1. roleplay_scores テーブル作成（存在しない場合のみ）
 -- =============================================
 
--- AI が返す総評・強み・改善点を保存（ダッシュボード詳細表示・振り返り用）
+CREATE TABLE IF NOT EXISTS public.roleplay_scores (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  overall_score INT NOT NULL,
+  category_scores JSONB NOT NULL DEFAULT '[]',
+  summary TEXT,                           -- AI総評
+  strengths JSONB DEFAULT '[]',           -- 良かった点のリスト
+  improvements JSONB DEFAULT '[]',        -- 改善点のリスト
+  difficulty TEXT,
+  industry TEXT,
+  scene TEXT,
+  customer_type TEXT,                     -- 顧客タイプ（individual/owner/manager/staff）
+  product TEXT,                           -- 商材名
+  conversation_log JSONB,                 -- 会話ログ [{role, content}, ...]
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- =============================================
+-- 2. 既存テーブルへのカラム追加（冪等）
+-- テーブルが既に存在し、新しいカラムだけ不足している場合に必要
+-- =============================================
+
 ALTER TABLE public.roleplay_scores
   ADD COLUMN IF NOT EXISTS summary TEXT,
   ADD COLUMN IF NOT EXISTS strengths JSONB DEFAULT '[]',
-  ADD COLUMN IF NOT EXISTS improvements JSONB DEFAULT '[]';
-
--- ロールプレイのシナリオ条件を完全に保存（分析・フィルタリング用）
-ALTER TABLE public.roleplay_scores
+  ADD COLUMN IF NOT EXISTS improvements JSONB DEFAULT '[]',
   ADD COLUMN IF NOT EXISTS customer_type TEXT,
-  ADD COLUMN IF NOT EXISTS product TEXT;
-
--- 会話ログ保存（スコア詳細画面での会話再生・レビュー用）
--- JSONB配列: [{"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]
-ALTER TABLE public.roleplay_scores
-  ADD COLUMN IF NOT EXISTS conversation_log JSONB;
-
--- updated_at タイムスタンプ（プロジェクト規約準拠）
-ALTER TABLE public.roleplay_scores
+  ADD COLUMN IF NOT EXISTS product TEXT,
+  ADD COLUMN IF NOT EXISTS conversation_log JSONB,
   ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
 
 -- 既存レコードの updated_at を created_at で埋める
@@ -34,7 +63,7 @@ UPDATE public.roleplay_scores
   WHERE updated_at IS NULL;
 
 -- =============================================
--- 2. updated_at 自動更新トリガー
+-- 3. updated_at 自動更新トリガー
 -- =============================================
 
 -- 汎用の updated_at トリガー関数（他テーブルでも再利用可能）
@@ -53,8 +82,12 @@ CREATE TRIGGER set_roleplay_scores_updated_at
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =============================================
--- 3. 追加インデックス（分析クエリ最適化）
+-- 4. インデックス（分析クエリ最適化）
 -- =============================================
+
+-- ユーザー別 + 日付でのスコア取得用（メイン）
+CREATE INDEX IF NOT EXISTS idx_scores_user_date
+  ON public.roleplay_scores(user_id, created_at DESC);
 
 -- 業種別のスコア分析用
 CREATE INDEX IF NOT EXISTS idx_scores_industry
@@ -71,11 +104,16 @@ CREATE INDEX IF NOT EXISTS idx_scores_user_industry
   ON public.roleplay_scores(user_id, industry, created_at DESC);
 
 -- =============================================
--- 4. RLS 有効化 + ポリシー設定
+-- 5. RLS 有効化 + ポリシー設定
 -- =============================================
 
 -- RLS を有効化（これが最も重要な修正 -- 現状セキュリティホール）
 ALTER TABLE public.roleplay_scores ENABLE ROW LEVEL SECURITY;
+
+-- 既存ポリシーを削除してから再作成（冪等性担保）
+DROP POLICY IF EXISTS "Users can read own scores" ON public.roleplay_scores;
+DROP POLICY IF EXISTS "Users can insert own scores" ON public.roleplay_scores;
+DROP POLICY IF EXISTS "Users can update own scores" ON public.roleplay_scores;
 
 -- ユーザーは自分のスコア履歴のみ読み取り可能
 CREATE POLICY "Users can read own scores"
@@ -101,7 +139,7 @@ CREATE POLICY "Users can update own scores"
 --        RLS をバイパスする。公開読み取りポリシーは不要。
 
 -- =============================================
--- 5. スコア統計用のヘルパー関数
+-- 6. スコア統計用のヘルパー関数
 -- =============================================
 
 -- ユーザーの直近N件のスコア平均を取得
@@ -154,3 +192,10 @@ BEGIN
   ORDER BY avg_score ASC;
 END;
 $$;
+
+-- =============================================
+-- 完了確認
+-- =============================================
+-- 実行後、以下のクエリで確認できます:
+-- SELECT COUNT(*) FROM public.roleplay_scores;
+-- SELECT policyname FROM pg_policies WHERE tablename = 'roleplay_scores';

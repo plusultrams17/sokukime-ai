@@ -291,7 +291,70 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
             </div>
           </div>
 
-          {/* Upgrade CTA */}
+          {/* ── 痛み可視化ブロック（Pain Diagnosis） ── */}
+          <div className="pixar-card">
+            <div className="text-center">
+              <div
+                style={{
+                  fontSize: "0.75em",
+                  fontWeight: 700,
+                  color: "#8a8680",
+                  marginBottom: "0.4em",
+                }}
+              >
+                あなたの弱点診断
+              </div>
+              <div
+                style={{
+                  fontSize: "0.95em",
+                  fontWeight: 800,
+                  color: "#4d4c4a",
+                  marginBottom: "0.8em",
+                }}
+              >
+                スコアを下げたのは、このカテゴリ ↓
+              </div>
+              {(() => {
+                const sorted = [...score.categories].sort(
+                  (a, b) => a.score - b.score,
+                );
+                const weakest = sorted[0];
+                if (!weakest) return null;
+                return (
+                  <div
+                    style={{
+                      padding: "0.8em 1em",
+                      borderRadius: "0.8em",
+                      background: "#fef2f2",
+                      border: "0.12em solid #ef4444",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "0.85em",
+                        fontWeight: 800,
+                        color: "#991b1b",
+                        marginBottom: "0.3em",
+                      }}
+                    >
+                      ⚠️ {weakest.name}: {weakest.score}点
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "0.75em",
+                        color: "#7f1d1d",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      このカテゴリを集中練習すると、スコアが平均 +15点見込めます
+                    </p>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+
+          {/* ── Pro差分 + 切迫感ブロック ── */}
           <div
             className="pixar-card"
             style={{
@@ -302,49 +365,75 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
             <div className="text-center">
               <div
                 style={{
-                  fontSize: "1.8em",
+                  fontSize: "0.75em",
+                  fontWeight: 700,
+                  color: "#8a8680",
                   marginBottom: "0.3em",
                 }}
               >
-                🎉
+                Proなら今日、この弱点を潰せます
               </div>
-              <p
-                style={{
-                  fontSize: "1.1em",
-                  fontWeight: 800,
-                  color: "#4d4c4a",
-                  marginBottom: "0.3em",
-                }}
-              >
-                ロープレ完了おめでとうございます！
-              </p>
-              <p
-                style={{
-                  fontSize: "0.85em",
-                  color: "#6a6560",
-                  marginBottom: "0.8em",
-                  lineHeight: 1.6,
-                }}
-              >
-                無料登録で明日もロープレできます。
-                <br />
-                スコアは保存され、伸びが見えるようになります。
-              </p>
+
+              {/* Pro差分リスト */}
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
-                  gap: "0.4em",
-                  fontSize: "0.78em",
-                  color: "#6a6560",
-                  marginBottom: "0.8em",
+                  gap: "0.5em",
+                  textAlign: "left",
+                  padding: "0.8em 1em",
+                  margin: "0.5em 0 0.8em",
+                  background: "#fff",
+                  borderRadius: "0.8em",
+                  border: "0.12em solid #f48a58",
                 }}
               >
-                <span>✓ 毎日1回の無料ロープレ</span>
-                <span>✓ スコア履歴の保存＆推移グラフ</span>
-                <span>✓ 5カテゴリ別の詳細アドバイス</span>
+                <div
+                  style={{
+                    fontSize: "0.8em",
+                    color: "#4d4c4a",
+                    fontWeight: 700,
+                  }}
+                >
+                  ✓ 弱点カテゴリに特化した「反論処理20連発」ロープレ
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.8em",
+                    color: "#4d4c4a",
+                    fontWeight: 700,
+                  }}
+                >
+                  ✓ 毎日無制限ロープレで7日間で +20点改善
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.8em",
+                    color: "#4d4c4a",
+                    fontWeight: 700,
+                  }}
+                >
+                  ✓ 22レッスンで即決営業メソッドを体系的に習得
+                </div>
               </div>
+
+              {/* 切迫感 */}
+              <p
+                style={{
+                  fontSize: "0.72em",
+                  color: "#991b1b",
+                  fontWeight: 700,
+                  marginBottom: "0.8em",
+                  lineHeight: 1.5,
+                }}
+              >
+                📊「検討します」を3回受けると、
+                <br />
+                4回目の成約率は
+                <span style={{ fontSize: "1.2em" }}>-37%</span>下がります
+              </p>
+
+              {/* メインCTA */}
               <Link
                 href="/login?redirect=/roleplay"
                 style={{
@@ -363,7 +452,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   boxShadow: "0.12em 0.12em 0 #c4693d",
                 }}
               >
-                無料登録して無制限化 →
+                無料でスコアを保存する →
               </Link>
               <p
                 style={{

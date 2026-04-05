@@ -133,7 +133,7 @@ export default function Home() {
               className="mb-4 text-xs font-bold tracking-[0.2em] uppercase sm:mb-5 sm:text-sm"
               style={{ color: "#f97316" }}
             >
-              業種別営業学習プログラム
+              即決営業メソッド × AIロープレ
             </p>
 
             {/* Main heading */}
@@ -144,9 +144,9 @@ export default function Home() {
                 textShadow: "0 2px 20px rgba(0,0,0,0.3)",
               }}
             >
-              売れる営業には、
+              「検討します」を、
               <br className="sm:hidden" />
-              <span className="lp-highlight-hero">「型」</span>がある。
+              その場で<span className="lp-highlight-hero">&quot;イエス&quot;</span>に変える。
             </p>
 
             {/* Sub heading */}
@@ -157,20 +157,19 @@ export default function Home() {
                 textShadow: "0 1px 8px rgba(0,0,0,0.2)",
               }}
             >
-              営業心理学に基づく「成約5ステップメソッド」を、
+              訪販・保険・不動産の現場で磨かれた「即決営業メソッド」を、
               <br className="hidden sm:block" />
-              22レッスンで体系的に学べるプログラムです。
+              AIロープレで体に叩き込む。3分後、あなたの切り返しが変わります。
             </p>
 
             {/* CTA */}
             <div className="mb-3 flex flex-col items-center gap-3">
               <CTAButton className="hero-cta-btn" />
-              <SecondaryCTA className="lp-cta-secondary--hero" />
             </div>
 
             {/* Trust signals */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
-              {["登録不要", "3分で体験完了", "クレカ不要"].map((text) => (
+              {["平均67%切り返し成功率", "3分で体験完了", "登録・クレカ不要"].map((text) => (
                 <span
                   key={text}
                   className="inline-flex items-center gap-1.5 text-xs sm:text-sm"

@@ -90,7 +90,7 @@ const faqItems = [
 
 export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [billing, setBilling] = useState<"monthly" | "annual">("annual");
+  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [promoCode, setPromoCode] = useState("");
   const [promoOpen, setPromoOpen] = useState(false);
   const [activePromo] = useState(() => getActivePromotion());
@@ -345,6 +345,38 @@ export default function PricingPage() {
           </button>
         </div>
 
+        {/* Score Improvement Guarantee — Hero級配置: Pricing Card直上で返金保証を強調 */}
+        <div
+          style={{
+            maxWidth: "800px",
+            margin: "0 auto 2rem",
+            padding: "1.5rem 2rem",
+            background: "linear-gradient(135deg, #fff8f3, #fef2f2)",
+            borderRadius: "1rem",
+            border: "2px solid #f97316",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>🛡️</div>
+          <h3
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: 800,
+              color: "#ea580c",
+              marginBottom: "0.5rem",
+            }}
+          >
+            14日間スコア改善保証
+          </h3>
+          <p style={{ fontSize: "0.95rem", color: "#4a5568", lineHeight: 1.6 }}>
+            14日間で営業スコアが改善しなければ、<strong>全額返金します</strong>。<br />
+            リスクなくProの全機能を試せます。
+          </p>
+          <p style={{ fontSize: "0.75rem", color: "#718096", marginTop: "0.5rem" }}>
+            ※ 14日間で7回以上のロープレ実施が条件
+          </p>
+        </div>
+
         {/* Pricing Cards */}
         <div className="grid gap-8 md:grid-cols-2">
           {/* Free Plan */}
@@ -442,6 +474,25 @@ export default function PricingPage() {
               </div>
             )}
 
+            {/* 7日間無料の視覚化バナー */}
+            <div
+              style={{
+                padding: "1rem 1.5rem",
+                background: "#fef2f2",
+                border: "2px solid #ef4444",
+                borderRadius: "0.75rem",
+                textAlign: "center",
+                marginBottom: "1rem",
+              }}
+            >
+              <p style={{ fontSize: "1.1rem", fontWeight: 800, color: "#991b1b" }}>
+                ✅ 7日間は100%無料（1円も請求されません）
+              </p>
+              <p style={{ fontSize: "0.85rem", color: "#7f1d1d", marginTop: "0.3rem" }}>
+                カード登録後、7日経過してから初めて {billing === "annual" ? `¥${annualMonthlyTaxInc.toLocaleString()}/月（税込）` : `¥${monthlyTaxInc.toLocaleString()}/月（税込）`} が課金されます
+              </p>
+            </div>
+
             <button
               onClick={handleUpgrade}
               disabled={isLoading}
@@ -450,8 +501,7 @@ export default function PricingPage() {
               {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
             </button>
             <p className="mt-3 text-center text-[11px] text-muted">
-              今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで無料 → その後{billing === "annual" ? `¥${annualMonthlyTaxInc.toLocaleString()}/月（税込）` : `¥${monthlyTaxInc.toLocaleString()}/月（税込）`}
-              ・いつでも解約OK
+              今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで無料 ・ いつでも解約OK
             </p>
             <p className="mt-1 text-center text-[11px] text-accent/70">
               1回のロープレあたり約¥99 — コーヒー1杯以下
@@ -497,21 +547,6 @@ export default function PricingPage() {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Score Improvement Guarantee — 競合失敗分析: 返金保証がないのは最大のコンバージョンキラー */}
-        <div className="mt-8 rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 text-center">
-          <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent text-xl text-white">
-            🛡️
-          </div>
-          <h3 className="mb-2 text-lg font-bold text-foreground">14日間スコア改善保証</h3>
-          <p className="mx-auto max-w-md text-sm leading-relaxed text-muted">
-            Proプランで14日間毎日練習してもスコアが改善しない場合、<strong className="text-foreground">全額返金</strong>します。
-            メソッドの効果に自信があるからこその保証です。
-          </p>
-          <p className="mt-2 text-xs text-muted">
-            ※ 14日間で7回以上のロープレ実施が条件
-          </p>
         </div>
 
         {/* Guarantee Badge */}
