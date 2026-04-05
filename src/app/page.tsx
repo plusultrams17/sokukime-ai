@@ -133,7 +133,7 @@ export default function Home() {
               className="mb-4 text-xs font-bold tracking-[0.2em] uppercase sm:mb-5 sm:text-sm"
               style={{ color: "#f97316" }}
             >
-              即決営業メソッド × AIロープレ
+              商談即決スキル × AIロープレ
             </p>
 
             {/* Main heading */}
@@ -144,9 +144,9 @@ export default function Home() {
                 textShadow: "0 2px 20px rgba(0,0,0,0.3)",
               }}
             >
-              「検討します」を、
-              <br className="sm:hidden" />
-              その場で<span className="lp-highlight-hero">&quot;イエス&quot;</span>に変える。
+              「検討します」を、その場で
+              <br />
+              <span className="lp-highlight-hero">&quot;イエス&quot;</span>に変える。
             </p>
 
             {/* Sub heading */}
@@ -157,7 +157,7 @@ export default function Home() {
                 textShadow: "0 1px 8px rgba(0,0,0,0.2)",
               }}
             >
-              訪販・保険・不動産の現場で磨かれた「即決営業メソッド」を、
+              訪販・保険・不動産の現場で磨かれた「商談即決スキル」を、
               <br className="hidden sm:block" />
               AIロープレで体に叩き込む。3分後、あなたの切り返しが変わります。
             </p>

@@ -137,7 +137,7 @@ body {
   box-shadow:
     0 4px 20px rgba(215, 0, 14, 0.35),
     0 0 0 0 rgba(215, 0, 14, 0);
-  animation: lp-shine 3s infinite, hero-cta-glow 2.5s ease-in-out infinite;
+  animation: hero-cta-glow 2.5s ease-in-out infinite;
 }
 
 @keyframes hero-cta-glow {

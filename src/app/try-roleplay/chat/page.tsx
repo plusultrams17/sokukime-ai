@@ -413,7 +413,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                     fontWeight: 700,
                   }}
                 >
-                  ✓ 22レッスンで即決営業メソッドを体系的に習得
+                  ✓ 22レッスンで商談即決スキルを体系的に習得
                 </div>
               </div>
 
