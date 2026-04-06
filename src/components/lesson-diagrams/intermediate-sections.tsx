@@ -115,41 +115,49 @@ function NgWordsDiagram() {
   );
 }
 
-/** クロージング回数と成約率: バーチャート */
+/** 営業マンの成約率: 20%〜80% */
 function ClosingCountDiagram() {
   return (
     <div className="my-6">
       <svg
-        viewBox="0 0 520 200"
+        viewBox="0 0 520 180"
         width="100%"
         xmlns="http://www.w3.org/2000/svg"
         style={{ fontFamily: FONT }}
       >
         {/* Title */}
         <text x="260" y="22" textAnchor="middle" fontSize="13" fill={ACCENT} fontWeight="bold">
-          {"クロージング回数と成約率"}
+          {"営業マンの成約率と3つの属性"}
         </text>
 
-        {/* Y axis labels */}
-        <text x="75" y="62" textAnchor="end" fontSize="12" fill={DARK}>{"1回"}</text>
-        <text x="75" y="102" textAnchor="end" fontSize="12" fill={DARK}>{"2回"}</text>
-        <text x="75" y="142" textAnchor="end" fontSize="12" fill={DARK}>{"3回+"}</text>
+        {/* Rate bar */}
+        <text x="40" y="60" textAnchor="end" fontSize="11" fill={DARK} fontWeight="bold">{"成約率"}</text>
+        <rect x="50" y="46" width="420" height="24" fill={LIGHT_BG} stroke={MUTED} strokeWidth="1" />
+        <rect x="50" y="46" width="100" height="24" fill={MUTED} />
+        <text x="100" y="62" textAnchor="middle" fontSize="10" fill={WHITE} fontWeight="bold">{"20%"}</text>
+        <rect x="370" y="46" width="100" height="24" fill={ACCENT} />
+        <text x="420" y="62" textAnchor="middle" fontSize="10" fill={WHITE} fontWeight="bold">{"80%"}</text>
 
-        {/* Bar 1: 10% */}
-        <rect x="85" y="46" width="40" height="24" fill={MUTED} />
-        <text x="135" y="63" fontSize="12" fill={MUTED} fontWeight="bold">{"10%"}</text>
-
-        {/* Bar 2: 20% */}
-        <rect x="85" y="86" width="80" height="24" fill="#D97706" />
-        <text x="175" y="103" fontSize="12" fill="#D97706" fontWeight="bold">{"20%"}</text>
-
-        {/* Bar 3: significant UP */}
-        <rect x="85" y="126" width="300" height="24" fill={ACCENT} />
-        <text x="395" y="143" fontSize="12" fill={ACCENT} fontWeight="bold">{"飛躍的UP"}</text>
+        {/* Three attributes */}
+        {[
+          { label: "即決する", sub: "すぐ決断", x: 60, color: ACCENT },
+          { label: "悩む", sub: "クロージング次第", x: 210, color: "#D97706" },
+          { label: "拒否する", sub: "買わない", x: 360, color: MUTED },
+        ].map((item, i) => (
+          <g key={i}>
+            <rect x={item.x} y="90" width="120" height="45" fill={WHITE} stroke={item.color} strokeWidth="1.5" />
+            <text x={item.x + 60} y="110" textAnchor="middle" fontSize="12" fill={item.color} fontWeight="bold">
+              {item.label}
+            </text>
+            <text x={item.x + 60} y="126" textAnchor="middle" fontSize="9" fill={MUTED}>
+              {item.sub}
+            </text>
+          </g>
+        ))}
 
         {/* Bottom note */}
-        <text x="260" y="185" textAnchor="middle" fontSize="11" fill={MUTED}>
-          {"1回で諦めない。粘り強く丁寧にクロージングを重ねる"}
+        <text x="260" y="160" textAnchor="middle" fontSize="11" fill={MUTED}>
+          {"クロージング力が強い営業マンは「悩む」お客様を決断させられる"}
         </text>
       </svg>
     </div>
@@ -592,7 +600,7 @@ function ThreeTechniquesComboDiagram() {
 // 5. positive-closing  (ポジティブクロージング)
 // ═══════════════════════════════════════════════════════════════
 
-/** ポジティブシングルの流れ */
+/** 未来描写クロージングの流れ */
 function PositiveSingleFlowDiagram() {
   return (
     <div className="my-6">
@@ -610,7 +618,7 @@ function PositiveSingleFlowDiagram() {
 
         {/* Title */}
         <text x="280" y="22" textAnchor="middle" fontSize="13" fill={ACCENT} fontWeight="bold">
-          {"ポジティブシングルの流れ"}
+          {"未来描写クロージングの流れ"}
         </text>
 
         {/* Flow boxes */}
@@ -651,7 +659,7 @@ function PositiveSingleFlowDiagram() {
   );
 }
 
-/** ポジティブトリプル: 3連発リズム */
+/** 三段ベネフィット訴求: 3連発リズム */
 function PositiveTripleDiagram() {
   return (
     <div className="my-6">
@@ -663,7 +671,7 @@ function PositiveTripleDiagram() {
       >
         {/* Title */}
         <text x="260" y="22" textAnchor="middle" fontSize="13" fill={ACCENT} fontWeight="bold">
-          {"ポジティブトリプル（3連発リズム）"}
+          {"三段ベネフィット訴求（3連発リズム）"}
         </text>
 
         {/* Three boxes side by side */}
@@ -745,7 +753,7 @@ function PyramidStructureDiagram() {
 // 6. negative-closing  (ネガティブクロージング)
 // ═══════════════════════════════════════════════════════════════
 
-/** ネガティブシングルの流れ */
+/** 危機感クロージングの流れ */
 function NegativeSingleFlowDiagram() {
   return (
     <div className="my-6">
@@ -763,7 +771,7 @@ function NegativeSingleFlowDiagram() {
 
         {/* Title */}
         <text x="270" y="22" textAnchor="middle" fontSize="13" fill={ACCENT} fontWeight="bold">
-          {"ネガティブシングルの流れ"}
+          {"危機感クロージングの流れ"}
         </text>
 
         {/* Boxes */}
@@ -1143,6 +1151,7 @@ export const intermediateSectionDiagrams: Record<string, Record<string, React.Co
     "respect-first": RespectFirstDiagram,
     "denial-guidance": DenialGuidanceDiagram,
     "negative-impact": NegativeImpactDiagram,
+    "ideal-ratio": IdealRatioDiagram,
   },
   "desire-patterns": {
     "desire-comparison": DesireComparisonDiagram,

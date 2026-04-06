@@ -67,41 +67,44 @@ function RebuttalMindsetDiagram() {
   );
 }
 
-/** Bar chart: rebuttal count vs success rate */
+/** Bar chart: rebuttal count vs success rate (manual exact data) */
 function RebuttalStatsDiagram() {
   const bars = [
-    { label: "1回", pct: 15, w: 60 },
-    { label: "2回", pct: 25, w: 100 },
-    { label: "3回+", pct: 40, w: 160 },
+    { label: "1回", pct: "1.8%", w: 8 },
+    { label: "2回", pct: "22.0%", w: 88 },
+    { label: "3回", pct: "68.0%", w: 272 },
+    { label: "4回", pct: "73.0%", w: 292 },
+    { label: "5回", pct: "78.0%", w: 312 },
   ];
 
   return (
     <div className="my-6">
       <svg
-        viewBox="0 0 500 180"
+        viewBox="0 0 520 260"
         width="100%"
         xmlns="http://www.w3.org/2000/svg"
         style={{ fontFamily: FONT }}
       >
-        <text x="250" y="20" textAnchor="middle" fontSize="13" fontWeight="bold" fill={DARK}>
-          切り返し回数と成約率向上
+        <text x="260" y="20" textAnchor="middle" fontSize="13" fontWeight="bold" fill={DARK}>
+          切り返し回数と成約率
         </text>
 
         {bars.map((bar, i) => {
-          const y = 40 + i * 48;
+          const y = 38 + i * 40;
+          const isHighlight = i >= 2;
           return (
             <g key={i}>
-              <text x="55" y={y + 22} textAnchor="end" fontSize="12" fontWeight="bold" fill={DARK}>{bar.label}</text>
-              <rect x="65" y={y} width={bar.w} height={34} fill={i === 2 ? ACCENT : LIGHT_BG} stroke={ACCENT} strokeWidth={1.5} />
-              <text x={65 + bar.w + 8} y={y + 22} fontSize="12" fontWeight="bold" fill={i === 2 ? ACCENT : DARK}>+{bar.pct}%</text>
+              <text x="45" y={y + 20} textAnchor="end" fontSize="12" fontWeight="bold" fill={DARK}>{bar.label}</text>
+              <rect x="55" y={y} width={bar.w} height={30} fill={isHighlight ? ACCENT : LIGHT_BG} stroke={ACCENT} strokeWidth={1.5} />
+              <text x={55 + bar.w + 8} y={y + 20} fontSize="12" fontWeight="bold" fill={isHighlight ? ACCENT : DARK}>{bar.pct}</text>
             </g>
           );
         })}
 
-        {/* Annotation */}
-        <text x="350" y="65" fontSize="10" fill={MUTED}>多くの営業マンは</text>
-        <text x="350" y="80" fontSize="10" fill={MUTED}>1回で引き下がる</text>
-        <text x="350" y="148" fontSize="11" fontWeight="bold" fill={ACCENT}>粘り強さが成約を生む</text>
+        {/* Bottom note */}
+        <text x="260" y="240" textAnchor="middle" fontSize="11" fill={MUTED}>
+          6回目以降は変化なし。3〜5回繰り返すと80%以上が成約する
+        </text>
       </svg>
     </div>
   );

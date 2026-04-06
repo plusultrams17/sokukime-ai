@@ -62,7 +62,7 @@ function EffectOrientedDiagram() {
   );
 }
 
-// 自信の正体 — Formula: 知識 x 経験 x フィードバック
+// 自信の正体 — 88%は思い込み
 function ConfidenceFormulaDiagram() {
   return (
     <div className="my-6">
@@ -75,69 +75,58 @@ function ConfidenceFormulaDiagram() {
         {/* Formula bar */}
         <rect x="20" y="15" width="480" height="50" fill={LIGHT_BG} stroke={ACCENT} strokeWidth="1.5" />
         <text x="260" y="48" textAnchor="middle" fontSize="16" fill={DARK} fontWeight="bold">
-          自信 = 知識 x 経験 x フィードバック
+          自信の主要因 = 88%は「思い込み」
         </text>
 
-        {/* Three pillars */}
-        <rect x="30" y="85" width="140" height="50" fill={ACCENT} stroke="none" />
-        <text x="100" y="107" textAnchor="middle" fontSize="13" fill={WHITE} fontWeight="bold">知識</text>
-        <text x="100" y="124" textAnchor="middle" fontSize="10" fill={WHITE}>商品・業界・手法</text>
+        {/* Two pillars */}
+        <rect x="50" y="85" width="250" height="50" fill={ACCENT} stroke="none" />
+        <text x="175" y="107" textAnchor="middle" fontSize="14" fill={WHITE} fontWeight="bold">思い込み 88%</text>
+        <text x="175" y="124" textAnchor="middle" fontSize="10" fill={WHITE}>誰でも自信は持てるし、簡単になくなる</text>
 
-        <rect x="190" y="85" width="140" height="50" fill={ACCENT} stroke="none" />
-        <text x="260" y="107" textAnchor="middle" fontSize="13" fill={WHITE} fontWeight="bold">経験</text>
-        <text x="260" y="124" textAnchor="middle" fontSize="10" fill={WHITE}>商談の場数</text>
-
-        <rect x="350" y="85" width="140" height="50" fill={ACCENT} stroke="none" />
-        <text x="420" y="107" textAnchor="middle" fontSize="13" fill={WHITE} fontWeight="bold">フィードバック</text>
-        <text x="420" y="124" textAnchor="middle" fontSize="10" fill={WHITE}>改善と修正</text>
+        <rect x="320" y="85" width="150" height="50" fill={MUTED} stroke="none" />
+        <text x="395" y="107" textAnchor="middle" fontSize="13" fill={WHITE} fontWeight="bold">経験 2〜3%</text>
+        <text x="395" y="124" textAnchor="middle" fontSize="10" fill={WHITE}>経験の積み重ねは微小</text>
       </svg>
     </div>
   );
 }
 
-// 営業の4つのカテゴリー — 2x2 Matrix
+// 自信を持つための4つのカテゴリー
 function FourCategoriesDiagram() {
   return (
     <div className="my-6">
       <svg
-        viewBox="0 0 520 250"
+        viewBox="0 0 520 180"
         width="100%"
         xmlns="http://www.w3.org/2000/svg"
         style={{ fontFamily: FONT }}
       >
-        {/* Axes */}
-        <line x1="100" y1="230" x2="500" y2="230" stroke={DARK} strokeWidth="2" />
-        <line x1="100" y1="230" x2="100" y2="20" stroke={DARK} strokeWidth="2" />
-        <polygon points="500,230 492,224 492,236" fill={DARK} />
-        <polygon points="100,20 94,28 106,28" fill={DARK} />
+        <text x="260" y="22" textAnchor="middle" fontSize="13" fill={DARK} fontWeight="bold">
+          自信を持つための4つのカテゴリー
+        </text>
 
-        <text x="300" y="248" textAnchor="middle" fontSize="12" fill={DARK} fontWeight="bold">知識</text>
-        <text x="88" y="130" fontSize="12" fill={DARK} fontWeight="bold" textAnchor="end"
-          transform="rotate(-90, 88, 130)">自信</text>
+        {[
+          { label: "商品", sub: "良い点だけを見る", x: 20 },
+          { label: "会社", sub: "良い点だけを見る", x: 145 },
+          { label: "営業職", sub: "良い点だけを見る", x: 270 },
+          { label: "自分", sub: "良い点だけを見る", x: 395 },
+        ].map((item, i) => (
+          <g key={i}>
+            <rect x={item.x} y="45" width="110" height="70" fill={WHITE} stroke={ACCENT} strokeWidth="1.5" />
+            <text x={item.x + 55} y="73" textAnchor="middle" fontSize="14" fill={ACCENT} fontWeight="bold">
+              {item.label}
+            </text>
+            <text x={item.x + 55} y="98" textAnchor="middle" fontSize="10" fill={MUTED}>
+              {item.sub}
+            </text>
+          </g>
+        ))}
 
-        {/* Grid lines */}
-        <line x1="300" y1="20" x2="300" y2="230" stroke={MUTED} strokeWidth="1" strokeDasharray="4,4" />
-        <line x1="100" y1="125" x2="500" y2="125" stroke={MUTED} strokeWidth="1" strokeDasharray="4,4" />
-
-        {/* Bottom-left */}
-        <rect x="110" y="135" width="180" height="85" fill="#FEE2E2" stroke="#FECACA" strokeWidth="1" />
-        <text x="200" y="175" textAnchor="middle" fontSize="13" fill="#991B1B" fontWeight="bold">売れない営業</text>
-        <text x="200" y="195" textAnchor="middle" fontSize="10" fill="#991B1B">知識も自信もない</text>
-
-        {/* Top-left */}
-        <rect x="110" y="30" width="180" height="85" fill="#FEF3C7" stroke="#FDE68A" strokeWidth="1" />
-        <text x="200" y="70" textAnchor="middle" fontSize="13" fill="#92400E" fontWeight="bold">押し売り営業</text>
-        <text x="200" y="90" textAnchor="middle" fontSize="10" fill="#92400E">勢いだけで知識不足</text>
-
-        {/* Bottom-right */}
-        <rect x="310" y="135" width="180" height="85" fill="#FEF3C7" stroke="#FDE68A" strokeWidth="1" />
-        <text x="400" y="175" textAnchor="middle" fontSize="13" fill="#92400E" fontWeight="bold">御用聞き営業</text>
-        <text x="400" y="195" textAnchor="middle" fontSize="10" fill="#92400E">知識はあるが受け身</text>
-
-        {/* Top-right */}
-        <rect x="310" y="30" width="180" height="85" fill="#D1FAE5" stroke={ACCENT} strokeWidth="2" />
-        <text x="400" y="70" textAnchor="middle" fontSize="14" fill={ACCENT} fontWeight="bold">トップセールス</text>
-        <text x="400" y="90" textAnchor="middle" fontSize="10" fill={ACCENT}>知識と自信を両立</text>
+        {/* Bottom note */}
+        <rect x="60" y="135" width="400" height="30" fill={LIGHT_BG} stroke="none" />
+        <text x="260" y="155" textAnchor="middle" fontSize="11" fill={DARK} fontWeight="bold">
+          完璧なモノはない。良い点だけを見て悪い点を見ないのがプロの技術
+        </text>
       </svg>
     </div>
   );

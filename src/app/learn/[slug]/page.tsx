@@ -7,11 +7,12 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getLessonBySlug, getAdjacentLessons } from "@/lib/lessons";
 import type { QuizQuestion } from "@/lib/lessons";
-import { LessonDiagram, getSectionDiagram } from "@/components/lesson-diagrams";
+import { getSectionDiagram } from "@/components/lesson-diagrams";
 import { LessonScene } from "@/components/lesson-scenes";
 import { PdfExportButton } from "@/components/pdf/PdfExportButton";
 import LessonPdfContent from "@/components/pdf/LessonPdfContent";
 import { InlineWorksheet } from "@/components/inline-worksheet";
+import { LessonPractice } from "@/components/lesson-practice";
 import { isLessonFree, FREE_LESSON_SLUGS } from "@/lib/lessons/access";
 
 const TABS = ["理論", "トーク例", "確認クイズ", "実践練習"];
@@ -488,7 +489,6 @@ export default function LessonPage() {
                 {/* Theory Tab */}
                 {activeTab === 0 && (
                   <div>
-                    <LessonDiagram slug={slug} />
                     <TheoryContent slug={slug} theory={lesson.theory} />
                     {/* Next step button */}
                     <div className="mt-10 flex justify-center">
@@ -557,83 +557,14 @@ export default function LessonPage() {
                   />
                 )}
 
-                {/* Practice Tab */}
+                {/* Practice Tab — Inline Roleplay */}
                 {activeTab === 3 && (
-                  <div>
-                    {/* Learning point reminder */}
-                    {lesson.objectives && lesson.objectives.length > 0 && (
-                      <div
-                        className={`mb-8 rounded-xl border p-5 ${
-                          practiceHighlight
-                            ? "border-accent/40 bg-accent/5"
-                            : "border-gray-200 bg-gray-50"
-                        }`}
-                      >
-                        <p className="text-sm font-bold text-foreground mb-3">
-                          このレッスンの学習ポイント
-                        </p>
-                        <ul className="space-y-1.5">
-                          {lesson.objectives.map((obj, i) => (
-                            <li key={i} className="text-sm text-muted leading-relaxed flex items-start gap-2">
-                              <svg className="w-4 h-4 text-accent mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <polyline points="20 6 9 17 4 12" />
-                              </svg>
-                              {obj}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    <h2 className="text-lg font-bold text-foreground mb-3">
-                      実践練習のテーマ
-                    </h2>
-                    <p className="text-muted leading-relaxed mb-8 text-base">
-                      {lesson.practicePrompt}
-                    </p>
-
-                    <div className="border-t border-gray-200 pt-6 space-y-4">
-                      {/* Primary CTA - AI Roleplay */}
-                      <div className="rounded-xl border border-accent/20 bg-accent/5 p-5">
-                        <p className="text-sm font-bold text-accent mb-1">学んだらすぐ実践</p>
-                        <p className="text-xs text-muted mb-4">レッスンで学んだテクニックをAIロープレで実践練習できます。繰り返すことで「型」が定着します。</p>
-                        <Link
-                          href="/roleplay"
-                          className="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold text-white transition hover:opacity-90"
-                          style={{ backgroundColor: color }}
-                        >
-                          AIロープレで実践する →
-                        </Link>
-                      </div>
-
-                      {/* Secondary - Worksheet */}
-                      <Link
-                        href="/worksheet"
-                        className="flex items-center justify-between py-3 border-b border-gray-100 group"
-                      >
-                        <div>
-                          <p className="text-sm font-bold text-foreground group-hover:underline">
-                            ワークシートで準備する
-                          </p>
-                          <p className="text-xs text-muted mt-0.5">
-                            商談準備を体系的に行う
-                          </p>
-                        </div>
-                        <svg
-                          className="w-4 h-4 text-gray-300 group-hover:text-foreground transition shrink-0"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <polyline points="9 18 15 12 9 6" />
-                        </svg>
-                      </Link>
-                    </div>
-
-                  </div>
+                  <LessonPractice
+                    slug={slug}
+                    lesson={lesson}
+                    color={color}
+                    practiceHighlight={practiceHighlight}
+                  />
                 )}
               </div>
           </div>

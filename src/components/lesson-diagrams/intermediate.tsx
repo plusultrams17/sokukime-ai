@@ -422,9 +422,9 @@ export function PositiveClosingDiagram() {
           </marker>
         </defs>
 
-        {/* Section 1: ポジティブシングル */}
+        {/* Section 1: 未来描写クロージング */}
         <text x="310" y="24" textAnchor="middle" fontSize="14" fontFamily={FONT} fill={ACCENT} fontWeight="bold">
-          {"ポジティブシングル"}
+          {"未来描写クロージング"}
         </text>
 
         {/* Flow: SP -> ベネフィット -> 天国IF -> 3倍リアクション -> 証言引用 -> 訴求 */}
@@ -501,9 +501,9 @@ export function PositiveClosingDiagram() {
         {/* Divider */}
         <line x1="30" y1="100" x2="570" y2="100" stroke={BORDER} strokeWidth="1" />
 
-        {/* Section 2: ポジティブトリプル */}
+        {/* Section 2: 三段ベネフィット訴求 */}
         <text x="310" y="126" textAnchor="middle" fontSize="14" fontFamily={FONT} fill={ACCENT} fontWeight="bold">
-          {"ポジティブトリプル"}
+          {"三段ベネフィット訴求"}
         </text>
         <text x="310" y="145" textAnchor="middle" fontSize="12" fontFamily={FONT} fill={MUTED}>
           {"3つのベネフィットでリズムを作る"}

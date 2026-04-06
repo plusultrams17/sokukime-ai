@@ -206,8 +206,11 @@ export default function LearnPage() {
 
                         {/* Lock overlay for paid lessons */}
                         {locked && (
-                          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 rounded-[inherit]">
-                            <svg className="inline-block h-8 w-8 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/50 rounded-[inherit]">
+                            <svg className="inline-block h-6 w-6 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            <p className="text-xs font-medium text-white/90 mt-2 text-center px-3 leading-snug">
+                              {lesson.title}
+                            </p>
                           </div>
                         )}
 
