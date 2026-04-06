@@ -82,6 +82,15 @@ export async function POST(request: NextRequest) {
           completed_at: new Date().toISOString(),
         });
 
+        // Grant Pro access — subscription_status='program' distinguishes from recurring subs
+        await supabaseAdmin
+          .from("profiles")
+          .update({
+            plan: "pro",
+            subscription_status: "program",
+          })
+          .eq("id", userId);
+
         // Send purchase confirmation email
         const { data: buyerProfile } = await supabaseAdmin
           .from("profiles")
@@ -238,6 +247,17 @@ export async function POST(request: NextRequest) {
       const customerId = subscription.customer as string;
       const status = subscription.status;
 
+      // Never downgrade program purchasers via subscription events
+      const { data: subUpdProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("subscription_status")
+        .eq("stripe_customer_id", customerId)
+        .single();
+
+      if (subUpdProfile?.subscription_status === "program") {
+        break;
+      }
+
       // 一時停止の検知
       if (subscription.pause_collection) {
         await supabaseAdmin
@@ -279,6 +299,17 @@ export async function POST(request: NextRequest) {
           .from("organizations")
           .update({ stripe_subscription_id: null })
           .eq("id", subscription.metadata.org_id);
+        break;
+      }
+
+      // Never downgrade program purchasers via subscription events
+      const { data: subDelProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("subscription_status")
+        .eq("stripe_customer_id", customerId)
+        .single();
+
+      if (subDelProfile?.subscription_status === "program") {
         break;
       }
 

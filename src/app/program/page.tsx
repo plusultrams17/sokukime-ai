@@ -30,7 +30,7 @@ const painPoints = [
 const includedItems = [
   {
     label: "22レッスン（動画+テキスト）",
-    description: "成約5ステップメソッドを初級・中級・上級で体系的に学習",
+    description: "成約5ステップメソッドを初級・中級・上級の3段階で体系的に学習",
   },
   {
     label: "認定試験",
@@ -141,7 +141,7 @@ const faqItems = [
   {
     question: "返金はできますか？",
     answer:
-      "デジタルコンテンツの性質上、購入後の返金は原則お受けしておりません。ただし、コンテンツに重大な不備がある場合はサポートまでご連絡ください。購入前に無料の学習コースで内容の一部をご確認いただけます。",
+      "本商品はデジタルコンテンツのため、特定商取引法に基づくクーリングオフの対象外となります。購入後の返品・返金は原則お受けしておりません。ただし、コンテンツに重大な不備がある場合はサポート（seiyaku.coach.ai@gmail.com）までご連絡ください。購入前に無料の学習コースで内容の一部をご確認いただけます。",
   },
   {
     question: "いつまで見られますか？",
@@ -172,7 +172,6 @@ const faqItems = [
 export default function ProgramPage() {
   const [loading, setLoading] = useState(false);
   const launchPrice = 9800;
-  const regularPrice = 14800;
 
   const handleCheckout = async () => {
     setLoading(true);
@@ -202,19 +201,19 @@ export default function ProgramPage() {
       <section className="relative overflow-hidden py-20 sm:py-28">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <p className="mb-4 inline-block rounded-full border border-accent/30 bg-accent/5 px-4 py-1.5 text-xs font-bold text-accent">
-            先着30名限定 - 特別価格で提供中
+            ローンチ記念価格で提供中
           </p>
           <h1 className="mb-6 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
-            営業の「型」を身につければ、
+            営業の「型」を身につけて、
             <br className="hidden sm:block" />
-            <span className="text-accent">成約率は変わる</span>
+            <span className="text-accent">成約率の向上を目指す</span>
           </h1>
           <p className="mx-auto mb-8 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-            成約5ステップメソッドを22レッスンで完全習得。
+            成約5ステップメソッドを22レッスンで体系的に学ぶ。
             <br className="hidden sm:block" />
             反論切り返しテンプレート・トークスクリプト・AIコーチ Pro アクセス権付き。
             <br className="hidden sm:block" />
-            学んで、練習して、結果を出す。すべてが揃った買い切りプログラム。
+            学んで、練習して、実力を磨く。すべてが揃った買い切りプログラム。
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <button
@@ -225,14 +224,15 @@ export default function ProgramPage() {
               {loading ? "処理中..." : "今すぐプログラムを手に入れる"}
             </button>
             <p className="text-sm text-muted">
-              <span className="line-through">¥{regularPrice.toLocaleString()}</span>
-              {" "}
               <span className="text-lg font-bold text-foreground">
                 ¥{launchPrice.toLocaleString()}
               </span>
-              <span className="text-xs text-muted">（税込¥{Math.round(launchPrice * 1.1).toLocaleString()}）</span>
+              <span className="text-xs text-muted">（税込¥{Math.round(launchPrice * 1.1).toLocaleString()}）/ 買い切り</span>
             </p>
           </div>
+          <p className="mt-3 text-center text-xs text-muted">
+            ※ 効果には個人差があります。成果を保証するものではありません。
+          </p>
         </div>
       </section>
 
@@ -443,12 +443,12 @@ export default function ProgramPage() {
         <div className="mx-auto max-w-4xl px-6">
           <div className="relative mx-auto max-w-lg rounded-2xl border-2 border-accent bg-card p-8 sm:p-10">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold text-white">
-              先着30名限定
+              ローンチ記念価格
             </div>
 
             <div className="mb-6 text-center">
               <h2 className="mb-2 text-xl font-bold sm:text-2xl">
-                成約5ステップ完全攻略プログラム
+                成約5ステップ攻略プログラム
               </h2>
               <p className="text-sm text-muted">
                 学習+実践+テンプレートのオールインワン
@@ -456,9 +456,6 @@ export default function ProgramPage() {
             </div>
 
             <div className="mb-6 text-center">
-              <p className="mb-1 text-sm text-muted line-through">
-                通常価格 ¥{regularPrice.toLocaleString()}
-              </p>
               <p className="text-4xl font-extrabold text-accent sm:text-5xl">
                 ¥{launchPrice.toLocaleString()}
               </p>
@@ -502,21 +499,26 @@ export default function ProgramPage() {
             <p className="mt-3 text-center text-[11px] text-muted">
               買い切り型 - 追加費用なし - 無期限アクセス
             </p>
+            <p className="mt-2 text-center text-[11px] text-muted">
+              ※ デジタルコンテンツのため、購入後の返品・返金は原則不可です。
+              <br />
+              ※ 効果には個人差があります。営業成果を保証するものではありません。
+            </p>
 
             <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted">
               <span>Stripe安全決済</span>
               <span>クレジットカード対応</span>
+              <Link href="/legal/tokushoho" className="underline hover:text-foreground">特商法表記</Link>
             </div>
           </div>
 
-          {/* Savings callout */}
+          {/* Included value callout */}
           <div className="mx-auto mt-6 max-w-lg rounded-xl border border-accent/20 bg-accent/5 p-4 text-center">
             <p className="text-sm font-bold text-foreground">
-              個別に購入するより
-              <span className="text-accent"> ¥{(regularPrice - launchPrice + 2980).toLocaleString()} おトク</span>
+              AIコーチ Pro アクセス権付き
             </p>
             <p className="mt-1 text-xs text-muted">
-              AIコーチ Pro 1ヶ月分（¥2,980）+ 学習教材・テンプレートがすべて含まれています
+              AIコーチ Pro（月額¥2,980相当）+ 22レッスン学習教材・テンプレートがすべて含まれています
             </p>
           </div>
         </div>
@@ -568,7 +570,7 @@ export default function ProgramPage() {
             営業の「型」を今日から身につけよう
           </h2>
           <p className="mb-8 text-sm text-muted">
-            先着30名限定の特別価格。営業研修1回分の費用で、一生使える営業スキルが手に入ります。
+            ローンチ記念価格で提供中。営業研修1回分以下の費用で、体系的な営業スキルを学べます。
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <button
@@ -586,13 +588,15 @@ export default function ProgramPage() {
             </Link>
           </div>
           <p className="mt-4 text-xs text-muted">
-            <span className="line-through">¥{regularPrice.toLocaleString()}</span>
-            {" "}
             <span className="font-bold text-foreground">
               ¥{launchPrice.toLocaleString()}
             </span>
             （税込¥{Math.round(launchPrice * 1.1).toLocaleString()}）
             - 買い切り - 無期限アクセス
+          </p>
+          <p className="mt-2 text-xs text-muted">
+            ※ 効果には個人差があります。
+            <Link href="/legal/tokushoho" className="underline hover:text-foreground">特定商取引法に基づく表記</Link>
           </p>
         </div>
       </section>
