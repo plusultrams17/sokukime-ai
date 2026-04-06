@@ -7,6 +7,7 @@ import { ReferralPrompt } from "@/components/referral-prompt";
 import type { ScoreResult } from "./page";
 import { trackCTAClick, trackUpgradePromptShown, trackUpgradePromptClicked, trackScoreShared } from "@/lib/tracking";
 import { CATEGORY_LESSON_MAP, getCategoryLearnLinks } from "@/lib/lessons/category-lesson-map";
+import { getGradeInfo, getGrade } from "@/lib/grade";
 
 interface ScoreCardProps {
   score: ScoreResult & { scoreId?: string | null; previousScore?: number | null };
@@ -16,26 +17,11 @@ interface ScoreCardProps {
 }
 
 function getScoreColor(score: number) {
-  if (score >= 80) return "text-green-600";
-  if (score >= 60) return "text-yellow-600";
-  if (score >= 40) return "text-orange-500";
-  return "text-red-500";
+  return getGradeInfo(score).color;
 }
 
 function getScoreBarColor(score: number) {
-  if (score >= 80) return "bg-green-500";
-  if (score >= 60) return "bg-yellow-500";
-  if (score >= 40) return "bg-orange-400";
-  return "bg-red-400";
-}
-
-function getGrade(score: number) {
-  if (score >= 90) return "S";
-  if (score >= 80) return "A";
-  if (score >= 70) return "B";
-  if (score >= 60) return "C";
-  if (score >= 40) return "D";
-  return "E";
+  return getGradeInfo(score).barClass;
 }
 
 // Number of categories visible to free users
@@ -72,7 +58,8 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
     ? `https://seiyaku-coach.vercel.app/score-share/${score.scoreId}`
     : "https://seiyaku-coach.vercel.app";
 
-  const shareText = `成約コーチ AIで営業ロープレしたらスコア${score.overall}点（ランク${getGrade(score.overall)}）だった。AIコーチのフィードバックが的確すぎる… #成約コーチAI #営業 #営業ロープレ`;
+  const overallGrade = getGradeInfo(score.overall);
+  const shareText = `営業ロープレAIで5ステップ診断したら${score.overall}点（${overallGrade.grade}ランク: ${overallGrade.label}）だった。30項目の行動チェックリストで採点されるから納得感がすごい #成約コーチAI #営業`;
   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(scorePageUrl)}`;
   const lineShareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(scorePageUrl)}&text=${encodeURIComponent(`営業ロープレAIでスコア${score.overall}点取った！無料で試せるよ`)}`;
   const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(scorePageUrl)}`;
@@ -157,13 +144,21 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
         <div className="mb-4 rounded-2xl border border-card-border bg-card p-6">
           <h3 className="mb-4 text-sm font-medium text-muted">カテゴリ別スコア</h3>
           <div className="space-y-4">
-            {visibleCategories.map((cat) => (
+            {visibleCategories.map((cat) => {
+              const gi = getGradeInfo(cat.score);
+              return (
               <div key={cat.name}>
                 <div className="mb-1 flex items-center justify-between">
                   <span className="text-sm font-medium">{cat.name}</span>
-                  <span className={`text-sm font-bold ${getScoreColor(cat.score)}`}>
-                    {cat.score}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`inline-flex h-5 items-center rounded px-1.5 text-[10px] font-black ${gi.color} bg-current/10`}
+                      style={{ backgroundColor: `${gi.hex}15` }}>
+                      {gi.grade}
+                    </span>
+                    <span className={`text-sm font-bold ${gi.color}`}>
+                      {cat.score}
+                    </span>
+                  </div>
                 </div>
                 <div className="mb-2 h-2 overflow-hidden rounded-full bg-card-border">
                   <div
@@ -197,7 +192,8 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                   ) : null;
                 })()}
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
 

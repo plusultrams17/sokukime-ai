@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { ScriptCompletionPreview } from "@/components/script-completion-preview";
 
 /* ------------------------------------------------------------------ */
 /*  Data                                                               */
@@ -200,31 +201,32 @@ export default function ProgramPage() {
       {/* ── Hero ── */}
       <section className="relative overflow-hidden py-20 sm:py-28">
         <div className="mx-auto max-w-4xl px-6 text-center">
-          <p className="mb-4 inline-block rounded-full border border-accent/30 bg-accent/5 px-4 py-1.5 text-xs font-bold text-accent">
-            ローンチ記念価格で提供中
+          <p className="mb-4 inline-block rounded-full border border-lp-cta/30 bg-lp-cta/5 px-4 py-1.5 text-xs font-bold text-lp-cta">
+            先着30名限定 — 特別価格で提供中
           </p>
           <h1 className="mb-6 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
-            営業の「型」を身につけて、
+            営業の「型」を身につければ、
             <br className="hidden sm:block" />
-            <span className="text-accent">成約率の向上を目指す</span>
+            <span className="lp-highlight-hero">成約率は変わる</span>
           </h1>
           <p className="mx-auto mb-8 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-            成約5ステップメソッドを22レッスンで体系的に学ぶ。
+            成約5ステップメソッドを22レッスンで完全習得。
             <br className="hidden sm:block" />
             反論切り返しテンプレート・トークスクリプト・AIコーチ Pro アクセス権付き。
             <br className="hidden sm:block" />
-            学んで、練習して、実力を磨く。すべてが揃った買い切りプログラム。
+            学んで、練習して、結果を出す。すべてが揃った買い切りプログラム。
           </p>
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="flex flex-col items-center gap-4">
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="inline-flex h-14 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60 sm:min-w-[280px]"
+              className="lp-cta-btn hero-cta-btn disabled:opacity-60"
             >
               {loading ? "処理中..." : "今すぐプログラムを手に入れる"}
             </button>
             <p className="text-sm text-muted">
-              <span className="text-lg font-bold text-foreground">
+              <span className="mr-1 text-sm text-muted line-through">¥14,800</span>
+              <span className="text-lg font-bold text-lp-cta">
                 ¥{launchPrice.toLocaleString()}
               </span>
               <span className="text-xs text-muted">（税込¥{Math.round(launchPrice * 1.1).toLocaleString()}）/ 買い切り</span>
@@ -234,6 +236,11 @@ export default function ProgramPage() {
             ※ 効果には個人差があります。成果を保証するものではありません。
           </p>
         </div>
+      </section>
+
+      {/* ── Script Completion Preview ── */}
+      <section>
+        <ScriptCompletionPreview />
       </section>
 
       {/* ── Pain Points ── */}
@@ -441,9 +448,9 @@ export default function ProgramPage() {
       {/* ── Pricing ── */}
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-4xl px-6">
-          <div className="relative mx-auto max-w-lg rounded-2xl border-2 border-accent bg-card p-8 sm:p-10">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold text-white">
-              ローンチ記念価格
+          <div className="relative mx-auto max-w-lg rounded-2xl border-2 border-lp-cta bg-card p-8 sm:p-10">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-lp-cta px-4 py-1 text-xs font-bold text-white">
+              先着30名限定価格
             </div>
 
             <div className="mb-6 text-center">
@@ -456,7 +463,8 @@ export default function ProgramPage() {
             </div>
 
             <div className="mb-6 text-center">
-              <p className="text-4xl font-extrabold text-accent sm:text-5xl">
+              <p className="text-sm text-muted line-through">¥14,800</p>
+              <p className="text-4xl font-extrabold text-lp-cta sm:text-5xl">
                 ¥{launchPrice.toLocaleString()}
               </p>
               <p className="mt-1 text-xs text-muted">
@@ -491,7 +499,7 @@ export default function ProgramPage() {
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="flex h-14 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
+              className="lp-cta-btn w-full disabled:opacity-60"
             >
               {loading ? "処理中..." : "今すぐプログラムを手に入れる"}
             </button>
@@ -513,7 +521,7 @@ export default function ProgramPage() {
           </div>
 
           {/* Included value callout */}
-          <div className="mx-auto mt-6 max-w-lg rounded-xl border border-accent/20 bg-accent/5 p-4 text-center">
+          <div className="mx-auto mt-6 max-w-lg rounded-xl border border-lp-cta/20 bg-lp-cta/5 p-4 text-center">
             <p className="text-sm font-bold text-foreground">
               AIコーチ Pro アクセス権付き
             </p>
@@ -570,25 +578,26 @@ export default function ProgramPage() {
             営業の「型」を今日から身につけよう
           </h2>
           <p className="mb-8 text-sm text-muted">
-            ローンチ記念価格で提供中。営業研修1回分以下の費用で、体系的な営業スキルを学べます。
+            先着30名限定・特別価格で提供中。営業研修1回分以下の費用で、体系的な営業スキルを学べます。
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="inline-flex h-14 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60 sm:min-w-[280px]"
+              className="lp-cta-btn hero-cta-btn disabled:opacity-60"
             >
               {loading ? "処理中..." : "今すぐプログラムを手に入れる"}
             </button>
             <Link
               href="/learn"
-              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50"
+              className="lp-cta-secondary"
             >
               まず無料で学習コースを見る
             </Link>
           </div>
           <p className="mt-4 text-xs text-muted">
-            <span className="font-bold text-foreground">
+            <span className="mr-1 text-xs line-through">¥14,800</span>
+            <span className="font-bold text-lp-cta">
               ¥{launchPrice.toLocaleString()}
             </span>
             （税込¥{Math.round(launchPrice * 1.1).toLocaleString()}）

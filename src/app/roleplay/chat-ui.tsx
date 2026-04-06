@@ -7,6 +7,7 @@ import {
   trackRoleplayCoachToggled,
   trackRoleplayScoreRequested,
 } from "@/lib/tracking";
+import { LessonDrawer } from "@/components/lesson-drawer";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -79,6 +80,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
   const [coach, setCoach] = useState<CoachData | null>(null);
   const [showCoach, setShowCoach] = useState(true);
   const [showNudge, setShowNudge] = useState(false);
+  const [showLessonDrawer, setShowLessonDrawer] = useState(false);
   const nudgeShownRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -250,6 +252,12 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                 <span className="text-[11px] sm:text-xs text-muted">
                   {turnCount}/{maxTurns}
                 </span>
+                <button
+                  onClick={() => setShowLessonDrawer(true)}
+                  className="rounded px-2 py-0.5 text-[11px] sm:text-xs transition bg-card-border text-muted hover:text-accent hover:bg-accent/10"
+                >
+                  教材
+                </button>
                 <button
                   onClick={() => {
                     const next = !showCoach;
@@ -630,6 +638,12 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
         </div>
       )}
 
+      {/* Lesson reference drawer */}
+      <LessonDrawer
+        open={showLessonDrawer}
+        onClose={() => setShowLessonDrawer(false)}
+        currentStepNumber={coach?.stepNumber}
+      />
     </div>
   );
 }

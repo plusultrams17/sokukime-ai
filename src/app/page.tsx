@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
 import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
+import { ScriptCompletionPreview } from "@/components/script-completion-preview";
 
 /* ─── Reusable CTA Buttons ─── */
 
@@ -372,6 +373,21 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          4.5. 完成スクリプトプレビュー
+      ═══════════════════════════════════════════════ */}
+      <section style={{ backgroundColor: "#e8e6e1" }}>
+        <ScriptCompletionPreview />
+        <div className="mx-auto max-w-4xl px-6 pb-16 text-center">
+          <Link
+            href="/program"
+            className="lp-cta-secondary"
+          >
+            攻略プログラムの詳細を見る →
+          </Link>
         </div>
       </section>
 

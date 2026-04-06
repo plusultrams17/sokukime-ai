@@ -3,6 +3,7 @@ import { Header } from "@/components/header";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
+import { getGradeInfo, getGrade } from "@/lib/grade";
 
 interface ScoreData {
   id: string;
@@ -11,29 +12,6 @@ interface ScoreData {
   difficulty: string | null;
   industry: string | null;
   created_at: string;
-}
-
-function getGrade(score: number) {
-  if (score >= 90) return "S";
-  if (score >= 80) return "A";
-  if (score >= 70) return "B";
-  if (score >= 60) return "C";
-  if (score >= 40) return "D";
-  return "E";
-}
-
-function getScoreColor(score: number) {
-  if (score >= 80) return "text-green-500";
-  if (score >= 60) return "text-yellow-500";
-  if (score >= 40) return "text-orange-500";
-  return "text-red-500";
-}
-
-function getBarColor(score: number) {
-  if (score >= 80) return "bg-green-500";
-  if (score >= 60) return "bg-yellow-500";
-  if (score >= 40) return "bg-orange-400";
-  return "bg-red-400";
 }
 
 async function getScore(id: string): Promise<ScoreData | null> {
@@ -61,9 +39,9 @@ export async function generateMetadata(
     return { title: "スコアが見つかりません | 成約コーチ AI" };
   }
 
-  const grade = getGrade(score.overall_score);
-  const title = `営業スコア ${score.overall_score}点（ランク${grade}）| 成約コーチ AI`;
-  const description = `AIロープレで営業スコア${score.overall_score}点を獲得！あなたも無料で営業力を診断してみませんか？`;
+  const gradeInfo = getGradeInfo(score.overall_score);
+  const title = `営業スコア ${score.overall_score}点（${gradeInfo.grade}ランク: ${gradeInfo.label}）| 成約コーチ AI`;
+  const description = `30項目の行動チェックリストでAI採点。営業スコア${score.overall_score}点（${gradeInfo.grade}ランク）を獲得！あなたも無料で営業力を診断してみませんか？`;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return {
@@ -94,7 +72,7 @@ export default async function ScoreSharePage(
     notFound();
   }
 
-  const grade = getGrade(score.overall_score);
+  const gi = getGradeInfo(score.overall_score);
   const categories = (score.category_scores || []) as { name: string; score: number }[];
 
   return (
@@ -106,13 +84,13 @@ export default async function ScoreSharePage(
         <div className="mb-8 rounded-2xl border border-card-border bg-card p-8 text-center">
           <div className="mb-2 text-sm text-muted">営業ロープレ AIスコア</div>
           <div className="flex items-center justify-center gap-4">
-            <span className={`text-7xl font-black ${getScoreColor(score.overall_score)}`}>
+            <span className={`text-7xl font-black ${gi.color}`}>
               {score.overall_score}
             </span>
             <span className="text-4xl font-black text-muted/30">/ 100</span>
           </div>
-          <div className={`mt-2 text-2xl font-bold ${getScoreColor(score.overall_score)}`}>
-            ランク {grade}
+          <div className={`mt-2 text-2xl font-bold ${gi.color}`}>
+            {gi.grade}ランク: {gi.label}
           </div>
           {score.industry && (
             <div className="mt-3 text-xs text-muted">
@@ -120,6 +98,9 @@ export default async function ScoreSharePage(
               {score.difficulty && <> ・ 難易度: {score.difficulty}</>}
             </div>
           )}
+          <div className="mt-3 text-[11px] text-muted/60">
+            30項目の行動チェックリストに基づくAI採点
+          </div>
         </div>
 
         {/* Category Scores */}
@@ -127,22 +108,31 @@ export default async function ScoreSharePage(
           <div className="mb-8 rounded-2xl border border-card-border bg-card p-6">
             <h3 className="mb-4 text-sm font-medium text-muted">5ステップ分析</h3>
             <div className="space-y-3">
-              {categories.map((cat) => (
+              {categories.map((cat) => {
+                const cgi = getGradeInfo(cat.score);
+                return (
                 <div key={cat.name}>
                   <div className="mb-1 flex items-center justify-between">
                     <span className="text-sm font-medium">{cat.name}</span>
-                    <span className={`text-sm font-bold ${getScoreColor(cat.score)}`}>
-                      {cat.score}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-flex h-5 items-center rounded px-1.5 text-[10px] font-black ${cgi.color}`}
+                        style={{ backgroundColor: `${cgi.hex}15` }}>
+                        {cgi.grade}
+                      </span>
+                      <span className={`text-sm font-bold ${cgi.color}`}>
+                        {cat.score}
+                      </span>
+                    </div>
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-card-border">
                     <div
-                      className={`h-full rounded-full ${getBarColor(cat.score)}`}
+                      className={`h-full rounded-full ${cgi.barClass}`}
                       style={{ width: `${cat.score}%` }}
                     />
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

@@ -167,6 +167,7 @@ const customerScenes = [
 
 // Customer personas imported from shared definition
 import { CUSTOMER_PERSONAS } from "@/lib/personas";
+import { loadPracticeProfile, savePracticeProfile } from "@/lib/practice-profile";
 
 export default function RoleplayPage() {
   const [phase, setPhase] = useState<RoleplayPhase>("setup");
@@ -423,6 +424,18 @@ export default function RoleplayPage() {
     });
   }, []);
 
+  // Load saved practice profile on mount (pre-fill form with user's last settings)
+  useEffect(() => {
+    const profile = loadPracticeProfile();
+    if (profile) {
+      setProduct(profile.product);
+      setCustomerIndustry(profile.industry);
+      setScene(profile.scene);
+      setCustomerType(profile.customerType);
+      setDifficulty(profile.difficulty);
+    }
+  }, []);
+
   // Auto-start roleplay after a Phase 1 template is applied (state must be flushed first)
   useEffect(() => {
     if (!pendingAutoStart) return;
@@ -527,6 +540,17 @@ export default function RoleplayPage() {
 
   async function handleStartRoleplay() {
     if (!canStart) return;
+
+    // Save settings to practice profile for persistence across sessions
+    savePracticeProfile({
+      product,
+      productDetail: "",
+      industry: customerIndustry || customerType,
+      scene: scene as "visit" | "phone" | "inbound",
+      customerType: customerType as "individual" | "owner" | "manager" | "staff",
+      difficulty,
+      updatedAt: new Date().toISOString(),
+    });
 
     trackRoleplaySetup({
       product,
