@@ -42,7 +42,7 @@ export default async function BlogTagPage({ params }: Props) {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
   const allTags = getAllTags();
 
   return (

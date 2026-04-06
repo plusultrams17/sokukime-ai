@@ -64,7 +64,7 @@ export async function generateMetadata(
   const grade = getGrade(score.overall_score);
   const title = `営業スコア ${score.overall_score}点（ランク${grade}）| 成約コーチ AI`;
   const description = `AIロープレで営業スコア${score.overall_score}点を獲得！あなたも無料で営業力を診断してみませんか？`;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return {
     title,

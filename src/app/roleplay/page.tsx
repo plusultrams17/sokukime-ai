@@ -69,7 +69,7 @@ function UpgradeToast() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in-up">
       <div className="mx-4 w-full max-w-md rounded-2xl border border-green-500/30 bg-card p-8 shadow-2xl">
-        <div className="mb-4 text-center text-4xl">🎉</div>
+        <div className="mb-4 text-center text-4xl" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polyline points="20 6 9 17 4 12"/></svg></div>
         <h2 className="mb-2 text-center text-xl font-bold text-green-400">
           Proプランへようこそ！
         </h2>
@@ -139,8 +139,8 @@ const customerTypes = [
 ];
 
 const genderOptions = [
-  { value: "male", label: "👨 男性" },
-  { value: "female", label: "👩 女性" },
+  { value: "male", label: "男性" },
+  { value: "female", label: "女性" },
   { value: "unspecified", label: "指定なし" },
 ];
 
@@ -154,15 +154,15 @@ const ageOptions = [
 
 type InputMode = "text" | "url" | "file";
 const inputModes: { value: InputMode; label: string }[] = [
-  { value: "text", label: "✏️ 手書き" },
-  { value: "url", label: "🔗 URL" },
-  { value: "file", label: "📄 ファイル" },
+  { value: "text", label: "手書き" },
+  { value: "url", label: "URL" },
+  { value: "file", label: "ファイル" },
 ];
 
 const customerScenes = [
-  { value: "phone", label: "📞 電話営業", desc: "テレアポ・電話商談" },
-  { value: "visit", label: "🏠 訪問営業", desc: "お客さん宅・会社に訪問" },
-  { value: "inbound", label: "📩 問い合わせ対応", desc: "お客さんからの問い合わせ" },
+  { value: "phone", label: "電話営業", desc: "テレアポ・電話商談" },
+  { value: "visit", label: "訪問営業", desc: "お客さん宅・会社に訪問" },
+  { value: "inbound", label: "問い合わせ対応", desc: "お客さんからの問い合わせ" },
 ];
 
 // Customer personas imported from shared definition
@@ -215,14 +215,14 @@ export default function RoleplayPage() {
 
   // Industry-specific quick-start templates — 競合失敗分析: 92%がカスタマイズされた練習を好む
   const INDUSTRY_TEMPLATES = [
-    { label: "🏠 不動産", product: "新築マンション", customerType: "individual", industry: "住宅購入検討者", scene: "visit", difficulty: "cautious", desc: "マンション・戸建て" },
-    { label: "🛡️ 保険", product: "生命保険", customerType: "individual", industry: "保険見直し検討中", scene: "visit", difficulty: "friendly", desc: "生命・損害保険" },
-    { label: "☁️ IT・SaaS", product: "法人向けクラウドサービス", customerType: "manager", industry: "IT企業", scene: "phone", difficulty: "cautious", desc: "法人ソフトウェア" },
-    { label: "🏗️ リフォーム", product: "外壁塗装", customerType: "individual", industry: "戸建て住宅オーナー", scene: "visit", difficulty: "skeptical", desc: "外壁・屋根・水回り" },
-    { label: "📚 教育", product: "学習塾の入会", customerType: "individual", industry: "子育て世帯", scene: "inbound", difficulty: "friendly", desc: "塾・習い事" },
-    { label: "☀️ エネルギー", product: "太陽光パネル", customerType: "individual", industry: "戸建て住宅オーナー", scene: "phone", difficulty: "silent", desc: "太陽光・蓄電池" },
-    { label: "🚗 自動車", product: "新車販売", customerType: "individual", industry: "車買い替え検討者", scene: "inbound", difficulty: "talkative", desc: "新車・中古車" },
-    { label: "💼 人材", product: "求人広告", customerType: "owner", industry: "中小企業", scene: "phone", difficulty: "low-energy", desc: "求人・人材紹介" },
+    { label: "不動産", product: "新築マンション", customerType: "individual", industry: "住宅購入検討者", scene: "visit", difficulty: "cautious", desc: "マンション・戸建て" },
+    { label: "保険", product: "生命保険", customerType: "individual", industry: "保険見直し検討中", scene: "visit", difficulty: "friendly", desc: "生命・損害保険" },
+    { label: "IT・SaaS", product: "法人向けクラウドサービス", customerType: "manager", industry: "IT企業", scene: "phone", difficulty: "cautious", desc: "法人ソフトウェア" },
+    { label: "リフォーム", product: "外壁塗装", customerType: "individual", industry: "戸建て住宅オーナー", scene: "visit", difficulty: "skeptical", desc: "外壁・屋根・水回り" },
+    { label: "教育", product: "学習塾の入会", customerType: "individual", industry: "子育て世帯", scene: "inbound", difficulty: "friendly", desc: "塾・習い事" },
+    { label: "エネルギー", product: "太陽光パネル", customerType: "individual", industry: "戸建て住宅オーナー", scene: "phone", difficulty: "silent", desc: "太陽光・蓄電池" },
+    { label: "自動車", product: "新車販売", customerType: "individual", industry: "車買い替え検討者", scene: "inbound", difficulty: "talkative", desc: "新車・中古車" },
+    { label: "人材", product: "求人広告", customerType: "owner", industry: "中小企業", scene: "phone", difficulty: "low-energy", desc: "求人・人材紹介" },
   ];
 
   // Phase 1 simple-mode templates — 初回ユーザー向けのワンタップ開始
@@ -230,7 +230,7 @@ export default function RoleplayPage() {
     {
       id: "painting",
       name: "訪販リフォーム",
-      icon: "🏠",
+      icon: "",
       product: "外壁塗装",
       scene: "visit",
       customerType: "individual",
@@ -241,7 +241,7 @@ export default function RoleplayPage() {
     {
       id: "insurance",
       name: "保険営業",
-      icon: "🛡️",
+      icon: "",
       product: "医療保険",
       scene: "phone",
       customerType: "individual",
@@ -252,7 +252,7 @@ export default function RoleplayPage() {
     {
       id: "real_estate",
       name: "不動産営業",
-      icon: "🏢",
+      icon: "",
       product: "新築マンション",
       scene: "visit",
       customerType: "individual",
@@ -263,7 +263,7 @@ export default function RoleplayPage() {
     {
       id: "car",
       name: "自動車営業",
-      icon: "🚗",
+      icon: "",
       product: "新車（ファミリーカー）",
       scene: "inbound",
       customerType: "individual",
@@ -274,7 +274,7 @@ export default function RoleplayPage() {
     {
       id: "saas",
       name: "SaaS営業",
-      icon: "💼",
+      icon: "",
       product: "業務効率化SaaS",
       scene: "phone",
       customerType: "owner",
@@ -285,7 +285,7 @@ export default function RoleplayPage() {
     {
       id: "web",
       name: "Web制作営業",
-      icon: "🎨",
+      icon: "",
       product: "コーポレートサイト制作",
       scene: "visit",
       customerType: "owner",
@@ -585,7 +585,7 @@ export default function RoleplayPage() {
     return (
       <div className="pixar-setup flex min-h-screen flex-col items-center justify-center">
         <div className="pixar-card animate-fade-in-up text-center" style={{ padding: '2em', maxWidth: '20em' }}>
-          <div style={{ fontSize: '2.5em', marginBottom: '0.3em' }}>📊</div>
+          <div style={{ fontSize: '2.5em', marginBottom: '0.3em' }} aria-hidden="true"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f48a58" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
           <div style={{ fontSize: '1.1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.3em' }}>診断結果を作成中...</div>
           <p style={{ fontSize: '0.82em', color: '#6a6560' }}>ロープレの内容を分析しています</p>
         </div>
@@ -662,7 +662,7 @@ export default function RoleplayPage() {
                 className={isPixarPhase ? '' : 'rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent'}
                 title="連続練習日数"
               >
-                🔥 {usage.streak}日連続
+                {usage.streak}日連続
               </div>
             )}
             {usage && usage.plan === "pro" && (
@@ -730,16 +730,18 @@ export default function RoleplayPage() {
                   aria-label={`${t.name}のロープレを開始: ${t.description}`}
                 >
                   <div className="flex items-start gap-3">
-                    <div
-                      aria-hidden="true"
-                      style={{
-                        fontSize: '2rem',
-                        lineHeight: 1,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {t.icon}
-                    </div>
+                    {t.icon ? (
+                      <div
+                        aria-hidden="true"
+                        style={{
+                          fontSize: '2rem',
+                          lineHeight: 1,
+                          flexShrink: 0,
+                        }}
+                      >
+                        {t.icon}
+                      </div>
+                    ) : null}
                     <div className="flex-1 min-w-0">
                       <div
                         style={{
@@ -784,7 +786,7 @@ export default function RoleplayPage() {
             {usage && usage.plan === "free" && !usage.canStart && (
               <div className="pixar-card" style={{ borderColor: '#f48a58', background: 'linear-gradient(135deg, #fff8f3, #fdf2f2)' }}>
                 <div className="text-center">
-                  <div style={{ fontSize: '2em', marginBottom: '0.3em' }}>🔥</div>
+                  <div style={{ fontSize: '2em', marginBottom: '0.3em' }} aria-hidden="true"><span className="inline-block h-6 w-6 rounded-full bg-accent" /></div>
                   <p style={{ fontSize: '1.1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.2em' }}>
                     今日のロープレは終了 — でもまだ伸びしろがあります
                   </p>
@@ -841,7 +843,7 @@ export default function RoleplayPage() {
                   cursor: 'pointer',
                 }}
               >
-                <span aria-hidden="true">⚙️</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
                 もっと詳しく設定したい方はこちら
               </button>
             </div>
@@ -860,7 +862,7 @@ export default function RoleplayPage() {
                   textDecoration: 'none',
                 }}
               >
-                <span style={{ fontSize: '1.1em' }}>📖</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
                 まず学習コースで「型」を学ぶと効果UP
                 <span style={{ color: '#f48a58', fontWeight: 800 }}>→</span>
               </Link>
@@ -910,7 +912,7 @@ export default function RoleplayPage() {
                     textDecoration: 'none',
                   }}
                 >
-                  <span style={{ fontSize: '1.1em' }}>📖</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
                   学習コース
                   <span style={{ color: '#f48a58', fontWeight: 800 }}>→</span>
                 </Link>
@@ -920,7 +922,7 @@ export default function RoleplayPage() {
             {/* Quick Start by Industry — 60秒で最初のロープレ開始 */}
             <div className="pixar-card" style={{ background: '#f8f3ea', borderColor: '#d4cabb' }}>
               <div className="mb-3 flex items-center gap-2">
-                <span style={{ fontSize: '1.2em' }}>⚡</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f48a58" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 <span style={{ fontSize: '0.9em', fontWeight: 800, color: '#4d4c4a' }}>業種別クイックスタート</span>
                 <span style={{ fontSize: '0.68em', color: '#a09a90', fontWeight: 600 }}>ワンタップで設定完了</span>
               </div>
@@ -946,7 +948,7 @@ export default function RoleplayPage() {
             {/* ── あなた（営業マン）Card ── */}
             <div className="pixar-card pixar-card--sales">
               <div className="mb-4 flex items-center">
-                <div className="pixar-avatar pixar-avatar--sales">🔥</div>
+                <div className="pixar-avatar pixar-avatar--sales"><span className="inline-block h-4 w-4 rounded-full bg-accent" /></div>
                 <p className="pixar-username">あなた（営業マン）</p>
               </div>
 
@@ -1032,7 +1034,7 @@ export default function RoleplayPage() {
                           onClick={() => productFileRef.current?.click()}
                           className="pixar-upload-area"
                         >
-                          <div style={{ fontSize: '1.5em', marginBottom: '0.3em' }}>📄</div>
+                          <div style={{ fontSize: '1.5em', marginBottom: '0.3em' }} aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
                           <div style={{ fontSize: '0.82em', fontWeight: 700, color: '#6a6560' }}>
                             クリックしてファイルを選択
                           </div>
@@ -1042,7 +1044,7 @@ export default function RoleplayPage() {
                         </button>
                       ) : (
                         <div className="pixar-file-info">
-                          <span>📄</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                           <span>{productFileName}</span>
                           <button
                             type="button"
@@ -1082,7 +1084,7 @@ export default function RoleplayPage() {
             {/* ── 相手（お客さん）Card ── */}
             <div className="pixar-card pixar-card--customer">
               <div className="mb-4 flex items-center">
-                <div className="pixar-avatar pixar-avatar--customer">👤</div>
+                <div className="pixar-avatar pixar-avatar--customer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
                 <p className="pixar-username">相手（お客さん）</p>
               </div>
 
@@ -1208,7 +1210,7 @@ export default function RoleplayPage() {
                           onClick={() => customerFileRef.current?.click()}
                           className="pixar-upload-area"
                         >
-                          <div style={{ fontSize: '1.5em', marginBottom: '0.3em' }}>📄</div>
+                          <div style={{ fontSize: '1.5em', marginBottom: '0.3em' }} aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
                           <div style={{ fontSize: '0.82em', fontWeight: 700, color: '#6a6560' }}>
                             クリックしてファイルを選択
                           </div>
@@ -1218,7 +1220,7 @@ export default function RoleplayPage() {
                         </button>
                       ) : (
                         <div className="pixar-file-info">
-                          <span>📄</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                           <span>{customerFileName}</span>
                           <button
                             type="button"
@@ -1265,7 +1267,7 @@ export default function RoleplayPage() {
             {usage && usage.plan === "free" && !usage.canStart && (
               <div className="pixar-card" style={{ borderColor: '#f48a58', background: 'linear-gradient(135deg, #fff8f3, #fdf2f2)' }}>
                 <div className="text-center">
-                  <div style={{ fontSize: '2em', marginBottom: '0.3em' }}>🔥</div>
+                  <div style={{ fontSize: '2em', marginBottom: '0.3em' }} aria-hidden="true"><span className="inline-block h-6 w-6 rounded-full bg-accent" /></div>
                   <p style={{ fontSize: '1.1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.2em' }}>
                     今日のロープレは終了 — でもまだ伸びしろがあります
                   </p>
@@ -1275,9 +1277,9 @@ export default function RoleplayPage() {
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5em', marginBottom: '0.5em' }}>
                     <div style={{ display: 'flex', gap: '0.8em', fontSize: '0.72em', color: '#6a6560' }}>
-                      <span>✓ 無制限ロープレ</span>
-                      <span>✓ 全スコア開放</span>
-                      <span>✓ AI改善アドバイス</span>
+                      <span>無制限ロープレ</span>
+                      <span>全スコア開放</span>
+                      <span>AI改善アドバイス</span>
                     </div>
                   </div>
                   <a
@@ -1316,7 +1318,7 @@ export default function RoleplayPage() {
               disabled={!canStart || isCheckingUsage || (usage !== null && usage.plan === "free" && !usage.canStart)}
               className="pixar-start-btn"
             >
-              {isCheckingUsage ? "確認中..." : usage && usage.plan === "free" && !usage.canStart ? "本日の無料回数を使い切りました" : "🎯 ロープレを開始する"}
+              {isCheckingUsage ? "確認中..." : usage && usage.plan === "free" && !usage.canStart ? "本日の無料回数を使い切りました" : "ロープレを開始する"}
             </button>
           </div>
         </div>
@@ -1518,7 +1520,7 @@ function AuthGateContent({
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="rounded-full border border-card-border bg-card/80 px-4 py-2 text-xs font-medium text-muted backdrop-blur-sm">
-                    🔒 5カテゴリの詳細分析を見る
+                    5カテゴリの詳細分析を見る
                   </div>
                 </div>
               </div>
@@ -1527,21 +1529,21 @@ function AuthGateContent({
               <div className="mb-5 rounded-xl border border-accent/20 bg-accent/5 p-4 text-left">
                 <p className="mb-2 text-xs font-bold text-accent">ログインで見れる内容：</p>
                 <ul className="space-y-1 text-xs text-muted">
-                  <li>✓ 5カテゴリ別の詳細スコア＆レーダーチャート</li>
-                  <li>✓ カテゴリごとの改善ポイント</li>
-                  <li>✓ スコア履歴の保存＆推移グラフ</li>
-                  <li>✓ 毎日1回の無料ロープレ（Proなら無制限）</li>
+                  <li>5カテゴリ別の詳細スコア＆レーダーチャート</li>
+                  <li>カテゴリごとの改善ポイント</li>
+                  <li>スコア履歴の保存＆推移グラフ</li>
+                  <li>毎日1回の無料ロープレ（Proなら無制限）</li>
                 </ul>
               </div>
 
               <div className="mb-4 flex flex-wrap justify-center gap-3 text-[11px] text-muted">
-                <span>✓ 完全無料・クレジットカード不要</span>
-                <span>✓ Googleアカウントで10秒で完了</span>
+                <span>完全無料・クレジットカード不要</span>
+                <span>Googleアカウントで10秒で完了</span>
               </div>
             </>
           ) : (
             <>
-              <div className="mb-4 text-5xl">📊</div>
+              <div className="mb-4 text-5xl" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
               <p className="mb-4 text-sm text-muted">
                 あなたの営業スコアが算出されました。結果を見るにはログインしてください。
               </p>
@@ -1557,8 +1559,8 @@ function AuthGateContent({
                 </div>
               )}
               <div className="mb-4 flex flex-wrap justify-center gap-3 text-[11px] text-muted">
-                <span>✓ 完全無料・クレジットカード不要</span>
-                <span>✓ 10秒で登録完了</span>
+                <span>完全無料・クレジットカード不要</span>
+                <span>10秒で登録完了</span>
               </div>
             </>
           )}

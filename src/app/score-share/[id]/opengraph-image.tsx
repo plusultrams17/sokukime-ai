@@ -185,7 +185,7 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
               fontWeight: 700,
             }}
           >
-            無料で診断する → seiyaku-coach.com
+            無料で診断する → seiyaku-coach.vercel.app
           </div>
         </div>
       </div>

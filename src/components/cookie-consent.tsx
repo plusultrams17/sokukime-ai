@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 
 const CONSENT_KEY = "cookie_consent";
+export const CONSENT_CHANGE_EVENT = "cookie_consent_change";
 
 export type ConsentStatus = "accepted" | "declined" | null;
 
@@ -21,7 +22,7 @@ export function CookieConsent() {
   function handleAccept() {
     localStorage.setItem(CONSENT_KEY, "accepted");
     setVisible(false);
-    window.location.reload();
+    window.dispatchEvent(new Event(CONSENT_CHANGE_EVENT));
   }
 
   function handleDecline() {
@@ -32,7 +33,7 @@ export function CookieConsent() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-card-border bg-card/95 backdrop-blur-md p-4 shadow-xl">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-card-border bg-card/95 backdrop-blur-md p-4 shadow-xl">
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-3 sm:flex-row sm:justify-between">
         <p className="text-sm text-muted text-center sm:text-left">
           当サイトではサービス改善のためCookieを使用しています。

@@ -13,21 +13,21 @@ export const metadata: Metadata = {
 
 const scenes = [
   {
-    icon: "📞",
+    icon: "",
     image: "/images/pages/scenario-phone.png",
     name: "電話営業",
     desc: "テレアポ・電話商談のシミュレーション。短い会話の中でアポイントを取る練習に最適。",
     tips: "素早い切り返しと簡潔なトークが求められます",
   },
   {
-    icon: "🏠",
+    icon: "",
     image: "/images/pages/scenario-visit.png",
     name: "訪問営業",
     desc: "お客さん宅・会社に訪問するシーンを再現。対面ならではの信頼構築から契約までの流れを練習。",
     tips: "アプローチから丁寧に信頼関係を築くことがポイント",
   },
   {
-    icon: "📩",
+    icon: "",
     image: "/images/pages/scenario-inbound.png",
     name: "問い合わせ対応",
     desc: "お客さんからの問い合わせに対応するシーン。ニーズが顕在化しているお客さんへの提案を練習。",
@@ -37,25 +37,25 @@ const scenes = [
 
 const customerTypes = [
   {
-    icon: "👤",
+    icon: "",
     image: "/images/pages/scenario-individual.png",
     name: "個人のお客さん",
     desc: "一般消費者への営業。感情に寄り添ったアプローチが重要です。",
   },
   {
-    icon: "👔",
+    icon: "",
     image: "/images/pages/scenario-executive.png",
     name: "会社オーナー・社長",
     desc: "経営者への営業。ROIや経営課題の解決を軸にした提案が求められます。",
   },
   {
-    icon: "📊",
+    icon: "",
     image: "/images/pages/scenario-manager.png",
     name: "部長・課長クラス",
     desc: "決裁権を持つ管理職への営業。上への説明のしやすさも考慮した提案を。",
   },
   {
-    icon: "🙋",
+    icon: "",
     image: "/images/pages/scenario-staff.png",
     name: "担当者・一般社員",
     desc: "現場の担当者への営業。上長への起案をサポートする提案が効果的です。",
@@ -64,17 +64,17 @@ const customerTypes = [
 
 const difficulties = [
   {
-    level: "🟢 素直なお客さん",
+    level: "素直なお客さん",
     desc: "比較的前向きで、話を聞いてくれるタイプ。初心者の練習に最適。基本の型を身につけるのに向いています。",
     techniques: "アプローチの型、基本的なヒアリング、シンプルなクロージング",
   },
   {
-    level: "🟡 慎重なお客さん",
+    level: "慎重なお客さん",
     desc: "「考えます」「検討します」が口癖の慎重派。切り返しの練習に最適。中級者向け。",
     techniques: "深掘りヒアリング、感情に訴えるプレゼン、粘り強いクロージング",
   },
   {
-    level: "🔴 手強いお客さん",
+    level: "手強いお客さん",
     desc: "反論が多く、簡単には首を縦に振らないタイプ。反論処理の実践練習に。上級者向け。",
     techniques: "根拠提示、共感→確認→行動促進、複数回のクロージングアプローチ",
   },

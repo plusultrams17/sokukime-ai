@@ -248,15 +248,15 @@ export function CancelSaveModal({
                     </div>
                     <div className="space-y-2 text-xs">
                       <div className="flex items-center gap-2">
-                        <span className="text-accent">✓</span>
+                        <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
                         <span>成約5ステップメソッドに基づくAIコーチング</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-accent">✓</span>
+                        <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
                         <span>5ステップ×リアルタイム分析</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-accent">✓</span>
+                        <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
                         <span>営業シーン別のカスタムロールプレイ</span>
                       </div>
                     </div>
@@ -288,13 +288,13 @@ export function CancelSaveModal({
                 </div>
                 <div className="mt-3 space-y-1 text-xs text-muted">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-accent">✓</span> データ・進捗はすべて保持されます
+                    <svg className="h-3.5 w-3.5 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> データ・進捗はすべて保持されます
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-accent">✓</span> 停止期間中は課金されません
+                    <svg className="h-3.5 w-3.5 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 停止期間中は課金されません
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-accent">✓</span> 自動再開の3日前にメールで通知
+                    <svg className="h-3.5 w-3.5 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 自動再開の3日前にメールで通知
                   </div>
                 </div>
               </div>

@@ -8,38 +8,38 @@ import { useRouter } from "next/navigation";
 /* ─── Config ─── */
 
 const INDUSTRIES = [
-  { value: "painting", label: "🎨 塗装", product: "外壁塗装", industry: "戸建て住宅オーナー" },
-  { value: "construction", label: "🏗️ 建設", product: "リフォーム工事", industry: "戸建て住宅オーナー" },
-  { value: "realestate", label: "🏠 不動産", product: "新築マンション", industry: "住宅購入検討者" },
-  { value: "beauty", label: "💄 美容", product: "美容サロン会員", industry: "美容・健康意識の高い層" },
-  { value: "it", label: "☁️ IT", product: "法人向けクラウドサービス", industry: "IT企業" },
-  { value: "insurance", label: "🛡️ 保険", product: "生命保険", industry: "保険見直し検討中" },
-  { value: "education", label: "📚 教育", product: "学習塾の入会", industry: "子育て世帯" },
-  { value: "other", label: "✨ その他", product: "商品・サービス", industry: "一般のお客さん" },
+  { value: "painting", label: "塗装", product: "外壁塗装", industry: "戸建て住宅オーナー" },
+  { value: "construction", label: "建設", product: "リフォーム工事", industry: "戸建て住宅オーナー" },
+  { value: "realestate", label: "不動産", product: "新築マンション", industry: "住宅購入検討者" },
+  { value: "beauty", label: "美容", product: "美容サロン会員", industry: "美容・健康意識の高い層" },
+  { value: "it", label: "IT", product: "法人向けクラウドサービス", industry: "IT企業" },
+  { value: "insurance", label: "保険", product: "生命保険", industry: "保険見直し検討中" },
+  { value: "education", label: "教育", product: "学習塾の入会", industry: "子育て世帯" },
+  { value: "other", label: "その他", product: "商品・サービス", industry: "一般のお客さん" },
 ] as const;
 
 const DIFFICULTIES = [
   {
     value: "friendly",
-    label: "😊 やさしい",
+    label: "やさしい",
     description: "感じが良く話しやすい。まず慣れたい人向け",
   },
   {
     value: "cautious",
-    label: "🤔 ふつう",
+    label: "ふつう",
     description: "しっかり検討するリアルな顧客",
   },
   {
     value: "skeptical",
-    label: "😤 むずかしい",
+    label: "むずかしい",
     description: "疑り深く、厳しい質問をしてくる",
   },
 ] as const;
 
 const SCENES = [
-  { value: "phone", label: "📞 電話", description: "テレアポ・電話商談" },
-  { value: "visit", label: "🏠 訪問", description: "お客さん宅・会社に訪問" },
-  { value: "inbound", label: "📩 来店・問合せ", description: "お客さんからの問合せ対応" },
+  { value: "phone", label: "電話", description: "テレアポ・電話商談" },
+  { value: "visit", label: "訪問", description: "お客さん宅・会社に訪問" },
+  { value: "inbound", label: "来店・問合せ", description: "お客さんからの問合せ対応" },
 ] as const;
 
 /* ─── Session Storage Keys ─── */
@@ -160,8 +160,8 @@ export default function TryRoleplayPage() {
               }}
             >
               <div className="text-center">
-                <div style={{ fontSize: "1.8em", marginBottom: "0.3em" }}>
-                  ✨
+                <div style={{ fontSize: "1.8em", marginBottom: "0.3em" }} aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f48a58" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 </div>
                 <p
                   style={{
@@ -359,7 +359,7 @@ export default function TryRoleplayPage() {
                   marginTop: "-0.5em",
                 }}
               >
-                ✓ 登録不要 ・ ✓ クレカ不要 ・ ✓ 3分で完了
+                登録不要 ・ クレカ不要 ・ 3分で完了
               </p>
             </>
           )}

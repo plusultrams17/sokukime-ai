@@ -33,7 +33,7 @@ export interface Category {
 
 const categories: Category[] = [
   {
-    id: "price", name: "価格・費用", icon: "💰", image: "/images/pages/objection-price.png",
+    id: "price", name: "価格・費用", icon: "", image: "/images/pages/objection-price.png",
     items: [
       { objection: "高いですね", context: "見積もり提示後に最もよく聞く反論", ngResponse: "すぐに値引きを提案する", responses: ["「何と比較して高いと感じますか？」と基準を確認し、価値の再提示につなげる", "日割り・月額換算で「1日コーヒー1杯分」と伝え、費用対効果を可視化する"], technique: "質問法＋日割り換算", tip: "「高い」は断り文句ではなく、納得材料が不足しているサイン" },
       { objection: "予算がありません", context: "予算を理由に断る場合", ngResponse: "「そうですか」と引き下がる", responses: ["「予算の問題をクリアできる方法があるとしたら、ご検討いただけますか？」と仮定で聞く", "分割払い・リース・補助金など、支払い方法の選択肢を提示する"], technique: "仮定法＋代替手段の提案", tip: "予算がないのか、優先順位が低いのかを見極めることが重要" },
@@ -43,7 +43,7 @@ const categories: Category[] = [
     ],
   },
   {
-    id: "timing", name: "時期・タイミング", icon: "⏰", image: "/images/pages/objection-timing.png",
+    id: "timing", name: "時期・タイミング", icon: "", image: "/images/pages/objection-timing.png",
     items: [
       { objection: "今は忙しいです", context: "話を聞く時間がないと断る場合", ngResponse: "「では改めます」とすぐ引き下がる", responses: ["「お忙しいところ恐れ入ります。3分だけ要点をお伝えしてもよろしいですか？」と短時間を提案", "「お忙しい方ほどメリットが大きい提案なんです」と興味を引く一言を添える"], technique: "時間限定法", tip: "「忙しい」は反論ではなく、興味を持つ理由を提示できていないサイン" },
       { objection: "来月検討します", context: "先延ばしにしようとする場合", ngResponse: "「承知しました。来月お電話します」と素直に待つ", responses: ["「来月ですと○○の条件が変わる可能性があります。今決めることのメリットをお伝えしてもいいですか？」", "「来月までに検討される材料として、お見積もりだけお渡ししてもいいですか？」と接点を維持"], technique: "緊急性の提示＋接点維持", tip: "「来月」は永遠に来ない。今日の商談で次のアクションを確約すること" },
@@ -53,7 +53,7 @@ const categories: Category[] = [
     ],
   },
   {
-    id: "consider", name: "検討・保留", icon: "🤔", image: "/images/pages/objection-consider.png",
+    id: "consider", name: "検討・保留", icon: "", image: "/images/pages/objection-consider.png",
     items: [
       { objection: "検討させてください", context: "最も多い反論。商談の最後に出やすい", ngResponse: "「ぜひご検討ください」と帰る", responses: ["「もちろんです。何か気になる点がありますか？今お答えできるかもしれません」と懸念を引き出す", "「検討される際のポイントを3つお伝えしますね」と情報提供で主導権を維持"], technique: "懸念引き出し法", tip: "「検討します」の裏には必ず理由がある。その理由を聞き出すことが重要" },
       { objection: "上に相談してみます", context: "決裁者が別にいる場合", ngResponse: "「お願いします」と相手任せにする", responses: ["「ぜひ。上の方にご説明しやすいよう、ポイントをまとめた資料をお作りしましょうか？」", "「よろしければ、次回上の方もご同席いただけると、直接ご質問にお答えできます」と同席を提案"], technique: "稟議サポート＋決裁者同席", tip: "担当者を「社内営業マン」にするための武器を渡すこと" },
@@ -63,7 +63,7 @@ const categories: Category[] = [
     ],
   },
   {
-    id: "competitor", name: "競合・比較", icon: "🏢", image: "/images/pages/objection-competitor.png",
+    id: "competitor", name: "競合・比較", icon: "", image: "/images/pages/objection-competitor.png",
     items: [
       { objection: "他社も見ています", context: "比較検討中の場合", ngResponse: "他社の悪口を言う", responses: ["「比較検討は大切ですね。比較される際のチェックポイントを3つお伝えします」と比較基準を教育する", "「当社の強みは○○です。他社さんにもぜひ同じ基準で確認してみてください」と自信を見せる"], technique: "比較基準の教育", tip: "比較基準をこちらが設定できれば、有利な土俵で戦える" },
       { objection: "今の業者に満足しています", context: "既存取引先がある場合", ngResponse: "「うちのほうがいいですよ」と張り合う", responses: ["「素晴らしいお取引先ですね。ちなみに、もし1点だけ改善できるとしたら何ですか？」と潜在不満を引き出す", "「補完的にご活用いただくケースも多いです。1回だけお試しいただけませんか？」"], technique: "潜在不満の発掘＋補完利用", tip: "既存取引先を否定せず、補完的な価値を提案する" },
@@ -73,7 +73,7 @@ const categories: Category[] = [
     ],
   },
   {
-    id: "need", name: "必要性", icon: "❌", image: "/images/pages/objection-noneed.png",
+    id: "need", name: "必要性", icon: "", image: "/images/pages/objection-noneed.png",
     items: [
       { objection: "うちには必要ありません", context: "ニーズを感じていない場合", ngResponse: "「いえ、必要です」と否定する", responses: ["「おっしゃる通りかもしれません。ちなみに、○○について現在どのように対応されていますか？」と質問で切り返す", "「同じように思っていた○○様が、実は○○という課題を抱えていたことがわかった事例があります」"], technique: "質問転換法＋事例提示", tip: "「必要ない」はニーズ喚起が不足しているサイン" },
       { objection: "興味がありません", context: "門前払いの場合", ngResponse: "しつこく食い下がる", responses: ["「失礼しました。ちなみに○○のお悩みもありませんか？1分だけ確認させてください」と別角度で切り込む", "「ご興味がないのは当然です。ただ、○○についてだけお伝えさせてください。もし不要でしたらすぐに失礼します」"], technique: "別角度アプローチ＋時間限定", tip: "一度断られても、切り口を変えれば突破できることがある" },
@@ -83,7 +83,7 @@ const categories: Category[] = [
     ],
   },
   {
-    id: "trust", name: "不信・不安", icon: "😟", image: "/images/pages/objection-distrust.png",
+    id: "trust", name: "不信・不安", icon: "", image: "/images/pages/objection-distrust.png",
     items: [
       { objection: "本当に効果あるんですか？", context: "効果に懐疑的な場合", ngResponse: "「絶対に効果があります」と断言する", responses: ["「その質問をされるのは当然です。○○様と同じ状況だった○○社の事例をご紹介します」と実例で示す", "「効果を保証するのは難しいですが、もし効果がなかった場合の○○制度もあります」とリスク軽減策を提示"], technique: "事例提示＋リスクヘッジ", tip: "「効果がある」と言うより「効果が出た事例」を見せるほうが100倍説得力がある" },
       { objection: "実績はありますか？", context: "会社や製品の信頼性を確認したい場合", ngResponse: "パンフレットを渡すだけ", responses: ["「はい。○○業界で○○社、○○社様にご利用いただいています。特に○○社様では○○という成果が出ています」と具体的に答える", "「導入事例集をお見せしましょう。御社と同じ規模・業種の事例もあります」"], technique: "具体的実績の提示", tip: "実績は数字と固有名詞（許可済み）で語ると説得力が増す" },
@@ -177,12 +177,12 @@ export default function ObjectionHandbookPage() {
           <h2 className="mb-6 text-xl font-bold text-foreground">関連ツール</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {[
-              { href: "/tools/sales-quiz", name: "営業力診断テスト", icon: "📊" },
-              { href: "/tools/script-generator", name: "トークスクリプト生成", icon: "📝" },
-              { href: "/tools/closing-calculator", name: "クロージング率計算", icon: "🧮" },
+              { href: "/tools/sales-quiz", name: "営業力診断テスト", icon: "" },
+              { href: "/tools/script-generator", name: "トークスクリプト生成", icon: "" },
+              { href: "/tools/closing-calculator", name: "クロージング率計算", icon: "" },
             ].map((t) => (
               <Link key={t.href} href={t.href} className="rounded-xl border border-card-border bg-white p-4 text-center transition hover:-translate-y-0.5 hover:shadow-sm">
-                <div className="text-2xl mb-1">{t.icon}</div>
+                {t.icon ? <div className="text-2xl mb-1">{t.icon}</div> : null}
                 <div className="text-sm font-medium text-foreground">{t.name}</div>
               </Link>
             ))}

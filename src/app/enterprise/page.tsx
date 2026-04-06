@@ -13,41 +13,41 @@ export const metadata: Metadata = {
 };
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 const benefits = [
   {
-    icon: "💰",
+    icon: "",
     title: "研修コスト1/10以下",
     description:
       "集合型営業研修（1回5万円〜）と比べ、成約コーチ AIなら1人月額1,980円〜。年間で数百万円のコスト削減が可能です。",
   },
   {
-    icon: "📊",
+    icon: "",
     title: "成果を数値で可視化",
     description:
       "全メンバーのロープレスコアを5カテゴリで定量評価。誰がどのスキルに課題を持っているか一目でわかります。",
   },
   {
-    icon: "🔄",
+    icon: "",
     title: "忘却曲線に対抗する毎日の練習",
     description:
       "営業研修の87%は30日で忘却されます（Xerox社調査）。毎日5分のAIロープレで「学んだら忘れない」環境を構築。",
   },
   {
-    icon: "🕐",
+    icon: "",
     title: "24時間・場所を選ばず",
     description:
       "全国の拠点・リモートワーカーも同じ品質のトレーニングを受けられます。研修のためのスケジュール調整は不要。",
   },
   {
-    icon: "🎯",
+    icon: "",
     title: "業種別シナリオ対応",
     description:
       "保険・不動産・SaaS・人材など16業種に特化したシナリオを用意。御社の営業現場に近い状況で練習できます。",
   },
   {
-    icon: "🛡️",
+    icon: "",
     title: "安心のセキュリティ",
     description:
       "Supabase + Stripe による業界標準のセキュリティ。データは暗号化され、日本国内のインフラで運用。",
@@ -108,7 +108,7 @@ ____年__月__日
 4. 集合研修のコスト・スケジュール調整負担
 
 ■ 導入ツール概要
-サービス名: 成約コーチ AI（https://seiyaku-coach.com）
+サービス名: 成約コーチ AI（https://seiyaku-coach.vercel.app）
 提供形態: SaaS（クラウド）
 内容: AIがリアルなお客さん役を演じる営業ロープレ練習ツール
       5カテゴリ（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）で
@@ -139,7 +139,7 @@ ____年__月__日
 
 ■ 添付資料
 - サービス概要資料
-- 料金プラン詳細（https://seiyaku-coach.com/pricing）
+- 料金プラン詳細（https://seiyaku-coach.vercel.app/pricing）
 
 ■ 承認欄
 部長: ______ 課長: ______ 担当: ______`;
@@ -268,7 +268,7 @@ export default function EnterprisePage() {
                 key={b.title}
                 className="rounded-2xl border border-card-border bg-card p-6"
               >
-                <span className="mb-3 block text-3xl">{b.icon}</span>
+                {b.icon ? <span className="mb-3 block text-3xl">{b.icon}</span> : null}
                 <h3 className="mb-2 text-base font-bold text-foreground">
                   {b.title}
                 </h3>

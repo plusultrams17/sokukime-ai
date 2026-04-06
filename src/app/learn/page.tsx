@@ -354,25 +354,28 @@ export default function LearnPage() {
       <section className="border-t border-gray-200 px-6 py-12">
         <div className="mx-auto max-w-5xl text-center">
           <h2 className="text-lg font-bold text-foreground mb-2">
-            学んだ技術を実践で磨く
+            今学んだ技術を、AIロープレで実践しよう
           </h2>
           <p className="text-sm text-muted mb-6">
-            理論を学んだら、AIロープレで実践練習。各レッスンのワークシートで商談準備も万全に。
+            知識だけでは商談は変わりません。AIが本番さながらのお客さん役を演じます。無料・登録不要で今すぐ体験。
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              href="/roleplay"
-              className="rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-hover"
+              href="/try-roleplay"
+              className="rounded-lg bg-accent px-6 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
             >
-              AIロープレで練習する
+              無料でAIロープレを試す
             </Link>
             <Link
               href="/lp/roleplay"
               className="rounded-lg border border-gray-300 px-6 py-2.5 text-sm font-medium text-foreground transition hover:border-foreground"
             >
-              営業分析を試す（無料）
+              ロープレの詳細を見る
             </Link>
           </div>
+          <p className="mt-3 text-xs text-muted">
+            &#10003; 無料で体験&ensp;&#10003; 登録不要&ensp;&#10003; 3分で完了
+          </p>
         </div>
       </section>
 

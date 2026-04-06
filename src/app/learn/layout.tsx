@@ -13,7 +13,7 @@ export default function LearnLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return (
     <>

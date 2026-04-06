@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return {
     title: post.title,
@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: Props) {
     .slice(0, 3);
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
   const articleUrl = `${siteUrl}/blog/${post.slug}`;
 
   const blogJsonLd = {
@@ -172,7 +172,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-card-border pb-6 text-sm text-muted">
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-2">
-                <span className="text-base">🔥</span>
+                <span className="inline-block h-3 w-3 rounded-full bg-accent" />
                 <span className="font-medium text-foreground">成約コーチ AI</span>
               </div>
               <time dateTime={post.publishedAt}>

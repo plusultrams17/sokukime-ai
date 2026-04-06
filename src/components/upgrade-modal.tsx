@@ -134,19 +134,19 @@ export function UpgradeModal({
         {/* Pro features */}
         <div className="mb-5 space-y-2">
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-accent">✓</span>
+            <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
             <span>ロープレ<span className="font-bold text-accent">無制限</span></span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-accent">✓</span>
+            <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
             <span>全5カテゴリの<span className="font-bold text-accent">詳細スコア</span></span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-accent">✓</span>
+            <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
             <span>AI<span className="font-bold text-accent">改善アドバイス</span></span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-accent">✓</span>
+            <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
             <span>全ワークシート・全シーン</span>
           </div>
         </div>
@@ -200,7 +200,7 @@ export function UpgradeModal({
         </div>
 
         <div className="mb-3 text-center text-xs text-muted">
-          🛡️ 14日間スコア改善保証・いつでも解約OK・違約金なし
+          14日間スコア改善保証・いつでも解約OK・違約金なし
         </div>
 
         {stats && (

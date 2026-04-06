@@ -39,7 +39,7 @@ export function BlogEmailCapture() {
   if (status === "success") {
     return (
       <div className="my-10 rounded-2xl border border-green-500/30 bg-green-500/5 p-6 text-center sm:p-8">
-        <div className="mb-2 text-2xl">✓</div>
+        <div className="mb-2"><svg className="mx-auto h-7 w-7 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
         <p className="font-bold text-green-400">登録ありがとうございます！</p>
         <p className="mt-1 text-sm text-muted">
           営業ノウハウや新機能の情報をお届けします。

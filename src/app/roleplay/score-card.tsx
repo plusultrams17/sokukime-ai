@@ -76,8 +76,8 @@ const CATEGORY_LEARN_LINK: Record<string, { href: string; label: string }> = {
 export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
   // Use score-specific share page if scoreId is available (shows OG image with actual score)
   const scorePageUrl = score.scoreId
-    ? `https://seiyaku-coach.com/score-share/${score.scoreId}`
-    : "https://seiyaku-coach.com";
+    ? `https://seiyaku-coach.vercel.app/score-share/${score.scoreId}`
+    : "https://seiyaku-coach.vercel.app";
 
   const shareText = `成約コーチ AIで営業ロープレしたらスコア${score.overall}点（ランク${getGrade(score.overall)}）だった。AIコーチのフィードバックが的確すぎる… #成約コーチAI #営業 #営業ロープレ`;
   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(scorePageUrl)}`;
@@ -112,7 +112,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
         {/* First Session Celebration — 競合失敗分析: 初回体験の弱さが離脱の最大要因 */}
         {score.previousScore == null && (
           <div className="mb-4 rounded-2xl border border-accent/20 bg-accent/5 px-5 py-4 text-center animate-fade-in-up">
-            <div className="text-2xl mb-1">🎉</div>
+            <div className="text-2xl mb-1" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polyline points="20 6 9 17 4 12"/></svg></div>
             <div className="text-sm font-bold text-foreground">
               初めてのスコアが出ました！
             </div>
@@ -126,7 +126,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
         {/* Score Improvement Celebration */}
         {score.previousScore != null && score.overall > score.previousScore && (
           <div className="mb-4 rounded-2xl border border-green-500/20 bg-green-500/5 px-5 py-4 text-center animate-fade-in-up">
-            <div className="text-2xl mb-1">📈</div>
+            <div className="text-2xl mb-1" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
             <div className="text-sm font-bold text-green-500">
               +{score.overall - score.previousScore}点アップ！前回 {score.previousScore}点 → 今回 {score.overall}点
             </div>
@@ -182,7 +182,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                 {CATEGORY_NEXT_STEP[cat.name] && (
                   <div className="mt-1.5 rounded-lg border border-accent/10 bg-accent/5 px-3 py-2">
                     <p className="text-xs font-bold text-accent">
-                      {cat.score < 60 ? "💡 次回のアクション:" : "✅ 次のステップ:"}
+                      {cat.score < 60 ? "次回のアクション:" : "次のステップ:"}
                     </p>
                     <p className="text-xs text-muted leading-relaxed">
                       {cat.score < 60 ? CATEGORY_NEXT_STEP[cat.name].lowTip : CATEGORY_NEXT_STEP[cat.name].midTip}
@@ -236,7 +236,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
               <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-background/40 transition group-hover:bg-background/50">
                 <div className="text-center">
                   <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-xl">
-                    🔒
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                   </div>
                   <p className="mb-1 text-sm font-bold">
                     残り{lockedCategories.length}カテゴリの詳細スコアとAI改善アドバイス
@@ -284,7 +284,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
               </div>
               <div className="absolute inset-x-0 bottom-0 h-24 flex items-end justify-center rounded-b-2xl bg-gradient-to-t from-card via-card/80 to-transparent pb-4">
                 <span className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-white transition group-hover:bg-accent-hover">
-                  🔓 続きを読む（Proプラン）
+                  続きを読む（Proプラン）
                 </span>
               </div>
             </div>
@@ -307,7 +307,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           >
             <div className="grid gap-4 sm:grid-cols-2 select-none">
               <div className="rounded-2xl border border-card-border bg-card p-6">
-                <h3 className="mb-3 text-sm font-medium text-green-600">💪 良かった点</h3>
+                <h3 className="mb-3 text-sm font-medium text-green-600">良かった点</h3>
                 {/* Show first item visible, rest blurred */}
                 {score.strengths.length > 0 && (
                   <p className="text-sm leading-relaxed text-muted mb-2">・{score.strengths[0]}</p>
@@ -324,7 +324,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                 </div>
               </div>
               <div className="rounded-2xl border border-card-border bg-card p-6">
-                <h3 className="mb-3 text-sm font-medium text-accent">📈 改善ポイント</h3>
+                <h3 className="mb-3 text-sm font-medium text-accent">改善ポイント</h3>
                 {score.improvements.length > 0 && (
                   <p className="text-sm leading-relaxed text-muted mb-2">・{score.improvements[0]}</p>
                 )}
@@ -342,14 +342,14 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
             </div>
             <div className="absolute inset-0 flex items-end justify-center pb-4">
               <span className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card/90 px-4 py-2 text-xs font-medium text-muted backdrop-blur-sm transition group-hover:border-accent group-hover:text-accent">
-                🔒 タップしてProプランで詳細フィードバックを見る
+                タップしてProプランで詳細フィードバックを見る
               </span>
             </div>
           </div>
         ) : (
           <div className="mb-8 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-card-border bg-card p-6">
-              <h3 className="mb-3 text-sm font-medium text-green-600">💪 良かった点</h3>
+              <h3 className="mb-3 text-sm font-medium text-green-600">良かった点</h3>
               <ul className="space-y-2">
                 {score.strengths.map((s, i) => (
                   <li key={i} className="text-sm leading-relaxed text-muted">
@@ -359,7 +359,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
               </ul>
             </div>
             <div className="rounded-2xl border border-card-border bg-card p-6">
-              <h3 className="mb-3 text-sm font-medium text-accent">📈 改善ポイント</h3>
+              <h3 className="mb-3 text-sm font-medium text-accent">改善ポイント</h3>
               <ul className="space-y-2">
                 {score.improvements.map((s, i) => (
                   <li key={i} className="text-sm leading-relaxed text-muted">
@@ -376,7 +376,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           <div className="mb-6 rounded-2xl border border-card-border bg-card p-5">
             <p className="mb-2 text-sm font-bold">今回のセッションまとめ</p>
             <div className="flex items-start gap-3 mb-2">
-              <span className="text-green-500 mt-0.5">💪</span>
+              <svg className="mt-0.5 flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               <p className="text-sm text-muted">
                 一番良かったカテゴリ: <span className="font-bold text-foreground">
                   {[...visibleCategories].sort((a, b) => b.score - a.score)[0]?.name}
@@ -396,7 +396,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           return weakest && weakest.score < 70 ? (
             <div className="mb-4 rounded-2xl border border-accent/20 bg-accent/5 p-5">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">🎯</span>
+                <span className="inline-block h-3 w-3 rounded-full bg-accent flex-shrink-0" />
                 <span className="text-sm font-bold text-accent">次の練習で意識するポイント</span>
               </div>
               <p className="text-sm text-foreground mb-1">
@@ -484,7 +484,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
               7日間無料で全機能を試す
             </button>
             <p className="mt-2 text-[11px] text-muted">
-              🛡️ 14日間スコア改善保証・いつでも解約OK・違約金なし
+              14日間スコア改善保証・いつでも解約OK・違約金なし
             </p>
           </div>
         )}

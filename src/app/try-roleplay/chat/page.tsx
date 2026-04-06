@@ -302,7 +302,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   marginBottom: "0.4em",
                 }}
               >
-                あなたの弱点診断
+                改善ポイント
               </div>
               <div
                 style={{
@@ -312,7 +312,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   marginBottom: "0.8em",
                 }}
               >
-                スコアを下げたのは、このカテゴリ ↓
+                最もスコアが低かったカテゴリ
               </div>
               {(() => {
                 const sorted = [...score.categories].sort(
@@ -337,7 +337,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                         marginBottom: "0.3em",
                       }}
                     >
-                      ⚠️ {weakest.name}: {weakest.score}点
+                      {weakest.name}: {weakest.score}点
                     </div>
                     <p
                       style={{
@@ -346,7 +346,8 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                         lineHeight: 1.5,
                       }}
                     >
-                      このカテゴリを集中練習すると、スコアの改善が見込めます
+                      このカテゴリを重点的に練習することで、全体スコアの底上げが期待できます。
+                      無料登録すると毎日1回のロープレで継続的に改善できます。
                     </p>
                   </div>
                 );
@@ -365,21 +366,21 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
             <div className="text-center">
               <div
                 style={{
-                  fontSize: "0.75em",
-                  fontWeight: 700,
-                  color: "#8a8680",
-                  marginBottom: "0.3em",
+                  fontSize: "0.85em",
+                  fontWeight: 800,
+                  color: "#4d4c4a",
+                  marginBottom: "0.5em",
                 }}
               >
-                Proなら今日、この弱点を潰せます
+                スコアを伸ばすには、繰り返しの練習が必要です
               </div>
 
-              {/* Pro差分リスト */}
+              {/* 無料/Proの違い */}
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: "0.5em",
+                  gap: "0.4em",
                   textAlign: "left",
                   padding: "0.8em 1em",
                   margin: "0.5em 0 0.8em",
@@ -395,42 +396,49 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                     fontWeight: 700,
                   }}
                 >
-                  ✓ 弱点カテゴリに特化した「反論処理20連発」ロープレ
+                  無料プランでできること:
                 </div>
                 <div
                   style={{
-                    fontSize: "0.8em",
-                    color: "#4d4c4a",
-                    fontWeight: 700,
+                    fontSize: "0.78em",
+                    color: "#6a6560",
+                    fontWeight: 600,
+                    paddingLeft: "0.5em",
                   }}
                 >
-                  ✓ 毎日無制限ロープレで7日間で +20点改善
+                  ・22レッスンで営業の「型」を学習（全レッスン無料）
                 </div>
                 <div
                   style={{
-                    fontSize: "0.8em",
-                    color: "#4d4c4a",
-                    fontWeight: 700,
+                    fontSize: "0.78em",
+                    color: "#6a6560",
+                    fontWeight: 600,
+                    paddingLeft: "0.5em",
                   }}
                 >
-                  ✓ 22レッスンで商談即決スキルを体系的に習得
+                  ・毎日1回のAIロープレで実践練習
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.78em",
+                    color: "#6a6560",
+                    fontWeight: 600,
+                    paddingLeft: "0.5em",
+                  }}
+                >
+                  ・スコアで自分の弱点を確認
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.7em",
+                    color: "#a09a90",
+                    marginTop: "0.3em",
+                    paddingLeft: "0.5em",
+                  }}
+                >
+                  Proなら: 無制限ロープレ・全5カテゴリ詳細スコア・AI改善アドバイス
                 </div>
               </div>
-
-              {/* 切迫感 */}
-              <p
-                style={{
-                  fontSize: "0.72em",
-                  color: "#991b1b",
-                  fontWeight: 700,
-                  marginBottom: "0.8em",
-                  lineHeight: 1.5,
-                }}
-              >
-                📊 切り返しの「型」を練習するほど、
-                <br />
-                本番の商談で自信を持って対応できます
-              </p>
 
               {/* メインCTA */}
               <Link
@@ -451,7 +459,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   boxShadow: "0.12em 0.12em 0 #c4693d",
                 }}
               >
-                弱点を集中練習する（無料）→
+                無料登録して練習を続ける
               </Link>
               <p
                 style={{
@@ -460,7 +468,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   marginTop: "0.5em",
                 }}
               >
-                クレカ不要 ・ 10秒で完了
+                メールアドレスのみ ・ クレカ不要
               </p>
             </div>
           </div>

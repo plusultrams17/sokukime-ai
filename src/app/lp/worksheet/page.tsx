@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 /* ─── SEO Metadata ─── */
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 export const metadata: Metadata = {
   title: "AI営業分析ワークシート | 商談準備・振り返りツール",

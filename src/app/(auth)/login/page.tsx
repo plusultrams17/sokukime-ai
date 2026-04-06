@@ -69,7 +69,7 @@ function LoginForm() {
 
         {/* 7日間無料トライアル訴求（強化版） */}
         <div className="rounded-xl border-2 border-accent bg-gradient-to-br from-accent/10 to-accent/5 px-5 py-4 text-center">
-          <div className="text-2xl mb-1" aria-hidden="true">✨</div>
+          <div className="text-2xl mb-1" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
           <p className="text-base font-extrabold text-accent mb-1">
             Proの全機能を <span className="text-lg">7日間無料</span> で試せる
           </p>
@@ -115,7 +115,7 @@ function LoginForm() {
               "クレジットカード不要",
             ].map((item) => (
               <li key={item} className="flex items-start gap-2 text-xs text-muted leading-relaxed">
-                <span className="text-accent mt-0.5" aria-hidden="true">✓</span>
+                <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>{item}</span>
               </li>
             ))}

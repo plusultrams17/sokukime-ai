@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 export const metadata: Metadata = {
   title: "成約5ステップ完全攻略プログラム｜営業の型を22レッスンで習得",

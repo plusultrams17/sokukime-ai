@@ -168,25 +168,25 @@ export default function ScoringFeaturePage() {
           <div className="grid gap-4 sm:grid-cols-2">
             {[
               {
-                icon: "📈",
+                icon: "",
                 image: "/images/pages/scoring-total.png",
                 title: "総合スコア & ランク",
                 desc: "100点満点の総合評価とS〜Eのランク表示",
               },
               {
-                icon: "📋",
+                icon: "",
                 image: "/images/pages/scoring-feedback.png",
                 title: "カテゴリ別フィードバック",
                 desc: "各ステップの得点と具体的な改善アドバイス",
               },
               {
-                icon: "💪",
+                icon: "",
                 image: "/images/pages/scoring-strength.png",
                 title: "強みの分析",
                 desc: "あなたの営業で特に良かったポイント",
               },
               {
-                icon: "🎯",
+                icon: "",
                 image: "/images/pages/scoring-improve.png",
                 title: "改善ポイント",
                 desc: "次のロープレで意識すべき具体的な課題",

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const useCases = [
   {
-    icon: "🆕",
+    icon: "",
     image: "/images/pages/usecase-newbie.png",
     title: "新人営業マンの研修",
     problem:
@@ -30,7 +30,7 @@ const useCases = [
     stats: "独り立ちまでの期間を大幅に短縮",
   },
   {
-    icon: "👥",
+    icon: "",
     image: "/images/pages/usecase-team.png",
     title: "営業チームのスキル底上げ",
     problem:
@@ -46,7 +46,7 @@ const useCases = [
     stats: "チーム全体の営業力を底上げ",
   },
   {
-    icon: "💼",
+    icon: "",
     image: "/images/pages/usecase-freelance.png",
     title: "個人事業主・フリーランス",
     problem:
@@ -62,7 +62,7 @@ const useCases = [
     stats: "商談への自信度が大幅アップ",
   },
   {
-    icon: "📞",
+    icon: "",
     image: "/images/pages/usecase-teleapo.png",
     title: "テレアポ・電話営業の練習",
     problem:
@@ -80,7 +80,7 @@ const useCases = [
 ];
 
 export default function UseCasesPage() {
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return (
     <div className="min-h-screen bg-background">

@@ -196,7 +196,7 @@ export default function InsightsPage() {
         {/* ZONE 2: Content */}
         {insights.length === 0 ? (
           <div className="rounded-xl border border-card-border bg-card p-8 text-center">
-            <div className="mb-3 text-4xl">📰</div>
+            <div className="mb-3"><span className="inline-block h-5 w-5 rounded-full bg-accent" /></div>
             <h2 className="mb-2 text-lg font-bold">
               まだインサイトがありません
             </h2>

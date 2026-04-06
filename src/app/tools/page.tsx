@@ -21,7 +21,7 @@ const tools = [
     name: "営業力診断テスト",
     description:
       "10問の質問でアプローチ・ヒアリング・プレゼン・クロージング・反論処理の5項目を診断。あなたの強みと弱点が一目でわかります。",
-    icon: "📊",
+    icon: "",
     image: "/images/misc/tool-sales-quiz.png",
     keywords: ["営業力 診断", "営業スキル チェック"],
     time: "約3分",
@@ -31,7 +31,7 @@ const tools = [
     name: "営業トークスクリプト生成",
     description:
       "業種と商材を選ぶだけで、5ステップメソッドに基づくトークスクリプトを自動生成。アプローチからクロージングまでの台本が手に入ります。",
-    icon: "📝",
+    icon: "",
     image: "/images/misc/tool-script-generator.png",
     keywords: ["トークスクリプト", "営業 台本"],
     time: "約1分",
@@ -41,7 +41,7 @@ const tools = [
     name: "反論切り返しトーク集",
     description:
       "「高い」「検討します」「必要ない」——営業でよくある断り文句30パターンへの切り返しトークを6カテゴリで整理。即実践できる対処法を無料公開。",
-    icon: "🛡️",
+    icon: "",
     image: "/images/misc/tool-objection-handbook.png",
     keywords: ["反論処理", "切り返しトーク"],
     time: "読み放題",
@@ -51,7 +51,7 @@ const tools = [
     name: "クロージング率計算ツール",
     description:
       "商談数・提案数・成約数を入力して成約率を自動計算。業種別ベンチマークと比較し、改善すべきポイントを可視化します。",
-    icon: "🧮",
+    icon: "",
     image: "/images/misc/tool-closing-calculator.png",
     keywords: ["成約率 計算", "営業 KPI"],
     time: "約1分",
@@ -59,7 +59,7 @@ const tools = [
 ];
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 export default function ToolsPage() {
   const jsonLdData = {

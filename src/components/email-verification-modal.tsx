@@ -62,7 +62,7 @@ export function EmailVerificationModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
       <div className="w-full max-w-md animate-fade-in-up rounded-2xl border border-card-border bg-card p-8 text-center">
-        <div className="mb-4 text-5xl">📧</div>
+        <div className="mb-4"><svg className="mx-auto h-12 w-12 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7"/></svg></div>
         <h2 className="mb-2 text-xl font-bold">メール認証をお願いします</h2>
         <p className="mb-2 text-sm text-muted">
           ご利用ありがとうございます！引き続きご利用いただくには、

@@ -12,7 +12,7 @@ function getResend(): Resend | null {
 }
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "成約コーチ AI <onboarding@resend.dev>";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 /** Common email footer with unsubscribe link (特定電子メール法 compliance) */
 function emailFooter(unsubscribeUrl?: string): string {
@@ -20,7 +20,7 @@ function emailFooter(unsubscribeUrl?: string): string {
     ? `<a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline">配信停止</a>　|　`
     : "";
   return `<p style="font-size:11px;color:#9ca3af;text-align:center;margin:16px 0 0">
-    ${unsubLine}© 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.com</a>
+    ${unsubLine}© 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
   </p>`;
 }
 
@@ -1346,7 +1346,7 @@ function cronFailureAlertEmail(data: AdminAlertData): { subject: string; html: s
     </div>
   </div>
   <p style="font-size:11px;color:#9ca3af;text-align:center;margin:16px 0 0">
-    © 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.com</a>
+    © 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
   </p>
 </div>
 </body>
@@ -1404,7 +1404,7 @@ function adminAlertEmail(data: AdminAlertData): { subject: string; html: string 
     </div>
   </div>
   <p style="font-size:11px;color:#9ca3af;text-align:center;margin:16px 0 0">
-    © 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.com</a>
+    © 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
   </p>
 </div>
 </body>

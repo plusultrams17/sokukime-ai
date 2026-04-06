@@ -26,7 +26,7 @@ const notoSerifJP = Noto_Serif_JP({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

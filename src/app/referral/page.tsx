@@ -80,7 +80,7 @@ export default function ReferralPage() {
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <div className="w-full max-w-md animate-fade-in-up text-center">
           <div className="rounded-2xl border border-card-border bg-card p-8">
-            <div className="mb-4 text-4xl">🔒</div>
+            <div className="mb-4"><svg className="mx-auto h-10 w-10 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
             <h2 className="mb-2 text-lg font-bold">ログインが必要です</h2>
             <p className="mb-6 text-sm text-muted">
               紹介プログラムを利用するにはログインしてください

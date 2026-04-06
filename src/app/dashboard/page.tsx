@@ -157,7 +157,7 @@ export default function DashboardPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <div className="w-full max-w-md text-center">
-          <div className="mb-6 text-5xl">🎯</div>
+          <div className="mb-6 text-5xl" aria-hidden="true"><span className="inline-block h-10 w-10 rounded-full bg-accent" /></div>
           <h2 className="mb-3 text-xl font-bold text-foreground">まだデータがありません</h2>
           <p className="mb-6 text-sm text-muted leading-relaxed">
             最初のロープレを完了すると、ここにあなたの営業力データが表示されます。
@@ -234,7 +234,7 @@ export default function DashboardPage() {
           <div className="mb-6 rounded-xl border border-accent/30 bg-gradient-to-r from-accent/10 to-accent/5 px-5 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">🎁</span>
+                <span className="inline-block h-5 w-5 rounded-full bg-accent" />
                 <div>
                   <div className="text-sm font-bold text-accent">
                     Pro体験中 — 残り{data.trialDaysRemaining}日
@@ -257,7 +257,7 @@ export default function DashboardPage() {
         {/* Streak */}
         {data.streak > 0 && (
           <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-5 py-4 flex items-center gap-3">
-            <span className="text-3xl">🔥</span>
+            <span className="inline-block h-6 w-6 rounded-full bg-accent" />
             <div className="flex-1">
               <div className="text-lg font-bold text-accent">{data.streak}日連続</div>
               <div className="text-xs text-muted">
@@ -281,7 +281,7 @@ export default function DashboardPage() {
         {hasScores && data.bestScore >= 80 && (
           <div className="mb-6 rounded-xl border border-green-500/20 bg-green-500/5 px-5 py-4">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl">🏆</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg>
               <div className="text-base font-bold text-green-500">
                 Aランク達成！上位プレイヤーの仲間入りです
               </div>
@@ -311,7 +311,7 @@ export default function DashboardPage() {
         {data.totalSessions >= 10 && data.plan === "free" && data.bestScore < 80 && (
           <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-5 py-4">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl">⚡</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
               <div className="text-sm font-bold">
                 {data.totalSessions}回の練習、素晴らしい行動力です！
               </div>
@@ -418,7 +418,7 @@ export default function DashboardPage() {
               : "border-card-border bg-card"
           }`}>
             <div className="flex items-center gap-3">
-              <span className="text-2xl">{data.latestScore > data.firstScore ? "📈" : "📊"}</span>
+              <span className="inline-block h-5 w-5 rounded-full bg-accent" />
               <div className="flex-1">
                 <div className={`text-sm font-bold ${data.latestScore > data.firstScore ? "text-green-500" : "text-muted"}`}>
                   初回から{data.latestScore > data.firstScore ? "+" : ""}{data.latestScore - data.firstScore}点の{data.latestScore > data.firstScore ? "成長" : "変化"}
@@ -496,7 +496,7 @@ export default function DashboardPage() {
         {/* Empty State */}
         {!hasScores && (
           <div className="mb-8 rounded-2xl border border-card-border bg-card p-8 text-center">
-            <div className="mb-3 text-4xl">📊</div>
+            <div className="mb-3 text-4xl" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
             <h2 className="mb-2 text-lg font-bold">まだスコアデータがありません</h2>
             <p className="mb-6 text-sm text-muted">
               ロープレを行うとスコアがここに記録され、<br />
@@ -558,7 +558,7 @@ export default function DashboardPage() {
             href="/roleplay"
             className="rounded-xl border border-card-border bg-card p-4 text-center transition hover:border-accent/30"
           >
-            <div className="mb-1 text-xl">🎯</div>
+            <div className="mb-1 text-xl" aria-hidden="true"><span className="inline-block h-5 w-5 rounded-full bg-accent" /></div>
             <div className="text-sm font-bold">ロープレ</div>
             <div className="text-[11px] text-muted">AIと営業練習</div>
           </Link>
@@ -566,7 +566,7 @@ export default function DashboardPage() {
             href="/insights"
             className="rounded-xl border border-card-border bg-card p-4 text-center transition hover:border-accent/30"
           >
-            <div className="mb-1 text-xl">📰</div>
+            <div className="mb-1 text-xl" aria-hidden="true"><span className="inline-block h-5 w-5 rounded-full bg-accent/50" /></div>
             <div className="text-sm font-bold">インサイト</div>
             <div className="text-[11px] text-muted">業界最新情報</div>
           </Link>
@@ -574,7 +574,7 @@ export default function DashboardPage() {
             href="/learn"
             className="rounded-xl border border-card-border bg-card p-4 text-center transition hover:border-accent/30"
           >
-            <div className="mb-1 text-xl">📚</div>
+            <div className="mb-1 text-xl" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
             <div className="text-sm font-bold">学習</div>
             <div className="text-[11px] text-muted">成約5ステップ</div>
           </Link>
@@ -582,7 +582,7 @@ export default function DashboardPage() {
             href="/referral"
             className="rounded-xl border border-card-border bg-card p-4 text-center transition hover:border-accent/30"
           >
-            <div className="mb-1 text-xl">🎁</div>
+            <div className="mb-1 text-xl" aria-hidden="true"><span className="inline-block h-5 w-5 rounded-full bg-accent/50" /></div>
             <div className="text-sm font-bold">友達紹介</div>
             <div className="text-[11px] text-muted">¥1,000 OFFクーポン</div>
           </Link>

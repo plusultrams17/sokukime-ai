@@ -14,19 +14,19 @@ export const metadata: Metadata = {
 
 const values = [
   {
-    icon: "🎯",
+    icon: "",
     image: "/images/pages/about-value-practice.png",
     title: "実践主義",
     desc: "理論だけでなく、繰り返し実践することで営業力は身につく。AIとの反復練習で「型」を体に染み込ませます。",
   },
   {
-    icon: "📊",
+    icon: "",
     image: "/images/pages/about-value-datadriven.png",
     title: "データドリブン",
     desc: "感覚ではなく、5ステップの定量スコアで弱点を可視化。何を改善すべきか明確にします。",
   },
   {
-    icon: "🔥",
+    icon: "",
     image: "/images/pages/about-value-accessible.png",
     title: "アクセシブル",
     desc: "24時間いつでも、スマホからでも練習可能。先輩の時間を奪わず、自分のペースでスキルアップ。",
@@ -34,7 +34,7 @@ const values = [
 ];
 
 export default function AboutPage() {
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return (
     <div className="min-h-screen bg-background">
@@ -188,7 +188,7 @@ export default function AboutPage() {
           <div className="rounded-2xl border border-card-border bg-card p-6 sm:p-8">
             <div className="mb-6 flex items-start gap-4">
               <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-2xl">
-                👨‍💻
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               </div>
               <div>
                 <p className="text-lg font-bold text-foreground">成約コーチ AI 開発チーム</p>
@@ -236,7 +236,7 @@ export default function AboutPage() {
           <div className="mt-8 rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 sm:p-8">
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-accent text-xl text-white">
-                🛡️
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
               <div>
                 <h3 className="mb-2 text-lg font-bold text-foreground">スコア改善保証</h3>

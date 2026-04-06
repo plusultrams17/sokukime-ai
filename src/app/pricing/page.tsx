@@ -23,11 +23,11 @@ const features = [
 ];
 
 const comparisons = [
-  { name: "法人向けAIロープレ", cost: "¥100,000〜", frequency: "法人契約のみ・見積もり必要", icon: "🤖", image: "/images/misc/comparison-training.png" },
-  { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", icon: "🏢", image: "/images/misc/comparison-training.png" },
-  { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", icon: "👔", image: "/images/misc/comparison-consulting.png" },
-  { name: "先輩にロープレ依頼", cost: "時給換算 ¥3,000〜", frequency: "週1回（相手の都合次第）", icon: "👥", image: "/images/misc/comparison-senpai.png" },
-  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "22レッスン+全業種コンテンツ+無制限AI練習・24時間・個人で即開始", icon: "🔥", image: "/images/misc/comparison-ai-pro.png", highlight: true },
+  { name: "法人向けAIロープレ", cost: "¥100,000〜", frequency: "法人契約のみ・見積もり必要", icon: "", image: "/images/misc/comparison-training.png" },
+  { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", icon: "", image: "/images/misc/comparison-training.png" },
+  { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", icon: "", image: "/images/misc/comparison-consulting.png" },
+  { name: "先輩にロープレ依頼", cost: "時給換算 ¥3,000〜", frequency: "週1回（相手の都合次第）", icon: "", image: "/images/misc/comparison-senpai.png" },
+  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "22レッスン+全業種コンテンツ+無制限AI練習・24時間・個人で即開始", icon: "", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
 
@@ -103,9 +103,8 @@ export default function PricingPage() {
       .catch(() => {});
   }, []);
 
+  // ¥2,980 is already tax-inclusive (per tokushoho/terms)
   const monthlyPrice = 2980;
-  // Tax-inclusive prices (Japan law requires 総額表示 since 2021-04-01)
-  const monthlyTaxInc = Math.round(monthlyPrice * 1.1);
 
   async function handleUpgrade() {
     setIsLoading(true);
@@ -130,7 +129,7 @@ export default function PricingPage() {
     setIsLoading(false);
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const pricingJsonLd = {
     "@context": "https://schema.org",
@@ -214,55 +213,54 @@ export default function PricingPage() {
       <Header />
 
       <div className="mx-auto max-w-4xl px-6 py-20">
-        {/* Trial Countdown Banner — 競合失敗分析: urgency drives 15-25% more conversions */}
-        {trialDays !== null && trialDays > 0 && (
-          <div className="mb-8 rounded-xl border-2 border-accent/40 bg-accent/5 px-5 py-4 text-center animate-fade-in-up">
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-2xl">⏰</span>
-              <div>
-                <div className="text-sm font-bold text-accent">
-                  無料トライアル残り{trialDays}日
-                </div>
-                <div className="text-xs text-muted">
-                  {trialDays <= 2 ? "間もなく終了します。今すぐProプランに登録して全機能を維持しましょう" : "トライアル中に全機能を試して、効果を実感してください"}
-                </div>
+        {/* Trial Banner — show to everyone, personalized for authenticated users */}
+        <div className="mb-8 rounded-xl border-2 border-accent/40 bg-accent/5 px-5 py-4 text-center animate-fade-in-up">
+          <div className="flex items-center justify-center gap-3">
+            <svg className="inline-block h-6 w-6 text-accent shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>
+            <div>
+              <div className="text-sm font-bold text-accent">
+                {trialDays !== null && trialDays > 0
+                  ? `無料トライアル残り${trialDays}日`
+                  : "7日間の無料トライアル付き"}
+              </div>
+              <div className="text-xs text-muted">
+                {trialDays !== null && trialDays > 0 && trialDays <= 2
+                  ? "間もなく終了します。今すぐProプランに登録して全機能を維持しましょう"
+                  : "Proプランの全機能を7日間無料で体験。いつでも解約OK、クレカ登録後の即課金なし"}
               </div>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Pricing Section Title */}
         <div className="mb-10 text-center">
           <h1 className="mb-4 text-4xl font-bold">料金プラン</h1>
           <p className="text-lg text-muted">
-            営業の「型」を学んで、AIで実践。もっと上を目指すならProへ
+            無料で学び始めて、本気で伸ばしたくなったらProへ
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-sm text-muted leading-relaxed">
-            成約コーチ AIは22レッスンの学習コースと業種別コンテンツを無料で提供。Proプラン（月額¥2,980）なら全業種のトークスクリプト・切り返し話法テンプレート・無制限AIロープレ練習が使い放題。いつでも解約可能です。
+            22レッスンの学習コースは無料で全て受講可能。Proプランでは全業種のトークスクリプト・切り返し話法30パターン・AIロープレ無制限が月額¥2,980（税込）で使えます。7日間の無料トライアル付き、いつでも解約可能です。
           </p>
         </div>
 
         {/* Objection Handling */}
         <div className="mb-12 grid gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-card-border bg-card p-5 text-center">
-            <div className="mb-2 text-2xl">🤔</div>
-            <p className="mb-1 text-sm font-bold">効果があるか不安？</p>
+            <p className="mb-2 text-sm font-bold text-foreground">効果があるか不安な方へ</p>
             <p className="text-xs text-muted leading-relaxed">
-              営業心理学に基づく22レッスンで体系的に学習。業種別トークスクリプトですぐ現場で使えます。まず無料レッスンを1つ試してみてください。
+              営業心理学に基づく22レッスンで体系的に学習。業種別トークスクリプトで、学んだその日から現場で使えます。まず無料レッスンを1つ試してみてください。
             </p>
           </div>
           <div className="rounded-xl border border-card-border bg-card p-5 text-center">
-            <div className="mb-2 text-2xl">⏰</div>
-            <p className="mb-1 text-sm font-bold">時間がない？</p>
+            <p className="mb-2 text-sm font-bold text-foreground">忙しくて時間が取れない方へ</p>
             <p className="text-xs text-muted leading-relaxed">
-              1回のロープレはたった3〜5分。通勤中・昼休み・寝る前の隙間時間でOK。チーム研修のように日程調整する必要もありません。
+              1回のロープレは3〜5分。通勤中や昼休みの隙間時間で練習できます。集合研修のような日程調整は不要です。
             </p>
           </div>
           <div className="rounded-xl border border-card-border bg-card p-5 text-center">
-            <div className="mb-2 text-2xl">💰</div>
-            <p className="mb-1 text-sm font-bold">本当にいつでも辞められる？</p>
+            <p className="mb-2 text-sm font-bold text-foreground">解約が面倒では？と思う方へ</p>
             <p className="text-xs text-muted leading-relaxed">
-              7日間の無料トライアル中はいつでもキャンセル可能。課金後も1クリックで即解約、違約金・手数料は一切ありません。
+              7日間の無料トライアル中はいつでもキャンセル可能です。課金開始後も設定画面から即解約でき、違約金・手数料は一切かかりません。
             </p>
           </div>
         </div>
@@ -279,7 +277,7 @@ export default function PricingPage() {
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>🛡️</div>
+          <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}><svg className="inline-block h-6 w-6 text-[#ea580c]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM14.707 8.707a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg></div>
           <h3
             style={{
               fontSize: "1.25rem",
@@ -355,13 +353,10 @@ export default function PricingPage() {
               <h3 className="text-xl font-bold text-accent">Proプラン</h3>
               <div className="mt-4">
                 <span className="text-4xl font-bold">¥{monthlyPrice.toLocaleString()}</span>
-                <span className="text-muted">/月</span>
+                <span className="text-muted">/月<span className="text-xs">（税込）</span></span>
               </div>
-              <p className="mt-1 text-xs text-muted">
-                税込 ¥{monthlyTaxInc.toLocaleString()}/月
-              </p>
               <p className="mt-2 text-sm text-muted">
-                全コンテンツ+無制限AIロープレで本気のスキルアップ
+                全業種コンテンツと無制限AIロープレで、短期間で営業力を伸ばす
               </p>
             </div>
 
@@ -383,18 +378,18 @@ export default function PricingPage() {
             <div
               style={{
                 padding: "1rem 1.5rem",
-                background: "#fef2f2",
-                border: "2px solid #ef4444",
+                background: "#fff8f3",
+                border: "2px solid #f97316",
                 borderRadius: "0.75rem",
                 textAlign: "center",
                 marginBottom: "1rem",
               }}
             >
-              <p style={{ fontSize: "1.1rem", fontWeight: 800, color: "#991b1b" }}>
-                ✅ 7日間は100%無料（1円も請求されません）
+              <p style={{ fontSize: "1rem", fontWeight: 800, color: "#9a3412" }}>
+                最初の7日間は無料 ── 課金は一切発生しません
               </p>
-              <p style={{ fontSize: "0.85rem", color: "#7f1d1d", marginTop: "0.3rem" }}>
-                カード登録後、7日経過してから初めて ¥{monthlyTaxInc.toLocaleString()}/月（税込）が課金されます
+              <p style={{ fontSize: "0.85rem", color: "#78350f", marginTop: "0.3rem" }}>
+                カード登録後、7日間は全機能を無料で利用可能。その後 ¥{monthlyPrice.toLocaleString()}/月（税込）
               </p>
             </div>
 
@@ -409,7 +404,7 @@ export default function PricingPage() {
               今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで無料 ・ いつでも解約OK
             </p>
             <p className="mt-1 text-center text-[11px] text-accent/70">
-              1回のロープレあたり約¥99 — コーヒー1杯以下
+              毎日練習しても1回あたり約¥99
             </p>
 
             {/* Promo Code Input */}
@@ -456,10 +451,10 @@ export default function PricingPage() {
 
         {/* Guarantee Badge */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted">
-          <span className="flex items-center gap-1">🛡️ 14日間スコア改善保証</span>
-          <span className="flex items-center gap-1">🔒 Stripe安全決済</span>
-          <span className="flex items-center gap-1">🏪 コンビニ決済対応</span>
-          <span className="flex items-center gap-1">🧾 経費精算・領収書OK</span>
+          <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM14.707 8.707a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg> 14日間スコア改善保証</span>
+          <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg> Stripe安全決済</span>
+          <span className="flex items-center gap-1">コンビニ決済対応</span>
+          <span className="flex items-center gap-1">経費精算・領収書OK</span>
         </div>
         <p className="mt-2 text-center text-xs text-muted">
           上司の承認不要 — 個人で今すぐ始められます。法人払いにも対応。
@@ -468,7 +463,7 @@ export default function PricingPage() {
         {/* ROI Comparison Section */}
         <div className="mt-20">
           <h2 className="mb-8 text-center text-2xl font-bold">
-            コスパで比較
+            営業スキルを伸ばす方法、コストで比べると
           </h2>
           <div className="space-y-3">
             {comparisons.map((item) => (
@@ -482,9 +477,9 @@ export default function PricingPage() {
               >
                 {item.image ? (
                   <Image src={item.image} alt={item.name} width={48} height={48} className="rounded-lg object-cover" />
-                ) : (
+                ) : item.icon ? (
                   <span className="text-2xl">{item.icon}</span>
-                )}
+                ) : null}
                 <div className="flex-1">
                   <p
                     className={`font-bold ${
@@ -523,11 +518,11 @@ export default function PricingPage() {
               法人・チーム向け
             </p>
             <h2 className="mb-4 text-2xl font-bold">
-              チームの営業力を底上げしませんか？
+              チーム全員の営業力を、均一に底上げする
             </h2>
             <p className="mb-6 text-sm text-muted leading-relaxed">
-              営業チーム全員のスキルを均一に底上げ。個別の営業研修（1回5万円〜）と比べて
-              <strong>1/10以下のコスト</strong>で、毎日の実践練習環境を提供します。
+              個別の営業研修（1回5万円〜）と比べて<strong>1/10以下のコスト</strong>で、
+              メンバー全員に毎日の実践練習環境を提供します。
             </p>
 
             {/* Team Plan Price */}
@@ -652,7 +647,7 @@ export default function PricingPage() {
         {/* Bottom CTA */}
         <div className="mt-20 text-center">
           <p className="mb-6 text-muted">
-            営業研修1回の費用で、22レッスン+全業種コンテンツ+無制限AI練習が使い放題
+            まずは無料で始めて、自分に合うか試してみてください
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link

@@ -13,25 +13,25 @@ export const metadata: Metadata = {
 
 const coachFeatures = [
   {
-    icon: "📍",
+    icon: "",
     image: "/images/pages/coach-step.png",
     title: "現在のステップ表示",
     desc: "会話の進行に応じて、今どのステップにいるかを自動判定。アプローチ→ヒアリング→プレゼン→クロージング→反論処理の流れを把握できます。",
   },
   {
-    icon: "✅",
+    icon: "",
     image: "/images/pages/coach-detect.png",
     title: "テクニック検出",
     desc: "あなたの発言から使用したテクニックを自動検出。「ゴール共有トーク」「共感フレーズ」「根拠提示」など、成約メソッドの型が使えているかリアルタイムで確認できます。",
   },
   {
-    icon: "💡",
+    icon: "",
     image: "/images/pages/coach-suggest.png",
     title: "次のアクション提案",
     desc: "「次はヒアリングで深掘りしましょう」「クロージングのタイミングです」など、会話の流れに沿った具体的なアドバイスを表示します。",
   },
   {
-    icon: "💬",
+    icon: "",
     image: "/images/pages/coach-example.png",
     title: "例文コピー機能",
     desc: "各テクニックの具体的な例文をワンクリックでコピー。「こう言えばいい」がすぐにわかるので、初心者でも型を実践しやすくなっています。",
@@ -100,7 +100,7 @@ export default function CoachFeaturePage() {
                 step: "3",
                 text: "コーチパネルにフィードバック表示",
                 detail:
-                  "✅ できている点、🟡 改善の余地がある点、次に使うべき型を表示",
+                  "できている点、改善の余地がある点、次に使うべき型を表示",
               },
               {
                 step: "4",

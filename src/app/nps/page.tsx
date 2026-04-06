@@ -55,7 +55,7 @@ function NPSContent() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-6">
         <div className="mx-auto max-w-md text-center">
-          <div className="mb-4 text-5xl">🙏</div>
+          <div className="mb-4"><svg className="mx-auto h-12 w-12 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
           <h1 className="mb-2 text-xl font-bold">ご回答ありがとうございます！</h1>
           <p className="mb-6 text-sm text-muted">
             いただいたフィードバックは、サービス改善に活用させていただきます。

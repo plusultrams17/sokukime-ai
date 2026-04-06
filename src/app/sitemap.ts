@@ -4,7 +4,7 @@ import { getAllIndustrySlugs } from "@/data/industries";
 import { getAllLessons } from "@/lib/lessons";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const staticPages: MetadataRoute.Sitemap = [
     {

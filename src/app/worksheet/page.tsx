@@ -224,7 +224,7 @@ export default function WorksheetPage() {
 
   /* ─── JSON-LD ─────────────────────────────────── */
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const worksheetJsonLd = {
     "@context": "https://schema.org",

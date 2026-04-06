@@ -3,7 +3,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { Footer } from "@/components/footer";
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 export const metadata: Metadata = {
   title: "よくある質問（FAQ）",
@@ -26,7 +26,7 @@ interface FAQCategory {
 const faqCategories: FAQCategory[] = [
   {
     title: "サービスについて",
-    icon: "💡",
+    icon: "",
     items: [
       {
         question: "成約コーチ AIとは何ですか？",
@@ -57,7 +57,7 @@ const faqCategories: FAQCategory[] = [
   },
   {
     title: "料金・プラン",
-    icon: "💰",
+    icon: "",
     items: [
       {
         question: "無料プランに制限はありますか？",
@@ -103,7 +103,7 @@ const faqCategories: FAQCategory[] = [
   },
   {
     title: "使い方・機能",
-    icon: "🎯",
+    icon: "",
     items: [
       {
         question: "ロープレの所要時間はどれくらいですか？",
@@ -134,7 +134,7 @@ const faqCategories: FAQCategory[] = [
   },
   {
     title: "セキュリティ・プライバシー",
-    icon: "🔒",
+    icon: "",
     items: [
       {
         question: "個人情報はどのように保護されていますか？",
@@ -204,7 +204,7 @@ export default function FAQPage() {
         {faqCategories.map((category) => (
           <section key={category.title} className="mb-10">
             <h2 className="mb-4 flex items-center gap-2 text-lg font-bold">
-              <span>{category.icon}</span>
+              {category.icon ? <span>{category.icon}</span> : null}
               {category.title}
             </h2>
             <div className="space-y-3">

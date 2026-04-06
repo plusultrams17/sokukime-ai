@@ -51,9 +51,9 @@ const STEPS = [
 ];
 
 const sceneLabels: Record<string, string> = {
-  phone: "📞 電話営業",
-  visit: "🏠 訪問営業",
-  inbound: "📩 問い合わせ対応",
+  phone: "電話営業",
+  visit: "訪問営業",
+  inbound: "問い合わせ対応",
 };
 
 const sceneHints: Record<string, string> = {
@@ -230,9 +230,9 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
   }
 
   const qualityIcon = (q: string) => {
-    if (q === "good") return "✅";
-    if (q === "ok") return "🟡";
-    return "❌";
+    if (q === "good") return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline",verticalAlign:"text-bottom"}}><polyline points="20 6 9 17 4 12"/></svg>;
+    if (q === "ok") return <span className="inline-block h-3 w-3 rounded-full bg-yellow-500" style={{verticalAlign:"text-bottom"}} />;
+    return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline",verticalAlign:"text-bottom"}}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
   };
 
   return (
@@ -244,7 +244,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
           <div className="mx-auto max-w-3xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] sm:text-xs text-muted truncate mr-2">
-                {sceneLabels[scene] || "🏠 訪問営業"} │ {product} → {industry}
+                {sceneLabels[scene] || "訪問営業"} │ {product} → {industry}
               </span>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <span className="text-[11px] sm:text-xs text-muted">
@@ -262,7 +262,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                       : "bg-card-border text-muted"
                   }`}
                 >
-                  🎓 コーチ {showCoach ? "ON" : "OFF"}
+                  コーチ {showCoach ? "ON" : "OFF"}
                 </button>
               </div>
             </div>
@@ -294,10 +294,10 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
             {messages.length === 0 && !isLoading && (
               <div className="animate-fade-in-up space-y-4 sm:space-y-5">
                 <div className="rounded-xl border border-card-border bg-card/50 px-4 py-3 text-center text-xs sm:text-sm text-muted">
-                  {sceneLabels[scene] || "🏠"} ロープレ開始 ─ あなたは<span className="font-bold text-accent">営業マン</span>です。<span className="font-bold text-blue-400">{industry || "お客さん"}</span>に{product}を提案してください。
+                  {sceneLabels[scene] || ""} ロープレ開始 ─ あなたは<span className="font-bold text-accent">営業マン</span>です。<span className="font-bold text-blue-400">{industry || "お客さん"}</span>に{product}を提案してください。
                 </div>
                 <div className="rounded-xl border border-accent/30 bg-accent/5 px-4 py-4 sm:px-5 sm:py-5 text-center">
-                  <div className="mb-2 text-2xl sm:text-3xl">🎤</div>
+                  <div className="mb-2 text-2xl sm:text-3xl" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
                   <p className="text-sm sm:text-base font-bold text-foreground mb-1">
                     あなたの第一声からスタートです！
                   </p>
@@ -311,7 +311,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
             {/* Scenario intro (after first message) */}
             {messages.length > 0 && (
               <div className="animate-fade-in-up rounded-xl border border-card-border bg-card/50 px-3 py-2 sm:px-4 sm:py-3 text-center text-[11px] sm:text-xs text-muted">
-                {sceneLabels[scene] || "🏠"} ロープレ中 ─ <span className="font-bold text-accent">営業マン</span> vs <span className="font-bold text-blue-400">{industry || "お客さん"}</span>
+                {sceneLabels[scene] || ""} ロープレ中 ─ <span className="font-bold text-accent">営業マン</span> vs <span className="font-bold text-blue-400">{industry || "お客さん"}</span>
               </div>
             )}
 
@@ -330,7 +330,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                       : "bg-blue-500/20 text-blue-400"
                   }`}
                 >
-                  {msg.role === "user" ? "🔥" : "👤"}
+                  {msg.role === "user" ? <span className="inline-block h-3 w-3 rounded-full bg-accent" /> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>}
                 </div>
 
                 {/* Bubble */}
@@ -358,7 +358,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
             {isLoading && (
               <div className="flex animate-fade-in-up gap-2 sm:gap-3">
                 <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-xs sm:text-sm text-blue-400">
-                  👤
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
                 <div>
                   <div className="mb-1 text-[11px] sm:text-xs font-bold text-blue-400">
@@ -385,7 +385,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
             <div className="mx-auto max-w-3xl">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-bold text-accent">
-                  🎓 {coach.stepNumber}. {coach.currentStep}
+                  {coach.stepNumber}. {coach.currentStep}
                 </span>
                 {coach.detectedTechniques.length > 0 && (
                   <div className="flex gap-1.5">
@@ -417,11 +417,11 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                 </div>
               )}
               <p className="mb-2 text-sm leading-relaxed text-muted">
-                💡 {coach.nextTip}
+                {coach.nextTip}
               </p>
               <div className="flex items-start gap-2 rounded-lg bg-accent/5 border border-accent/20 px-3 py-2">
                 <p className="flex-1 text-sm font-medium text-accent leading-relaxed">
-                  🗣️ {coach.examplePhrase}
+                  {coach.examplePhrase}
                 </p>
                 <button
                   onClick={() => {
@@ -441,7 +441,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
         {showNudge && (
           <div className="animate-fade-in-up border-t border-yellow-500/30 bg-yellow-500/5 px-3 py-3 sm:px-4 sm:py-4">
             <div className="mx-auto max-w-3xl flex items-start gap-3">
-              <span className="text-xl sm:text-2xl flex-shrink-0 mt-0.5">💡</span>
+              <svg className="flex-shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>
               <div className="flex-1 min-w-0">
                 <p className="text-sm sm:text-base font-bold text-foreground mb-1">
                   行き詰まっていますか？
@@ -456,7 +456,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3.5 py-2 text-xs sm:text-sm font-bold text-white transition hover:bg-accent-hover"
                   >
-                    📖 「{STEP_LESSON_MAP[coach?.stepNumber ?? 1]?.label ?? "ゴール共有"}」を学ぶ
+                    「{STEP_LESSON_MAP[coach?.stepNumber ?? 1]?.label ?? "ゴール共有"}」を学ぶ
                   </a>
                   <a
                     href="/learn"
@@ -487,7 +487,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                 disabled={isScoring}
                 className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-sm sm:text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
               >
-                {isScoring ? "📊 採点中..." : "📊 商談を終了して採点する"}
+                {isScoring ? "採点中..." : "商談を終了して採点する"}
               </button>
             ) : (
               <div className="flex gap-2 sm:gap-3">
@@ -532,7 +532,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
             {/* Current Step */}
             <div className="rounded-xl border border-accent/30 bg-accent/5 p-5">
               <div className="mb-1 flex items-center gap-2">
-                <span className="text-xl">🎓</span>
+                <svg className="text-accent" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
                 <span className="text-sm font-medium text-accent">
                   現在のステップ
                 </span>
@@ -577,7 +577,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
             {/* Next Tip */}
             <div className="rounded-xl border border-card-border p-5">
               <div className="mb-2 text-sm font-medium text-muted">
-                💡 次に使うべきテクニック
+                次に使うべきテクニック
               </div>
               <p className="text-base leading-relaxed">{coach.nextTip}</p>
             </div>
@@ -585,7 +585,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
             {/* Example Phrase */}
             <div className="rounded-xl border border-accent/20 bg-accent/5 p-5">
               <div className="mb-2 text-sm font-medium text-accent">
-                🗣️ トーク例（コピーして使ってOK）
+                トーク例（コピーして使ってOK）
               </div>
               <p className="text-base leading-relaxed font-medium">
                 {coach.examplePhrase}
@@ -604,7 +604,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
             {/* 5 Step Reference */}
             <div className="rounded-xl border border-card-border p-5">
               <div className="mb-3 text-sm font-medium text-muted">
-                📖 営業5ステップ
+                営業5ステップ
               </div>
               <div className="space-y-1.5 text-sm">
                 {STEPS.map((s) => (

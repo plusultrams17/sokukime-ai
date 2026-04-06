@@ -1,6 +1,6 @@
 import { getAllBlogPosts } from "@/lib/blog";
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 function escapeXml(str: string): string {
   return str

@@ -1,17 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Script from "next/script";
-import { getConsentStatus } from "@/components/cookie-consent";
+import { getConsentStatus, CONSENT_CHANGE_EVENT } from "@/components/cookie-consent";
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export function GoogleAnalytics() {
   const [consented, setConsented] = useState(false);
 
-  useEffect(() => {
+  const checkConsent = useCallback(() => {
     setConsented(getConsentStatus() === "accepted");
   }, []);
+
+  useEffect(() => {
+    checkConsent();
+    window.addEventListener(CONSENT_CHANGE_EVENT, checkConsent);
+    return () => window.removeEventListener(CONSENT_CHANGE_EVENT, checkConsent);
+  }, [checkConsent]);
 
   if (!GA_MEASUREMENT_ID || !consented) {
     return null;
@@ -40,9 +46,15 @@ const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
 export function MicrosoftClarity() {
   const [consented, setConsented] = useState(false);
 
-  useEffect(() => {
+  const checkConsent = useCallback(() => {
     setConsented(getConsentStatus() === "accepted");
   }, []);
+
+  useEffect(() => {
+    checkConsent();
+    window.addEventListener(CONSENT_CHANGE_EVENT, checkConsent);
+    return () => window.removeEventListener(CONSENT_CHANGE_EVENT, checkConsent);
+  }, [checkConsent]);
 
   if (!CLARITY_PROJECT_ID || !consented) {
     return null;

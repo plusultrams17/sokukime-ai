@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const features = [
   {
-    icon: "🎭",
+    icon: "",
     image: "/images/pages/feature-roleplay.png",
     title: "AIロープレ",
     desc: "AIがリアルなお客さん役を演じます。業種・商材・難易度を自由にカスタマイズして、あらゆる営業シーンを練習。",
@@ -26,7 +26,7 @@ const features = [
     ],
   },
   {
-    icon: "🧠",
+    icon: "",
     image: "/images/pages/feature-coach.png",
     title: "リアルタイムAIコーチ",
     desc: "会話中にリアルタイムで成約メソッドのテクニックを分析。今何をすべきかをコーチがアドバイスします。",
@@ -38,7 +38,7 @@ const features = [
     ],
   },
   {
-    icon: "📊",
+    icon: "",
     image: "/images/pages/feature-scoring.png",
     title: "成約スコアリング",
     desc: "5ステップそれぞれを20点満点で採点。総合スコアとランク（S〜E）で実力を可視化します。",
@@ -52,7 +52,7 @@ const features = [
 ];
 
 export default function FeaturesPage() {
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   return (
     <div className="min-h-screen bg-background">
@@ -119,7 +119,7 @@ export default function FeaturesPage() {
                     key={h}
                     className="flex items-center gap-2 text-sm text-muted"
                   >
-                    <span className="text-accent">✓</span>
+                    <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     {h}
                   </div>
                 ))}

@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { generateUnsubscribeToken } from "@/lib/unsubscribe";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 /**
  * GET /api/unsubscribe?uid=xxx&token=xxx

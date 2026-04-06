@@ -10,7 +10,7 @@ export default function AuthLayout({
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Link href="/" className="inline-block">
-            <span className="text-3xl">🔥</span>
+            <span className="inline-block h-4 w-4 rounded-full bg-accent" />
             <h1 className="mt-2 text-2xl font-bold">成約コーチ AI</h1>
           </Link>
           <p className="mt-2 text-sm text-muted">

@@ -1,29 +1,16 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { Suspense, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-
-function SignupRedirect() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    // /signup へのアクセスは /login にリダイレクト（パラメータ引き継ぎ）
-    const params = new URLSearchParams(searchParams.toString());
-    router.replace(`/login${params.toString() ? `?${params.toString()}` : ""}`);
-  }, [router, searchParams]);
-
-  return (
-    <div className="flex items-center justify-center py-12">
-      <div className="text-sm text-muted">リダイレクト中...</div>
-    </div>
-  );
+interface Props {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default function SignupPage() {
-  return (
-    <Suspense>
-      <SignupRedirect />
-    </Suspense>
-  );
+export default async function SignupPage({ searchParams }: Props) {
+  const params = await searchParams;
+  const entries = Object.entries(params).flatMap(([key, val]) => {
+    if (val === undefined) return [];
+    if (Array.isArray(val)) return val.map((v) => [key, v] as [string, string]);
+    return [[key, val] as [string, string]];
+  });
+  const qs = new URLSearchParams(entries).toString();
+  redirect(`/login${qs ? `?${qs}` : ""}`);
 }

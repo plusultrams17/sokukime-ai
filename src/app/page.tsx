@@ -9,7 +9,7 @@ import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
 function CTAButton({ className = "" }: { className?: string }) {
   return (
     <Link href="/try-roleplay" scroll={true} className={`lp-cta-btn ${className}`}>
-      今すぐAIロープレを体験
+      無料でAIロープレを試す
     </Link>
   );
 }
@@ -30,7 +30,7 @@ function SecondaryCTA({ className = "" }: { className?: string }) {
 
 export default function Home() {
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.com";
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -133,7 +133,7 @@ export default function Home() {
               className="mb-4 text-xs font-bold tracking-[0.2em] uppercase sm:mb-5 sm:text-sm"
               style={{ color: "#f97316" }}
             >
-              商談即決スキル × AIロープレ
+              訪販・保険・不動産 入社1〜3年目の営業パーソン向け
             </p>
 
             {/* Main heading */}
@@ -146,7 +146,7 @@ export default function Home() {
             >
               「検討します」を、その場で
               <br />
-              <span className="lp-highlight-hero">&quot;イエス&quot;</span>に変える。
+              <span className="lp-highlight-hero">&quot;お願いします&quot;</span>に変える。
             </p>
 
             {/* Sub heading */}
@@ -157,9 +157,9 @@ export default function Home() {
                 textShadow: "0 1px 8px rgba(0,0,0,0.2)",
               }}
             >
-              訪販・保険・不動産の営業マンが使う「商談即決スキル」を、
+              22レッスンで商談の「型」を学び、AIロープレで何度でも実践。
               <br className="hidden sm:block" />
-              AIロープレで体に叩き込む。3分後、あなたの切り返しが変わります。
+              登録不要・3分で体験できます。
             </p>
 
             {/* CTA */}
@@ -200,7 +200,7 @@ export default function Home() {
 
           {/* Scroll indicator — bottom of viewport */}
           <div
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 sm:bottom-10"
+            className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 sm:bottom-10"
             aria-hidden="true"
           >
             <div className="hero-scroll-indicator flex flex-col items-center gap-1">
@@ -236,38 +236,35 @@ export default function Home() {
       <section style={{ backgroundColor: "#f7f8ea" }}>
         <div className="lp-section text-center">
           <p className="lp-heading mb-8">
-            こんな<span className="lp-highlight">悩み</span>はありませんか？
+            入社1〜3年目、こんな<span className="lp-highlight">壁</span>にぶつかっていませんか？
           </p>
           <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
             {[
               {
-                emoji: "😥",
-                text: "先輩が忙しくてロープレ相手がいない",
+                text: "先輩が忙しく、ロープレの相手がいない。自主練の方法もわからない",
               },
               {
-                emoji: "🙈",
-                text: "何回ミスしても恥ずかしくない環境がほしい",
+                text: "商談で「検討します」と言われると、何を返せばいいかわからず黙ってしまう",
               },
               {
-                emoji: "🤔",
-                text: "自分の営業トークの何が悪いか分からない",
+                text: "数字が上がらない原因がトークなのか、提案なのか、自分では判断できない",
               },
             ].map((item) => (
               <div
                 key={item.text}
                 className="rounded-xl bg-white/80 px-5 py-6 shadow-sm backdrop-blur-sm"
               >
-                <p className="mb-2 text-2xl">{item.emoji}</p>
                 <p className="text-sm font-medium leading-relaxed text-foreground">
                   {item.text}
                 </p>
               </div>
             ))}
           </div>
-          <p className="mt-8 text-sm text-muted">
-            成約コーチ AIなら、<strong className="text-foreground">24時間いつでも</strong>AIがロープレ相手になり、
+          <p className="mt-8 text-sm text-muted leading-relaxed">
+            練習量と正しい型 ── この2つが揃えば、営業スキルは着実に伸びます。
             <br className="hidden sm:block" />
-            <strong className="text-foreground">5カテゴリのスコア</strong>で改善ポイントが一目瞭然です。
+            成約コーチ AIは<strong className="text-foreground">24時間いつでもAIがロープレ相手</strong>になり、
+            <strong className="text-foreground">5カテゴリのスコア</strong>で改善ポイントを可視化します。
           </p>
         </div>
       </section>
@@ -277,10 +274,14 @@ export default function Home() {
       ═══════════════════════════════════════════════ */}
       <section style={{ backgroundColor: "#e8e6e1" }}>
         <div className="lp-section text-center">
-          <p className="lp-heading mb-12">
-            <span className="lp-highlight">成約コーチ AI</span>なら、
+          <p className="lp-heading mb-4">
+            学ぶ → 試す → 伸びる。
             <br className="sm:hidden" />
-            営業の「型」が身につく
+            <span className="lp-highlight">3ステップ</span>で営業力を磨く
+          </p>
+          <p className="mx-auto mb-12 max-w-xl text-sm text-muted leading-relaxed">
+            レッスンで型を理解し、AIロープレで実践し、スコアで弱点を把握する。
+            このサイクルを繰り返すことで、商談の対応力が変わります。
           </p>
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
             <Image
@@ -318,7 +319,7 @@ export default function Home() {
       <section style={{ backgroundColor: "#f7f8ea" }}>
         <div className="lp-section pb-0">
           <p className="lp-heading text-center" style={{ marginBottom: "-30px" }}>
-            AIロープレの<span className="lp-highlight">スコアリング</span>評価基準
+            5カテゴリの<span className="lp-highlight">スコア</span>で弱点が一目瞭然
           </p>
         </div>
         <div className="relative w-full">
@@ -349,13 +350,13 @@ export default function Home() {
         {/* ChatGPT/法人との差別化 */}
         <div className="lp-section pt-8 pb-6">
           <p className="mb-6 text-center text-sm font-bold text-foreground">
-            ChatGPTや法人AIロープレとの違い
+            他の営業練習方法との比較
           </p>
           <div className="mx-auto grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
             {[
-              { label: "ChatGPT", items: ["メソッドなし", "スコアなし", "進捗管理なし"], color: "#9ca3af" },
-              { label: "法人AIロープレ", items: ["初期費用 数百万円", "法人契約のみ", "個人利用不可"], color: "#9ca3af" },
-              { label: "成約コーチ AI", items: ["22レッスン内蔵", "5カテゴリ採点", "月¥2,980で即開始"], color: "var(--lp-cta)" },
+              { label: "ChatGPTで自主練", items: ["営業メソッドなし", "スコア評価なし", "学習の進捗管理なし"], color: "#9ca3af" },
+              { label: "法人向けAIロープレ", items: ["導入費用 数十〜数百万円", "法人契約のみ", "個人では利用不可"], color: "#9ca3af" },
+              { label: "成約コーチ AI", items: ["22レッスンで型を習得", "5カテゴリで採点", "月¥2,980・個人で即開始"], color: "var(--lp-cta)" },
             ].map((col) => (
               <div key={col.label} className="rounded-xl border bg-white px-4 py-4" style={{ borderColor: col.color }}>
                 <p className="mb-2 text-center text-xs font-bold" style={{ color: col.color }}>
@@ -416,10 +417,12 @@ export default function Home() {
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-card-border bg-white">
         <div className="lp-section text-center">
-          <p className="lp-heading mb-6">
-            「なんとなく」の営業を
-            <br />
-            今日で終わりにしませんか？
+          <p className="lp-heading mb-4">
+            まず3分、試してみてください
+          </p>
+          <p className="mx-auto mb-8 max-w-md text-sm text-muted leading-relaxed">
+            自分の営業トークがどう評価されるのか、スコアで確認できます。
+            登録もクレジットカードも不要です。
           </p>
           <div className="mb-8 flex flex-col items-center gap-3">
             <CTAButton />
@@ -434,11 +437,11 @@ export default function Home() {
           </div>
           {/* Pro plan anchoring */}
           <div className="mt-8 mx-auto max-w-md rounded-lg border border-card-border bg-background px-6 py-4">
-            <p className="text-xs text-muted mb-1">さらに本格的に学びたい方へ</p>
+            <p className="text-xs text-muted mb-1">本格的に営業力を伸ばしたい方へ</p>
             <p className="text-sm font-bold text-foreground">
-              Proプラン <span style={{ color: "var(--lp-cta)" }}>¥2,980</span><span className="text-muted font-normal">/月</span>
+              Proプラン <span style={{ color: "var(--lp-cta)" }}>¥2,980</span><span className="text-muted font-normal">/月（税込）</span>
             </p>
-            <p className="text-xs text-muted mt-1">全業種トークスクリプト・AIロープレ無制限・認定試験</p>
+            <p className="text-xs text-muted mt-1">全業種トークスクリプト・AIロープレ無制限・7日間無料トライアル付き</p>
           </div>
         </div>
       </section>

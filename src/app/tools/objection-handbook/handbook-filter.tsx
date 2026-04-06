@@ -85,7 +85,7 @@ export function HandbookFilter({ categories }: { categories: Category[] }) {
                       </span>
                     </div>
                     <div className="rounded-lg bg-amber-50 border border-amber-200/50 p-3">
-                      <p className="text-xs font-semibold text-amber-700 mb-1">💡 ポイント</p>
+                      <p className="text-xs font-semibold text-amber-700 mb-1">ポイント</p>
                       <p className="text-sm text-amber-800">{item.tip}</p>
                     </div>
                   </div>

@@ -17,39 +17,39 @@ const industries = [
   {
     value: "housing",
     label: "住宅・リフォーム",
-    icon: "🏠",
+    icon: "",
     products: ["外壁塗装", "リフォーム", "太陽光パネル"],
   },
   {
     value: "insurance",
     label: "保険・金融",
-    icon: "🛡️",
+    icon: "",
     products: ["生命保険", "損害保険", "投資商品"],
   },
   {
     value: "education",
     label: "教育・スクール",
-    icon: "📚",
+    icon: "",
     products: ["学習塾の入会", "オンライン講座", "英会話スクール"],
   },
   {
     value: "it",
     label: "IT・SaaS",
-    icon: "💻",
+    icon: "",
     products: ["法人向けクラウドサービス", "業務効率化ツール", "セキュリティソフト"],
   },
   {
     value: "other",
     label: "その他",
-    icon: "📦",
+    icon: "",
     products: [],
   },
 ];
 
 const scenes = [
-  { value: "visit", label: "🏠 訪問営業", desc: "お客さん宅・会社に訪問" },
-  { value: "phone", label: "📞 電話営業", desc: "テレアポ・電話商談" },
-  { value: "inbound", label: "📩 問い合わせ対応", desc: "お客さんからの問い合わせ" },
+  { value: "visit", label: "訪問営業", desc: "お客さん宅・会社に訪問" },
+  { value: "phone", label: "電話営業", desc: "テレアポ・電話商談" },
+  { value: "inbound", label: "問い合わせ対応", desc: "お客さんからの問い合わせ" },
 ];
 
 export function WelcomeModal({ open, onComplete }: WelcomeModalProps) {
@@ -115,7 +115,7 @@ export function WelcomeModal({ open, onComplete }: WelcomeModalProps) {
                       : "border-card-border hover:border-accent/50"
                   }`}
                 >
-                  <span className="text-xl">{ind.icon}</span>
+                  {ind.icon ? <span className="text-xl">{ind.icon}</span> : null}
                   <span className="text-sm font-medium">{ind.label}</span>
                 </button>
               ))}
