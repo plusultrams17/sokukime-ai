@@ -346,7 +346,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                         lineHeight: 1.5,
                       }}
                     >
-                      このカテゴリを集中練習すると、スコアが平均 +15点見込めます
+                      このカテゴリを集中練習すると、スコアの改善が見込めます
                     </p>
                   </div>
                 );
@@ -427,10 +427,9 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   lineHeight: 1.5,
                 }}
               >
-                📊「検討します」を3回受けると、
+                📊 切り返しの「型」を練習するほど、
                 <br />
-                4回目の成約率は
-                <span style={{ fontSize: "1.2em" }}>-37%</span>下がります
+                本番の商談で自信を持って対応できます
               </p>
 
               {/* メインCTA */}
@@ -452,7 +451,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   boxShadow: "0.12em 0.12em 0 #c4693d",
                 }}
               >
-                無料でスコアを保存する →
+                弱点を集中練習する（無料）→
               </Link>
               <p
                 style={{

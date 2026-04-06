@@ -8,10 +8,9 @@ import { trackCTAClick } from "@/lib/tracking";
 
 const navLinks = [
   { href: "/learn", label: "学習コース" },
-  { href: "/industry", label: "業種別" },
-  { href: "/tools", label: "無料ツール" },
-  { href: "/blog", label: "ブログ" },
+  { href: "/try-roleplay", label: "AIロープレ体験" },
   { href: "/pricing", label: "料金プラン" },
+  { href: "/faq", label: "FAQ" },
 ];
 
 export function Header() {
