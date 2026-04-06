@@ -207,7 +207,7 @@ export default function LearnPage() {
                         {/* Lock overlay for paid lessons */}
                         {locked && (
                           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 rounded-[inherit]">
-                            <span className="text-3xl">🔒</span>
+                            <svg className="inline-block h-8 w-8 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                           </div>
                         )}
 
@@ -396,7 +396,7 @@ function ExamCard({ progress, purchased }: { progress: Progress; purchased: bool
     return (
       <div className="border-t-2 border-accent pt-8 relative">
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-white/80 rounded-xl">
-          <span className="text-4xl mb-3">🔒</span>
+          <svg className="inline-block h-10 w-10 text-muted mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           <p className="text-sm font-bold text-foreground mb-2">
             認定試験はプログラム購入後にご利用いただけます
           </p>
@@ -417,7 +417,7 @@ function ExamCard({ progress, purchased }: { progress: Progress; purchased: bool
             成約メソッド認定試験
           </h2>
           <p className="text-sm text-muted leading-relaxed mb-4">
-            全レッスンの学習を完了し、認定試験に合格して認定証を取得しましょう。
+            全レッスンの学習を完了し、認定試験に合格すると認定証を取得できます。
           </p>
         </div>
       </div>
@@ -440,7 +440,7 @@ function ExamCard({ progress, purchased }: { progress: Progress; purchased: bool
         成約メソッド認定試験
       </h2>
       <p className="text-sm text-muted leading-relaxed mb-4">
-        全レッスンの学習を完了し、認定試験に合格して認定証を取得しましょう。
+        全レッスンの学習を完了し、認定試験に合格すると認定証を取得できます。
         20問中16問以上の正答（80%）で合格です。
       </p>
 

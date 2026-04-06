@@ -261,7 +261,7 @@ export default function DashboardPage() {
             <div className="flex-1">
               <div className="text-lg font-bold text-accent">{data.streak}日連続</div>
               <div className="text-xs text-muted">
-                {data.streak >= 7 ? "素晴らしい！習慣化されています" : data.streak >= 3 ? "いい調子！継続は力なり" : "連続記録を伸ばそう！"}
+                {data.streak >= 7 ? "練習が定着しています" : data.streak >= 3 ? "いい調子です。継続は力なり" : "連続記録を伸ばしていきましょう"}
               </div>
             </div>
             {data.plan === "pro" && (
@@ -283,7 +283,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3 mb-2">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg>
               <div className="text-base font-bold text-green-500">
-                Aランク達成！上位プレイヤーの仲間入りです
+                Aランク達成 -- 上位プレイヤーの仲間入りです
               </div>
             </div>
             <p className="text-xs text-muted mb-3">
@@ -313,7 +313,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3 mb-2">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
               <div className="text-sm font-bold">
-                {data.totalSessions}回の練習、素晴らしい行動力です！
+                {data.totalSessions}回の練習を継続しています
               </div>
             </div>
             <p className="text-xs text-muted mb-3">
@@ -348,7 +348,7 @@ export default function DashboardPage() {
             {data.totalScored === 0
               ? "ロープレを始めるとレベルが上がります"
               : data.avgScore >= 80
-              ? "トップレベル！Sランクを目指しましょう"
+              ? "トップレベルです。Sランクまであと少しです"
               : `次のレベルまで：平均スコアを${data.avgScore >= 60 ? 80 : data.avgScore >= 40 ? 60 : 40}点以上に`}
           </div>
         </div>
@@ -471,7 +471,7 @@ export default function DashboardPage() {
             <p className="mt-3 text-xs text-muted">
               このカテゴリを集中的に練習することで、総合スコアの大幅な改善が期待できます。
               {CATEGORY_LESSON_MAP[data.weakestCategory.name] && (
-                <> 学習コースの「{CATEGORY_LESSON_MAP[data.weakestCategory.name].label}」で基礎を確認しましょう。</>
+                <> 学習コースの「{CATEGORY_LESSON_MAP[data.weakestCategory.name].label}」で基礎を確認できます。</>
               )}
             </p>
             <div className="mt-4 flex flex-col sm:flex-row gap-2">

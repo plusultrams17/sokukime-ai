@@ -71,7 +71,7 @@ function UpgradeToast() {
       <div className="mx-4 w-full max-w-md rounded-2xl border border-green-500/30 bg-card p-8 shadow-2xl">
         <div className="mb-4 text-center text-4xl" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polyline points="20 6 9 17 4 12"/></svg></div>
         <h2 className="mb-2 text-center text-xl font-bold text-green-400">
-          Proプランへようこそ！
+          Proプランのご利用が開始されました
         </h2>
         <p className="mb-6 text-center text-sm text-muted">
           無制限ロープレ・全5カテゴリ詳細スコア・AI改善アドバイスが使えます
@@ -791,7 +791,7 @@ export default function RoleplayPage() {
                     今日のロープレは終了 — でもまだ伸びしろがあります
                   </p>
                   <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
-                    毎日3回以上ロープレする営業マンは<span style={{ color: '#f48a58', fontWeight: 800 }}>スコアが平均20点UP</span>。<br />
+                    繰り返し練習することで<span style={{ color: '#f48a58', fontWeight: 800 }}>スコアの改善が期待</span>できます。<br />
                     Proなら無制限に練習できます。
                   </p>
                   <a
@@ -881,7 +881,7 @@ export default function RoleplayPage() {
                 ロープレ設定
               </h1>
               <p className="text-sm font-semibold" style={{ color: '#8a8680', marginBottom: '0.8em' }}>
-                営業シーンを設定して、AIとロープレを始めましょう
+                営業シーンを設定して、AIとロープレを始められます
               </p>
               <div className="flex flex-wrap justify-center gap-2">
                 <button
@@ -1272,7 +1272,7 @@ export default function RoleplayPage() {
                     今日のロープレは終了 — でもまだ伸びしろがあります
                   </p>
                   <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
-                    毎日3回以上ロープレする営業マンは<span style={{ color: '#f48a58', fontWeight: 800 }}>スコアが平均20点UP</span>。<br />
+                    繰り返し練習することで<span style={{ color: '#f48a58', fontWeight: 800 }}>スコアの改善が期待</span>できます。<br />
                     Proなら無制限に練習でき、全5カテゴリの詳細フィードバックも見れます。
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5em', marginBottom: '0.5em' }}>
@@ -1492,7 +1492,7 @@ function AuthGateContent({
       <div className="w-full max-w-md animate-fade-in-up text-center">
         <div className="mb-6 rounded-2xl border border-card-border bg-card p-8">
           <h2 className="mb-2 text-xl font-bold">
-            ロープレお疲れさまでした！
+            ロープレお疲れさまでした
           </h2>
 
           {previewScore ? (

@@ -50,16 +50,25 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 60px;
-  padding: 0 48px;
+  height: 52px;
+  padding: 0 20px;
+  max-width: calc(100vw - 32px);
   background-color: var(--lp-cta);
   color: #fff;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   border-radius: 4px;
   overflow: hidden;
   transition: background-color 0.2s ease;
+}
+@media (min-width: 640px) {
+  .lp-cta-btn {
+    height: 60px;
+    padding: 0 48px;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+  }
 }
 
 .lp-cta-btn:hover { background-color: var(--lp-cta-hover); }

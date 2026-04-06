@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getLessonBySlug, getAdjacentLessons } from "@/lib/lessons";
@@ -108,6 +108,11 @@ export default function LessonPage() {
   const [purchased, setPurchased] = useState(false);
   const [statusLoaded, setStatusLoaded] = useState(false);
 
+  // Learning flow state
+  const [visitedTabs, setVisitedTabs] = useState<Set<number>>(new Set([0]));
+  const [practiceHighlight, setPracticeHighlight] = useState(false);
+  const tabContentRef = useRef<HTMLDivElement>(null);
+
   // Quiz state
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -129,12 +134,32 @@ export default function LessonPage() {
   // Reset quiz when slug changes
   useEffect(() => {
     setActiveTab(0);
+    setVisitedTabs(new Set([0]));
+    setPracticeHighlight(false);
     setCurrentQ(0);
     setSelected(null);
     setSubmitted(false);
     setScore(0);
     setQuizCompleted(false);
   }, [slug]);
+
+  /** Switch tab with visited tracking + smooth scroll */
+  const switchToTab = useCallback((tabIndex: number) => {
+    setActiveTab(tabIndex);
+    setVisitedTabs((prev) => new Set(prev).add(tabIndex));
+    // Smooth scroll to tab content
+    setTimeout(() => {
+      tabContentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  }, []);
+
+  /** Get the next recommended (unvisited) tab index, or -1 if all visited */
+  function getNextRecommendedTab(): number {
+    for (let i = 0; i < TABS.length; i++) {
+      if (!visitedTabs.has(i)) return i;
+    }
+    return -1;
+  }
 
   const free = isLessonFree(slug);
   const locked = statusLoaded && !free && !purchased;
@@ -194,7 +219,7 @@ export default function LessonPage() {
               <div className="w-full relative">
                 <LessonScene slug={slug} />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <span className="text-5xl">🔒</span>
+                  <svg className="inline-block h-12 w-12 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                 </div>
               </div>
               <div className="p-5 sm:p-6">
@@ -213,7 +238,7 @@ export default function LessonPage() {
 
             {/* Purchase gate */}
             <div className="border border-gray-200 rounded-xl p-8 text-center mb-10">
-              <span className="text-4xl mb-4 block">🔒</span>
+              <svg className="inline-block h-10 w-10 text-muted mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
               <h2 className="text-lg font-bold text-foreground mb-2">
                 このレッスンはプログラム購入後にご利用いただけます
               </h2>
@@ -257,6 +282,7 @@ export default function LessonPage() {
   }
 
   const color = LEVEL_COLORS[lesson.level];
+  const nextRecommended = getNextRecommendedTab();
 
   function handleSelect(optionIndex: number) {
     if (submitted) return;
@@ -387,28 +413,52 @@ export default function LessonPage() {
 
           {/* Tab + Content */}
           <div>
-              {/* Tab Bar */}
-              <div className="sticky top-16 z-40 bg-white border-b border-gray-200 mb-10">
+              {/* Tab Bar with progress indicators */}
+              <div ref={tabContentRef} className="sticky top-16 z-40 bg-white border-b border-gray-200 mb-10">
                 <div className="flex">
-                  {TABS.map((tab, i) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(i)}
-                      className={`flex-1 py-3.5 text-center text-sm transition relative ${
-                        activeTab === i
-                          ? "font-bold text-foreground"
-                          : "font-medium text-muted hover:text-foreground"
-                      }`}
-                    >
-                      {tab}
-                      {activeTab === i && (
-                        <div
-                          className="absolute bottom-0 left-0 right-0 h-[3px]"
-                          style={{ backgroundColor: color }}
-                        />
-                      )}
-                    </button>
-                  ))}
+                  {TABS.map((tab, i) => {
+                    const isActive = activeTab === i;
+                    const isVisited = visitedTabs.has(i) && !isActive;
+                    const isRecommended = nextRecommended === i && !isActive;
+
+                    return (
+                      <button
+                        key={tab}
+                        onClick={() => switchToTab(i)}
+                        className={`flex-1 py-3.5 text-center text-sm transition relative flex items-center justify-center gap-1.5 ${
+                          isActive
+                            ? "font-bold text-foreground"
+                            : "font-medium text-muted hover:text-foreground"
+                        } ${isRecommended ? "animate-gentle-pulse" : ""}`}
+                        style={isRecommended ? { borderColor: color } as React.CSSProperties : undefined}
+                      >
+                        {/* Tab number or check indicator */}
+                        {isActive ? (
+                          <span
+                            className="inline-flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold text-white shrink-0"
+                            style={{ backgroundColor: color }}
+                          >
+                            {i + 1}
+                          </span>
+                        ) : isVisited ? (
+                          <svg className="w-4 h-4 text-green-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        ) : (
+                          <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 text-[11px] font-medium text-gray-400 shrink-0">
+                            {i + 1}
+                          </span>
+                        )}
+                        <span className="hidden sm:inline">{tab}</span>
+                        {isActive && (
+                          <div
+                            className="absolute bottom-0 left-0 right-0 h-[3px]"
+                            style={{ backgroundColor: color }}
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -419,6 +469,16 @@ export default function LessonPage() {
                   <div>
                     <LessonDiagram slug={slug} />
                     <TheoryContent slug={slug} theory={lesson.theory} />
+                    {/* Next step button */}
+                    <div className="mt-10 flex justify-center">
+                      <button
+                        onClick={() => switchToTab(1)}
+                        className="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold text-white transition hover:opacity-90"
+                        style={{ backgroundColor: color }}
+                      >
+                        トーク例を見る →
+                      </button>
+                    </div>
                   </div>
                 )}
 
@@ -435,6 +495,16 @@ export default function LessonPage() {
                         トーク例はそのまま暗記するのではなく、自分の言葉でアレンジして使いましょう。
                         大切なのは「型」を身につけることです。
                       </p>
+                    </div>
+                    {/* Next step button */}
+                    <div className="mt-10 flex justify-center">
+                      <button
+                        onClick={() => switchToTab(2)}
+                        className="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold text-white transition hover:opacity-90"
+                        style={{ backgroundColor: color }}
+                      >
+                        確認クイズに挑戦 →
+                      </button>
                     </div>
                   </div>
                 )}
@@ -458,6 +528,10 @@ export default function LessonPage() {
                       setScore(0);
                       setQuizCompleted(false);
                     }}
+                    onGoToPractice={() => {
+                      setPracticeHighlight(true);
+                      switchToTab(3);
+                    }}
                     color={color}
                   />
                 )}
@@ -465,6 +539,31 @@ export default function LessonPage() {
                 {/* Practice Tab */}
                 {activeTab === 3 && (
                   <div>
+                    {/* Learning point reminder */}
+                    {lesson.objectives && lesson.objectives.length > 0 && (
+                      <div
+                        className={`mb-8 rounded-xl border p-5 ${
+                          practiceHighlight
+                            ? "border-accent/40 bg-accent/5"
+                            : "border-gray-200 bg-gray-50"
+                        }`}
+                      >
+                        <p className="text-sm font-bold text-foreground mb-3">
+                          このレッスンの学習ポイント
+                        </p>
+                        <ul className="space-y-1.5">
+                          {lesson.objectives.map((obj, i) => (
+                            <li key={i} className="text-sm text-muted leading-relaxed flex items-start gap-2">
+                              <svg className="w-4 h-4 text-accent mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                              {obj}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
                     <h2 className="text-lg font-bold text-foreground mb-3">
                       実践練習のテーマ
                     </h2>
@@ -473,35 +572,20 @@ export default function LessonPage() {
                     </p>
 
                     <div className="border-t border-gray-200 pt-6 space-y-4">
-                      <div className="rounded-xl bg-accent/5 border border-accent/20 p-4 mb-4">
-                        <p className="text-sm font-bold text-accent mb-1">学んだらすぐ実践!</p>
-                        <p className="text-xs text-muted">レッスンで学んだテクニックをAIロープレで実践練習しましょう。実践することで「型」が身体に染みつきます。</p>
-                      </div>
-                      <Link
-                        href="/roleplay"
-                        className="flex items-center justify-between py-3 border-b border-gray-100 group"
-                      >
-                        <div>
-                          <p className="text-sm font-bold text-foreground group-hover:underline">
-                            このレッスンで学んだ「{lesson.title}」をAI相手に実践してみる
-                          </p>
-                          <p className="text-xs text-muted mt-0.5">
-                            AIロープレで実践練習
-                          </p>
-                        </div>
-                        <svg
-                          className="w-4 h-4 text-gray-300 group-hover:text-foreground transition shrink-0"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                      {/* Primary CTA - AI Roleplay */}
+                      <div className="rounded-xl border border-accent/20 bg-accent/5 p-5">
+                        <p className="text-sm font-bold text-accent mb-1">学んだらすぐ実践</p>
+                        <p className="text-xs text-muted mb-4">レッスンで学んだテクニックをAIロープレで実践練習できます。繰り返すことで「型」が定着します。</p>
+                        <Link
+                          href="/roleplay"
+                          className="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold text-white transition hover:opacity-90"
+                          style={{ backgroundColor: color }}
                         >
-                          <polyline points="9 18 15 12 9 6" />
-                        </svg>
-                      </Link>
+                          AIロープレで実践する →
+                        </Link>
+                      </div>
 
+                      {/* Secondary - Worksheet */}
                       <Link
                         href="/worksheet"
                         className="flex items-center justify-between py-3 border-b border-gray-100 group"
@@ -527,6 +611,29 @@ export default function LessonPage() {
                         </svg>
                       </Link>
                     </div>
+
+                    {/* Next lesson link */}
+                    {next && (
+                      <div className="mt-10 flex justify-end">
+                        <Link
+                          href={`/learn/${next.slug}`}
+                          className="lesson-next-btn group"
+                          style={{ "--level-color": color } as React.CSSProperties}
+                        >
+                          <div className="text-right min-w-0">
+                            <p className="text-xs text-white/70 mb-0.5">次のレッスン</p>
+                            <p className="text-sm font-bold text-white truncate">
+                              {next.title}
+                            </p>
+                          </div>
+                          <svg className="lesson-next-btn__arrows" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 43">
+                            <polygon points="39.58,4.46 44.11,0 66,21.5 44.11,43 39.58,38.54 56.94,21.5" />
+                            <polygon points="19.79,4.46 24.32,0 46.21,21.5 24.32,43 19.79,38.54 37.15,21.5" />
+                            <polygon points="0,4.46 4.53,0 26.42,21.5 4.53,43 0,38.54 17.36,21.5" />
+                          </svg>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -660,6 +767,7 @@ function QuizSection({
   onSubmit,
   onNext,
   onRetry,
+  onGoToPractice,
   color,
 }: {
   quiz: QuizQuestion[];
@@ -672,6 +780,7 @@ function QuizSection({
   onSubmit: () => void;
   onNext: () => void;
   onRetry: () => void;
+  onGoToPractice: () => void;
   color: string;
 }) {
   const [showExplanation, setShowExplanation] = useState(false);
@@ -695,20 +804,20 @@ function QuizSection({
         </h2>
         <p className="text-muted mb-6 text-sm">
           {perfect
-            ? "素晴らしい結果です。次のレッスンに進みましょう。"
+            ? "全問正解です。学んだ技術を実践してみましょう。"
             : score >= 2
-              ? "よくできました。復習して満点を目指しましょう。"
-              : "もう一度理論を確認してからチャレンジしてみましょう。"}
+              ? "あと少しです。実践で復習すると定着します。"
+              : "もう一度理論を確認してから再チャレンジしてみてください。"}
         </p>
         <div className="space-y-3">
           <div>
-            <Link
-              href="/roleplay"
+            <button
+              onClick={onGoToPractice}
               className="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold text-white transition hover:opacity-90"
               style={{ backgroundColor: color }}
             >
-              学んだ技術をAIロープレで実践する →
-            </Link>
+              学んだ技術を実践する →
+            </button>
           </div>
           <div>
             <button

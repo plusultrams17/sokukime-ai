@@ -239,11 +239,11 @@ export default function AboutPage() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
               <div>
-                <h3 className="mb-2 text-lg font-bold text-foreground">スコア改善保証</h3>
+                <h3 className="mb-2 text-lg font-bold text-foreground">14日間返金保証</h3>
                 <p className="text-sm leading-relaxed text-muted">
-                  Proプランをご利用いただき、14日間毎日ロープレを続けてもスコアが改善しない場合、
+                  Proプランにご満足いただけなかった場合、14日以内であれば
                   <strong className="text-foreground">全額返金</strong>いたします。
-                  私たちはメソッドの効果に自信があるからこそ、この保証をお約束します。
+                  安心してお試しいただけます。
                 </p>
                 <p className="mt-2 text-xs text-muted">
                   ※ 14日間で7回以上のロープレ実施が条件です。詳細は利用規約をご確認ください。

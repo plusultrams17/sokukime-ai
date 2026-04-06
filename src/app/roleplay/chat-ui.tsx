@@ -104,7 +104,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
       currentStep: "アプローチ",
       stepNumber: 1,
       detectedTechniques: [],
-      nextTip: "まずは相手を褒めて心理的安全の確保をしましょう。2度褒めが理想。その後「ゴール共有」でYESを取ります",
+      nextTip: "まずは相手を褒めて心理的安全の確保を。2度褒めが理想。その後「ゴール共有」でYESを取ります",
       examplePhrase: "素敵な会社ですね！今まで○社伺いましたがダントツです。ところで、もしお話聞いて気に入らなかったら断ってくださいね。気に入ったらぜひスタートしてください！",
     });
     setTimeout(() => inputRef.current?.focus(), 300);

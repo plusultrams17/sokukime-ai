@@ -200,7 +200,7 @@ export function UpgradeModal({
         </div>
 
         <div className="mb-3 text-center text-xs text-muted">
-          14日間スコア改善保証・いつでも解約OK・違約金なし
+          14日間返金保証・いつでも解約OK・違約金なし
         </div>
 
         {stats && (

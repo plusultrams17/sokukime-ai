@@ -6,6 +6,7 @@ import { RadarChart } from "@/components/radar-chart";
 import { ReferralPrompt } from "@/components/referral-prompt";
 import type { ScoreResult } from "./page";
 import { trackCTAClick, trackUpgradePromptShown, trackUpgradePromptClicked, trackScoreShared } from "@/lib/tracking";
+import { CATEGORY_LESSON_MAP, getCategoryLearnLinks } from "@/lib/lessons/category-lesson-map";
 
 interface ScoreCardProps {
   score: ScoreResult & { scoreId?: string | null; previousScore?: number | null };
@@ -64,14 +65,6 @@ const CATEGORY_NEXT_STEP: Record<string, { lowTip: string; midTip: string }> = {
   },
 };
 
-/** Map scoring categories to learn page course levels */
-const CATEGORY_LEARN_LINK: Record<string, { href: string; label: string }> = {
-  "アプローチ": { href: "/learn#beginner", label: "初級コースで復習" },
-  "ヒアリング": { href: "/learn#beginner", label: "初級コースで復習" },
-  "プレゼン": { href: "/learn#beginner", label: "初級コースで復習" },
-  "クロージング": { href: "/learn#intermediate", label: "中級コースで復習" },
-  "反論処理": { href: "/learn#advanced", label: "上級コースで復習" },
-};
 
 export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
   // Use score-specific share page if scoreId is available (shows OG image with actual score)
@@ -114,11 +107,11 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           <div className="mb-4 rounded-2xl border border-accent/20 bg-accent/5 px-5 py-4 text-center animate-fade-in-up">
             <div className="text-2xl mb-1" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polyline points="20 6 9 17 4 12"/></svg></div>
             <div className="text-sm font-bold text-foreground">
-              初めてのスコアが出ました！
+              初めてのスコアが出ました
             </div>
             <div className="text-xs text-muted mt-1 leading-relaxed">
               これがあなたの出発点です。練習を重ねるほどスコアは上がります。
-              <br />まずは3回ロープレして、弱点パターンを把握しましょう。
+              <br />まずは3回ロープレすると、弱点パターンが把握できます。
             </div>
           </div>
         )}
@@ -128,10 +121,10 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           <div className="mb-4 rounded-2xl border border-green-500/20 bg-green-500/5 px-5 py-4 text-center animate-fade-in-up">
             <div className="text-2xl mb-1" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
             <div className="text-sm font-bold text-green-500">
-              +{score.overall - score.previousScore}点アップ！前回 {score.previousScore}点 → 今回 {score.overall}点
+              +{score.overall - score.previousScore}点アップ -- 前回 {score.previousScore}点 → 今回 {score.overall}点
             </div>
             <div className="text-xs text-muted mt-1">
-              練習の成果が出ています。この調子で続けましょう！
+              練習の成果が出ています。この調子で続けていきましょう。
             </div>
           </div>
         )}
@@ -189,14 +182,20 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                     </p>
                   </div>
                 )}
-                {cat.score < 60 && CATEGORY_LEARN_LINK[cat.name] && (
-                  <Link
-                    href={CATEGORY_LEARN_LINK[cat.name].href}
-                    className="mt-1 inline-block text-xs text-accent hover:underline"
-                  >
-                    {CATEGORY_LEARN_LINK[cat.name].label} →
-                  </Link>
-                )}
+                {cat.score < 70 && (() => {
+                  const link = getCategoryLearnLinks(cat.name, cat.score);
+                  return link ? (
+                    <Link
+                      href={`/learn/${link.slug}`}
+                      className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-accent hover:underline"
+                    >
+                      <span className="inline-flex h-4 items-center rounded bg-accent/10 px-1.5 text-[10px] font-bold text-accent">
+                        {link.label}
+                      </span>
+                      「{link.title}」で復習 →
+                    </Link>
+                  ) : null;
+                })()}
               </div>
             ))}
           </div>
@@ -407,6 +406,20 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
                   {weakest.score < 60 ? CATEGORY_NEXT_STEP[weakest.name].lowTip : CATEGORY_NEXT_STEP[weakest.name].midTip}
                 </p>
               )}
+              {(() => {
+                const link = getCategoryLearnLinks(weakest.name, weakest.score);
+                return link ? (
+                  <Link
+                    href={`/learn/${link.slug}`}
+                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:underline"
+                  >
+                    <span className="inline-flex h-4 items-center rounded bg-accent/10 px-1.5 text-[10px] font-bold text-accent">
+                      {link.label}
+                    </span>
+                    「{link.title}」レッスンで復習 →
+                  </Link>
+                ) : null;
+              })()}
             </div>
           ) : null;
         })()}
@@ -422,12 +435,19 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
           >
             もう一度ロープレする
           </button>
-          <Link
-            href="/learn"
-            className="flex h-12 flex-1 items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:text-foreground"
-          >
-            営業の型を復習する
-          </Link>
+          {(() => {
+            const weakest = [...score.categories].sort((a, b) => a.score - b.score)[0];
+            const link = weakest ? getCategoryLearnLinks(weakest.name, weakest.score) : null;
+            const href = link ? `/learn/${link.slug}` : "/learn";
+            return (
+              <Link
+                href={href}
+                className="flex h-12 flex-1 items-center justify-center rounded-xl border border-card-border text-sm text-muted transition hover:text-foreground"
+              >
+                弱点を復習する
+              </Link>
+            );
+          })()}
         </div>
 
         {/* Share buttons — prominent placement drives organic growth */}
@@ -484,7 +504,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade }: ScoreCardProps) {
               7日間無料で全機能を試す
             </button>
             <p className="mt-2 text-[11px] text-muted">
-              14日間スコア改善保証・いつでも解約OK・違約金なし
+              14日間返金保証・いつでも解約OK・違約金なし
             </p>
           </div>
         )}
@@ -631,7 +651,7 @@ function ReviewPrompt({ roleplayScore }: { roleplayScore: number }) {
     return (
       <div className="mt-6 w-full max-w-2xl rounded-2xl border border-accent/20 bg-accent/5 p-6 text-center">
         <p className="mb-1 text-sm font-bold">
-          スコア {roleplayScore} 点、お見事です！
+          スコア {roleplayScore} 点を記録しました
         </p>
         <p className="mb-4 text-xs text-muted">
           あなたの声を聞かせてください。料金ページに掲載させていただきます。

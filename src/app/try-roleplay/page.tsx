@@ -359,7 +359,7 @@ export default function TryRoleplayPage() {
                   marginTop: "-0.5em",
                 }}
               >
-                登録不要 ・ クレカ不要 ・ 3分で完了
+                クレカ不要 ・ 3分で完了
               </p>
             </>
           )}

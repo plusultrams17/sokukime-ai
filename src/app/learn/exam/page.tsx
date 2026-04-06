@@ -215,7 +215,7 @@ export default function ExamPage() {
           {statusLoaded && !purchased && (
             <div>
               <div className="border border-gray-200 rounded-xl p-8 text-center mb-10">
-                <span className="text-4xl mb-4 block">🔒</span>
+                <svg className="inline-block h-10 w-10 text-muted mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                 <h2 className="text-lg font-bold text-foreground mb-2">
                   認定試験はプログラム購入後にご利用いただけます
                 </h2>
@@ -602,7 +602,7 @@ export default function ExamPage() {
                     })}
                   </div>
                   <p className="text-sm text-muted mt-4">
-                    正答率が低い分野のレッスンを重点的に復習しましょう。
+                    正答率が低い分野のレッスンを重点的に復習すると効果的です。
                   </p>
                 </div>
               )}
@@ -611,7 +611,7 @@ export default function ExamPage() {
               {passed && (
                 <div className="border border-accent/30 bg-accent/5 rounded-xl p-6 mb-8">
                   <p className="text-sm font-bold text-foreground mb-2">
-                    学習完了！次はAIロープレで実践しましょう
+                    学習完了 -- 次はAIロープレで実践できます
                   </p>
                   <p className="text-xs text-muted mb-4 leading-relaxed">
                     メソッドを学んだ今が、一番伸びるタイミングです。<br />

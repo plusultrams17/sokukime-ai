@@ -55,7 +55,7 @@ const faqItems = [
   {
     question: "Proプランで何が変わりますか？",
     answer:
-      "全8業種のトークスクリプト・切り返し話法テンプレート（30パターン）が使い放題になり、AIロープレも無制限。全5カテゴリの詳細スコアとAI改善アドバイスで、短期間でスキルアップを実感できます。",
+      "全8業種のトークスクリプト・切り返し話法テンプレート（30パターン）が使い放題になり、AIロープレも無制限。全5カテゴリの詳細スコアとAI改善アドバイスで、弱点を把握しながら練習できます。",
   },
   {
     question: "領収書・請求書は発行できますか？",
@@ -70,7 +70,7 @@ const faqItems = [
   {
     question: "返金はできますか？",
     answer:
-      "はい。14日間スコア改善保証があります。Proプランに登録後14日間毎日ロープレを続けてもスコアが改善しない場合、全額返金いたします（14日間で7回以上のロープレ実施が条件）。また、7日間の無料トライアル中はいつでもキャンセル可能で、一切課金されません。",
+      "はい。14日間返金保証があります。Proプランにご満足いただけなかった場合、登録後14日以内であれば全額返金いたします（14日間で7回以上のロープレ実施が条件）。また、7日間の無料トライアル中はいつでもキャンセル可能で、一切課金されません。",
   },
   {
     question: "複数のデバイスで使えますか？",
@@ -286,14 +286,14 @@ export default function PricingPage() {
               marginBottom: "0.5rem",
             }}
           >
-            14日間スコア改善保証
+            14日間返金保証
           </h3>
           <p style={{ fontSize: "0.95rem", color: "#4a5568", lineHeight: 1.6 }}>
-            14日間で営業スコアが改善しなければ、<strong>全額返金します</strong>。<br />
-            リスクなくProの全機能を試せます。
+            Proプランにご満足いただけなかった場合、14日以内なら<strong>全額返金</strong>いたします。<br />
+            まずはリスクなくお試しください。
           </p>
           <p style={{ fontSize: "0.75rem", color: "#718096", marginTop: "0.5rem" }}>
-            ※ 14日間で7回以上のロープレ実施が条件
+            ※ 14日間で7回以上のロープレ実施が返金条件です
           </p>
         </div>
 
@@ -451,7 +451,7 @@ export default function PricingPage() {
 
         {/* Guarantee Badge */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted">
-          <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM14.707 8.707a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg> 14日間スコア改善保証</span>
+          <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM14.707 8.707a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg> 14日間返金保証</span>
           <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg> Stripe安全決済</span>
           <span className="flex items-center gap-1">コンビニ決済対応</span>
           <span className="flex items-center gap-1">経費精算・領収書OK</span>

@@ -157,9 +157,9 @@ export default function Home() {
                 textShadow: "0 1px 8px rgba(0,0,0,0.2)",
               }}
             >
-              22レッスンで商談の「型」を学び、AIロープレで何度でも実践。
-              <br className="hidden sm:block" />
-              登録不要・3分で体験できます。
+              営業の「型」を学び、AIで何度でも実践。
+              <br />
+              3分で体験できます。
             </p>
 
             {/* CTA */}
@@ -169,7 +169,7 @@ export default function Home() {
 
             {/* Trust signals */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
-              {["22レッスン収録", "3分で体験完了", "登録・クレカ不要"].map((text) => (
+              {["22レッスン収録", "クレカ不要", "いつでも退会OK"].map((text) => (
                 <span
                   key={text}
                   className="inline-flex items-center gap-1.5 text-xs sm:text-sm"
@@ -236,7 +236,9 @@ export default function Home() {
       <section style={{ backgroundColor: "#f7f8ea" }}>
         <div className="lp-section text-center">
           <p className="lp-heading mb-8">
-            入社1〜3年目、こんな<span className="lp-highlight">壁</span>にぶつかっていませんか？
+            入社1〜3年目、
+            <br className="sm:hidden" />
+            こんな<span className="lp-highlight">壁</span>にぶつかっていませんか？
           </p>
           <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
             {[
@@ -429,9 +431,9 @@ export default function Home() {
             <SecondaryCTA />
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted">
-            <span>登録不要</span>
-            <span className="hidden sm:inline text-card-border">|</span>
             <span>3分で体験完了</span>
+            <span className="hidden sm:inline text-card-border">|</span>
+            <span>クレカ不要</span>
             <span className="hidden sm:inline text-card-border">|</span>
             <span>いつでも退会OK</span>
           </div>
