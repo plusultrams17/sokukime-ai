@@ -48,10 +48,13 @@ const GUEST_COMPLETED_KEY = "guest-roleplay-completed";
 
 export default function TryRoleplayPage() {
   const router = useRouter();
-  const [industry, setIndustry] = useState<string>("painting");
-  const [difficulty, setDifficulty] = useState<string>("cautious");
-  const [scene, setScene] = useState<string>("phone");
+  const [industry, setIndustry] = useState<string>("");
+  const [difficulty, setDifficulty] = useState<string>("");
+  const [scene, setScene] = useState<string>("");
   const [alreadyTried, setAlreadyTried] = useState(false);
+
+  const allSelected = industry !== "" && difficulty !== "" && scene !== "";
+  const missingCount = [industry, difficulty, scene].filter((v) => v === "").length;
 
   // Check if user already completed guest trial
   useEffect(() => {
@@ -290,7 +293,7 @@ export default function TryRoleplayPage() {
                 >
                   3. シーンを選ぶ
                 </label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                   {SCENES.map((s) => (
                     <button
                       key={s.value}
@@ -319,13 +322,34 @@ export default function TryRoleplayPage() {
               </section>
 
               {/* Start button */}
-              <button
-                type="button"
-                onClick={handleStart}
-                className="pixar-start-btn"
-              >
-                体験開始 →
-              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={handleStart}
+                  disabled={!allSelected}
+                  className="pixar-start-btn"
+                >
+                  {allSelected ? "体験開始 →" : `あと${missingCount}つ選んでください`}
+                </button>
+                {!allSelected && (
+                  <p
+                    className="mt-2 text-center"
+                    style={{
+                      fontSize: "0.75em",
+                      fontWeight: 700,
+                      color: "#c4693d",
+                    }}
+                  >
+                    ↑{" "}
+                    {[
+                      ...(industry === "" ? ["業種"] : []),
+                      ...(difficulty === "" ? ["難易度"] : []),
+                      ...(scene === "" ? ["シーン"] : []),
+                    ].join("・")}
+                    を選択してください
+                  </p>
+                )}
+              </div>
 
               <p
                 className="text-center"

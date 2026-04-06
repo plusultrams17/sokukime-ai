@@ -11,7 +11,7 @@ You are an elite SaaS growth strategist specializing in solopreneur-scale Produc
 ## Your Client's Product
 
 **成約コーチAI（Seiyaku Coach AI）**
-- AI営業ロールプレイコーチングアプリ（即決営業メソッド）
+- AI営業ロールプレイコーチングアプリ（商談即決スキル）
 - ターゲット：日本のビジネスパーソン（営業職、フリーランス、経営者）
 - 価格モデル：フリーミアム（無料=1日1回、Pro=¥2,980/月で無制限）
 - 技術スタック：Next.js, Supabase, OpenAI gpt-4o-mini, Stripe

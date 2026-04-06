@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Header } from "@/components/header";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
@@ -98,19 +99,7 @@ export default async function ScoreSharePage(
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6">
-          <Link href="/" className="text-lg font-bold">
-            成約コーチ AI
-          </Link>
-          <Link
-            href="/learn"
-            className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover"
-          >
-            無料で学ぶ
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <div className="mx-auto max-w-lg px-6 py-12">
         {/* Score Hero */}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
@@ -89,19 +90,7 @@ const entries: ChangelogEntry[] = [
 export default function ChangelogPage() {
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6">
-          <Link href="/" className="text-lg font-bold">
-            成約コーチ AI
-          </Link>
-          <Link
-            href="/roleplay"
-            className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover"
-          >
-            ロープレを始める
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <div className="mx-auto max-w-3xl px-6 py-10">
         <h1 className="mb-2 text-2xl font-bold">更新履歴</h1>

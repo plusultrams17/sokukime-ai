@@ -87,7 +87,7 @@ export default function Home() {
   return (
     <div className="lp-page min-h-screen bg-background">
       <JsonLd data={jsonLdData} />
-      <Header minimal />
+      <Header />
 
       {/* SEO */}
       <h1 className="sr-only">
@@ -169,7 +169,7 @@ export default function Home() {
 
             {/* Trust signals */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
-              {["平均67%切り返し成功率", "3分で体験完了", "登録・クレカ不要"].map((text) => (
+              {["22レッスン収録", "3分で体験完了", "登録・クレカ不要"].map((text) => (
                 <span
                   key={text}
                   className="inline-flex items-center gap-1.5 text-xs sm:text-sm"
@@ -236,7 +236,7 @@ export default function Home() {
       <section style={{ backgroundColor: "#f7f8ea" }}>
         <div className="lp-section pb-0">
           <p className="lp-heading text-center" style={{ marginBottom: "-30px" }}>
-            営業の<span className="lp-highlight">「型」</span>を学んだ人の変化
+            AIロープレの<span className="lp-highlight">スコアリング</span>評価基準
           </p>
         </div>
         {/* Full-width image with stats overlaid top-left */}
@@ -251,9 +251,9 @@ export default function Home() {
           {/* Stats — top-left overlay, individual cards */}
           <div className="absolute top-4 left-4 space-y-2 sm:top-8 sm:left-8 sm:space-y-3 lg:top-12 lg:left-12">
             {[
-              { value: "1.8倍", label: "初回商談での成約率" },
-              { value: "67%", label: "「検討します」からの切り返し成功率" },
-              { value: "83%", label: "受講者が3週間でスコア改善" },
+              { value: "5カテゴリ", label: "スコアで弱点を可視化" },
+              { value: "3分", label: "1回のロープレ所要時間" },
+              { value: "22レッスン", label: "体系的な営業メソッド" },
             ].map((stat, i) => (
               <div key={i} className="flex items-center gap-2 rounded-lg bg-white/85 px-3 py-2 shadow-md backdrop-blur-sm sm:px-4 sm:py-3">
                 <span className="shrink-0 text-sm font-bold sm:text-base lg:text-lg" style={{ color: "var(--lp-cta)" }}>
@@ -265,10 +265,6 @@ export default function Home() {
               </div>
             ))}
           </div>
-          {/* Citation */}
-          <p className="absolute bottom-3 left-4 text-xs text-muted/70 sm:bottom-6 sm:left-8">
-            ※自社プラットフォームデータに基づく（2024年）
-          </p>
         </div>
       </section>
 
@@ -313,8 +309,9 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          4. 社会的証明
+          4. 社会的証明 — 実ユーザーが集まるまで非表示
       ═══════════════════════════════════════════════ */}
+      {/*
       <section style={{ backgroundColor: "#e8e6e1" }}>
         <div className="lp-section pt-6 text-center">
           <p className="lp-heading mb-8">
@@ -343,6 +340,52 @@ export default function Home() {
               className="w-full"
             />
           </div>
+          <p className="mt-4 text-center text-xs text-muted/70">
+            ※サービスイメージです。実際のユーザーの声ではありません
+          </p>
+        </div>
+      </section>
+      */}
+
+      {/* ═══════════════════════════════════════════════
+          4. こんな悩みはありませんか？
+      ═══════════════════════════════════════════════ */}
+      <section style={{ backgroundColor: "#e8e6e1" }}>
+        <div className="lp-section pt-6 text-center">
+          <p className="lp-heading mb-8">
+            こんな<span className="lp-highlight">悩み</span>はありませんか？
+          </p>
+          <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
+            {[
+              {
+                emoji: "😥",
+                text: "先輩が忙しくてロープレ相手がいない",
+              },
+              {
+                emoji: "🙈",
+                text: "何回ミスしても恥ずかしくない環境がほしい",
+              },
+              {
+                emoji: "🤔",
+                text: "自分の営業トークの何が悪いか分からない",
+              },
+            ].map((item) => (
+              <div
+                key={item.text}
+                className="rounded-xl bg-white/80 px-5 py-6 shadow-sm backdrop-blur-sm"
+              >
+                <p className="mb-2 text-2xl">{item.emoji}</p>
+                <p className="text-sm font-medium leading-relaxed text-foreground">
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-sm text-muted">
+            成約コーチ AIなら、<strong className="text-foreground">24時間いつでも</strong>AIがロープレ相手になり、
+            <br className="hidden sm:block" />
+            <strong className="text-foreground">5カテゴリのスコア</strong>で改善ポイントが一目瞭然です。
+          </p>
         </div>
       </section>
 

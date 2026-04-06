@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/json-ld";
 export const metadata: Metadata = {
   title: "営業メソッド学習プログラム｜22レッスン+認定試験",
   description:
-    "成約5ステップメソッドを体系的に学べる営業学習コース。初級（アプローチ・ヒアリング・プレゼン）8レッスン、中級（クロージング）7レッスン、上級（反論処理）7レッスン＋認定試験。営業心理学に基づく実践的なカリキュラム。",
+    "営業の5ステップメソッドを22レッスンで学習。初級〜上級まで段階的に営業心理学を習得できます",
   alternates: { canonical: "/learn" },
 };
 

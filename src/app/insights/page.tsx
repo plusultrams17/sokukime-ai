@@ -10,6 +10,7 @@ import { SalesTalkPanel } from "@/components/insights/SalesTalkPanel";
 import { InsightPaywall } from "@/components/insights/InsightPaywall";
 import { InsightSkeleton } from "@/components/insights/InsightSkeleton";
 import { IndustrySetupModal } from "@/components/insights/IndustrySetupModal";
+import { Header } from "@/components/header";
 
 const DEFAULT_INDUSTRIES = [
   { slug: "all", label: "すべて" },
@@ -175,20 +176,7 @@ export default function InsightsPage() {
 
   return (
     <>
-      {/* Header */}
-      <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6">
-          <Link href="/" className="text-lg font-bold">
-            成約コーチ AI
-          </Link>
-          <Link
-            href="/roleplay"
-            className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover"
-          >
-            ロープレを始める
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <div
         className={`mx-auto max-w-4xl px-6 py-10 ${

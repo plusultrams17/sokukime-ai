@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
+import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { trackCTAClick, trackCheckoutStarted, trackPricingPageView, trackCheckoutStart } from "@/lib/tracking";
 import { PricingExitPopup } from "@/components/exit-popups/pricing-exit-popup";
@@ -57,11 +58,6 @@ const faqItems = [
       "全8業種のトークスクリプト・切り返し話法テンプレート（30パターン）が使い放題になり、AIロープレも無制限。全5カテゴリの詳細スコアとAI改善アドバイスで、短期間でスキルアップを実感できます。",
   },
   {
-    question: "年額プランはありますか？",
-    answer:
-      "はい。年額プラン（¥29,800/年）をご用意しています。月額換算で約¥2,483となり、2ヶ月分おトクです。",
-  },
-  {
     question: "領収書・請求書は発行できますか？",
     answer:
       "はい。Stripeの決済管理画面から領収書をダウンロードいただけます。法人利用の場合は経費精算にもご利用いただけます。",
@@ -90,7 +86,6 @@ const faqItems = [
 
 export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [promoCode, setPromoCode] = useState("");
   const [promoOpen, setPromoOpen] = useState(false);
   const [activePromo] = useState(() => getActivePromotion());
@@ -109,24 +104,19 @@ export default function PricingPage() {
   }, []);
 
   const monthlyPrice = 2980;
-  const annualPrice = 29800;
-  const annualMonthly = Math.round(annualPrice / 12);
-  const savingsMonths = 2;
   // Tax-inclusive prices (Japan law requires 総額表示 since 2021-04-01)
   const monthlyTaxInc = Math.round(monthlyPrice * 1.1);
-  const annualTaxInc = Math.round(annualPrice * 1.1);
-  const annualMonthlyTaxInc = Math.round(annualTaxInc / 12);
 
   async function handleUpgrade() {
     setIsLoading(true);
     trackCTAClick("pricing_pro", "pricing_page", "/api/stripe/checkout");
     trackCheckoutStarted();
-    trackCheckoutStart({ billing });
+    trackCheckoutStart({});
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ billing, ...(promoCode ? { promoCode } : {}) }),
+        body: JSON.stringify({ ...(promoCode ? { promoCode } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -158,9 +148,9 @@ export default function PricingPage() {
         offers: {
           "@type": "AggregateOffer",
           lowPrice: "0",
-          highPrice: "29800",
+          highPrice: "2980",
           priceCurrency: "JPY",
-          offerCount: 3,
+          offerCount: 2,
           offers: [
             {
               "@type": "Offer",
@@ -177,16 +167,6 @@ export default function PricingPage() {
               price: "2980",
               priceCurrency: "JPY",
               description: "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス",
-              availability: "https://schema.org/InStock",
-              url: `${siteUrl}/pricing`,
-              priceValidUntil: "2026-12-31",
-            },
-            {
-              "@type": "Offer",
-              name: "Proプラン（年額）",
-              price: "29800",
-              priceCurrency: "JPY",
-              description: "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス（2ヶ月分おトク）",
               availability: "https://schema.org/InStock",
               url: `${siteUrl}/pricing`,
               priceValidUntil: "2026-12-31",
@@ -231,38 +211,7 @@ export default function PricingPage() {
     <div className="min-h-screen bg-background">
       <JsonLd data={pricingJsonLd} />
 
-      {/* Header */}
-      <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-3">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="header-logo">
-              <path d="M8 38c2-1 5-2 9-2s7 1 9 3" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-              <path d="M17 36c2-1.5 4-2 6-1.5 2.5 0.8 4 2.5 5 4.5 0.8 1.5 0.5 3-0.5 4s-2.5 1.5-4 1" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-              <path d="M56 38c-2-1-5-2-9-2s-7 1-9 3" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-              <path d="M47 36c-2-1.5-4-2-6-1.5-2.5 0.8-4 2.5-5 4.5-0.8 1.5-0.5 3 0.5 4s2.5 1.5 4 1" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" />
-              <path d="M27 39c1.5-2 3.5-3 5-3s3.5 1 5 3c1 1.5 1 3 0 4s-2.5 1.5-5 1.5-4-0.5-5-1.5-1-2.5 0-4z" stroke="var(--accent)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M25.5 38.5c1-1 2-1.2 3-0.8 1.2 0.4 1.8 1.5 1.5 2.8" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-              <path d="M38.5 38.5c-1-1-2-1.2-3-0.8-1.2 0.4-1.8 1.5-1.5 2.8" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-              <circle cx="32" cy="24" r="2" fill="var(--accent)" opacity="0.7" />
-              <circle cx="24" cy="27" r="1.3" fill="var(--accent)" opacity="0.6" />
-              <circle cx="40" cy="27" r="1.3" fill="var(--accent)" opacity="0.6" />
-              <path d="M32 28v-5" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-              <path d="M27 30l-2-3" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-              <path d="M37 30l2-3" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-            </svg>
-            <span className="header-wave-text" aria-label="成約コーチ AI">
-              <span className="header-wave-text__outline">成約コーチ AI</span>
-              <span className="header-wave-text__fill">成約コーチ AI</span>
-            </span>
-          </Link>
-          <Link
-            href="/learn"
-            className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover"
-          >
-            無料で学ぶ
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <div className="mx-auto max-w-4xl px-6 py-20">
         {/* Trial Countdown Banner — 競合失敗分析: urgency drives 15-25% more conversions */}
@@ -316,33 +265,6 @@ export default function PricingPage() {
               7日間の無料トライアル中はいつでもキャンセル可能。課金後も1クリックで即解約、違約金・手数料は一切ありません。
             </p>
           </div>
-        </div>
-
-        {/* Billing Toggle */}
-        <div className="mb-10 flex items-center justify-center gap-3">
-          <button
-            onClick={() => setBilling("monthly")}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-              billing === "monthly"
-                ? "bg-card text-foreground shadow-sm border border-card-border"
-                : "text-muted hover:text-foreground"
-            }`}
-          >
-            月額
-          </button>
-          <button
-            onClick={() => setBilling("annual")}
-            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
-              billing === "annual"
-                ? "bg-card text-foreground shadow-sm border border-card-border"
-                : "text-muted hover:text-foreground"
-            }`}
-          >
-            年額
-            <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-[11px] font-bold text-green-500">
-              {savingsMonths}ヶ月分おトク
-            </span>
-          </button>
         </div>
 
         {/* Score Improvement Guarantee — Hero級配置: Pricing Card直上で返金保証を強調 */}
@@ -432,28 +354,11 @@ export default function PricingPage() {
             <div className="mb-6">
               <h3 className="text-xl font-bold text-accent">Proプラン</h3>
               <div className="mt-4">
-                {billing === "annual" ? (
-                  <>
-                    <span className="text-4xl font-bold">¥{annualMonthly.toLocaleString()}</span>
-                    <span className="text-muted">/月</span>
-                    <div className="mt-1 flex items-center gap-2">
-                      <span className="text-sm text-muted line-through">¥{monthlyPrice.toLocaleString()}/月</span>
-                      <span className="text-xs text-muted">
-                        年額 ¥{annualPrice.toLocaleString()}
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-4xl font-bold">¥{monthlyPrice.toLocaleString()}</span>
-                    <span className="text-muted">/月</span>
-                  </>
-                )}
+                <span className="text-4xl font-bold">¥{monthlyPrice.toLocaleString()}</span>
+                <span className="text-muted">/月</span>
               </div>
               <p className="mt-1 text-xs text-muted">
-                {billing === "annual"
-                  ? `税込 ¥${annualMonthlyTaxInc.toLocaleString()}/月（年額 ¥${annualTaxInc.toLocaleString()}）`
-                  : `税込 ¥${monthlyTaxInc.toLocaleString()}/月`}
+                税込 ¥{monthlyTaxInc.toLocaleString()}/月
               </p>
               <p className="mt-2 text-sm text-muted">
                 全コンテンツ+無制限AIロープレで本気のスキルアップ
@@ -461,7 +366,7 @@ export default function PricingPage() {
             </div>
 
             {/* Campaign Notice — auto-applied at checkout */}
-            {activePromo && billing === "monthly" && (
+            {activePromo && (
               <div className="mb-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-2.5 text-center">
                 <p className="text-xs font-bold text-accent">
                   {activePromo.name}適用中
@@ -489,7 +394,7 @@ export default function PricingPage() {
                 ✅ 7日間は100%無料（1円も請求されません）
               </p>
               <p style={{ fontSize: "0.85rem", color: "#7f1d1d", marginTop: "0.3rem" }}>
-                カード登録後、7日経過してから初めて {billing === "annual" ? `¥${annualMonthlyTaxInc.toLocaleString()}/月（税込）` : `¥${monthlyTaxInc.toLocaleString()}/月（税込）`} が課金されます
+                カード登録後、7日経過してから初めて ¥{monthlyTaxInc.toLocaleString()}/月（税込）が課金されます
               </p>
             </div>
 

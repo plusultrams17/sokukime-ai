@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Header } from "@/components/header";
 
 export default function LegalLayout({
   children,
@@ -7,20 +8,7 @@ export default function LegalLayout({
 }) {
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🔥</span>
-            <span className="text-lg font-bold">成約コーチ AI</span>
-          </Link>
-          <Link
-            href="/learn"
-            className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent-hover"
-          >
-            無料で学ぶ
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <main className="mx-auto max-w-3xl px-6 py-16">{children}</main>
 
