@@ -17,20 +17,41 @@ import { isLessonFree, FREE_LESSON_SLUGS } from "@/lib/lessons/access";
 const TABS = ["理論", "トーク例", "確認クイズ", "実践練習"];
 
 /**
- * Process examples HTML to wrap consecutive dialogue lines
- * (lines starting with 営業：/お客様：/顧客：) in .dialogue containers.
+ * Process examples HTML:
+ * 1. Wrap consecutive dialogue lines in .dialogue containers.
+ * 2. Wrap speaker names (営業：, お客様：, etc.) with colored span tags.
  */
 function processExamplesHtml(html: string): string {
-  const lines = html.split("\n");
+  // Step 1: Wrap speaker names with colored spans
+  let processed = html
+    .replace(
+      /(<p><strong>)(営業(?:[\s\u3000]*[（(].*?[）)])?[\s\u3000]*[：:])(<\/strong>)/g,
+      '$1<span class="speaker-sales">$2</span>$3'
+    )
+    .replace(
+      /(<p><strong>)((?:お客様|顧客|相手|客)(?:[\s\u3000]*[（(].*?[）)])?[\s\u3000]*[：:])(<\/strong>)/g,
+      '$1<span class="speaker-customer">$2</span>$3'
+    )
+    .replace(
+      /(<p>)(営業(?:[\s\u3000]*[（(].*?[）)])?[\s\u3000]*[：:])(?!<\/strong>)/g,
+      '$1<span class="speaker-sales">$2</span>'
+    )
+    .replace(
+      /(<p>)((?:お客様|顧客|相手|客)(?:[\s\u3000]*[（(].*?[）)])?[\s\u3000]*[：:])(?!<\/strong>)/g,
+      '$1<span class="speaker-customer">$2</span>'
+    );
+
+  // Step 2: Wrap consecutive dialogue lines in .dialogue containers
+  const lines = processed.split("\n");
   const result: string[] = [];
   let inDialogue = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
 
-    // Dialogue starter: lines with role labels
+    // Dialogue starter: lines with role labels (check both raw and span-wrapped)
     const isDialogueStart =
-      /^<p>(?:営業|お客様|顧客|相手|客)：/.test(line);
+      /^<p>(?:<strong>)?(?:<span class="speaker-(?:sales|customer)">)?(?:営業|お客様|顧客|相手|客)/.test(line);
     // Stage directions only continue an existing dialogue
     const isStageDirection =
       /^<p><em>[^<]*<\/em><\/p>$/.test(line);
@@ -612,28 +633,6 @@ export default function LessonPage() {
                       </Link>
                     </div>
 
-                    {/* Next lesson link */}
-                    {next && (
-                      <div className="mt-10 flex justify-end">
-                        <Link
-                          href={`/learn/${next.slug}`}
-                          className="lesson-next-btn group"
-                          style={{ "--level-color": color } as React.CSSProperties}
-                        >
-                          <div className="text-right min-w-0">
-                            <p className="text-xs text-white/70 mb-0.5">次のレッスン</p>
-                            <p className="text-sm font-bold text-white truncate">
-                              {next.title}
-                            </p>
-                          </div>
-                          <svg className="lesson-next-btn__arrows" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 43">
-                            <polygon points="39.58,4.46 44.11,0 66,21.5 44.11,43 39.58,38.54 56.94,21.5" />
-                            <polygon points="19.79,4.46 24.32,0 46.21,21.5 24.32,43 19.79,38.54 37.15,21.5" />
-                            <polygon points="0,4.46 4.53,0 26.42,21.5 4.53,43 0,38.54 17.36,21.5" />
-                          </svg>
-                        </Link>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>

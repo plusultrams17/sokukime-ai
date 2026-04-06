@@ -505,29 +505,62 @@ body {
   background: none;
 }
 
-/* NG / OK example blocks */
+/* ── NG / OK example card blocks ── */
 .blog-content .example-ng,
 .blog-content .example-ok {
-  margin-bottom: 1.25rem;
-  padding: 1rem 1.25rem;
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.25rem 1rem;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .blog-content .example-ng {
-  border-left: 4px solid #DC2626;
   background: #FEF2F2;
+  border: 1px solid #FECACA;
 }
 
 .blog-content .example-ok {
-  border-left: 4px solid #16A34A;
   background: #F0FDF4;
+  border: 1px solid #BBF7D0;
 }
 
+/* Label bar via ::before on h3 */
 .blog-content .example-ng h3,
 .blog-content .example-ok h3 {
+  position: relative;
   border-left: none;
   padding-left: 0;
   margin-top: 0;
+  margin-bottom: 0.75rem;
   font-size: 0.9375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.blog-content .example-ng h3::before,
+.blog-content .example-ok h3::before {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #fff;
+  padding: 0.2rem 0.625rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.blog-content .example-ng h3::before {
+  content: "\2715  NG";
+  background: #DC2626;
+}
+
+.blog-content .example-ok h3::before {
+  content: "\2713  OK";
+  background: #16A34A;
 }
 
 .blog-content .example-ng h3 {
@@ -541,6 +574,11 @@ body {
 .blog-content .example-ng p:last-child,
 .blog-content .example-ok p:last-child {
   margin-bottom: 0;
+}
+
+.blog-content .example-ng p,
+.blog-content .example-ok p {
+  margin-bottom: 0.5rem;
 }
 
 .blog-content .example-ng strong {
@@ -558,19 +596,26 @@ body {
   color: inherit;
   font-style: italic;
   font-weight: 400;
-  opacity: 0.7;
+  opacity: 0.65;
+  font-size: 0.8125rem;
 }
 
-/* Dialogue quote styling */
+/* ── Dialogue card block ── */
 .blog-content .dialogue {
-  margin-bottom: 1.25rem;
-  padding: 1rem 1.25rem;
-  background: #F8F9FA;
-  border-left: 3px solid var(--card-border);
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.25rem 1rem;
+  background: #F8FAFC;
+  border-left: 3px solid #3B82F6;
+  border-radius: 0 12px 12px 0;
+  border-top: 1px solid #E2E8F0;
+  border-right: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
 }
 
 .blog-content .dialogue p {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.625rem;
+  line-height: 1.7;
 }
 
 .blog-content .dialogue p:last-child {
@@ -579,9 +624,87 @@ body {
 
 .blog-content .dialogue em {
   display: block;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   font-size: 0.8125rem;
-  opacity: 0.7;
+  color: #94A3B8;
+  font-style: italic;
+}
+
+/* ── Speaker name coloring ── */
+.blog-content .speaker-sales {
+  font-weight: 700;
+  color: #2563EB;
+}
+
+.blog-content .speaker-customer {
+  font-weight: 700;
+  color: #EA580C;
+}
+
+/* ── Talk example card (.example-talk) ── */
+.blog-content .example-talk {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.25rem 1rem 1.5rem;
+  background: #F0F4FF;
+  border-left: 3px solid #3B82F6;
+  border-radius: 0 12px 12px 0;
+  border-top: 1px solid #DBEAFE;
+  border-right: 1px solid #DBEAFE;
+  border-bottom: 1px solid #DBEAFE;
+}
+
+.blog-content .example-talk::before {
+  content: "\275D";
+  position: absolute;
+  top: 0.625rem;
+  right: 0.875rem;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: #93C5FD;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.blog-content .example-talk p {
+  margin-bottom: 0.5rem;
+}
+
+.blog-content .example-talk p:last-child {
+  margin-bottom: 0;
+}
+
+.blog-content .example-talk strong {
+  background: none;
+  color: #1E3A5F;
+}
+
+.blog-content .example-talk em {
+  color: #64748B;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.8125rem;
+}
+
+/* ── Responsive adjustments for example blocks ── */
+@media (max-width: 640px) {
+  .blog-content .example-ng,
+  .blog-content .example-ok {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .blog-content .dialogue,
+  .blog-content .example-talk {
+    padding: 1rem 1rem 0.75rem 1.125rem;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .blog-content .example-talk::before {
+    font-size: 1.25rem;
+    top: 0.5rem;
+    right: 0.625rem;
+  }
 }
 
 /* ── Lesson Card (hover-reveal) ── */
