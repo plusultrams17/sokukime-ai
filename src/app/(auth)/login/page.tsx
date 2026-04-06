@@ -22,7 +22,6 @@ function LoginForm() {
 
   const [error, setError] = useState(searchParams.get("error") || "");
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [showEmailForm, setShowEmailForm] = useState(false);
   const [stats, setStats] = useState<{ totalUsers: number; totalSessions: number } | null>(null);
 
   useEffect(() => {
@@ -103,32 +102,6 @@ function LoginForm() {
             )}
           </button>
 
-          {/* OR 区切り線 */}
-          <div className="flex items-center gap-3 my-1 text-[11px] text-muted">
-            <div className="flex-1 h-px bg-card-border" aria-hidden="true"></div>
-            <span>または</span>
-            <div className="flex-1 h-px bg-card-border" aria-hidden="true"></div>
-          </div>
-
-          {/* Email登録ボタン（Googleと同等サイズ） */}
-          <button
-            type="button"
-            onClick={() => setShowEmailForm((prev) => !prev)}
-            aria-expanded={showEmailForm}
-            className="flex h-14 w-full items-center justify-center gap-2 rounded-xl border-2 border-card-border bg-card text-sm font-bold text-foreground transition hover:border-accent hover:text-accent"
-          >
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2"/>
-              <path d="M3 7l9 6 9-6"/>
-            </svg>
-            メールアドレスで続ける
-          </button>
-
-          {showEmailForm && (
-            <div className="rounded-lg border border-card-border bg-card/50 px-4 py-3 text-xs text-muted text-center">
-              メール登録は現在準備中です。Googleアカウントでのご登録をご利用ください。
-            </div>
-          )}
         </div>
 
         {/* Free Plan 価値訴求（強化版） */}

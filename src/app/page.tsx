@@ -157,7 +157,7 @@ export default function Home() {
                 textShadow: "0 1px 8px rgba(0,0,0,0.2)",
               }}
             >
-              訪販・保険・不動産の現場で磨かれた「商談即決スキル」を、
+              訪販・保険・不動産の営業マンが使う「商談即決スキル」を、
               <br className="hidden sm:block" />
               AIロープレで体に叩き込む。3分後、あなたの切り返しが変わります。
             </p>

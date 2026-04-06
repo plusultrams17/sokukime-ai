@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPersona } from "@/lib/personas";
 import { checkRateLimit } from "@/lib/rate-limit";
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 /**
  * Guest chat API — no auth required.
@@ -31,14 +31,14 @@ const SYSTEM_PROMPT = `あなたは営業ロープレ用の「お客さん役」
 - 日本語の口語体で話してください
 - ペルソナの指示に従って返答の長さ・トーンを調整してください`;
 
-let anthropicClient: Anthropic | null = null;
-function getAnthropicClient(): Anthropic | null {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+let openaiClient: OpenAI | null = null;
+function getOpenAIClient(): OpenAI | null {
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
-  if (!anthropicClient) {
-    anthropicClient = new Anthropic({ apiKey });
+  if (!openaiClient) {
+    openaiClient = new OpenAI({ apiKey });
   }
-  return anthropicClient;
+  return openaiClient;
 }
 
 function getClientIP(request: NextRequest): string {
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext } =
       await request.json();
 
-    const client = getAnthropicClient();
+    const client = getOpenAIClient();
     if (!client) {
       return NextResponse.json({ message: getDefaultResponse() }, { status: 200 });
     }
@@ -113,20 +113,22 @@ export async function POST(request: NextRequest) {
 - 営業マンの商材: ${product}
 - お客さんのタイプ: ${persona?.label || "慎重なお客さん"}`;
 
-    const anthropicMessages = (messages as { role: string; content: string }[]).map((m) => ({
-      role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
-      content: m.content,
-    }));
+    const openaiMessages: OpenAI.ChatCompletionMessageParam[] = [
+      { role: "system", content: systemContent },
+      ...(messages as { role: string; content: string }[]).map((m) => ({
+        role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
+        content: m.content,
+      })),
+    ];
 
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
       max_tokens: 300,
-      system: systemContent,
-      messages: anthropicMessages,
+      messages: openaiMessages,
     });
 
     const assistantMessage =
-      response.content[0]?.type === "text" ? response.content[0].text : getDefaultResponse();
+      response.choices[0]?.message?.content ?? getDefaultResponse();
 
     return NextResponse.json({ message: assistantMessage });
   } catch (error) {
