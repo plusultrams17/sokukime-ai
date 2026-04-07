@@ -1,20 +1,32 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { getStripe } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 30;
 
+function getBaseUrl(): string {
+  // 1. Explicit env var
+  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
+  // 2. Vercel auto-set URL
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  // 3. Fallback
+  return "https://seiyaku-coach.vercel.app";
+}
+
 export async function POST() {
   // Step 1: Check env vars
   const priceId = process.env.STRIPE_PROGRAM_PRICE_ID;
   const stripeKey = process.env.STRIPE_SECRET_KEY;
+  const baseUrl = getBaseUrl();
 
   console.log("[checkout-program] Step 1 - env check:", {
     hasPriceId: !!priceId,
-    priceIdPrefix: priceId?.substring(0, 10),
     hasStripeKey: !!stripeKey,
     stripeKeyPrefix: stripeKey?.substring(0, 8),
-    stripeKeyLength: stripeKey?.length,
+    baseUrl,
   });
 
   if (!priceId) {
@@ -77,8 +89,8 @@ export async function POST() {
       payment_method_types: ["card"],
       allow_promotion_codes: true,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/program/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/program`,
+      success_url: `${baseUrl}/program/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/program`,
       locale: "ja",
       metadata: {
         supabase_user_id: userId,
