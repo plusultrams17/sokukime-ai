@@ -47,6 +47,7 @@ export async function POST() {
         : { customer_email: user.email! }),
       client_reference_id: user.id,
       mode: "payment",
+      payment_method_types: ["card"],
       allow_promotion_codes: true,
       line_items: [
         {
