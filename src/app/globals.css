@@ -3681,3 +3681,202 @@ body {
   border-bottom: 11px solid var(--card);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Rebuttal Challenge — Premium Animations
+═══════════════════════════════════════════════════════════ */
+
+/* ── Timer ── */
+.rc-timer-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+.rc-timer-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.rc-timer-urgent {
+  animation: rc-pulse-urgent 0.5s ease-in-out infinite alternate;
+}
+@keyframes rc-pulse-urgent {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+/* ── Intro icon ── */
+.rc-intro-icon-wrap {
+  display: flex;
+  justify-content: center;
+}
+.rc-intro-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  color: var(--accent);
+  background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(249,115,22,0.05));
+  box-shadow: 0 0 0 0 rgba(249,115,22,0.3);
+  animation: rc-icon-pulse 2s ease-in-out infinite;
+}
+@keyframes rc-icon-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.3); }
+  50% { box-shadow: 0 0 0 16px rgba(249,115,22,0); }
+}
+
+/* ── Start button ── */
+.rc-start-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 32px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  border: none;
+}
+.rc-start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(249,115,22,0.35);
+}
+.rc-start-btn-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: rc-btn-shine 2.5s ease-in-out infinite;
+}
+@keyframes rc-btn-shine {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+
+/* ── Objection card ── */
+.rc-objection-card {
+  position: relative;
+  border-radius: 1rem;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.rc-objection-card::before {
+  content: "\201C";
+  position: absolute;
+  top: -4px;
+  left: 12px;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.15;
+  font-family: Georgia, serif;
+}
+
+/* ── Grade badge ── */
+.rc-grade-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--grade-color) 12%, transparent);
+  border: 3px solid var(--grade-color);
+  animation: rc-grade-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.rc-grade-final {
+  width: 96px;
+  height: 96px;
+}
+.rc-grade-letter {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--grade-color);
+  line-height: 1;
+}
+.rc-grade-final .rc-grade-letter {
+  font-size: 2.75rem;
+}
+@keyframes rc-grade-pop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── 3D Flip Card ── */
+.rc-flip-container {
+  perspective: 800px;
+}
+.rc-flip-card {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.rc-flipped {
+  transform: rotateY(180deg);
+}
+.rc-flip-front,
+.rc-flip-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 1rem;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rc-flip-front {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  border: 2px dashed var(--accent);
+  background: color-mix(in srgb, var(--accent) 3%, var(--card));
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.rc-flip-front:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--card));
+}
+.rc-flip-back {
+  transform: rotateY(180deg);
+  border: 1px solid var(--accent);
+  background: var(--card);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 8px 32px rgba(249,115,22,0.12);
+}
+/* Make container match content height after flip */
+.rc-flip-card:not(.rc-flipped) {
+  height: 200px;
+}
+.rc-flipped .rc-flip-front {
+  pointer-events: none;
+}
+.rc-flipped .rc-flip-back {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rc-timer-urgent,
+  .rc-intro-icon,
+  .rc-start-btn-glow { animation: none; }
+  .rc-grade-badge { animation: none; transform: scale(1); opacity: 1; }
+  .rc-flip-card { transition: none; }
+}
+

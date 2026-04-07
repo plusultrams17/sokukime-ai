@@ -76,6 +76,16 @@ const tools = [
     keywords: ["営業 弱点", "業種別 ランキング"],
     time: "閲覧のみ",
   },
+  {
+    slug: "rebuttal-challenge",
+    name: "60秒 切り返しチャレンジ",
+    description:
+      "賃貸物件の内見中、お客さんの反論に60秒以内で切り返せ。即座に採点＋模範トーク表示。スピードと内容の2軸で実力を測定。",
+    icon: "",
+    image: "",
+    keywords: ["反論 切り返し", "60秒 チャレンジ"],
+    time: "約5分",
+  },
 ];
 
 const SITE_URL =
@@ -124,7 +134,7 @@ export default function ToolsPage() {
             営業力を鍛える<span className="text-accent">無料ツール</span>
           </h1>
           <p className="mx-auto max-w-2xl text-base text-white/70 leading-relaxed sm:text-lg">
-            今すぐ使える6つの営業支援ツール。
+            今すぐ使える7つの営業支援ツール。
             <br className="hidden sm:block" />
             診断・生成・学習・分析で、あなたの営業スキルを底上げします。
           </p>
