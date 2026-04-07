@@ -17,7 +17,6 @@ const navLinks = [
 export function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [plan, setPlan] = useState<"free" | "pro">("free");
-  const [isTeamMember, setIsTeamMember] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -33,15 +32,6 @@ export function Header() {
           .single()
           .then(({ data }) => {
             if (data?.plan) setPlan(data.plan as "free" | "pro");
-          });
-        supabase
-          .from("team_members")
-          .select("id")
-          .eq("user_id", user.id)
-          .limit(1)
-          .maybeSingle()
-          .then(({ data }) => {
-            if (data) setIsTeamMember(true);
           });
       }
     });
@@ -65,11 +55,6 @@ export function Header() {
 
         {/* Desktop CTA (right aligned) */}
         <div className="hidden items-center gap-4 lg:flex">
-          {isLoggedIn && isTeamMember && (
-            <Link href="/team" className="header-link">
-              チーム
-            </Link>
-          )}
           {isLoggedIn ? (
             <>
               <UserMenu />
@@ -124,15 +109,6 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          {isLoggedIn && isTeamMember && (
-            <Link
-              href="/team"
-              className="mobile-menu__link"
-              onClick={() => setOpen(false)}
-            >
-              チーム管理
-            </Link>
-          )}
           <div className="mobile-menu__divider" />
           {isLoggedIn ? (
             plan === "free" ? (

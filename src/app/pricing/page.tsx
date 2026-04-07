@@ -9,7 +9,6 @@ import { Footer } from "@/components/footer";
 import { trackCTAClick, trackCheckoutStarted, trackPricingPageView, trackCheckoutStart } from "@/lib/tracking";
 import { PricingExitPopup } from "@/components/exit-popups/pricing-exit-popup";
 import { UserReviews } from "@/components/user-reviews";
-import { ScrollSlideIn } from "@/components/scroll-slide-in";
 import { getActivePromotion } from "@/lib/promotions";
 
 const features = [
@@ -17,70 +16,36 @@ const features = [
   { name: "業種別トークスクリプト", free: "一部閲覧", pro: "全業種対応" },
   { name: "切り返し話法テンプレート", free: "基本パターン", pro: "30パターン" },
   { name: "AIロープレ", free: "1日1回", pro: "無制限" },
-  { name: "詳細スコア", free: "1カテゴリ", pro: "全5カテゴリ" },
-  { name: "AI改善アドバイス", free: "−", pro: "✓" },
-  { name: "リアルタイムコーチ", free: "✓", pro: "✓" },
+  { name: "詳細スコア + AI改善", free: "1カテゴリ", pro: "全5カテゴリ" },
 ];
 
 const comparisons = [
-  { name: "法人向けAIロープレ", cost: "¥100,000〜", frequency: "法人契約のみ・見積もり必要", icon: "", image: "/images/misc/comparison-training.png" },
-  { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", icon: "", image: "/images/misc/comparison-training.png" },
-  { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", icon: "", image: "/images/misc/comparison-consulting.png" },
-  { name: "先輩にロープレ依頼", cost: "時給換算 ¥3,000〜", frequency: "週1回（相手の都合次第）", icon: "", image: "/images/misc/comparison-senpai.png" },
-  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "22レッスン+全業種コンテンツ+無制限AI練習・24時間・個人で即開始", icon: "", image: "/images/misc/comparison-ai-pro.png", highlight: true },
+  { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", image: "/images/misc/comparison-training.png" },
+  { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", image: "/images/misc/comparison-consulting.png" },
+  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "無制限・24時間・即開始", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
 
 const faqItems = [
-  {
-    question: "いつでも解約できますか？",
-    answer:
-      "はい、いつでも解約できます。解約後も現在の請求期間の終了までProプランをご利用いただけます。",
-  },
-  {
-    question: "支払い方法は？",
-    answer:
-      "クレジットカード（Visa, Mastercard, JCB, American Express）およびコンビニ決済（セブン-イレブン、ローソン、ファミリーマート等）に対応しています。Stripeによる安全な決済システムを使用しています。",
-  },
-  {
-    question: "無料プランに制限はありますか？",
-    answer:
-      "無料プランでも22レッスンの学習コースは全て受講できます。業種別コンテンツは一部制限があり、AIロープレは1日1回までです。Proプランでは全業種コンテンツと無制限AIロープレが使えます。",
-  },
-  {
-    question: "無料プランからProへの切り替えはすぐにできますか？",
-    answer:
-      "はい。ワンクリックでアップグレードでき、すぐにProプランの全機能をご利用いただけます。",
-  },
-  {
-    question: "Proプランで何が変わりますか？",
-    answer:
-      "全8業種のトークスクリプト・切り返し話法テンプレート（30パターン）が使い放題になり、AIロープレも無制限。全5カテゴリの詳細スコアとAI改善アドバイスで、弱点を把握しながら練習できます。",
-  },
-  {
-    question: "領収書・請求書は発行できますか？",
-    answer:
-      "はい。Stripeの決済管理画面から領収書をダウンロードいただけます。法人利用の場合は経費精算にもご利用いただけます。",
-  },
   {
     question: "7日間の無料トライアルとは？",
     answer:
       "Proプランに申し込むと、最初の7日間は無料で全機能をお試しいただけます。トライアル期間中にいつでもキャンセル可能で、キャンセルすれば一切課金されません。",
   },
   {
-    question: "返金はできますか？",
+    question: "いつでも解約できますか？",
     answer:
-      "はい。14日間返金保証があります。Proプランにご満足いただけなかった場合、登録後14日以内であれば全額返金いたします（14日間で7回以上のロープレ実施が条件）。また、7日間の無料トライアル中はいつでもキャンセル可能で、一切課金されません。",
+      "はい、いつでも解約できます。解約後も現在の請求期間の終了までProプランをご利用いただけます。14日間返金保証もあります。",
   },
   {
-    question: "複数のデバイスで使えますか？",
+    question: "支払い方法は？",
     answer:
-      "はい。同一アカウントでPC・スマートフォン・タブレットからご利用いただけます。",
+      "クレジットカード（Visa, Mastercard, JCB, American Express）およびコンビニ決済に対応しています。Stripeによる安全な決済です。",
   },
   {
-    question: "法人チームプランとは？",
+    question: "無料プランとProの違いは？",
     answer:
-      "月額¥20,000（税抜）で5名までのチームメンバーが全員Proプランと同等の機能を利用できます。チーム管理ダッシュボードからメンバーの招待・管理が可能です。カード決済のほか、請求書払いにも対応しています。",
+      "無料プランでも22レッスンは全て受講可能。Proでは全業種コンテンツ・AIロープレ無制限・全5カテゴリの詳細スコア+AI改善アドバイスが使えます。",
   },
 ];
 
@@ -90,17 +55,8 @@ export default function PricingPage() {
   const [promoOpen, setPromoOpen] = useState(false);
   const [activePromo] = useState(() => getActivePromotion());
 
-  const [trialDays, setTrialDays] = useState<number | null>(null);
-
   useEffect(() => {
     trackPricingPageView({});
-    // Check trial status for countdown display
-    fetch("/api/dashboard")
-      .then((r) => r.ok ? r.json() : null)
-      .then((data) => {
-        if (data?.trialDaysRemaining) setTrialDays(data.trialDaysRemaining);
-      })
-      .catch(() => {});
   }, []);
 
   // ¥2,980 is already tax-inclusive (per tokushoho/terms)
@@ -213,87 +169,11 @@ export default function PricingPage() {
       <Header />
 
       <div className="mx-auto max-w-4xl px-6 py-20">
-        {/* Trial Banner — show to everyone, personalized for authenticated users */}
-        <div className="mb-8 rounded-xl border-2 border-accent/40 bg-accent/5 px-5 py-4 text-center animate-fade-in-up">
-          <div className="flex items-center justify-center gap-3">
-            <svg className="inline-block h-6 w-6 text-accent shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>
-            <div>
-              <div className="text-sm font-bold text-accent">
-                {trialDays !== null && trialDays > 0
-                  ? `無料トライアル残り${trialDays}日`
-                  : "7日間の無料トライアル付き"}
-              </div>
-              <div className="text-xs text-muted">
-                {trialDays !== null && trialDays > 0 && trialDays <= 2
-                  ? "間もなく終了します。今すぐProプランに登録して全機能を維持しましょう"
-                  : "Proプランの全機能を7日間無料で体験。いつでも解約OK、クレカ登録後の即課金なし"}
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Pricing Section Title */}
         <div className="mb-10 text-center">
-          <h1 className="mb-4 text-4xl font-bold">料金プラン</h1>
+          <h1 className="mb-3 text-4xl font-bold">料金プラン</h1>
           <p className="text-lg text-muted">
             無料で学び始めて、本気で伸ばしたくなったらProへ
-          </p>
-          <p className="mx-auto mt-4 max-w-2xl text-sm text-muted leading-relaxed">
-            22レッスンの学習コースは無料で全て受講可能。Proプランでは全業種のトークスクリプト・切り返し話法30パターン・AIロープレ無制限が月額¥2,980（税込）で使えます。7日間の無料トライアル付き、いつでも解約可能です。
-          </p>
-        </div>
-
-        {/* Objection Handling */}
-        <div className="mb-12 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-card-border bg-card p-5 text-center">
-            <p className="mb-2 text-sm font-bold text-foreground">効果があるか不安な方へ</p>
-            <p className="text-xs text-muted leading-relaxed">
-              営業心理学に基づく22レッスンで体系的に学習。業種別トークスクリプトで、学んだその日から現場で使えます。まず無料レッスンを1つ試してみてください。
-            </p>
-          </div>
-          <div className="rounded-xl border border-card-border bg-card p-5 text-center">
-            <p className="mb-2 text-sm font-bold text-foreground">忙しくて時間が取れない方へ</p>
-            <p className="text-xs text-muted leading-relaxed">
-              1回のロープレは3〜5分。通勤中や昼休みの隙間時間で練習できます。集合研修のような日程調整は不要です。
-            </p>
-          </div>
-          <div className="rounded-xl border border-card-border bg-card p-5 text-center">
-            <p className="mb-2 text-sm font-bold text-foreground">解約が面倒では？と思う方へ</p>
-            <p className="text-xs text-muted leading-relaxed">
-              7日間の無料トライアル中はいつでもキャンセル可能です。課金開始後も設定画面から即解約でき、違約金・手数料は一切かかりません。
-            </p>
-          </div>
-        </div>
-
-        {/* Score Improvement Guarantee — Hero級配置: Pricing Card直上で返金保証を強調 */}
-        <div
-          style={{
-            maxWidth: "800px",
-            margin: "0 auto 2rem",
-            padding: "1.5rem 2rem",
-            background: "linear-gradient(135deg, #fff8f3, #fef2f2)",
-            borderRadius: "1rem",
-            border: "2px solid #f97316",
-            textAlign: "center",
-          }}
-        >
-          <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}><svg className="inline-block h-6 w-6 text-[#ea580c]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM14.707 8.707a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg></div>
-          <h3
-            style={{
-              fontSize: "1.25rem",
-              fontWeight: 800,
-              color: "#ea580c",
-              marginBottom: "0.5rem",
-            }}
-          >
-            14日間返金保証
-          </h3>
-          <p style={{ fontSize: "0.95rem", color: "#4a5568", lineHeight: 1.6 }}>
-            Proプランにご満足いただけなかった場合、14日以内なら<strong>全額返金</strong>いたします。<br />
-            まずはリスクなくお試しください。
-          </p>
-          <p style={{ fontSize: "0.75rem", color: "#718096", marginTop: "0.5rem" }}>
-            ※ 14日間で7回以上のロープレ実施が返金条件です
           </p>
         </div>
 
@@ -374,22 +254,13 @@ export default function PricingPage() {
               </div>
             )}
 
-            {/* 7日間無料の視覚化バナー */}
-            <div
-              style={{
-                padding: "1rem 1.5rem",
-                background: "#fff8f3",
-                border: "2px solid #f97316",
-                borderRadius: "0.75rem",
-                textAlign: "center",
-                marginBottom: "1rem",
-              }}
-            >
-              <p style={{ fontSize: "1rem", fontWeight: 800, color: "#9a3412" }}>
-                最初の7日間は無料 ── 課金は一切発生しません
+            {/* 7日間無料バナー */}
+            <div className="mb-4 rounded-xl border-2 border-accent bg-accent/5 px-4 py-3 text-center">
+              <p className="text-sm font-extrabold text-accent">
+                最初の7日間は無料
               </p>
-              <p style={{ fontSize: "0.85rem", color: "#78350f", marginTop: "0.3rem" }}>
-                カード登録後、7日間は全機能を無料で利用可能。その後 ¥{monthlyPrice.toLocaleString()}/月（税込）
+              <p className="mt-0.5 text-xs text-muted">
+                トライアル中いつでもキャンセルOK。その後 ¥{monthlyPrice.toLocaleString()}/月
               </p>
             </div>
 
@@ -400,11 +271,8 @@ export default function PricingPage() {
             >
               {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
             </button>
-            <p className="mt-3 text-center text-[11px] text-muted">
-              今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで無料 ・ いつでも解約OK
-            </p>
-            <p className="mt-1 text-center text-[11px] text-accent/70">
-              毎日練習しても1回あたり約¥99
+            <p className="mt-2 text-center text-[11px] text-muted">
+              いつでも解約OK ・ 14日間返金保証
             </p>
 
             {/* Promo Code Input */}
@@ -456,9 +324,6 @@ export default function PricingPage() {
           <span className="flex items-center gap-1">コンビニ決済対応</span>
           <span className="flex items-center gap-1">経費精算・領収書OK</span>
         </div>
-        <p className="mt-2 text-center text-xs text-muted">
-          上司の承認不要 — 個人で今すぐ始められます。法人払いにも対応。
-        </p>
 
         {/* ROI Comparison Section */}
         <div className="mt-20">
@@ -475,11 +340,9 @@ export default function PricingPage() {
                     : "border-card-border bg-card"
                 }`}
               >
-                {item.image ? (
+                {item.image && (
                   <Image src={item.image} alt={item.name} width={48} height={48} className="rounded-lg object-cover" />
-                ) : item.icon ? (
-                  <span className="text-2xl">{item.icon}</span>
-                ) : null}
+                )}
                 <div className="flex-1">
                   <p
                     className={`font-bold ${
@@ -500,86 +363,13 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
-          <p className="mt-4 text-center text-xs text-muted">
-            ※一般的な市場価格の参考値です。実際の価格はサービス提供者により異なります。
+          <p className="mt-3 text-center text-xs text-muted">
+            ※ 一般的な市場価格の参考値です
           </p>
         </div>
 
         {/* Dynamic User Reviews — 承認済みレビューがあれば自動表示 */}
         <UserReviews />
-
-        {/* Team / Corporate Plan */}
-        <div className="mt-20 rounded-2xl border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-transparent p-8 sm:p-12">
-          <div className="mx-auto max-w-2xl text-center">
-            <div className="mb-3 inline-flex rounded-full bg-accent px-4 py-1 text-xs font-bold text-white">
-              新登場
-            </div>
-            <p className="mb-2 text-sm font-medium text-accent">
-              法人・チーム向け
-            </p>
-            <h2 className="mb-4 text-2xl font-bold">
-              チーム全員の営業力を、均一に底上げする
-            </h2>
-            <p className="mb-6 text-sm text-muted leading-relaxed">
-              個別の営業研修（1回5万円〜）と比べて<strong>1/10以下のコスト</strong>で、
-              メンバー全員に毎日の実践練習環境を提供します。
-            </p>
-
-            {/* Team Plan Price */}
-            <div className="mb-6">
-              <span className="text-4xl font-bold text-accent">¥20,000</span>
-              <span className="text-muted">/月（税抜）</span>
-              <p className="mt-1 text-xs text-muted">
-                税込 ¥22,000/月 ・ 5名まで ・ 1人あたり¥4,000/月
-              </p>
-            </div>
-
-            <div className="mb-8 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-xl border border-card-border bg-card p-4">
-                <p className="mb-1 text-2xl font-bold text-accent">無制限</p>
-                <p className="text-xs text-muted">全メンバーのロープレ回数</p>
-              </div>
-              <div className="rounded-xl border border-card-border bg-card p-4">
-                <p className="mb-1 text-2xl font-bold text-accent">5名</p>
-                <p className="text-xs text-muted">チームプラン対応人数</p>
-              </div>
-              <div className="rounded-xl border border-card-border bg-card p-4">
-                <p className="mb-1 text-2xl font-bold text-accent">請求書OK</p>
-                <p className="text-xs text-muted">経費精算・法人払い対応</p>
-              </div>
-            </div>
-
-            <div className="mb-6 rounded-xl bg-card border border-card-border p-4 text-left">
-              <p className="mb-2 text-sm font-bold">法人プランに含まれる機能</p>
-              <ul className="grid gap-1 text-sm text-muted sm:grid-cols-2">
-                <li>&#10003; 全メンバー無制限ロープレ</li>
-                <li>&#10003; 全5カテゴリの詳細スコア</li>
-                <li>&#10003; AI改善アドバイス</li>
-                <li>&#10003; チーム管理ダッシュボード</li>
-                <li>&#10003; メンバー招待・管理</li>
-                <li>&#10003; 請求書払い対応</li>
-              </ul>
-            </div>
-
-            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-              <Link
-                href="/team"
-                className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
-              >
-                チームプランを始める
-              </Link>
-              <a
-                href="mailto:support@seiyaku-coach.com?subject=法人プランのお問い合わせ&body=会社名：%0Aご担当者名：%0A利用予定人数：%0Aご質問・ご要望：%0A"
-                className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent bg-transparent px-8 text-base font-bold text-accent transition hover:bg-accent/10"
-              >
-                問い合わせる
-              </a>
-            </div>
-            <p className="mt-3 text-xs text-muted">
-              稟議書テンプレート付き ・ いつでも解約OK ・ カード決済 or 請求書払い
-            </p>
-          </div>
-        </div>
 
         {/* FAQ */}
         <div className="mt-20">
@@ -606,47 +396,9 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* Referral CTA */}
-        <div className="mt-12 rounded-xl border border-green-500/20 bg-green-500/5 p-6 text-center">
-          <p className="mb-1 text-sm font-bold">友達紹介で ¥1,000 OFF</p>
-          <p className="mb-3 text-xs text-muted">
-            紹介した友達もあなたも、初月 ¥1,000 割引。紹介コードを共有するだけ。
-          </p>
-          <Link
-            href="/referral"
-            className="inline-flex h-9 items-center rounded-lg border border-green-500/30 px-4 text-xs font-bold text-green-600 transition hover:bg-green-500/10"
-          >
-            紹介プログラムを見る →
-          </Link>
-        </div>
-
-        {/* Program Cross-sell */}
-        <div className="mt-12 rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 sm:p-8 text-center">
-          <p className="mb-2 text-sm font-medium text-accent">買い切り教材もあります</p>
-          <h3 className="mb-3 text-xl font-bold text-foreground">
-            成約5ステップ完全攻略プログラム
-          </h3>
-          <p className="mb-4 text-sm text-muted leading-relaxed">
-            22レッスン+反論切り返しテンプレート+トークスクリプトがすべてセット。
-            <br className="hidden sm:block" />
-            一度購入すれば無期限でアクセスできる買い切り型の教材です。
-          </p>
-          <div className="mb-4 flex items-center justify-center gap-2">
-            <span className="text-sm text-muted line-through">¥14,800</span>
-            <span className="text-2xl font-bold text-accent">¥9,800</span>
-            <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">先着30名</span>
-          </div>
-          <Link
-            href="/program"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-accent px-7 text-sm font-bold text-white transition hover:bg-accent-hover"
-          >
-            プログラムの詳細を見る
-          </Link>
-        </div>
-
         {/* Bottom CTA */}
-        <div className="mt-20 text-center">
-          <p className="mb-6 text-muted">
+        <div className="mt-16 text-center">
+          <p className="mb-5 text-muted">
             まずは無料で始めて、自分に合うか試してみてください
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -654,13 +406,7 @@ export default function PricingPage() {
               href="/learn"
               className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover sm:min-w-[220px]"
             >
-              無料で営業の型を学ぶ
-            </Link>
-            <Link
-              href="/roleplay"
-              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 bg-accent/5 px-6 text-sm font-bold text-accent transition hover:bg-accent/10 hover:border-accent/50 sm:min-w-[220px]"
-            >
-              学んだらAIで練習する
+              無料で学び始める
             </Link>
           </div>
         </div>
@@ -669,28 +415,6 @@ export default function PricingPage() {
       {/* Footer */}
       <Footer />
       <PricingExitPopup />
-      <ScrollSlideIn sessionKey="pricing-slide-in" scrollThreshold={0.4}>
-        <p className="mb-2 text-sm font-bold text-foreground">
-          まずは無料で学ぶ
-        </p>
-        <p className="mb-3 text-xs text-muted">
-          5分で最初のレッスンが完了
-        </p>
-        <div className="flex items-center gap-3">
-          <Link
-            href="/learn"
-            className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
-          >
-            無料で学ぶ
-          </Link>
-          <Link
-            href="/roleplay"
-            className="text-xs font-bold text-accent transition hover:underline"
-          >
-            AIで練習する
-          </Link>
-        </div>
-      </ScrollSlideIn>
     </div>
   );
 }
