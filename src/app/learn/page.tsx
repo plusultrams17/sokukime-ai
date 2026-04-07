@@ -369,12 +369,6 @@ export default function LearnPage() {
             >
               無料でAIロープレを試す
             </Link>
-            <Link
-              href="/lp/roleplay"
-              className="rounded-lg border border-gray-300 px-6 py-2.5 text-sm font-medium text-foreground transition hover:border-foreground"
-            >
-              ロープレの詳細を見る
-            </Link>
           </div>
           <p className="mt-3 text-xs text-muted">
             &#10003; 無料で体験&ensp;&#10003; 登録不要&ensp;&#10003; 3分で完了
