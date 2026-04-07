@@ -243,7 +243,7 @@ export default function FAQPage() {
               href="/roleplay"
               className="inline-flex h-11 items-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
             >
-              無料でロープレを試す
+              無料でAIロープレを試す
             </Link>
             <Link
               href="/pricing"

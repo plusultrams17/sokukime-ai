@@ -386,7 +386,7 @@ export default function EnterprisePage() {
               href="/roleplay"
               className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
             >
-              無料でロープレを試す
+              無料でAIロープレを試す
             </Link>
             <a
               href="mailto:support@seiyaku-coach.com?subject=法人プランのお問い合わせ&body=会社名：%0Aご担当者名：%0A利用予定人数：%0Aご質問・ご要望：%0A"

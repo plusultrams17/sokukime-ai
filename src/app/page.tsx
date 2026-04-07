@@ -307,7 +307,7 @@ export default function Home() {
           <Link href="/roleplay" className="transition hover:text-foreground">AIロープレ</Link>
           <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
           <Link href="/faq" className="transition hover:text-foreground">FAQ</Link>
-          <Link href="/terms" className="transition hover:text-foreground">利用規約</Link>
+          <Link href="/legal/terms" className="transition hover:text-foreground">利用規約</Link>
         </nav>
         <p>&copy; {new Date().getFullYear()} 成約コーチ AI</p>
       </footer>
