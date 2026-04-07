@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { UserMenu } from "@/components/user-menu";
+import { Logo } from "@/components/logo";
 import { trackCTAClick } from "@/lib/tracking";
 
 const navLinks = [
@@ -51,11 +52,7 @@ export function Header() {
     <header className="site-header">
       <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <span className="text-xl font-black tracking-tight text-foreground" style={{ fontFamily: "var(--font-serif-jp), 'YuMincho', 'Hiragino Mincho ProN', serif" }}>
-            成約コーチ<span style={{ color: "var(--lp-cta)" }}>AI</span>
-          </span>
-        </Link>
+        <Logo />
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 lg:flex">
