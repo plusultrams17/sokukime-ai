@@ -181,6 +181,9 @@ export default function ProgramPage() {
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else if (data.redirect) {
+        // Already purchased — go to resources
+        window.location.href = data.redirect;
       } else if (res.status === 401) {
         // Not logged in — redirect to signup with return URL
         window.location.href = "/signup?redirect=/program";
@@ -240,7 +243,7 @@ export default function ProgramPage() {
 
       {/* ── Script Completion Preview ── */}
       <section>
-        <ScriptCompletionPreview />
+        <ScriptCompletionPreview showCta={false} />
       </section>
 
       {/* ── Pain Points ── */}

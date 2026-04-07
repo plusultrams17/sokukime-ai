@@ -46,7 +46,7 @@ if (!STRIPE_SECRET_KEY) {
 const isTestMode = STRIPE_SECRET_KEY.startsWith("sk_test_");
 console.log(`\n🔑 Stripe mode: ${isTestMode ? "TEST" : "LIVE ⚠️"}\n`);
 
-const stripe = new Stripe(STRIPE_SECRET_KEY);
+const stripe = new Stripe(STRIPE_SECRET_KEY, { timeout: 60000 });
 
 // ── 作成する商品定義 ──
 const PRODUCTS = [

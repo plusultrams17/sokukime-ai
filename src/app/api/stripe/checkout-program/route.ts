@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
 import { getStripe } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export const maxDuration = 30;
 
@@ -71,6 +71,31 @@ export async function POST() {
       { error: `認証エラー: ${msg}` },
       { status: 503 }
     );
+  }
+
+  // Step 2.5: Check if already purchased (prevent double charge)
+  try {
+    const supabaseAdmin = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    );
+    const { data: existingPurchase } = await supabaseAdmin
+      .from("program_purchases")
+      .select("id")
+      .eq("user_id", userId)
+      .limit(1)
+      .maybeSingle();
+
+    if (existingPurchase) {
+      console.log("[checkout-program] Already purchased, redirecting to resources");
+      return NextResponse.json(
+        { error: "already_purchased", redirect: "/program/resources" },
+        { status: 409 },
+      );
+    }
+  } catch (e) {
+    console.error("[checkout-program] Purchase check failed:", e);
+    // Don't block checkout if check fails — Stripe handles idempotency
   }
 
   // Step 3: Create Stripe checkout session

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
 import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
-import { ScriptCompletionPreview } from "@/components/script-completion-preview";
 
 /* ─── Reusable CTA Buttons ─── */
 
@@ -232,92 +231,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          2. こんな悩みはありませんか？（PAS: Problem）
-      ═══════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#f7f8ea" }}>
-        <div className="lp-section text-center">
-          <p className="lp-heading mb-8">
-            入社1〜3年目、
-            <br className="sm:hidden" />
-            こんな<span className="lp-highlight">壁</span>にぶつかっていませんか？
-          </p>
-          <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
-            {[
-              {
-                text: "先輩が忙しく、ロープレの相手がいない。自主練の方法もわからない",
-              },
-              {
-                text: "商談で「検討します」と言われると、何を返せばいいかわからず黙ってしまう",
-              },
-              {
-                text: "数字が上がらない原因がトークなのか、提案なのか、自分では判断できない",
-              },
-            ].map((item) => (
-              <div
-                key={item.text}
-                className="rounded-xl bg-white/80 px-5 py-6 shadow-sm backdrop-blur-sm"
-              >
-                <p className="text-sm font-medium leading-relaxed text-foreground">
-                  {item.text}
-                </p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-8 text-sm text-muted leading-relaxed">
-            練習量と正しい型 ── この2つが揃えば、営業スキルは着実に伸びます。
-            <br className="hidden sm:block" />
-            成約コーチ AIは<strong className="text-foreground">24時間いつでもAIがロープレ相手</strong>になり、
-            <strong className="text-foreground">5カテゴリのスコア</strong>で改善ポイントを可視化します。
-          </p>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════
-          3. 解決策 / 価値（PAS: Solution）
-      ═══════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#e8e6e1" }}>
-        <div className="lp-section text-center">
-          <p className="lp-heading mb-4">
-            学ぶ → 試す → 伸びる。
-            <br className="sm:hidden" />
-            <span className="lp-highlight">3ステップ</span>で営業力を磨く
-          </p>
-          <p className="mx-auto mb-12 max-w-xl text-sm text-muted leading-relaxed">
-            レッスンで型を理解し、AIロープレで実践し、スコアで弱点を把握する。
-            このサイクルを繰り返すことで、商談の対応力が変わります。
-          </p>
-          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
-            <Image
-              src="/learn-visual.png"
-              alt="学ぶ — 5分のレッスンで営業心理学の「型」を理解"
-              width={600}
-              height={600}
-              className="w-full"
-            />
-            <Image
-              src="/try-visual.png"
-              alt="試す — 学んだ話法をAIロープレで即実践"
-              width={600}
-              height={600}
-              className="w-full"
-            />
-            <Image
-              src="/grow-visual.png"
-              alt="伸びる — 成約スコアで弱点が一目瞭然"
-              width={600}
-              height={600}
-              className="w-full"
-            />
-          </div>
-          <div className="mt-12 flex flex-col items-center gap-3">
-            <CTAButton />
-            <SecondaryCTA />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════
-          4. スコアリング紹介 + 法人比較
+          2. ビジュアル証明 — スコア画像
       ═══════════════════════════════════════════════ */}
       <section style={{ backgroundColor: "#f7f8ea" }}>
         <div className="lp-section pb-0">
@@ -350,88 +264,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-        {/* ChatGPT/法人との差別化 */}
-        <div className="lp-section pt-8 pb-6">
-          <p className="mb-6 text-center text-sm font-bold text-foreground">
-            他の営業練習方法との比較
-          </p>
-          <div className="mx-auto grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
-            {[
-              { label: "ChatGPTで自主練", items: ["営業メソッドなし", "スコア評価なし", "学習の進捗管理なし"], color: "#9ca3af" },
-              { label: "法人向けAIロープレ", items: ["導入費用 数十〜数百万円", "法人契約のみ", "個人では利用不可"], color: "#9ca3af" },
-              { label: "成約コーチ AI", items: ["22レッスンで型を習得", "5カテゴリで採点", "月¥2,980・個人で即開始"], color: "var(--lp-cta)" },
-            ].map((col) => (
-              <div key={col.label} className="rounded-xl border bg-white px-4 py-4" style={{ borderColor: col.color }}>
-                <p className="mb-2 text-center text-xs font-bold" style={{ color: col.color }}>
-                  {col.label}
-                </p>
-                <ul className="space-y-1">
-                  {col.items.map((item) => (
-                    <li key={item} className="text-center text-xs text-muted">{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* ═══════════════════════════════════════════════
-          4.5. 完成スクリプトプレビュー
-      ═══════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#e8e6e1" }}>
-        <ScriptCompletionPreview />
-        <div className="mx-auto max-w-4xl px-6 pb-16 text-center">
-          <Link
-            href="/program"
-            className="lp-cta-secondary"
-          >
-            攻略プログラムの詳細を見る →
-          </Link>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════
-          体験者の声 — 実ユーザーが集まるまで非表示
-      ═══════════════════════════════════════════════ */}
-      {/*
-      <section style={{ backgroundColor: "#e8e6e1" }}>
-        <div className="lp-section pt-6 text-center">
-          <p className="lp-heading mb-8">
-            体験者の声
-          </p>
-          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
-            <Image
-              src="/voice-1.png"
-              alt="25歳・不動産営業 — 型を学んでから商談に臨んだら、初めて即決をもらえた"
-              width={600}
-              height={400}
-              className="w-full"
-            />
-            <Image
-              src="/voice-2.png"
-              alt="34歳・SaaS営業マネージャー — 22レッスンをやらせたら共通言語ができて指導がラクになった"
-              width={600}
-              height={400}
-              className="w-full"
-            />
-            <Image
-              src="/voice-3.png"
-              alt="27歳・保険営業 — 5ステップの型があるだけで商談の組み立て方がわかるようになった"
-              width={600}
-              height={400}
-              className="w-full"
-            />
-          </div>
-          <p className="mt-4 text-center text-xs text-muted/70">
-            ※サービスイメージです。実際のユーザーの声ではありません
-          </p>
-        </div>
-      </section>
-      */}
-
-      {/* ═══════════════════════════════════════════════
-          5. 最終CTA
+          3. 最終CTA
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-card-border bg-white">
         <div className="lp-section text-center">

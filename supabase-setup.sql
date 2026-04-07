@@ -413,6 +413,8 @@ CREATE TABLE IF NOT EXISTS public.program_purchases (
 );
 CREATE INDEX IF NOT EXISTS idx_program_purchases_user ON program_purchases(user_id);
 CREATE INDEX IF NOT EXISTS idx_program_purchases_stripe ON program_purchases(stripe_payment_intent_id);
+-- Prevent duplicate purchases for same user+program
+CREATE UNIQUE INDEX IF NOT EXISTS idx_program_purchases_user_slug ON program_purchases(user_id, program_slug);
 
 ALTER TABLE program_purchases ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users read own program purchases" ON program_purchases FOR SELECT USING (auth.uid() = user_id);

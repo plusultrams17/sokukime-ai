@@ -71,25 +71,39 @@ export async function POST(request: NextRequest) {
         const programSlug = session.metadata.program_slug || "five-step-master";
         const paymentIntentId = session.payment_intent as string;
 
-        await supabaseAdmin.from("program_purchases").insert({
-          user_id: userId,
-          program_slug: programSlug,
-          stripe_payment_intent_id: paymentIntentId,
-          stripe_checkout_session_id: session.id,
-          amount: session.amount_total || 0,
-          currency: session.currency || "jpy",
-          status: "completed",
-          completed_at: new Date().toISOString(),
-        });
+        const { error: purchaseInsertError } = await supabaseAdmin
+          .from("program_purchases")
+          .upsert(
+            {
+              user_id: userId,
+              program_slug: programSlug,
+              stripe_payment_intent_id: paymentIntentId,
+              stripe_checkout_session_id: session.id,
+              amount: session.amount_total || 0,
+              currency: session.currency || "jpy",
+              status: "completed",
+              completed_at: new Date().toISOString(),
+            },
+            { onConflict: "stripe_payment_intent_id" },
+          );
+
+        if (purchaseInsertError) {
+          console.error("[webhook] program_purchases insert error:", purchaseInsertError);
+        }
 
         // Grant Pro access — subscription_status='program' distinguishes from recurring subs
-        await supabaseAdmin
+        const { error: profileUpdateError } = await supabaseAdmin
           .from("profiles")
           .update({
             plan: "pro",
             subscription_status: "program",
+            ...(customerId ? { stripe_customer_id: customerId } : {}),
           })
           .eq("id", userId);
+
+        if (profileUpdateError) {
+          console.error("[webhook] profile update error:", profileUpdateError);
+        }
 
         // Send purchase confirmation email
         const { data: buyerProfile } = await supabaseAdmin
