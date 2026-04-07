@@ -2,81 +2,49 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
 
-export const maxDuration = 30;
-
 export async function POST() {
+  const t0 = Date.now();
   try {
     const priceId = process.env.STRIPE_PROGRAM_PRICE_ID;
-
     if (!priceId) {
+      console.error("[checkout-program] STRIPE_PROGRAM_PRICE_ID is not set");
       return NextResponse.json(
         { error: "教材の料金設定に問題があります。管理者にお問い合わせください。" },
         { status: 500 }
       );
     }
 
-    const stripe = getStripe();
+    // 1. Auth check
     const supabase = await createClient();
     if (!supabase) {
+      console.error("[checkout-program] Supabase client creation failed");
       return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
     }
     const {
       data: { user },
     } = await supabase.auth.getUser();
+    console.log(`[checkout-program] auth: ${Date.now() - t0}ms`);
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get or create Stripe customer
-    const { data: profile, error: profileError } = await supabase
+    // 2. Get existing Stripe customer ID (optional — fallback to customer_email)
+    const { data: profile } = await supabase
       .from("profiles")
-      .select("stripe_customer_id, email")
+      .select("stripe_customer_id")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
+    console.log(`[checkout-program] profile: ${Date.now() - t0}ms`);
 
-    if (profileError) {
-      console.error("Profile query failed (stripe/checkout-program):", profileError);
-      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
-    }
+    const customerId = profile?.stripe_customer_id;
 
-    let customerId = profile?.stripe_customer_id;
-
-    // Run Stripe customer creation and purchase check in parallel
-    const [, existingResult] = await Promise.all([
-      // Create Stripe customer if needed
-      (async () => {
-        if (!customerId) {
-          const customer = await stripe.customers.create({
-            email: profile?.email || user.email!,
-            metadata: { supabase_user_id: user.id },
-          });
-          customerId = customer.id;
-          await supabase
-            .from("profiles")
-            .update({ stripe_customer_id: customerId })
-            .eq("id", user.id);
-        }
-      })(),
-      // Check existing purchase
-      supabase
-        .from("program_purchases")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("program_slug", "five-step-master")
-        .eq("status", "completed")
-        .single(),
-    ]);
-
-    if (existingResult.data) {
-      return NextResponse.json(
-        { error: "このプログラムは既に購入済みです" },
-        { status: 400 }
-      );
-    }
-
+    // 3. Create checkout session (single Stripe call)
+    const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
-      customer: customerId,
+      ...(customerId
+        ? { customer: customerId }
+        : { customer_email: user.email! }),
       client_reference_id: user.id,
       mode: "payment",
       allow_promotion_codes: true,
@@ -95,10 +63,11 @@ export async function POST() {
         program_slug: "five-step-master",
       },
     });
+    console.log(`[checkout-program] session created: ${Date.now() - t0}ms`);
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    console.error("Program checkout error:", error);
+    console.error(`[checkout-program] error at ${Date.now() - t0}ms:`, error);
     return NextResponse.json(
       { error: "チェックアウトセッションの作成に失敗しました" },
       { status: 500 }
