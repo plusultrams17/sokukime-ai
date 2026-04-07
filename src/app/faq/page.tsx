@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
 import { Footer } from "@/components/footer";
 
@@ -191,6 +192,7 @@ export default function FAQPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       <JsonLd data={faqJsonLd} />
 
       <div className="mx-auto max-w-3xl px-6 py-16">
