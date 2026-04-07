@@ -111,6 +111,7 @@ export default function Home() {
           alt="営業の道を歩むビジネスパーソン — 成約への旅路"
           fill
           priority
+          sizes="100vw"
           className="object-cover object-bottom opacity-60"
         />
 
@@ -125,7 +126,7 @@ export default function Home() {
 
         {/* Content — vertically centered with CTA close to heading */}
         <div
-          className="relative z-10 flex flex-col items-center justify-center px-6 pt-24 pb-24 sm:pt-28 sm:pb-28"
+          className="relative z-10 flex flex-col items-center justify-center px-4 pt-24 pb-24 sm:px-6 sm:pt-28 sm:pb-28"
           style={{ minHeight: "100dvh" }}
         >
           <div className="mx-auto w-full max-w-3xl text-center">
@@ -246,19 +247,20 @@ export default function Home() {
             alt="成約5ステップメソッド — アプローチ・ヒアリング・プレゼン・クロージング・反論処理"
             width={1600}
             height={900}
+            sizes="100vw"
             className="w-full"
           />
-          <div className="absolute top-4 left-4 space-y-2 sm:top-8 sm:left-8 sm:space-y-3 lg:top-12 lg:left-12">
+          <div className="absolute top-2 left-2 space-y-1.5 sm:top-8 sm:left-8 sm:space-y-3 lg:top-12 lg:left-12">
             {[
               { value: "5カテゴリ", label: "スコアで弱点を可視化" },
               { value: "3分", label: "1回のロープレ所要時間" },
               { value: "22レッスン", label: "体系的な営業メソッド" },
             ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-2 rounded-lg bg-white/85 px-3 py-2 shadow-md backdrop-blur-sm sm:px-4 sm:py-3">
-                <span className="shrink-0 text-sm font-bold sm:text-base lg:text-lg" style={{ color: "var(--lp-cta)" }}>
+              <div key={i} className="flex items-center gap-1.5 rounded-lg bg-white/85 px-2 py-1.5 shadow-md backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-3">
+                <span className="shrink-0 text-[11px] font-bold sm:text-base lg:text-lg" style={{ color: "var(--lp-cta)" }}>
                   {stat.value}
                 </span>
-                <p className="text-xs leading-snug text-foreground sm:text-sm lg:text-base">
+                <p className="text-[10px] leading-snug text-foreground sm:text-sm lg:text-base">
                   {stat.label}
                 </p>
               </div>
@@ -270,20 +272,20 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════
           2.5 ソーシャルプルーフ
       ═══════════════════════════════════════════════ */}
-      <section className="border-t border-card-border bg-white py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl px-6">
+      <section className="border-t border-card-border bg-white py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <p className="lp-heading mb-10 text-center">
             選ばれる<span className="lp-highlight">理由</span>
           </p>
           {/* 数値実績 */}
-          <div className="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mb-12 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4">
             {[
               { value: "22", unit: "レッスン", label: "体系的カリキュラム" },
               { value: "5", unit: "カテゴリ", label: "AIスコア分析" },
               { value: "30", unit: "パターン", label: "反論切り返しテンプレ" },
               { value: "24h", unit: "", label: "いつでも練習可能" },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-card-border bg-background p-4 text-center">
+              <div key={stat.label} className="rounded-xl border border-card-border bg-background p-3 text-center sm:p-4">
                 <div className="text-2xl font-extrabold sm:text-3xl" style={{ color: "var(--lp-cta)" }}>
                   {stat.value}<span className="text-sm font-bold text-muted">{stat.unit}</span>
                 </div>
@@ -292,7 +294,7 @@ export default function Home() {
             ))}
           </div>
           {/* こんな方に最適 */}
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 sm:grid-cols-3">
             {[
               { title: "入社1〜3年目", desc: "営業の「型」を最短で習得したい若手営業パーソン" },
               { title: "成約率に伸び悩み", desc: "自己流の限界を感じ、体系的メソッドで突破したい方" },
@@ -315,15 +317,15 @@ export default function Home() {
           <p className="lp-heading mb-4">
             まず3分、試してみてください
           </p>
-          <p className="mx-auto mb-8 max-w-md text-sm text-muted leading-relaxed">
+          <p className="mx-auto mb-6 max-w-md text-sm text-muted leading-relaxed sm:mb-8">
             自分の営業トークがどう評価されるのか、スコアで確認できます。
             登録もクレジットカードも不要です。
           </p>
-          <div className="mb-8 flex flex-col items-center gap-3">
+          <div className="mb-6 flex flex-col items-center gap-3 sm:mb-8">
             <CTAButton />
             <SecondaryCTA />
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted sm:gap-x-6 sm:text-sm">
             <span>3分で体験完了</span>
             <span className="hidden sm:inline text-card-border">|</span>
             <span>クレカ不要</span>
@@ -331,7 +333,7 @@ export default function Home() {
             <span>いつでも退会OK</span>
           </div>
           {/* Pro plan anchoring */}
-          <div className="mt-8 mx-auto max-w-md rounded-lg border border-card-border bg-background px-6 py-4">
+          <div className="mt-6 mx-auto max-w-md rounded-lg border border-card-border bg-background px-4 py-3 sm:mt-8 sm:px-6 sm:py-4">
             <p className="text-xs text-muted mb-1">本格的に営業力を伸ばしたい方へ</p>
             <p className="text-sm font-bold text-foreground">
               Proプラン <span style={{ color: "var(--lp-cta)" }}>¥2,980</span><span className="text-muted font-normal">/月（税込）</span>
@@ -342,8 +344,8 @@ export default function Home() {
       </section>
 
       {/* ── Inline Footer ── */}
-      <footer className="border-t border-card-border bg-white px-6 py-10 text-center text-xs text-muted">
-        <nav className="mb-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+      <footer className="border-t border-card-border bg-white px-4 py-8 text-center text-xs text-muted sm:px-6 sm:py-10">
+        <nav className="mb-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
           <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
           <Link href="/roleplay" className="transition hover:text-foreground">AIロープレ</Link>
           <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>

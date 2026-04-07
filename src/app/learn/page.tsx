@@ -93,12 +93,12 @@ export default function LearnPage() {
       <Header />
 
       {/* Hero */}
-      <section className="border-b border-gray-200 pt-28 pb-10 px-6">
+      <section className="border-b border-gray-200 pt-20 pb-8 px-4 sm:pt-28 sm:pb-10 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <p className="text-sm font-medium text-accent mb-3 tracking-wide">
             営業メソッド学習プログラム
           </p>
-          <h1 className="text-3xl font-bold text-foreground sm:text-4xl leading-tight mb-4">
+          <h1 className="text-2xl font-bold text-foreground sm:text-3xl md:text-4xl leading-tight mb-4">
             成約5ステップを
             <br className="sm:hidden" />
             体系的に学ぶ
@@ -132,7 +132,7 @@ export default function LearnPage() {
       </section>
 
       {/* Levels with Card Grid */}
-      <section className="px-6 py-12">
+      <section className="px-4 py-8 sm:px-6 sm:py-12">
         <div className="mx-auto max-w-5xl space-y-16">
           {LEVELS.map((level) => {
             const lessons = getLessonsByLevel(level.key);
@@ -272,14 +272,14 @@ export default function LearnPage() {
       </section>
 
       {/* Certification Exam */}
-      <section className="px-6 pb-8">
+      <section className="px-4 pb-8 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <ExamCard progress={progress} purchased={purchased} />
         </div>
       </section>
 
       {/* CTA */}
-      <section className="border-t border-gray-200 px-6 py-12">
+      <section className="border-t border-gray-200 px-4 py-10 sm:px-6 sm:py-12">
         <div className="mx-auto max-w-5xl text-center">
           <h2 className="text-lg font-bold text-foreground mb-2">
             今学んだ技術を、AIロープレで実践しよう

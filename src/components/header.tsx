@@ -48,7 +48,7 @@ export function Header() {
   return (
     <>
     <header className="site-header">
-      <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+      <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <Logo />
 

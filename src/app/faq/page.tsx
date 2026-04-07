@@ -195,8 +195,8 @@ export default function FAQPage() {
       <Header />
       <JsonLd data={faqJsonLd} />
 
-      <div className="mx-auto max-w-3xl px-6 py-16">
-        <h1 className="mb-3 text-center text-3xl font-black tracking-tight sm:text-4xl">
+      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-16">
+        <h1 className="mb-3 text-center text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">
           よくある質問
         </h1>
         <p className="mb-12 text-center text-sm text-muted">
@@ -215,13 +215,13 @@ export default function FAQPage() {
                   key={item.question}
                   className="group rounded-xl border border-card-border bg-card"
                 >
-                  <summary className="flex cursor-pointer items-center justify-between p-4 text-sm font-medium transition hover:text-accent">
+                  <summary className="flex cursor-pointer items-center justify-between p-3 text-sm font-medium transition hover:text-accent sm:p-4">
                     {item.question}
                     <span className="ml-2 text-muted transition group-open:rotate-180">
                       ▼
                     </span>
                   </summary>
-                  <div className="border-t border-card-border px-4 py-3 text-sm leading-relaxed text-muted">
+                  <div className="border-t border-card-border px-3 py-3 text-sm leading-relaxed text-muted sm:px-4">
                     {item.answer}
                   </div>
                 </details>
@@ -231,7 +231,7 @@ export default function FAQPage() {
         ))}
 
         {/* CTA */}
-        <div className="mt-12 rounded-2xl border border-accent/20 bg-accent/5 p-8 text-center">
+        <div className="mt-10 rounded-2xl border border-accent/20 bg-accent/5 p-5 text-center sm:mt-12 sm:p-8">
           <h2 className="mb-2 text-lg font-bold">
             他にご質問がありますか？
           </h2>

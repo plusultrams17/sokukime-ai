@@ -10,9 +10,9 @@ export default function LegalLayout({
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto max-w-3xl px-6 py-16">{children}</main>
+      <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-16">{children}</main>
 
-      <footer className="border-t border-card-border px-6 py-8">
+      <footer className="border-t border-card-border px-4 py-6 sm:px-6 sm:py-8">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
             <div className="text-sm text-muted">

@@ -107,7 +107,7 @@ export default function TryRoleplayPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto max-w-xl px-4 py-10 sm:py-16">
+      <main className="mx-auto max-w-xl px-4 py-8 sm:py-16">
         <div className="space-y-6">
           {/* Title */}
           <div className="text-center">
@@ -151,7 +151,7 @@ export default function TryRoleplayPage() {
           {!alreadyTried && (
             <>
               {/* 2x2 template grid */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2">
                 {TEMPLATES.map((t) => (
                   <button
                     key={t.id}

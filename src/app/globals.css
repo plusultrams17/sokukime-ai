@@ -32,9 +32,22 @@
   --color-lp-cta-hover: var(--lp-cta-hover);
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent iOS zoom on focus — inputs must be ≥16px */
+@media (max-width: 767px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* ── LP (BizReach-style) ── */
@@ -55,13 +68,21 @@ body {
   max-width: calc(100vw - 32px);
   background-color: var(--lp-cta);
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.03em;
   border-radius: 4px;
   overflow: hidden;
   transition: background-color 0.2s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
+@media (min-width: 480px) {
+  .lp-cta-btn {
+    font-size: 15px;
+  }
+}
+
 @media (min-width: 640px) {
   .lp-cta-btn {
     height: 60px;
@@ -156,9 +177,11 @@ body {
 
 @media (max-width: 639px) {
   .hero-cta-btn {
-    height: 56px !important;
-    padding: 0 36px !important;
-    font-size: 17px !important;
+    height: 52px !important;
+    padding: 0 20px !important;
+    font-size: 15px !important;
+    width: 100%;
+    max-width: calc(100vw - 48px);
   }
 }
 
@@ -175,15 +198,20 @@ body {
 .lp-section {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 80px 24px;
+  padding: 48px 16px;
 }
 
 .lp-heading {
   font-family: var(--font-serif-jp), "YuMincho", "Hiragino Mincho ProN", serif;
   font-weight: 900;
   color: var(--foreground);
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1.5;
+}
+
+@media (min-width: 480px) {
+  .lp-section { padding: 64px 24px; }
+  .lp-heading { font-size: 28px; }
 }
 
 @media (min-width: 640px) {
@@ -2753,12 +2781,12 @@ body {
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
+  padding: 10px;
 }
 
 @media (max-width: 1023px) {
@@ -2824,7 +2852,9 @@ body {
 }
 
 .mobile-menu__link {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 15px;
   font-weight: 600;
   color: var(--foreground);
@@ -3679,6 +3709,43 @@ body {
   border-left: 13px solid transparent;
   border-right: 13px solid transparent;
   border-bottom: 11px solid var(--card);
+}
+
+/* ── Legal page prose ── */
+
+.prose-custom {
+  color: var(--foreground);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.prose-custom h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.prose-custom h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.prose-custom p,
+.prose-custom li {
+  font-size: 0.875rem;
+  line-height: 1.85;
+  color: var(--muted);
+}
+
+.prose-custom ol {
+  padding-left: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .prose-custom h1 {
+    font-size: 1.875rem;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
