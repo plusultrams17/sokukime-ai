@@ -9,7 +9,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.verce
 export const metadata: Metadata = {
   title: "よくある質問（FAQ）",
   description:
-    "成約コーチ AIに関するよくある質問をまとめました。料金プラン、機能、使い方、解約方法など、お客様からよく寄せられるご質問にお答えします。",
+    "成約コーチAIに関するよくある質問をまとめました。料金プラン、機能、使い方、解約方法など、お客様からよく寄せられるご質問にお答えします。",
   alternates: { canonical: `${SITE_URL}/faq` },
 };
 
@@ -30,9 +30,9 @@ const faqCategories: FAQCategory[] = [
     icon: "",
     items: [
       {
-        question: "成約コーチ AIとは何ですか？",
+        question: "成約コーチAIとは何ですか？",
         answer:
-          "成約コーチ AIは、営業心理学に基づく5ステップメソッドを使い、AIとのロープレ（模擬商談）を通じて営業スキルを鍛えるオンラインサービスです。24時間いつでも何度でもAI相手に練習でき、5カテゴリの詳細スコアで自分の強み・弱みを可視化できます。",
+          "成約コーチAIは、営業心理学に基づく5ステップメソッドを使い、AIとのロープレ（模擬商談）を通じて営業スキルを鍛えるオンラインサービスです。24時間いつでも何度でもAI相手に練習でき、5カテゴリの詳細スコアで自分の強み・弱みを可視化できます。",
       },
       {
         question: "どのようなシーンで練習できますか？",
@@ -200,7 +200,7 @@ export default function FAQPage() {
           よくある質問
         </h1>
         <p className="mb-12 text-center text-sm text-muted">
-          成約コーチ AIに関するよくある質問をまとめました
+          成約コーチAIに関するよくある質問をまとめました
         </p>
 
         {faqCategories.map((category) => (

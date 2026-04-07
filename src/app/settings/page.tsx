@@ -3,13 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Footer } from "@/components/footer";
 
 export default function SettingsPage() {
   const [email, setEmail] = useState<string | null>(null);
   const [plan, setPlan] = useState<"free" | "pro">("free");
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,30 +21,16 @@ export default function SettingsPage() {
       setEmail(user.email || null);
       const { data: profile } = await supabase
         .from("profiles")
-        .select("plan, email_notifications")
+        .select("plan")
         .eq("id", user.id)
         .single();
       if (profile) {
         setPlan(profile.plan as "free" | "pro");
-        setEmailNotifications(profile.email_notifications !== false);
       }
       setLoading(false);
     }
     load();
   }, []);
-
-  async function handleToggleNotifications() {
-    setSaving(true);
-    const supabase = createClient();
-    if (!supabase) return;
-    const newVal = !emailNotifications;
-    setEmailNotifications(newVal);
-    await supabase
-      .from("profiles")
-      .update({ email_notifications: newVal })
-      .eq("id", (await supabase.auth.getUser()).data.user?.id || "");
-    setSaving(false);
-  }
 
   async function handleManageSubscription() {
     try {
@@ -57,8 +40,16 @@ export default function SettingsPage() {
         window.location.href = data.url;
       }
     } catch {
-      // ignore
+      alert("サブスクリプション管理画面を開けませんでした。もう一度お試しください。");
     }
+  }
+
+  async function handleLogout() {
+    const supabase = createClient();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+    window.location.href = "/";
   }
 
   if (loading) {
@@ -72,96 +63,82 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6">
+        <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-6">
           <Link href="/" className="text-lg font-bold">
-            成約コーチ AI
+            成約コーチAI
           </Link>
           <Link
             href="/dashboard"
-            className="rounded-lg border border-card-border px-4 py-2 text-sm text-muted transition hover:text-foreground"
+            className="rounded-lg border border-card-border px-4 py-1.5 text-sm text-muted transition hover:text-foreground"
           >
             ダッシュボード
           </Link>
         </div>
       </header>
 
-      <div className="mx-auto max-w-2xl px-6 py-10">
-        <h1 className="mb-2 text-2xl font-bold">設定</h1>
-        <p className="mb-8 text-sm text-muted">アカウントと通知の設定を管理します</p>
+      <div className="mx-auto max-w-2xl px-6 py-8">
+        <h1 className="mb-6 text-xl font-bold">設定</h1>
 
-        {/* Account Info */}
-        <div className="mb-6 rounded-xl border border-card-border bg-card p-6">
-          <h2 className="mb-4 text-sm font-semibold text-muted">アカウント情報</h2>
-          <div className="space-y-3">
+        {/* Account */}
+        <div className="mb-4 rounded-xl border border-card-border bg-card p-5">
+          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">アカウント</h2>
+          <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">メールアドレス</span>
+              <span className="text-sm text-muted">メール</span>
               <span className="text-sm font-medium">{email}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted">プラン</span>
               <span className={`text-sm font-bold ${plan === "pro" ? "text-accent" : "text-muted"}`}>
-                {plan === "pro" ? "Pro プラン" : "無料プラン"}
+                {plan === "pro" ? "Pro" : "Free"}
               </span>
             </div>
           </div>
         </div>
 
-        {/* Notification Settings */}
-        <div className="mb-6 rounded-xl border border-card-border bg-card p-6">
-          <h2 className="mb-4 text-sm font-semibold text-muted">メール通知</h2>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium">メール配信</p>
-              <p className="text-xs text-muted">学習リマインダー・新機能の通知など</p>
-            </div>
-            <button
-              onClick={handleToggleNotifications}
-              disabled={saving}
-              className={`relative h-7 w-12 rounded-full transition-colors ${
-                emailNotifications ? "bg-accent" : "bg-card-border"
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform ${
-                  emailNotifications ? "translate-x-5" : "translate-x-0.5"
-                }`}
-              />
-            </button>
-          </div>
-        </div>
-
         {/* Billing */}
-        <div className="mb-6 rounded-xl border border-card-border bg-card p-6">
-          <h2 className="mb-4 text-sm font-semibold text-muted">お支払い・請求</h2>
+        <div className="mb-4 rounded-xl border border-card-border bg-card p-5">
+          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">お支払い</h2>
           {plan === "pro" ? (
-            <div className="space-y-3">
-              <p className="text-sm text-muted">
-                Stripeの管理画面で、請求書・領収書のダウンロード、支払い方法の変更、プランの解約ができます。
-              </p>
-              <button
-                onClick={handleManageSubscription}
-                className="inline-flex h-10 items-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent-hover"
-              >
-                請求・サブスクリプション管理
-              </button>
-            </div>
+            <button
+              onClick={handleManageSubscription}
+              className="inline-flex h-9 items-center rounded-lg bg-accent px-4 text-sm font-bold text-white transition hover:bg-accent-hover"
+            >
+              請求・サブスクリプション管理
+            </button>
           ) : (
-            <div className="space-y-3">
-              <p className="text-sm text-muted">
-                Proプランにアップグレードすると、無制限ロープレ・AIコーチング・詳細分析が利用できます。
-              </p>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted">Proプランで無制限ロープレ</span>
               <Link
                 href="/pricing"
-                className="inline-flex h-10 items-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent-hover"
+                className="text-sm font-bold text-accent transition hover:underline"
               >
-                Proプランを見る
+                プランを見る
               </Link>
             </div>
           )}
         </div>
-      </div>
 
-      <Footer />
+        {/* Referral */}
+        <Link
+          href="/referral"
+          className="mb-4 flex items-center justify-between rounded-xl border border-card-border bg-card p-5 transition hover:border-accent/30"
+        >
+          <div>
+            <h2 className="text-xs font-semibold uppercase tracking-wide text-muted mb-1">紹介プログラム</h2>
+            <span className="text-sm text-muted">友達を紹介してお互い ¥1,000 OFF</span>
+          </div>
+          <span className="text-accent text-sm font-bold">→</span>
+        </Link>
+
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          className="w-full rounded-xl border border-card-border bg-card p-4 text-sm text-muted transition hover:text-red-500 hover:border-red-200"
+        >
+          ログアウト
+        </button>
+      </div>
     </div>
   );
 }

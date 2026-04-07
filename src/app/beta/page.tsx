@@ -9,12 +9,12 @@ import { BetaSignupForm } from "@/components/beta-signup-form";
 export const metadata: Metadata = {
   title: "ベータテスター募集 | 限定100名",
   description:
-    "成約コーチ AIのベータテスターを限定100名募集中。正式リリース後、Proプラン3ヶ月無料の特典付き。AIがリアルなお客さん役を演じる営業ロープレアプリを、誰よりも早く体験しませんか？",
+    "成約コーチAIのベータテスターを限定100名募集中。正式リリース後、Proプラン3ヶ月無料の特典付き。AIがリアルなお客さん役を演じる営業ロープレアプリを、誰よりも早く体験しませんか？",
   alternates: { canonical: "/beta" },
   openGraph: {
-    title: "ベータテスター募集 | 限定100名 | 成約コーチ AI",
+    title: "ベータテスター募集 | 限定100名 | 成約コーチAI",
     description:
-      "成約コーチ AIのベータテスターを限定100名募集中。正式リリース後、Proプラン3ヶ月無料の特典付き。",
+      "成約コーチAIのベータテスターを限定100名募集中。正式リリース後、Proプラン3ヶ月無料の特典付き。",
   },
 };
 
@@ -72,7 +72,7 @@ const howSteps = [
 const faqs = [
   {
     q: "ベータテスターは何をするのですか？",
-    a: "成約コーチ AIの全機能を無料で体験し、使い心地やご要望をフィードバックしていただくだけです。特別なスキルは必要ありません。",
+    a: "成約コーチAIの全機能を無料で体験し、使い心地やご要望をフィードバックしていただくだけです。特別なスキルは必要ありません。",
   },
   {
     q: "3ヶ月無料はいつから始まりますか？",
@@ -96,9 +96,9 @@ export default function BetaPage() {
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "ベータテスター募集 | 成約コーチ AI",
+    name: "ベータテスター募集 | 成約コーチAI",
     description:
-      "成約コーチ AIのベータテスターを限定100名募集中。正式リリース後、Proプラン3ヶ月無料。",
+      "成約コーチAIのベータテスターを限定100名募集中。正式リリース後、Proプラン3ヶ月無料。",
     url: `${SITE_URL}/beta`,
   };
 
@@ -276,7 +276,7 @@ export default function BetaPage() {
               href="/"
               className="text-sm text-muted transition hover:text-accent hover:underline"
             >
-              成約コーチ AI について詳しく見る →
+              成約コーチAI について詳しく見る →
             </Link>
           </p>
         </div>

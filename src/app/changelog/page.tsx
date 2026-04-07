@@ -5,7 +5,7 @@ import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "更新履歴",
-  description: "成約コーチ AIの最新アップデートと機能改善の履歴です。",
+  description: "成約コーチAIの最新アップデートと機能改善の履歴です。",
 };
 
 interface ChangelogEntry {
@@ -94,7 +94,7 @@ export default function ChangelogPage() {
 
       <div className="mx-auto max-w-3xl px-6 py-10">
         <h1 className="mb-2 text-2xl font-bold">更新履歴</h1>
-        <p className="mb-10 text-sm text-muted">成約コーチ AIの最新アップデート</p>
+        <p className="mb-10 text-sm text-muted">成約コーチAIの最新アップデート</p>
 
         <div className="relative space-y-0">
           {/* Timeline line */}

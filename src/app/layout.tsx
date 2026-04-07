@@ -31,8 +31,8 @@ const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.verce
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "業種別営業学習プログラム | 成約コーチ AI - 営業の「型」を体系的に習得",
-    template: "%s | 成約コーチ AI",
+    default: "業種別営業学習プログラム | 成約コーチAI - 営業の「型」を体系的に習得",
+    template: "%s | 成約コーチAI",
   },
   description:
     "成約コーチAIは営業心理学に基づく22レッスンとAIロープレで営業スキルを体系的に習得できる無料サービスです",
@@ -40,14 +40,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
     url: SITE_URL,
-    siteName: "成約コーチ AI",
-    title: "業種別営業学習プログラム | 成約コーチ AI - 営業の「型」を体系的に習得",
+    siteName: "成約コーチAI",
+    title: "業種別営業学習プログラム | 成約コーチAI - 営業の「型」を体系的に習得",
     description:
       "成約コーチAIは営業心理学に基づく22レッスンとAIロープレで営業スキルを体系的に習得できる無料サービスです",
   },
   twitter: {
     card: "summary_large_image",
-    title: "業種別営業学習プログラム | 成約コーチ AI - 営業の「型」を体系的に習得",
+    title: "業種別営業学習プログラム | 成約コーチAI - 営業の「型」を体系的に習得",
     description:
       "成約コーチAIは営業心理学に基づく22レッスンとAIロープレで営業スキルを体系的に習得できる無料サービスです",
   },
@@ -91,7 +91,7 @@ export default function RootLayout({
               {
                 "@type": "Organization",
                 "@id": `${SITE_URL}/#organization`,
-                name: "成約コーチ AI",
+                name: "成約コーチAI",
                 url: SITE_URL,
                 description:
                   "AI × 営業心理学メソッドで営業力を鍛えるロープレコーチングサービス",
@@ -109,7 +109,7 @@ export default function RootLayout({
               {
                 "@type": "WebSite",
                 "@id": `${SITE_URL}/#website`,
-                name: "成約コーチ AI",
+                name: "成約コーチAI",
                 url: SITE_URL,
                 description:
                   "AIがリアルなお客さん役を演じる営業ロープレ練習アプリ。成約率を上げる5ステップメソッドで営業研修を効率化。",

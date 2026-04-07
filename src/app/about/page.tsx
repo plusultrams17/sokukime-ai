@@ -6,9 +6,9 @@ import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
 
 export const metadata: Metadata = {
-  title: "成約コーチ AIについて",
+  title: "成約コーチAIについて",
   description:
-    "成約コーチ AIは営業心理学に基づくAI営業ロープレコーチングサービスです。営業マンが24時間いつでも練習できる環境を提供します。",
+    "成約コーチAIは営業心理学に基づくAI営業ロープレコーチングサービスです。営業マンが24時間いつでも練習できる環境を提供します。",
   alternates: { canonical: "/about" },
 };
 
@@ -45,9 +45,9 @@ export default function AboutPage() {
             {
               "@type": "AboutPage",
               "@id": `${siteUrl}/about#webpage`,
-              name: "成約コーチ AIについて",
+              name: "成約コーチAIについて",
               description:
-                "成約コーチ AIは、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。",
+                "成約コーチAIは、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。",
               url: `${siteUrl}/about`,
               isPartOf: { "@id": `${siteUrl}/#website` },
               about: { "@id": `${siteUrl}/#organization` },
@@ -58,7 +58,7 @@ export default function AboutPage() {
               "@id": `${siteUrl}/about#breadcrumb`,
               itemListElement: [
                 { "@type": "ListItem", position: 1, name: "ホーム", item: siteUrl },
-                { "@type": "ListItem", position: 2, name: "成約コーチ AIについて", item: `${siteUrl}/about` },
+                { "@type": "ListItem", position: 2, name: "成約コーチAIについて", item: `${siteUrl}/about` },
               ],
             },
           ],
@@ -75,7 +75,7 @@ export default function AboutPage() {
             <span className="text-accent">もっと身近に。</span>
           </h1>
           <p className="text-lg text-muted leading-relaxed">
-            成約コーチ AIは、AI × 営業心理学で営業マンの練習環境を変えるサービスです。
+            成約コーチAIは、AI × 営業心理学で営業マンの練習環境を変えるサービスです。
             <br />
             先輩に頼まなくても、24時間いつでも、何度でも営業ロープレができる世界を目指しています。
           </p>
@@ -86,7 +86,7 @@ export default function AboutPage() {
       <section className="border-t border-card-border px-6 py-12">
         <div className="mx-auto max-w-3xl">
           <p className="text-sm leading-relaxed text-muted">
-            <strong className="text-foreground">成約コーチ AI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間無制限ロープレで解決します。
+            <strong className="text-foreground">成約コーチAI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間無制限ロープレで解決します。
           </p>
         </div>
       </section>
@@ -120,7 +120,7 @@ export default function AboutPage() {
               </div>
             </div>
             <p>
-              成約コーチ AIは、これらの課題をAIの力で解決します。
+              成約コーチAIは、これらの課題をAIの力で解決します。
               営業心理学に基づいた体系的な営業手法をAIに搭載し、
               いつでもどこでも質の高いロープレ練習ができる環境を提供します。
             </p>
@@ -191,13 +191,13 @@ export default function AboutPage() {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               </div>
               <div>
-                <p className="text-lg font-bold text-foreground">成約コーチ AI 開発チーム</p>
+                <p className="text-lg font-bold text-foreground">成約コーチAI 開発チーム</p>
                 <p className="text-sm text-muted">営業現場の課題をテクノロジーで解決する</p>
               </div>
             </div>
             <div className="space-y-4 text-sm leading-relaxed text-muted">
               <p>
-                成約コーチ AIは、<strong className="text-foreground">「営業の練習環境がない」</strong>という現場の声から生まれました。
+                成約コーチAIは、<strong className="text-foreground">「営業の練習環境がない」</strong>という現場の声から生まれました。
               </p>
               <p>
                 営業研修は1回5万円以上が相場。しかも月1回の集合研修では、

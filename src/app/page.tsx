@@ -3,13 +3,14 @@ import Link from "next/link";
 import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
 import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
+import { SalesTriviaPopup } from "@/components/sales-trivia-popup";
 
 /* ─── Reusable CTA Buttons ─── */
 
 function CTAButton({ className = "" }: { className?: string }) {
   return (
-    <Link href="/try-roleplay" scroll={true} className={`lp-cta-btn ${className}`}>
-      無料でAIロープレを試す
+    <Link href="/diagnose" scroll={true} className={`lp-cta-btn ${className}`}>
+      30秒で営業力を診断する（無料）
     </Link>
   );
 }
@@ -17,11 +18,11 @@ function CTAButton({ className = "" }: { className?: string }) {
 function SecondaryCTA({ className = "" }: { className?: string }) {
   return (
     <Link
-      href="/learn"
+      href="/try-roleplay"
       scroll={true}
       className={`lp-cta-secondary ${className}`}
     >
-      まず営業の型を学ぶ →
+      AIロープレをすぐ試す →
     </Link>
   );
 }
@@ -38,7 +39,7 @@ export default function Home() {
       {
         "@type": "SoftwareApplication",
         "@id": `${siteUrl}/#application`,
-        name: "成約コーチ AI",
+        name: "成約コーチAI",
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         url: siteUrl,
@@ -94,7 +95,7 @@ export default function Home() {
         業種別営業学習プログラム — 成約5ステップメソッドで営業の「型」を習得
       </h1>
       <p className="sr-only">
-        成約コーチ AIは、営業心理学に基づく「成約5ステップメソッド」を22レッスンで体系的に学べる業種別営業学習プログラムです。アプローチ・ヒアリング・プレゼン・クロージング・反論処理の5ステップを、業種別のトークスクリプトと切り返し話法で実践的に習得。学んだ技術はAIロープレで即実践練習できます。
+        成約コーチAIは、営業心理学に基づく「成約5ステップメソッド」を22レッスンで体系的に学べる業種別営業学習プログラムです。アプローチ・ヒアリング・プレゼン・クロージング・反論処理の5ステップを、業種別のトークスクリプトと切り返し話法で実践的に習得。学んだ技術はAIロープレで即実践練習できます。
       </p>
 
       {/* ═══════════════════════════════════════════════
@@ -144,9 +145,9 @@ export default function Home() {
                 textShadow: "0 2px 20px rgba(0,0,0,0.3)",
               }}
             >
-              「検討します」を、その場で
+              あなたの営業力、何点？
               <br />
-              <span className="lp-highlight-hero">&quot;お願いします&quot;</span>に変える。
+              <span className="lp-highlight-hero">弱点がわかれば、売れる。</span>
             </p>
 
             {/* Sub heading */}
@@ -157,9 +158,9 @@ export default function Home() {
                 textShadow: "0 1px 8px rgba(0,0,0,0.2)",
               }}
             >
-              営業の「型」を学び、AIで何度でも実践。
+              30秒の診断で弱点を特定。
               <br />
-              3分で体験できます。
+              22レッスンで「型」を習得 → AIロープレで実践。
             </p>
 
             {/* CTA */}
@@ -267,6 +268,46 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
+          2.5 ソーシャルプルーフ
+      ═══════════════════════════════════════════════ */}
+      <section className="border-t border-card-border bg-white py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl px-6">
+          <p className="lp-heading mb-10 text-center">
+            選ばれる<span className="lp-highlight">理由</span>
+          </p>
+          {/* 数値実績 */}
+          <div className="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {[
+              { value: "22", unit: "レッスン", label: "体系的カリキュラム" },
+              { value: "5", unit: "カテゴリ", label: "AIスコア分析" },
+              { value: "30", unit: "パターン", label: "反論切り返しテンプレ" },
+              { value: "24h", unit: "", label: "いつでも練習可能" },
+            ].map((stat) => (
+              <div key={stat.label} className="rounded-xl border border-card-border bg-background p-4 text-center">
+                <div className="text-2xl font-extrabold sm:text-3xl" style={{ color: "var(--lp-cta)" }}>
+                  {stat.value}<span className="text-sm font-bold text-muted">{stat.unit}</span>
+                </div>
+                <div className="mt-1 text-xs text-muted">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+          {/* こんな方に最適 */}
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              { title: "入社1〜3年目", desc: "営業の「型」を最短で習得したい若手営業パーソン" },
+              { title: "成約率に伸び悩み", desc: "自己流の限界を感じ、体系的メソッドで突破したい方" },
+              { title: "ロープレが苦手", desc: "人前での練習が苦手で、AIと気軽に何度でも練習したい方" },
+            ].map((item) => (
+              <div key={item.title} className="rounded-xl border border-card-border bg-background p-5">
+                <p className="mb-1 text-sm font-bold text-foreground">{item.title}</p>
+                <p className="text-xs text-muted leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
           3. 最終CTA
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-card-border bg-white">
@@ -309,10 +350,11 @@ export default function Home() {
           <Link href="/faq" className="transition hover:text-foreground">FAQ</Link>
           <Link href="/legal/terms" className="transition hover:text-foreground">利用規約</Link>
         </nav>
-        <p>&copy; {new Date().getFullYear()} 成約コーチ AI</p>
+        <p>&copy; {new Date().getFullYear()} 成約コーチAI</p>
       </footer>
 
       <HomepageCTATracker />
+      <SalesTriviaPopup />
     </div>
   );
 }

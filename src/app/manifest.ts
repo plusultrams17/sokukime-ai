@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "成約コーチ AI - AI営業ロープレコーチ",
-    short_name: "成約コーチ AI",
+    name: "成約コーチAI - AI営業ロープレコーチ",
+    short_name: "成約コーチAI",
     description:
       "AIとロープレして営業スキルを磨こう。リアルな商談シミュレーションで成約率アップ。",
     start_url: "/",

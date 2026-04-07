@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "利用規約 | 成約コーチ AI",
-  description: "成約コーチ AIの利用規約です。サービスのご利用条件をご確認ください。",
+  title: "利用規約 | 成約コーチAI",
+  description: "成約コーチAIの利用規約です。サービスのご利用条件をご確認ください。",
 };
 
 export default function TermsPage() {
@@ -13,8 +13,8 @@ export default function TermsPage() {
       <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月15日</p>
 
       <p className="mb-6 text-sm leading-relaxed text-muted">
-        この利用規約（以下「本規約」）は、成約コーチ AI（以下「当サービス」）の利用条件を定めるものです。
-        本規約において「運営者」とは、成約コーチ AIを運営する個人事業主（屋号：HAKUSO）を指します。
+        この利用規約（以下「本規約」）は、成約コーチAI（以下「当サービス」）の利用条件を定めるものです。
+        本規約において「運営者」とは、成約コーチAIを運営する個人事業主（屋号：HAKUSO）を指します。
         ユーザーの皆さま（以下「ユーザー」）には、本規約に同意いただいた上で当サービスをご利用いただきます。
       </p>
 

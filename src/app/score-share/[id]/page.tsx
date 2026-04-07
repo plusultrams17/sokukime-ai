@@ -36,11 +36,11 @@ export async function generateMetadata(
   const score = await getScore(id);
 
   if (!score) {
-    return { title: "スコアが見つかりません | 成約コーチ AI" };
+    return { title: "スコアが見つかりません | 成約コーチAI" };
   }
 
   const gradeInfo = getGradeInfo(score.overall_score);
-  const title = `営業スコア ${score.overall_score}点（${gradeInfo.grade}ランク: ${gradeInfo.label}）| 成約コーチ AI`;
+  const title = `営業スコア ${score.overall_score}点（${gradeInfo.grade}ランク: ${gradeInfo.label}）| 成約コーチAI`;
   const description = `30項目の行動チェックリストでAI採点。営業スコア${score.overall_score}点（${gradeInfo.grade}ランク）を獲得！あなたも無料で営業力を診断してみませんか？`;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
@@ -51,7 +51,7 @@ export async function generateMetadata(
       title,
       description,
       url: `${appUrl}/score-share/${id}`,
-      siteName: "成約コーチ AI",
+      siteName: "成約コーチAI",
       type: "website",
     },
     twitter: {

@@ -6,9 +6,6 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getLessonsByLevel, getAllLessons } from "@/lib/lessons";
 import { LessonScene } from "@/components/lesson-scenes";
-import { PdfExportButton } from "@/components/pdf/PdfExportButton";
-import WorksheetPdfContent from "@/components/pdf/WorksheetPdfContent";
-import { loadCompanyContext, hasCompanyContext } from "@/lib/company-context";
 import { isLessonFree } from "@/lib/lessons/access";
 
 interface Progress {
@@ -278,78 +275,6 @@ export default function LearnPage() {
       <section className="px-6 pb-8">
         <div className="mx-auto max-w-5xl">
           <ExamCard progress={progress} purchased={purchased} />
-        </div>
-      </section>
-
-      {/* Full Worksheet PDF Export */}
-      <section className="border-t border-gray-200 px-6 py-10">
-        <div className="mx-auto max-w-5xl">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 sm:p-6 border border-gray-200 rounded-xl bg-gray-50/50">
-            <div>
-              <h3 className="text-base font-bold text-foreground mb-1">
-                営業準備ワークシート（完全版）
-              </h3>
-              <p className="text-sm text-muted leading-relaxed">
-                全レッスンで記入したワークシートを1つのPDFにまとめて保存。商談前の確認資料として活用できます。
-              </p>
-            </div>
-            <PdfExportButton
-              filename="営業準備ワークシート_完全版.pdf"
-              renderContent={(ref) => {
-                let phaseData: Record<string, string>[] = [{}, {}, {}, {}, {}];
-                let previews: string[] = ["", "", "", "", ""];
-                let industry = "";
-                try {
-                  const saved = localStorage.getItem("worksheet-v2-data");
-                  if (saved) {
-                    const parsed = JSON.parse(saved);
-                    if (parsed.phaseData) phaseData = parsed.phaseData;
-                    if (parsed.previews) previews = parsed.previews;
-                    if (parsed.industry) industry = parsed.industry;
-                  }
-                } catch {}
-                const ctx = loadCompanyContext();
-                if (!industry && ctx.industry) industry = ctx.industry;
-                const productInfo = hasCompanyContext(ctx)
-                  ? {
-                      productName: ctx.productName,
-                      industry: ctx.industry,
-                      targetAudience: ctx.targetAudience,
-                      keyFeatures: ctx.keyFeatures,
-                      priceRange: ctx.priceRange,
-                      advantages: ctx.advantages,
-                      challenges: ctx.challenges,
-                    }
-                  : null;
-                return (
-                  <WorksheetPdfContent
-                    ref={ref}
-                    industry={industry}
-                    productInfo={productInfo}
-                    phaseData={phaseData}
-                    previews={previews}
-                  />
-                );
-              }}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-foreground transition hover:border-foreground shrink-0"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              完全版PDFをダウンロード
-            </PdfExportButton>
-          </div>
         </div>
       </section>
 

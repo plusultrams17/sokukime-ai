@@ -29,16 +29,40 @@ export default function GuestChatPage() {
   const [setup, setSetup] = useState<GuestSetup | null>(null);
   const [score, setScore] = useState<ScoreResult | null>(null);
 
-  // Load setup from sessionStorage; guard against duplicate trials
+  // Load setup from URL params (primary) or sessionStorage (fallback)
   useEffect(() => {
+    // Check completed flag first
     try {
       const completed = sessionStorage.getItem(GUEST_COMPLETED_KEY);
       if (completed === "true") {
-        // Already completed guest trial → send to login
         router.replace("/login?redirect=/roleplay");
         return;
       }
+    } catch {
+      // sessionStorage unavailable — proceed
+    }
 
+    // 1. Try URL query parameters (reliable even without sessionStorage)
+    const url = new URL(window.location.href);
+    const product = url.searchParams.get("product");
+    const industry = url.searchParams.get("industry");
+    const difficulty = url.searchParams.get("difficulty");
+    const scene = url.searchParams.get("scene");
+
+    if (product && difficulty) {
+      setSetup({
+        product,
+        industry: industry || "",
+        difficulty,
+        scene: scene || "visit",
+        customerType: "individual",
+      });
+      setPhase("chat");
+      return;
+    }
+
+    // 2. Fallback to sessionStorage
+    try {
       const raw = sessionStorage.getItem(GUEST_SETUP_KEY);
       if (!raw) {
         router.replace("/try-roleplay");
@@ -120,7 +144,7 @@ export default function GuestChatPage() {
                 color: "#4d4c4a",
               }}
             >
-              成約コーチ AI
+              成約コーチAI
             </span>
           </Link>
           <div
@@ -204,7 +228,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                 color: "#4d4c4a",
               }}
             >
-              成約コーチ AI
+              成約コーチAI
             </span>
           </Link>
           <div
@@ -355,7 +379,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
             </div>
           </div>
 
-          {/* ── Pro差分 + 切迫感ブロック ── */}
+          {/* ── Signup CTA ── */}
           <div
             className="pixar-card"
             style={{
@@ -366,81 +390,15 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
             <div className="text-center">
               <div
                 style={{
-                  fontSize: "0.85em",
+                  fontSize: "0.9em",
                   fontWeight: 800,
                   color: "#4d4c4a",
-                  marginBottom: "0.5em",
+                  marginBottom: "0.6em",
                 }}
               >
-                スコアを伸ばすには、繰り返しの練習が必要です
+                無料登録で毎日ロープレ練習できます
               </div>
 
-              {/* 無料/Proの違い */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.4em",
-                  textAlign: "left",
-                  padding: "0.8em 1em",
-                  margin: "0.5em 0 0.8em",
-                  background: "#fff",
-                  borderRadius: "0.8em",
-                  border: "0.12em solid #f48a58",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "0.8em",
-                    color: "#4d4c4a",
-                    fontWeight: 700,
-                  }}
-                >
-                  無料プランでできること:
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.78em",
-                    color: "#6a6560",
-                    fontWeight: 600,
-                    paddingLeft: "0.5em",
-                  }}
-                >
-                  ・22レッスンで営業の「型」を学習（全レッスン無料）
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.78em",
-                    color: "#6a6560",
-                    fontWeight: 600,
-                    paddingLeft: "0.5em",
-                  }}
-                >
-                  ・毎日1回のAIロープレで実践練習
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.78em",
-                    color: "#6a6560",
-                    fontWeight: 600,
-                    paddingLeft: "0.5em",
-                  }}
-                >
-                  ・スコアで自分の弱点を確認
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.7em",
-                    color: "#a09a90",
-                    marginTop: "0.3em",
-                    paddingLeft: "0.5em",
-                  }}
-                >
-                  Proなら: 無制限ロープレ・全5カテゴリ詳細スコア・AI改善アドバイス
-                </div>
-              </div>
-
-              {/* メインCTA */}
               <Link
                 href="/login?redirect=/roleplay"
                 style={{
@@ -468,7 +426,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   marginTop: "0.5em",
                 }}
               >
-                メールアドレスのみ ・ クレカ不要
+                クレカ不要 ・ 10秒で完了
               </p>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getBlogPost, getAllBlogPosts } from "@/lib/blog";
 
-export const alt = "成約コーチ AI ブログ";
+export const alt = "成約コーチAI ブログ";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -98,7 +98,7 @@ export default async function OgImage({
                 color: "#ffffff",
               }}
             >
-              成約コーチ AI
+              成約コーチAI
             </div>
           </div>
 

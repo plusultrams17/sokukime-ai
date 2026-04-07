@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/lp/learn`,
     type: "website",
     locale: "ja_JP",
-    siteName: "成約コーチ AI",
+    siteName: "成約コーチAI",
   },
   twitter: {
     card: "summary_large_image",
@@ -168,7 +168,7 @@ const comparisons = [
     measurement: "主観評価",
   },
   {
-    method: "成約コーチ AI",
+    method: "成約コーチAI",
     price: "¥0〜¥2,980/月",
     timing: "24時間365日",
     pace: "自分のペース",
@@ -276,7 +276,7 @@ export default function LearnLP() {
           "営業心理学から体系化した営業メソッド。22レッスン・3レベル構成。理論→トーク例→クイズ→実践の4ステップで確実にスキルアップ。",
         provider: {
           "@type": "Organization",
-          name: "成約コーチ AI",
+          name: "成約コーチAI",
           url: SITE_URL,
         },
         url: `${SITE_URL}/learn`,

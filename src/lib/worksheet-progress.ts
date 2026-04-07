@@ -1,4 +1,4 @@
-import { WORKSHEET_PHASES } from "@/lib/pdf/worksheet-fields";
+import { WORKSHEET_PHASES } from "@/lib/worksheet-fields";
 
 export function getPhaseFieldKeys(phaseIndex: number): string[] {
   const phase = WORKSHEET_PHASES[phaseIndex];

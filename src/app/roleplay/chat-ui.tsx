@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import type { ScoreResult } from "./page";
+import type { ScoreResult } from "@/lib/scoring";
 import {
   trackRoleplayMessage,
   trackRoleplayCoachToggled,
@@ -34,6 +34,10 @@ interface ChatUIProps {
   customerType: string;
   productContext?: string;
   customerContext?: string;
+  /** Lesson-specific AI customer behavior instructions for the chat API */
+  lessonFocus?: string;
+  /** Lesson-specific scoring emphasis for the score API */
+  scoringFocus?: string;
   onFinish: (score: ScoreResult & { scoreId?: string | null }) => void;
   isGuest?: boolean;
   onAuthGate?: (messages: Message[], previewScore?: ScoreResult) => void;
@@ -41,6 +45,10 @@ interface ChatUIProps {
   chatEndpoint?: string;
   /** Override the score API endpoint (e.g. "/api/score/guest" for unauthenticated guests) */
   scoreEndpoint?: string;
+  /** Hide the lesson drawer button (e.g. when embedded in a lesson page) */
+  hideLessonDrawer?: boolean;
+  /** Auto-select this lesson in the drawer (e.g. when launched from a lesson page) */
+  lessonSlug?: string;
 }
 
 const STEPS = [
@@ -71,7 +79,9 @@ const STEP_LESSON_MAP: Record<number, { slug: string; label: string }> = {
   5: { slug: "rebuttal-pattern", label: "切り返しの型（共通フレームワーク）" },
 };
 
-export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, onFinish, isGuest, onAuthGate, chatEndpoint = "/api/chat", scoreEndpoint = "/api/score" }: ChatUIProps) {
+export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus, scoringFocus, onFinish, isGuest, onAuthGate, chatEndpoint = "/api/chat", scoreEndpoint = "/api/score", hideLessonDrawer, lessonSlug }: ChatUIProps) {
+  const isGuestMode = chatEndpoint.includes("guest");
+  const showLesson = !isGuestMode && !hideLessonDrawer;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -121,7 +131,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
       const res = await fetch("/api/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene, difficulty, productContext, customerContext }),
+        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene, difficulty, productContext, customerContext, lessonFocus }),
       });
       if (!res.ok) return; // Keep previous coach data (e.g. guest gets 401)
       const data = await res.json();
@@ -136,6 +146,8 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
 
     const userMessage = input.trim();
     setInput("");
+    // Reset textarea height after send
+    if (inputRef.current) inputRef.current.style.height = "auto";
     const newMessages: Message[] = [
       ...messages,
       { role: "user", content: userMessage },
@@ -160,6 +172,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
           customerType,
           productContext,
           customerContext,
+          lessonFocus,
           isFirstMessage: false,
         }),
       }).then((r) => r.json()).catch(() => ({ message: "（通信エラー）" })),
@@ -188,7 +201,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
         const res = await fetch("/api/score/preview", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType, productContext, customerContext }),
+          body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus: scoringFocus }),
         });
         const data = await res.json();
         if (!data.error) {
@@ -207,7 +220,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
       const res = await fetch(scoreEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType, productContext, customerContext }),
+        body: JSON.stringify({ messages, industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus: scoringFocus }),
       });
       const data = await res.json();
       onFinish(data);
@@ -249,15 +262,17 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                 {sceneLabels[scene] || "訪問営業"} │ {product} → {industry}
               </span>
               <div className="flex items-center gap-2 flex-shrink-0">
-                <span className="text-[11px] sm:text-xs text-muted">
+                <span className={`text-[11px] sm:text-xs ${turnCount >= maxTurns - 3 && turnCount > 0 ? "font-bold text-accent" : "text-muted"}`}>
                   {turnCount}/{maxTurns}
                 </span>
-                <button
-                  onClick={() => setShowLessonDrawer(true)}
-                  className="rounded px-2 py-0.5 text-[11px] sm:text-xs transition bg-card-border text-muted hover:text-accent hover:bg-accent/10"
-                >
-                  教材
-                </button>
+                {showLesson && (
+                  <button
+                    onClick={() => setShowLessonDrawer(true)}
+                    className="rounded px-2 py-0.5 text-[11px] sm:text-xs transition bg-card-border text-muted hover:text-accent hover:bg-accent/10"
+                  >
+                    教材
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     const next = !showCoach;
@@ -438,15 +453,15 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                   }}
                   className="flex-shrink-0 rounded bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent"
                 >
-                  コピー
+                  入力
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Learning nudge banner — shown after 30s idle */}
-        {showNudge && (
+        {/* Learning nudge banner — shown after 30s idle (only on standalone roleplay) */}
+        {showNudge && showLesson && (
           <div className="animate-fade-in-up border-t border-yellow-500/30 bg-yellow-500/5 px-3 py-3 sm:px-4 sm:py-4">
             <div className="mx-auto max-w-3xl flex items-start gap-3">
               <svg className="flex-shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>
@@ -486,6 +501,15 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
           </div>
         )}
 
+        {/* Remaining turns warning */}
+        {turnCount >= maxTurns - 3 && turnCount > 0 && turnCount < maxTurns && (
+          <div className="border-t border-accent/30 bg-accent/5 px-3 py-2 sm:px-4 text-center">
+            <p className="text-xs sm:text-sm font-medium text-accent">
+              残り{maxTurns - turnCount}ターン ─ クロージングに入りましょう
+            </p>
+          </div>
+        )}
+
         {/* Input area */}
         <div className="border-t border-card-border bg-background px-3 py-3 sm:px-4 sm:py-4">
           <div className="mx-auto max-w-3xl">
@@ -503,10 +527,16 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                   <textarea
                     ref={inputRef}
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={(e) => {
+                      setInput(e.target.value);
+                      // Auto-resize: reset height, then set to scrollHeight (max 5 rows ≈ 120px)
+                      const el = e.target;
+                      el.style.height = "auto";
+                      el.style.height = Math.min(el.scrollHeight, 120) + "px";
+                    }}
                     onKeyDown={handleKeyDown}
                     placeholder={messages.length === 0 ? "第一声を入力してください... (Enterで送信)" : "営業トークを入力... (Enterで送信)"}
-                    rows={1}
+                    rows={2}
                     className="w-full resize-none rounded-xl border border-card-border bg-card px-3 py-3 sm:px-4 text-sm outline-none placeholder:text-muted/50 focus:border-accent"
                   />
                 </div>
@@ -638,12 +668,15 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
         </div>
       )}
 
-      {/* Lesson reference drawer */}
-      <LessonDrawer
-        open={showLessonDrawer}
-        onClose={() => setShowLessonDrawer(false)}
-        currentStepNumber={coach?.stepNumber}
-      />
+      {/* Lesson reference drawer — only on standalone roleplay page */}
+      {showLesson && (
+        <LessonDrawer
+          open={showLessonDrawer}
+          onClose={() => setShowLessonDrawer(false)}
+          currentStepNumber={coach?.stepNumber}
+          lessonSlug={lessonSlug}
+        />
+      )}
     </div>
   );
 }

@@ -9,9 +9,6 @@ import { getLessonBySlug, getAdjacentLessons } from "@/lib/lessons";
 import type { QuizQuestion } from "@/lib/lessons";
 import { getSectionDiagram } from "@/components/lesson-diagrams";
 import { LessonScene } from "@/components/lesson-scenes";
-import { PdfExportButton } from "@/components/pdf/PdfExportButton";
-import LessonPdfContent from "@/components/pdf/LessonPdfContent";
-import { InlineWorksheet } from "@/components/inline-worksheet";
 import { LessonPractice } from "@/components/lesson-practice";
 import { isLessonFree, FREE_LESSON_SLUGS } from "@/lib/lessons/access";
 import { processExamplesHtml } from "@/lib/lessons/process-html";
@@ -327,33 +324,6 @@ export default function LessonPage() {
               </div>
             )}
 
-            {/* PDF Export */}
-            <div className="mb-6 flex justify-end">
-              <PdfExportButton
-                filename={`レッスン${lesson.order}_${lesson.title}.pdf`}
-                renderContent={(ref) => {
-                  let worksheetData: Record<string, string>[] | undefined;
-                  try {
-                    const saved = localStorage.getItem("worksheet-v2-data");
-                    if (saved) {
-                      const parsed = JSON.parse(saved);
-                      if (parsed.phaseData) worksheetData = parsed.phaseData;
-                    }
-                  } catch {}
-                  return (
-                    <LessonPdfContent
-                      ref={ref}
-                      lesson={lesson}
-                      slug={slug}
-                      quizScore={getProgress().quizScores[slug]}
-                      worksheetData={worksheetData}
-                    />
-                  );
-                }}
-              >
-                レッスンをPDFで保存
-              </PdfExportButton>
-            </div>
           </div>
 
           {/* Tab + Content */}
@@ -561,19 +531,7 @@ export default function LessonPage() {
 /* ── Theory with inline diagrams ─────────────────── */
 
 function TheoryContent({ slug, theory }: { slug: string; theory: string }) {
-  // First split on WORKSHEET marker, then handle DIAGRAM markers within each segment
-  const worksheetParts = theory.split(/<!-- WORKSHEET -->/);
-
-  return (
-    <>
-      {worksheetParts.map((segment, wi) => (
-        <div key={`ws-${wi}`}>
-          {wi > 0 && <InlineWorksheet slug={slug} />}
-          <TheorySegment slug={slug} html={segment} keyPrefix={`ws${wi}`} />
-        </div>
-      ))}
-    </>
-  );
+  return <TheorySegment slug={slug} html={theory} keyPrefix="t" />;
 }
 
 function TheorySegment({ slug, html, keyPrefix }: { slug: string; html: string; keyPrefix: string }) {

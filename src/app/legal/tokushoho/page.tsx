@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "特定商取引法に基づく表記 | 成約コーチ AI",
+  title: "特定商取引法に基づく表記 | 成約コーチAI",
   description:
-    "成約コーチ AIの特定商取引法に基づく表記です。事業者情報・販売条件をご確認ください。",
+    "成約コーチAIの特定商取引法に基づく表記です。事業者情報・販売条件をご確認ください。",
 };
 
 export default function TokushohoPage() {
@@ -15,7 +15,7 @@ export default function TokushohoPage() {
       <div className="overflow-hidden rounded-2xl border border-card-border">
         <table className="w-full">
           <tbody>
-            <Row label="販売事業者" value="HAKUSO（サービス名：成約コーチ AI）" />
+            <Row label="販売事業者" value="HAKUSO（サービス名：成約コーチAI）" />
             <Row
               label="代表者"
               value="※ご請求いただければ遅滞なく開示いたします"

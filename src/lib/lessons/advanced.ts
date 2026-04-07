@@ -138,11 +138,11 @@ export const advancedLessons: Lesson[] = [
 <h3>切り返し5技法（概要）</h3>
 <p>切り返しには5つの技法があります。</p>
 <ul>
-  <li><strong>技法1「目的の振り返り」</strong> -- 相手が考えたい or 検討したいケースで効果的</li>
-  <li><strong>技法2「第三者アタック」</strong> -- 相手が考えたい or 検討したいケースで効果的</li>
-  <li><strong>技法3「＋（プラス）のシャワー」</strong> -- 相手とバトルっぽく熱くなったケースで効果的</li>
-  <li><strong>技法4「すり替え」</strong> -- 相手の他社比較・他者相談・今じゃなくてもいいに効果的</li>
-  <li><strong>技法5「価値の上乗せ」</strong> -- 相手から価格が高いと言われたケースで効果的</li>
+  <li><strong>技法1「目的の振り返り」</strong><span class="ann">相手が考えたい or 検討したいケースで効果的</span></li>
+  <li><strong>技法2「第三者アタック」</strong><span class="ann">相手が考えたい or 検討したいケースで効果的</span></li>
+  <li><strong>技法3「＋（プラス）のシャワー」</strong><span class="ann">相手とバトルっぽく熱くなったケースで効果的</span></li>
+  <li><strong>技法4「すり替え」</strong><span class="ann">相手の他社比較・他者相談・今じゃなくてもいいに効果的</span></li>
+  <li><strong>技法5「価値の上乗せ」</strong><span class="ann">相手から価格が高いと言われたケースで効果的</span></li>
 </ul>
 
 <h3>共感→感謝→フックの重要性</h3>
@@ -150,7 +150,7 @@ export const advancedLessons: Lesson[] = [
 <ul>
   <li><strong>共感</strong>：「あーそーですよねー、考えたいですよねー、わかりますー」</li>
   <li><strong>感謝</strong>：「真剣に考えていただいて、ありがとうございます。」</li>
-  <li><strong>フック</strong>：「商品自体は良いと思っていますよね？」-- ここで小さなYESをもらうことが非常に重要。これがないと後で展開しにくくなる</li>
+  <li><strong>フック</strong>：「商品自体は良いと思っていますよね？」<span class="ann-accent">ここで小さなYESをもらうことが非常に重要。これがないと後で展開しにくくなる</span></li>
 </ul>
 
 <!-- WORKSHEET -->
@@ -347,7 +347,7 @@ export const advancedLessons: Lesson[] = [
 <p>エピソードは<strong>天国と地獄</strong>の2種類があります。</p>
 <ul>
   <li><strong>天国</strong>：決断して成功した人のストーリー</li>
-  <li><strong>地獄</strong>：決断しなくて後悔した人のストーリー -- <strong>こちらの方が効果ある</strong></li>
+  <li><strong>地獄</strong>：決断しなくて後悔した人のストーリー<span class="ann-accent">こちらの方が効果ある</span></li>
 </ul>
 <p>そこに自分の感情を入れてもOKです（「僕は〜を後悔しています」）。</p>
 

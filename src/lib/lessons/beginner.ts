@@ -19,9 +19,9 @@ export const beginnerLessons: Lesson[] = [
 
 <!-- DIAGRAM:effect-oriented -->
 <ul>
-  <li><strong>三流は「自分」本位</strong> -- 自分の都合を優先する</li>
-  <li><strong>二流は「相手」本位</strong> -- 相手の都合を優先する</li>
-  <li><strong>一流は「効果」本位</strong> -- 効果を出すことを優先する</li>
+  <li><strong>三流は「自分」本位</strong><span class="ann">自分の都合を優先する</span></li>
+  <li><strong>二流は「相手」本位</strong><span class="ann">相手の都合を優先する</span></li>
+  <li><strong>一流は「効果」本位</strong><span class="ann">効果を出すことを優先する</span></li>
 </ul>
 <p>ビジネスでは<strong>「効果」を優先すべき</strong>です。効果だけを考えると全てのビジネスは成功します。でも感情が邪魔をします。プライベートでは相手本位が正解かもしれませんが、営業においては効果が出るかどうかが重要です。</p>
 <p>効果が一番出るのは<strong>「訴求」（「契約してください」と言い切ること）</strong>です。結果をコミットできると更に効果が上がります。それができるかどうかは、自分に<strong>「自信」</strong>があるかどうかにかかっています。</p>
@@ -40,10 +40,10 @@ export const beginnerLessons: Lesson[] = [
 <h3>自信を持つための4つのカテゴリー</h3>
 <p>自信を持つには、以下の4つのカテゴリーで「良い点だけを見る」ことが必要です。</p>
 <ul>
-  <li><strong>商品</strong> -- 全ての商品に良い点も悪い点もある</li>
-  <li><strong>会社</strong> -- 全ての会社に良い点も悪い点もある</li>
-  <li><strong>営業職</strong> -- 全ての職種に良い点も悪い点もある</li>
-  <li><strong>自分</strong> -- 全ての人に良い点も悪い点もある</li>
+  <li><strong>商品</strong><span class="ann">全ての商品に良い点も悪い点もある</span></li>
+  <li><strong>会社</strong><span class="ann">全ての会社に良い点も悪い点もある</span></li>
+  <li><strong>営業職</strong><span class="ann">全ての職種に良い点も悪い点もある</span></li>
+  <li><strong>自分</strong><span class="ann">全ての人に良い点も悪い点もある</span></li>
 </ul>
 <p><strong>完璧なモノはありません。</strong>全てのモノに良い点も悪い点もあるのが通常です。人によって見方も感じ方も異なります。</p>
 <p>ポイントは<strong>「良い点だけを見て悪い点を見ない」</strong>ことです。これは営業の技術と言えます。営業の最優先事項は契約すること＝効果を出すこと。商品が悪い、会社が悪いと言い訳していてもしょうがない。人に対しても良い点だけ見ていたら好きになれます。商品も良い点だけを見ていたら良いと思えます。</p>
@@ -244,11 +244,11 @@ export const beginnerLessons: Lesson[] = [
 <!-- DIAGRAM:four-steps -->
 <h3>先回りの4ステップ</h3>
 <p>以下の4つを順番に伝えます。</p>
-<ul>
-  <li><strong>ステップ1</strong>：「精一杯お話をさせていただきます！」 -- 強調</li>
-  <li><strong>ステップ2</strong>：「気に入らなかったら断ってもらって構いませんので安心してくださいね。」 -- <strong>最重要：ここでもらうYESが一番大切</strong>。相手に「選択の自由」を与える</li>
-  <li><strong>ステップ3</strong>：「もし気に入ったら、この機会にスタートしてみてください。」 -- 訴求</li>
-  <li><strong>ステップ4</strong>：「よろしいですか？」 -- 念押し。ステップ3のYESの効果を強化するため</li>
+<ul class="step-list">
+  <li><strong>ステップ1</strong><span class="quote">「精一杯お話をさせていただきます！」</span><span class="ann">強調</span></li>
+  <li><strong>ステップ2</strong><span class="quote">「気に入らなかったら断ってもらって構いませんので安心してくださいね。」</span><span class="ann-accent">最重要：ここでもらうYESが一番大切。相手に「選択の自由」を与える</span></li>
+  <li><strong>ステップ3</strong><span class="quote">「もし気に入ったら、この機会にスタートしてみてください。」</span><span class="ann">訴求</span></li>
+  <li><strong>ステップ4</strong><span class="quote">「よろしいですか？」</span><span class="ann">念押し。ステップ3のYESの効果を強化するため</span></li>
 </ul>
 <p>ステップ2でYESをもらえると、ステップ3で99%OKになります。</p>
 <p>明確に伝えることが大切です。曖昧な<strong>「思います」「嬉しいです」「幸いです」はブーメラン</strong>です。選んだ言葉はそのままの結果になります。</p>
@@ -434,8 +434,8 @@ export const beginnerLessons: Lesson[] = [
 <p>ヒアリングの目的は<strong>「問題の把握」</strong>です。今の現状をそのまま聞くだけでは営業にはなりません。すぐ営業すると売れません。</p>
 <p>問題には2種類あります。</p>
 <ul>
-  <li><strong>浅い（ささくれ）</strong> -- 浅いまま営業すると必ず失敗する</li>
-  <li><strong>深い（骨折）</strong> -- 浅い問題を深い問題にする。緊急性を増させるのが営業</li>
+  <li><strong>浅い（ささくれ）</strong><span class="ann">浅いまま営業すると必ず失敗する</span></li>
+  <li><strong>深い（骨折）</strong><span class="ann">浅い問題を深い問題にする。緊急性を増させるのが営業</span></li>
 </ul>
 <p>問題を多く引き出した方が成約率が上がります。ニーズ（問題）は与えずに引き出すこと。勝手に与えると嫌がる人が多く、引き出せば嫌がられることもなく成約率が上がります。</p>
 
@@ -451,7 +451,7 @@ export const beginnerLessons: Lesson[] = [
 <h3>1行目は第三者話法＋口語がいい</h3>
 <p>目的は2つあります。</p>
 <ul>
-  <li><strong>答えやすくする</strong> -- 通常、自分の悩みを他人には伝えたくないもの</li>
+  <li><strong>答えやすくする</strong><span class="ann">通常、自分の悩みを他人には伝えたくないもの</span></li>
   <li><strong>いやらしさをなくす</strong></li>
 </ul>
 <p>ポイントは、第三者がしゃべったように話すこと。相手から「わかる〜」と共感されます。第三者話法はできるだけ強調した方が効果的で、セリフ前後に<strong>間を取り過ぎくらいに取る</strong>のがコツです。</p>
@@ -668,8 +668,8 @@ export const beginnerLessons: Lesson[] = [
 <h3>セールスポイントとベネフィットの違い</h3>
 <p>この2つは似ているけど異なるものです。</p>
 <ul>
-  <li><strong>セールスポイント（SP）</strong> -- 商品の特徴や性質、他社と比べて際立つ点。<strong>【理屈】</strong></li>
-  <li><strong>ベネフィット（利点）</strong> -- お客様が得られる利益。<strong>【感情】</strong></li>
+  <li><strong>セールスポイント（SP）</strong><span class="ann">商品の特徴や性質、他社と比べて際立つ点 <strong>【理屈】</strong></span></li>
+  <li><strong>ベネフィット（利点）</strong><span class="ann">お客様が得られる利益 <strong>【感情】</strong></span></li>
 </ul>
 <p><strong>セールスポイントだけでは売れません！</strong>ベネフィットは必ずわざわざ言わないとダメです。</p>
 
@@ -788,7 +788,7 @@ export const beginnerLessons: Lesson[] = [
 <p>想像させる未来には<strong>天国と地獄</strong>の2種類があります。</p>
 <ul>
   <li><strong>天国</strong>：ポジティブな未来</li>
-  <li><strong>地獄</strong>：ネガティブな未来 -- <strong>訴求が強い</strong></li>
+  <li><strong>地獄</strong>：ネガティブな未来<span class="ann-accent">訴求が強い</span></li>
 </ul>
 <p>「もし○○だったら気分はどうですか？」と、本当にありそうな具体的な1コマを想像させます。</p>
 <p>地獄トークが刺さらない場合は天国トークに切り替えましょう。</p>

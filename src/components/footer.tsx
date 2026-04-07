@@ -23,9 +23,9 @@ export function Footer() {
                 <path d="M27 30l-2-3" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
                 <path d="M37 30l2-3" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
               </svg>
-              <span className="header-wave-text" aria-label="成約コーチ AI">
-                <span className="header-wave-text__outline">成約コーチ AI</span>
-                <span className="header-wave-text__fill">成約コーチ AI</span>
+              <span className="header-wave-text" aria-label="成約コーチAI">
+                <span className="header-wave-text__outline">成約コーチAI</span>
+                <span className="header-wave-text__fill">成約コーチAI</span>
               </span>
             </div>
             <p className="text-sm text-muted leading-relaxed">
@@ -34,35 +34,24 @@ export function Footer() {
           </div>
           {/* Product */}
           <div>
-            <h4 className="mb-3 text-sm font-semibold text-foreground">プロダクト</h4>
+            <h4 className="mb-3 text-sm font-semibold text-foreground">サービス</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted">
               <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
-              <Link href="/roleplay" className="transition hover:text-foreground">AIロープレ</Link>
-              <Link href="/dashboard" className="transition hover:text-foreground">マイダッシュボード</Link>
-              <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
-              <Link href="/program" className="transition hover:text-foreground">教材プログラム</Link>
-              <Link href="/features" className="transition hover:text-foreground">機能紹介</Link>
+              <Link href="/try-roleplay" className="transition hover:text-foreground">AIロープレ体験</Link>
               <Link href="/tools" className="transition hover:text-foreground">無料ツール</Link>
-              <Link href="/insights" className="transition hover:text-foreground">業界インサイト</Link>
-              <Link href="/industry" className="transition hover:text-foreground">業種別ロープレ</Link>
-              <Link href="/use-cases" className="transition hover:text-foreground">活用シーン</Link>
-              <Link href="/enterprise" className="transition hover:text-foreground">法人導入</Link>
+              <Link href="/diagnose" className="transition hover:text-foreground">営業力診断</Link>
+              <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
               <Link href="/blog" className="transition hover:text-foreground">ブログ</Link>
-              <Link href="/faq" className="transition hover:text-foreground">よくある質問</Link>
-              <Link href="/changelog" className="transition hover:text-foreground">更新履歴</Link>
             </nav>
           </div>
-          {/* Industries */}
+          {/* Resources */}
           <div>
-            <h4 className="mb-3 text-sm font-semibold text-foreground">業種別ロープレ</h4>
+            <h4 className="mb-3 text-sm font-semibold text-foreground">リソース</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted">
-              <Link href="/industry/real-estate" className="transition hover:text-foreground">不動産営業</Link>
-              <Link href="/industry/insurance" className="transition hover:text-foreground">保険営業</Link>
-              <Link href="/industry/saas" className="transition hover:text-foreground">SaaS営業</Link>
-              <Link href="/industry/hr" className="transition hover:text-foreground">人材営業</Link>
-              <Link href="/industry/education" className="transition hover:text-foreground">教育営業</Link>
-              <Link href="/industry/retail" className="transition hover:text-foreground">物販営業</Link>
-              <Link href="/about" className="mt-2 transition hover:text-foreground">成約コーチ AIについて</Link>
+              <Link href="/industry" className="transition hover:text-foreground">業種別ロープレ</Link>
+              <Link href="/use-cases" className="transition hover:text-foreground">活用シーン</Link>
+              <Link href="/faq" className="transition hover:text-foreground">よくある質問</Link>
+              <Link href="/about" className="transition hover:text-foreground">成約コーチAIについて</Link>
             </nav>
           </div>
           {/* Legal */}
@@ -76,7 +65,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-card-border pt-6 text-center text-sm text-muted">
-          &copy; {new Date().getFullYear()} 成約コーチ AI. All rights reserved.
+          &copy; {new Date().getFullYear()} 成約コーチAI. All rights reserved.
         </div>
       </div>
     </footer>

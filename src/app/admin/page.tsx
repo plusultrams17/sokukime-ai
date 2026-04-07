@@ -158,7 +158,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Link href="/" className="text-lg font-bold">成約コーチ AI</Link>
+          <Link href="/" className="text-lg font-bold">成約コーチAI</Link>
           <div className="flex items-center gap-3">
             <span className="text-xs text-muted">
               {new Date(metrics.timestamp).toLocaleString("ja-JP")}

@@ -97,7 +97,7 @@ export default function IndustryIndexPage() {
               SaaS営業ではデモからの有料化トークが求められます。
             </p>
             <p>
-              成約コーチ AIの業種別ロープレでは、各業界でよくある反論パターンや商談シナリオをAIが再現。
+              成約コーチAIの業種別ロープレでは、各業界でよくある反論パターンや商談シナリオをAIが再現。
               業界特有のクロージングテクニックを何度でも練習できます。
               まずは
               <Link href="/tools/sales-quiz" className="text-accent hover:underline">

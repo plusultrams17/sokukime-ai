@@ -159,7 +159,7 @@ export default async function BlogTagPage({ params }: Props) {
             記事で学んだらAIで実践練習
           </h2>
           <p className="mb-8 text-muted">
-            成約コーチ AIなら、AIがリアルなお客さん役を演じてロープレ練習ができます。
+            成約コーチAIなら、AIがリアルなお客さん役を演じてロープレ練習ができます。
           </p>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link

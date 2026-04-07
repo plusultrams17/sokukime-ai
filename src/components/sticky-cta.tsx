@@ -14,11 +14,11 @@ interface StickyCTAProps {
 }
 
 export function StickyCTA({
-  ctaText = "無料で営業の型を学ぶ",
-  ctaHref = "/learn",
-  subtitle = "22レッスンで営業の型を習得",
-  brandName = "成約コーチ AI",
-  trackingId = "sticky_learn",
+  ctaText = "30秒で診断する",
+  ctaHref = "/diagnose",
+  subtitle = "30秒で営業力を無料診断",
+  brandName = "成約コーチAI",
+  trackingId = "sticky_diagnosis",
   onCtaClick,
 }: StickyCTAProps) {
   const [pastHero, setPastHero] = useState(false);
@@ -68,7 +68,7 @@ export function StickyCTA({
             AIで練習する
           </Link>
           <div className="flex flex-col items-center sm:flex-row sm:gap-3">
-            <span className="mb-1 text-[10px] text-muted sm:hidden">5分で1レッスン完了 ・ 登録不要</span>
+            <span className="mb-1 text-[10px] text-muted sm:hidden">{subtitle}</span>
             <Link
               href={ctaHref}
               scroll={true}

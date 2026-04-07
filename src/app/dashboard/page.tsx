@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { OnboardingChecklist } from "@/components/onboarding-checklist";
+import { SalesTriviaCard } from "@/components/sales-trivia-card";
 
 interface DashboardData {
   totalSessions: number;
@@ -50,15 +50,14 @@ function ScoreChart({ history }: { history: { score: number; date: string }[] })
   if (history.length === 0) return null;
 
   const maxScore = 100;
-  const height = 160;
+  const height = 120;
   const width = history.length > 1 ? 100 : 50;
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="min-w-[300px]" style={{ height: `${height + 30}px` }}>
+      <div className="min-w-[280px]" style={{ height: `${height + 24}px` }}>
         <svg viewBox={`0 0 ${width} ${height + 20}`} className="w-full h-full" preserveAspectRatio="none">
-          {/* Grid lines */}
-          {[20, 40, 60, 80].map((v) => (
+          {[40, 80].map((v) => (
             <line
               key={v}
               x1="0" y1={height - (v / maxScore) * height}
@@ -66,7 +65,6 @@ function ScoreChart({ history }: { history: { score: number; date: string }[] })
               stroke="var(--card-border)" strokeWidth="0.3" strokeDasharray="2,2"
             />
           ))}
-          {/* Line */}
           {history.length > 1 && (
             <polyline
               fill="none"
@@ -81,7 +79,6 @@ function ScoreChart({ history }: { history: { score: number; date: string }[] })
               }).join(" ")}
             />
           )}
-          {/* Dots */}
           {history.map((h, i) => {
             const x = history.length > 1 ? (i / (history.length - 1)) * width : width / 2;
             const y = height - (h.score / maxScore) * height;
@@ -215,21 +212,38 @@ export default function DashboardPage() {
       <Header />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
-        <h1 className="mb-2 text-2xl font-bold">マイダッシュボード</h1>
-        <p className="mb-8 text-sm text-muted">あなたの営業トレーニング進捗</p>
 
-        {/* Onboarding Checklist for new users — auto-detects progress from data */}
-        {data.totalSessions < 5 && (
-          <OnboardingChecklist
-            data={{
-              totalSessions: data.totalSessions,
-              totalScored: data.totalScored,
-              weakestCategory: data.weakestCategory,
-            }}
-          />
-        )}
+        {/* Hero: Quick Actions — always visible, always at top */}
+        <div className="mb-8">
+          <h1 className="mb-1 text-2xl font-bold">今日も練習しよう</h1>
+          <p className="mb-5 text-sm text-muted">
+            {hasScores
+              ? `最新スコア ${data.latestScore}点${data.scoreTrend > 0 ? `（+${data.scoreTrend}）` : ""} -- ${data.weakestCategory ? `${data.weakestCategory.name}を重点的に` : "この調子で続けましょう"}`
+              : "まずはAIロープレを試して、あなたの営業力をスコア化しましょう"}
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/roleplay"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover"
+            >
+              AIロープレを始める
+            </Link>
+            <Link
+              href="/learn"
+              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 px-8 text-sm font-bold text-accent transition hover:bg-accent/5"
+            >
+              レッスンで学ぶ
+            </Link>
+            <Link
+              href="/referral"
+              className="inline-flex h-12 items-center justify-center rounded-xl border border-card-border px-6 text-sm font-medium text-muted transition hover:text-foreground hover:border-accent/30"
+            >
+              友達を紹介して¥1,000 OFF
+            </Link>
+          </div>
+        </div>
 
-        {/* Reverse Trial Banner */}
+        {/* Trial Banner — compact, essential for conversion */}
         {data.trialDaysRemaining !== null && data.trialDaysRemaining > 0 && (
           <div className="mb-6 rounded-xl border border-accent/30 bg-gradient-to-r from-accent/10 to-accent/5 px-5 py-4">
             <div className="flex items-center justify-between">
@@ -237,7 +251,7 @@ export default function DashboardPage() {
                 <span className="inline-block h-5 w-5 rounded-full bg-accent" />
                 <div>
                   <div className="text-sm font-bold text-accent">
-                    Pro体験中 — 残り{data.trialDaysRemaining}日
+                    Pro体験中 -- 残り{data.trialDaysRemaining}日
                   </div>
                   <div className="text-xs text-muted">
                     無制限ロープレ・AIコーチ・詳細スコアが無料で使えます
@@ -254,269 +268,114 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Streak */}
+        {/* Streak — compact inline badge */}
         {data.streak > 0 && (
-          <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-5 py-4 flex items-center gap-3">
-            <span className="inline-block h-6 w-6 rounded-full bg-accent" />
-            <div className="flex-1">
-              <div className="text-lg font-bold text-accent">{data.streak}日連続</div>
-              <div className="text-xs text-muted">
-                {data.streak >= 7 ? "練習が定着しています" : data.streak >= 3 ? "いい調子です。継続は力なり" : "連続記録を伸ばしていきましょう"}
-              </div>
-            </div>
-            {data.plan === "pro" && (
-              <div className="shrink-0 rounded-full bg-accent/10 px-3 py-1 text-[10px] font-medium text-accent">
-                ストリークシールド ON
-              </div>
-            )}
-            {data.plan === "free" && data.streak >= 3 && (
-              <Link href="/pricing" className="shrink-0 rounded-full bg-accent/10 px-3 py-1 text-[10px] font-medium text-accent transition hover:bg-accent/20">
-                Pro: 1日休んでもOK →
-              </Link>
-            )}
+          <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-5 py-3 flex items-center gap-3">
+            <span className="inline-block h-5 w-5 rounded-full bg-accent" />
+            <div className="text-sm font-bold text-accent">{data.streak}日連続トレーニング中</div>
           </div>
         )}
 
-        {/* Milestone Celebration */}
-        {hasScores && data.bestScore >= 80 && (
-          <div className="mb-6 rounded-xl border border-green-500/20 bg-green-500/5 px-5 py-4">
-            <div className="flex items-center gap-3 mb-2">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg>
-              <div className="text-base font-bold text-green-500">
-                Aランク達成 -- 上位プレイヤーの仲間入りです
-              </div>
-            </div>
-            <p className="text-xs text-muted mb-3">
-              スコア{data.bestScore}点はAランク。ここからさらに磨けばSランクも目前です。
-            </p>
-            {data.plan === "free" ? (
-              <Link
-                href="/pricing"
-                className="inline-flex h-9 items-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
-              >
-                Proで毎日練習してSランクへ →
-              </Link>
-            ) : (
-              <Link
-                href="/referral"
-                className="inline-flex h-9 items-center rounded-lg bg-green-500/10 px-4 text-xs font-bold text-green-500 transition hover:bg-green-500/20"
-              >
-                この成果を同僚にシェアして ¥1,000 OFF →
-              </Link>
-            )}
-          </div>
-        )}
-
-        {/* Power User Upgrade Nudge */}
-        {data.totalSessions >= 10 && data.plan === "free" && data.bestScore < 80 && (
-          <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-5 py-4">
-            <div className="flex items-center gap-3 mb-2">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              <div className="text-sm font-bold">
-                {data.totalSessions}回の練習を継続しています
-              </div>
-            </div>
-            <p className="text-xs text-muted mb-3">
-              毎日の練習を続けているあなたは上位ユーザー。Proなら無制限で集中練習でき、スコアアップが加速します。
-            </p>
-            <Link
-              href="/pricing"
-              className="inline-flex h-9 items-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
-            >
-              7日間無料でProを試す →
-            </Link>
-          </div>
-        )}
-
-        {/* Endowed Progress — Nunes & Dreze (2006): starting at non-zero increases completion 79% */}
-        <div className="mb-6 rounded-xl border border-card-border bg-card p-5">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-bold">営業力レベル</span>
-            <span className="text-xs text-accent font-bold">
-              {data.totalScored === 0 ? "Lv.1 入門" : data.avgScore >= 80 ? "Lv.5 達人" : data.avgScore >= 60 ? "Lv.4 上級" : data.avgScore >= 40 ? "Lv.3 中級" : data.totalScored >= 3 ? "Lv.2 初級" : "Lv.1 入門"}
-            </span>
-          </div>
-          <div className="h-2.5 overflow-hidden rounded-full bg-card-border">
-            <div
-              className="h-full rounded-full bg-accent transition-all duration-1000"
-              style={{
-                width: `${Math.max(20, data.totalScored === 0 ? 20 : data.avgScore >= 80 ? 100 : data.avgScore >= 60 ? 80 : data.avgScore >= 40 ? 60 : data.totalScored >= 3 ? 40 : 20)}%`,
-              }}
-            />
-          </div>
-          <div className="mt-2 text-[11px] text-muted">
-            {data.totalScored === 0
-              ? "ロープレを始めるとレベルが上がります"
-              : data.avgScore >= 80
-              ? "トップレベルです。Sランクまであと少しです"
-              : `次のレベルまで：平均スコアを${data.avgScore >= 60 ? 80 : data.avgScore >= 40 ? 60 : 40}点以上に`}
-          </div>
+        {/* 今日の営業豆知識 */}
+        <div className="mb-6">
+          <SalesTriviaCard />
         </div>
 
-        {/* Pro Value Reinforcement — reduces churn by showing ROI */}
-        {data.plan === "pro" && data.totalSessions > 0 && (
-          <div className="mb-6 rounded-xl border border-accent/15 bg-accent/5 px-5 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xs text-muted">今月の利用価値</div>
-                <div className="text-lg font-bold text-accent">
-                  ¥{(data.totalSessions * 3000).toLocaleString()}相当
-                </div>
-                <div className="text-[11px] text-muted">
-                  {data.totalSessions}回の練習 × 研修換算¥3,000 = <span className="font-medium text-foreground">¥2,980で{data.totalSessions}回利用</span>
-                </div>
+        {/* Stats — 3 cards max, only when scores exist */}
+        {hasScores && (
+          <div className="mb-6 grid grid-cols-3 gap-3">
+            <div className="rounded-xl border border-card-border bg-card p-4 text-center">
+              <div className="text-xs text-muted mb-1">ベスト</div>
+              <div className={`text-2xl font-bold ${getScoreColor(data.bestScore)}`}>
+                {data.bestScore}
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-black text-accent">
-                  {Math.round((data.totalSessions * 3000) / 2980 * 100)}%
-                </div>
-                <div className="text-[10px] text-muted">コスパ</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Stats Grid */}
-        <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="rounded-xl border border-card-border bg-card p-4">
-            <div className="text-xs text-muted mb-1">総セッション数</div>
-            <div className="text-2xl font-bold">{data.totalSessions}</div>
-          </div>
-          <div className="rounded-xl border border-card-border bg-card p-4">
-            <div className="text-xs text-muted mb-1">ベストスコア</div>
-            <div className={`text-2xl font-bold ${hasScores ? getScoreColor(data.bestScore) : "text-muted"}`}>
-              {hasScores ? data.bestScore : "—"}
-            </div>
-            {hasScores && (
               <div className="text-[11px] text-muted">ランク {getGrade(data.bestScore)}</div>
-            )}
-          </div>
-          <div className="rounded-xl border border-card-border bg-card p-4">
-            <div className="text-xs text-muted mb-1">平均スコア</div>
-            <div className={`text-2xl font-bold ${hasScores ? getScoreColor(data.avgScore) : "text-muted"}`}>
-              {hasScores ? data.avgScore : "—"}
             </div>
-          </div>
-          <div className="rounded-xl border border-card-border bg-card p-4">
-            <div className="text-xs text-muted mb-1">最新スコア</div>
-            <div className={`text-2xl font-bold ${hasScores ? getScoreColor(data.latestScore) : "text-muted"}`}>
-              {hasScores ? data.latestScore : "—"}
-            </div>
-            {data.scoreTrend !== 0 && (
-              <div className={`text-[11px] font-medium ${data.scoreTrend > 0 ? "text-green-500" : "text-red-400"}`}>
-                {data.scoreTrend > 0 ? "+" : ""}{data.scoreTrend}点
+            <div className="rounded-xl border border-card-border bg-card p-4 text-center">
+              <div className="text-xs text-muted mb-1">最新</div>
+              <div className={`text-2xl font-bold ${getScoreColor(data.latestScore)}`}>
+                {data.latestScore}
               </div>
-            )}
-          </div>
-        </div>
-
-        {/* Improvement from first score — 競合失敗分析: 進捗の可視化がリテンションの鍵 */}
-        {hasScores && data.firstScore !== null && data.totalScored >= 2 && data.latestScore !== data.firstScore && (
-          <div className={`mb-6 rounded-xl border px-5 py-4 ${
-            data.latestScore > data.firstScore
-              ? "border-green-500/20 bg-green-500/5"
-              : "border-card-border bg-card"
-          }`}>
-            <div className="flex items-center gap-3">
-              <span className="inline-block h-5 w-5 rounded-full bg-accent" />
-              <div className="flex-1">
-                <div className={`text-sm font-bold ${data.latestScore > data.firstScore ? "text-green-500" : "text-muted"}`}>
-                  初回から{data.latestScore > data.firstScore ? "+" : ""}{data.latestScore - data.firstScore}点の{data.latestScore > data.firstScore ? "成長" : "変化"}
-                </div>
-                <div className="text-xs text-muted">
-                  初回 {data.firstScore}点 → 最新 {data.latestScore}点
-                  {data.latestScore > data.firstScore && data.firstScore > 0 && (
-                    <span className="ml-2 font-medium text-green-500">
-                      ({Math.round(((data.latestScore - data.firstScore) / data.firstScore) * 100)}%改善)
-                    </span>
-                  )}
-                </div>
-              </div>
-              {data.latestScore > data.firstScore && (
-                <div className="text-right">
-                  <div className="text-lg font-black text-green-500">
-                    +{data.latestScore - data.firstScore}
-                  </div>
-                  <div className="text-[10px] text-muted">pts</div>
+              {data.scoreTrend !== 0 && (
+                <div className={`text-[11px] font-medium ${data.scoreTrend > 0 ? "text-green-500" : "text-red-400"}`}>
+                  {data.scoreTrend > 0 ? "+" : ""}{data.scoreTrend}点
                 </div>
               )}
             </div>
+            <div className="rounded-xl border border-card-border bg-card p-4 text-center">
+              <div className="text-xs text-muted mb-1">練習回数</div>
+              <div className="text-2xl font-bold">{data.totalSessions}</div>
+              <div className="text-[11px] text-muted">セッション</div>
+            </div>
           </div>
         )}
 
-        {/* Score History Chart */}
-        {hasScores && data.history.length > 0 && (
-          <div className="mb-8 rounded-2xl border border-card-border bg-card p-6">
-            <h2 className="mb-4 text-sm font-medium text-muted">スコア推移</h2>
+        {/* Score History Chart — compact */}
+        {hasScores && data.history.length > 1 && (
+          <div className="mb-6 rounded-xl border border-card-border bg-card p-5">
+            <h2 className="mb-3 text-sm font-medium text-muted">スコア推移</h2>
             <ScoreChart history={data.history} />
           </div>
         )}
 
-        {/* Weakest Category + Recommendation */}
+        {/* Weakest Category — actionable recommendation */}
         {hasScores && data.weakestCategory && (
-          <div className="mb-8 rounded-2xl border border-accent/20 bg-accent/5 p-6">
-            <h2 className="mb-2 text-sm font-medium text-accent">改善推奨カテゴリ</h2>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-base font-bold">{data.weakestCategory.name}</span>
-              <span className={`text-lg font-bold ${getScoreColor(data.weakestCategory.score)}`}>
+          <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 p-5">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-sm font-medium text-accent">改善ポイント</h2>
+              <span className={`text-sm font-bold ${getScoreColor(data.weakestCategory.score)}`}>
                 {data.weakestCategory.score}点
               </span>
             </div>
-            <div className="mb-1 h-2 overflow-hidden rounded-full bg-card-border">
+            <div className="mb-2 text-base font-bold">{data.weakestCategory.name}</div>
+            <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-card-border">
               <div
                 className="h-full rounded-full bg-accent transition-all duration-700"
                 style={{ width: `${data.weakestCategory.score}%` }}
               />
             </div>
-            <p className="mt-3 text-xs text-muted">
-              このカテゴリを集中的に練習することで、総合スコアの大幅な改善が期待できます。
-              {CATEGORY_LESSON_MAP[data.weakestCategory.name] && (
-                <> 学習コースの「{CATEGORY_LESSON_MAP[data.weakestCategory.name].label}」で基礎を確認できます。</>
-              )}
-            </p>
-            <div className="mt-4 flex flex-col sm:flex-row gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Link
                 href="/roleplay"
-                className="flex h-10 items-center justify-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent-hover"
+                className="flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
               >
-                このカテゴリを重点練習する
+                重点練習する
               </Link>
-              <Link
-                href={CATEGORY_LESSON_MAP[data.weakestCategory.name] ? `/learn#${CATEGORY_LESSON_MAP[data.weakestCategory.name].level}` : "/learn"}
-                className="flex h-10 items-center justify-center rounded-lg border border-card-border px-5 text-sm text-muted transition hover:text-foreground"
-              >
-                {CATEGORY_LESSON_MAP[data.weakestCategory.name]
-                  ? `${CATEGORY_LESSON_MAP[data.weakestCategory.name].label}を復習`
-                  : "営業の型を復習する"}
-              </Link>
+              {CATEGORY_LESSON_MAP[data.weakestCategory.name] && (
+                <Link
+                  href={`/learn#${CATEGORY_LESSON_MAP[data.weakestCategory.name].level}`}
+                  className="flex h-9 items-center justify-center rounded-lg border border-card-border px-4 text-xs text-muted transition hover:text-foreground"
+                >
+                  {CATEGORY_LESSON_MAP[data.weakestCategory.name].label}を復習
+                </Link>
+              )}
             </div>
           </div>
         )}
 
-        {/* Empty State */}
+        {/* Empty State — for users with sessions but no scores yet */}
         {!hasScores && (
-          <div className="mb-8 rounded-2xl border border-card-border bg-card p-8 text-center">
-            <div className="mb-3 text-4xl" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-            <h2 className="mb-2 text-lg font-bold">まだスコアデータがありません</h2>
-            <p className="mb-6 text-sm text-muted">
-              ロープレを行うとスコアがここに記録され、<br />
-              あなたの成長を可視化できます。
+          <div className="mb-6 rounded-xl border border-card-border bg-card p-6 text-center">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <h2 className="mb-1 text-base font-bold">まだスコアがありません</h2>
+            <p className="mb-4 text-sm text-muted">
+              ロープレを完了するとスコアが記録されます
             </p>
             <Link
               href="/roleplay"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
+              className="inline-flex h-10 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
             >
               最初のロープレを始める
             </Link>
           </div>
         )}
 
-        {/* Pro Upgrade CTA for free users */}
+        {/* Single Upgrade CTA for free users — one clear spot, not scattered */}
         {data.plan === "free" && (
-          <div className="mb-8 rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/5 to-transparent p-6 text-center">
-            <p className="mb-1 text-sm font-bold">全5カテゴリの詳細フィードバックで効率的に改善</p>
-            <p className="mb-4 text-xs text-muted">
-              Proプランなら無制限ロープレ + AI改善アドバイスで短期間でスコアアップ
+          <div className="mb-6 rounded-xl border border-accent/30 bg-gradient-to-br from-accent/5 to-transparent p-5 text-center">
+            <p className="mb-1 text-sm font-bold">Proなら無制限ロープレ + AIコーチで短期間にスコアアップ</p>
+            <p className="mb-3 text-xs text-muted">
+              7日間完全無料 -- ¥2,980/月 -- いつでも解約OK
             </p>
             <Link
               href="/pricing"
@@ -524,69 +383,8 @@ export default function DashboardPage() {
             >
               7日間無料でProを試す
             </Link>
-            <p className="mt-2 text-[11px] text-muted">7日間完全無料 → ¥2,980/月 ・ いつでも解約OK</p>
           </div>
         )}
-
-        {/* Invoice Link for Pro Users */}
-        {data.plan === "pro" && (
-          <div className="mb-8 rounded-xl border border-card-border bg-card p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm font-bold">領収書・請求書</div>
-                <div className="text-xs text-muted">Stripeの管理画面で領収書のダウンロードが可能です</div>
-              </div>
-              <button
-                onClick={async () => {
-                  try {
-                    const res = await fetch("/api/stripe/portal", { method: "POST" });
-                    const d = await res.json();
-                    if (d.url) window.location.href = d.url;
-                  } catch { /* ignore */ }
-                }}
-                className="rounded-lg bg-accent/10 px-4 py-2 text-sm font-bold text-accent transition hover:bg-accent/20"
-              >
-                領収書を見る
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Quick Links */}
-        <div className="grid gap-3 sm:grid-cols-4">
-          <Link
-            href="/roleplay"
-            className="rounded-xl border border-card-border bg-card p-4 text-center transition hover:border-accent/30"
-          >
-            <div className="mb-1 text-xl" aria-hidden="true"><span className="inline-block h-5 w-5 rounded-full bg-accent" /></div>
-            <div className="text-sm font-bold">ロープレ</div>
-            <div className="text-[11px] text-muted">AIと営業練習</div>
-          </Link>
-          <Link
-            href="/insights"
-            className="rounded-xl border border-card-border bg-card p-4 text-center transition hover:border-accent/30"
-          >
-            <div className="mb-1 text-xl" aria-hidden="true"><span className="inline-block h-5 w-5 rounded-full bg-accent/50" /></div>
-            <div className="text-sm font-bold">インサイト</div>
-            <div className="text-[11px] text-muted">業界最新情報</div>
-          </Link>
-          <Link
-            href="/learn"
-            className="rounded-xl border border-card-border bg-card p-4 text-center transition hover:border-accent/30"
-          >
-            <div className="mb-1 text-xl" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
-            <div className="text-sm font-bold">学習</div>
-            <div className="text-[11px] text-muted">成約5ステップ</div>
-          </Link>
-          <Link
-            href="/referral"
-            className="rounded-xl border border-card-border bg-card p-4 text-center transition hover:border-accent/30"
-          >
-            <div className="mb-1 text-xl" aria-hidden="true"><span className="inline-block h-5 w-5 rounded-full bg-accent/50" /></div>
-            <div className="text-sm font-bold">友達紹介</div>
-            <div className="text-[11px] text-muted">¥1,000 OFFクーポン</div>
-          </Link>
-        </div>
       </div>
 
       <Footer />

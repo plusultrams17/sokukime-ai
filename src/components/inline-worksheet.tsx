@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { WORKSHEET_PHASES } from "@/lib/pdf/worksheet-fields";
+import { WORKSHEET_PHASES } from "@/lib/worksheet-fields";
 import { LESSON_WORKSHEET_MAP } from "@/lib/lessons/worksheet-mapping";
 import {
   loadCompanyContext,

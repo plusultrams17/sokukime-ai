@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { messages, industry, product, customerType, scene, difficulty, productContext, customerContext } = await request.json();
+  const { messages, industry, product, customerType, scene, difficulty, productContext, customerContext, lessonFocus } = await request.json();
   try {
     const client = getOpenAIClient();
     if (!client) {
@@ -119,7 +119,8 @@ export async function POST(request: NextRequest) {
 - 営業シーン: ${scene || "訪問"}
 ${personaHint ? `${personaHint}\n` : ""}${isB2B ? `- 取引タイプ: B2B（法人取引）\n※ B2B営業では「同業他社の導入事例」「コスト削減効果」「事業へのインパクト」の訴求が特に有効です` : ""}
 ${productContext ? `\n【商材の詳細情報】\n${productContext}` : ""}
-${customerContext ? `\n【お客さんのペルソナ詳細】\n${customerContext}` : ""}`;
+${customerContext ? `\n【お客さんのペルソナ詳細】\n${customerContext}` : ""}
+${lessonFocus ? `\n【レッスン別フォーカス】\n以下のレッスンで学んだテクニックに基づいてアドバイスしてください。nextTipとexamplePhraseはこのレッスンのテクニックを優先してください。\n${lessonFocus}` : ""}`;
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",

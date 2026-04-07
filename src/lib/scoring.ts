@@ -9,6 +9,7 @@ export interface ScoreInput {
   customerType: string;
   productContext?: string;
   customerContext?: string;
+  lessonFocus?: string;
 }
 
 export interface ScoreResult {
@@ -21,6 +22,7 @@ export interface ScoreResult {
   summary: string;
   strengths: string[];
   improvements: string[];
+  customerVoice?: string;
 }
 
 const SCORING_PROMPT = `あなたは「成約5ステップメソッド」公認の営業スキル採点AIです。
@@ -171,7 +173,8 @@ overall = (アプローチ + ヒアリング + プレゼン + クロージング
   ],
   "summary": "200文字程度の総評",
   "strengths": ["良かった点1", "良かった点2", "良かった点3"],
-  "improvements": ["改善点1", "改善点2", "改善点3"]
+  "improvements": ["改善点1", "改善点2", "改善点3"],
+  "customerVoice": "お客さん役の立場から一人称で200文字程度の本音を記述。具体的な会話の瞬間を引用しながら「〜と言われた時に〜と感じた」の形式で。ポジティブな点とネガティブな点をバランスよく含める。口語体でリアルなお客さんの感情を再現する。"
 }`;
 
 const customerTypeLabels: Record<string, string> = {
@@ -234,6 +237,7 @@ export function generateFallbackScore(): ScoreResult {
       "クロージングで自信を持って提案を言い切る練習をする",
       "反論に対して根拠を論理的に提示して切り返す",
     ],
+    customerVoice: "正直、最初は「また営業か」と思ったんですが、話を聞いているうちに少し興味が出てきました。ただ、もう少し具体的な数字やメリットを聞きたかったですね。全体的には丁寧な対応でした。",
   };
 }
 
@@ -249,7 +253,7 @@ function getAnthropicClient(): Anthropic | null {
 
 export async function scoreConversation(input: ScoreInput): Promise<ScoreResult> {
   const { getPersona } = await import("@/lib/personas");
-  const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext } = input;
+  const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus } = input;
   const persona = getPersona(difficulty);
 
   const conversationText = messages
@@ -286,6 +290,7 @@ export async function scoreConversation(input: ScoreInput): Promise<ScoreResult>
 ${isB2B ? `取引タイプ: B2B（法人取引）─ 「${product}」を「${industry}」事業者に提案\n※ B2B営業の観点も含めて採点してください（事業課題の把握、ROI訴求、同業他社事例の活用など）` : ""}
 ${productContext ? `\n【商材の詳細情報】\n${productContext}` : ""}
 ${customerContext ? `\n【お客さんのペルソナ詳細】\n${customerContext}` : ""}
+${lessonFocus ? `\n【レッスン別 採点フォーカス】\n${lessonFocus}` : ""}
 
 --- 会話内容 ---
 ${conversationText}

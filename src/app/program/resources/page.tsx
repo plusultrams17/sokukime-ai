@@ -4,21 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { PdfExportButton } from "@/components/pdf/PdfExportButton";
-import dynamic from "next/dynamic";
-
-const ObjectionCheatsheetPdf = dynamic(
-  () => import("@/components/pdf/ObjectionCheatsheetPdf"),
-  { ssr: false },
-);
-const ScriptTemplatePdf = dynamic(
-  () => import("@/components/pdf/ScriptTemplatePdf"),
-  { ssr: false },
-);
-const SalesChecklistPdf = dynamic(
-  () => import("@/components/pdf/SalesChecklistPdf"),
-  { ssr: false },
-);
 
 export default function ProgramResourcesPage() {
   const [status, setStatus] = useState<"loading" | "unauthorized" | "ready">("loading");
@@ -149,34 +134,7 @@ export default function ProgramResourcesPage() {
         </div>
       </section>
 
-      {/* Section 3: Downloadable PDFs */}
-      <section className="px-6 pb-12">
-        <div className="mx-auto max-w-4xl">
-          <SectionHeading>ダウンロード資料</SectionHeading>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <PdfCard
-              title="反論切り返し30パターン"
-              description="6カテゴリ x 5パターン。営業でよくある断り文句への切り返しトークをま���めたチートシート。"
-              filename="反論切り返し30パタ��ン_チートシート.pdf"
-              renderContent={(ref) => <ObjectionCheatsheetPdf ref={ref} />}
-            />
-            <PdfCard
-              title="5ステップ トークスクリプト"
-              description="成約5ステップの各段階で使��るテンプレートトーク。業種別ヒント付き。"
-              filename="5ステップ_トークスクリプト_テンプレート.pdf"
-              renderContent={(ref) => <ScriptTemplatePdf ref={ref} />}
-            />
-            <PdfCard
-              title="営業力セルフチェック"
-              description="5カテゴリ25項目の自己評価で現在の営業力を可視化。改善アクションプラン記入欄付き。"
-              filename="営業力セルフチェックシート.pdf"
-              renderContent={(ref) => <SalesChecklistPdf ref={ref} />}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Section 4: AI Coach Pro */}
+      {/* Section 3: AI Coach Pro (was Section 4) */}
       <section className="px-6 pb-12">
         <div className="mx-auto max-w-4xl">
           <SectionHeading>AIコーチ Pro</SectionHeading>
@@ -302,43 +260,6 @@ function ResourceCard({ href, title, description, icon }: ResourceCardProps) {
       </h3>
       <p className="text-xs text-muted leading-relaxed">{description}</p>
     </Link>
-  );
-}
-
-interface PdfCardProps {
-  title: string;
-  description: string;
-  filename: string;
-  renderContent: (ref: React.RefObject<HTMLDivElement | null>) => React.ReactNode;
-}
-
-function PdfCard({ title, description, filename, renderContent }: PdfCardProps) {
-  return (
-    <div className="flex flex-col rounded-2xl border border-card-border bg-white p-5 shadow-sm">
-      <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: "rgba(249,115,22,0.1)", color: "#f97316" }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-          <polyline points="10 9 9 9 8 9" />
-        </svg>
-      </div>
-      <h3 className="mb-2 text-sm font-bold text-foreground">{title}</h3>
-      <p className="mb-4 flex-1 text-xs text-muted leading-relaxed">{description}</p>
-      <PdfExportButton
-        filename={filename}
-        renderContent={renderContent}
-        className="inline-flex items-center justify-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2.5 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        PDFダウンロード
-      </PdfExportButton>
-    </div>
   );
 }
 

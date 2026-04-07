@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer";
 export const metadata: Metadata = {
   title: "成約スコアリング機能",
   description:
-    "成約コーチ AIのスコアリング機能。5ステップそれぞれを20点満点で採点し、営業力を100点満点で可視化します。",
+    "成約コーチAIのスコアリング機能。5ステップそれぞれを20点満点で採点し、営業力を100点満点で可視化します。",
   alternates: { canonical: "/features/scoring" },
 };
 

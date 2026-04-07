@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/lp/worksheet`,
     type: "website",
     locale: "ja_JP",
-    siteName: "成約コーチ AI",
+    siteName: "成約コーチAI",
   },
   twitter: {
     card: "summary_large_image",

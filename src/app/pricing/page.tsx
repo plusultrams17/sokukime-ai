@@ -22,7 +22,7 @@ const features = [
 const comparisons = [
   { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", image: "/images/misc/comparison-training.png" },
   { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", image: "/images/misc/comparison-consulting.png" },
-  { name: "成約コーチ AI Pro", cost: "¥2,980", frequency: "無制限・24時間・即開始", image: "/images/misc/comparison-ai-pro.png", highlight: true },
+  { name: "成約コーチAI Pro", cost: "¥2,980", frequency: "無制限・24時間・即開始", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
 
@@ -80,7 +80,7 @@ export default function PricingPage() {
         window.location.href = "/signup";
       }
     } catch {
-      // ignore
+      alert("チェックアウトの開始に失敗しました。もう一度お試しください。");
     }
     setIsLoading(false);
   }
@@ -93,12 +93,12 @@ export default function PricingPage() {
       {
         "@type": "Product",
         "@id": `${siteUrl}/pricing#product`,
-        name: "成約コーチ AI Proプラン",
+        name: "成約コーチAI Proプラン",
         description:
           "AIロープレ無制限・全5カテゴリ詳細スコア・AI改善アドバイス・リアルタイムコーチング付きの営業トレーニングプラン",
         brand: {
           "@type": "Organization",
-          name: "成約コーチ AI",
+          name: "成約コーチAI",
         },
         offers: {
           "@type": "AggregateOffer",
@@ -190,6 +190,9 @@ export default function PricingPage() {
               <p className="mt-2 text-sm text-muted">
                 まずは試してみたい方に
               </p>
+              <p className="mt-1 text-xs text-yellow-600/80">
+                ※ AIロープレは1日1回・スコアは1カテゴリのみ
+              </p>
             </div>
 
             <Link
@@ -235,6 +238,9 @@ export default function PricingPage() {
                 <span className="text-4xl font-bold">¥{monthlyPrice.toLocaleString()}</span>
                 <span className="text-muted">/月<span className="text-xs">（税込）</span></span>
               </div>
+              <p className="mt-1 text-sm font-medium text-accent/80">
+                1日あたり約¥99 ─ コーヒー1杯以下
+              </p>
               <p className="mt-2 text-sm text-muted">
                 全業種コンテンツと無制限AIロープレで、短期間で営業力を伸ばす
               </p>
@@ -399,16 +405,15 @@ export default function PricingPage() {
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
           <p className="mb-5 text-muted">
-            まずは無料で始めて、自分に合うか試してみてください
+            0円で全機能を体験。7日間のトライアル後もいつでも解約OK
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/learn"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover sm:min-w-[220px]"
+          <button
+              onClick={handleUpgrade}
+              disabled={isLoading}
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60 sm:min-w-[240px]"
             >
-              無料で学び始める
-            </Link>
-          </div>
+              {isLoading ? "処理中..." : "0円で今すぐ始める"}
+            </button>
         </div>
       </div>
 

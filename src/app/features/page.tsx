@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/json-ld";
 export const metadata: Metadata = {
   title: "機能紹介",
   description:
-    "成約コーチ AIの主要機能。AIロープレ、リアルタイムコーチ、成約スコアリングなど、営業力を鍛える機能を詳しく紹介します。",
+    "成約コーチAIの主要機能。AIロープレ、リアルタイムコーチ、成約スコアリングなど、営業力を鍛える機能を詳しく紹介します。",
   alternates: { canonical: "/features" },
 };
 
@@ -63,9 +63,9 @@ export default function FeaturesPage() {
             {
               "@type": "WebPage",
               "@id": `${siteUrl}/features#webpage`,
-              name: "機能紹介 | 成約コーチ AI",
+              name: "機能紹介 | 成約コーチAI",
               description:
-                "成約コーチ AIの主要機能：(1) AIロープレ（業種・難易度カスタマイズ対応）、(2) リアルタイムAIコーチ（商談中テクニック自動分析）、(3) 成約スコアリング（5ステップ×20点満点で採点）。従来の対面ロープレと比較してコスト約94%削減。",
+                "成約コーチAIの主要機能：(1) AIロープレ（業種・難易度カスタマイズ対応）、(2) リアルタイムAIコーチ（商談中テクニック自動分析）、(3) 成約スコアリング（5ステップ×20点満点で採点）。従来の対面ロープレと比較してコスト約94%削減。",
               url: `${siteUrl}/features`,
               isPartOf: { "@id": `${siteUrl}/#website` },
               about: { "@id": `${siteUrl}/#application` },
@@ -91,7 +91,7 @@ export default function FeaturesPage() {
             AI × 成約メソッドで、効率的に営業力を鍛える
           </p>
           <p className="mx-auto mt-6 max-w-3xl text-sm text-muted leading-relaxed text-left">
-            成約コーチ AIの主要機能は、(1) <strong className="text-foreground">AIロープレ</strong>（業種・難易度カスタマイズ対応、3営業シーン×4顧客タイプ×3難易度）、(2) <strong className="text-foreground">リアルタイムAIコーチ</strong>（商談中にテクニックを自動分析・提案）、(3) <strong className="text-foreground">成約スコアリング</strong>（5ステップ×20点の100点満点で採点）の3つです。従来の対面ロープレ（1回¥50,000〜・週1-2回が限度）と比較して、月額¥2,980で24時間無制限に練習できます。
+            成約コーチAIの主要機能は、(1) <strong className="text-foreground">AIロープレ</strong>（業種・難易度カスタマイズ対応、3営業シーン×4顧客タイプ×3難易度）、(2) <strong className="text-foreground">リアルタイムAIコーチ</strong>（商談中にテクニックを自動分析・提案）、(3) <strong className="text-foreground">成約スコアリング</strong>（5ステップ×20点の100点満点で採点）の3つです。従来の対面ロープレ（1回¥50,000〜・週1-2回が限度）と比較して、月額¥2,980で24時間無制限に練習できます。
           </p>
         </div>
       </section>
@@ -151,7 +151,7 @@ export default function FeaturesPage() {
                     従来のロープレ
                   </th>
                   <th className="px-6 py-4 text-center font-bold text-accent">
-                    成約コーチ AI
+                    成約コーチAI
                   </th>
                 </tr>
               </thead>

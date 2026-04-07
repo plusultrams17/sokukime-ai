@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { TEAM_DISCOUNT_TIERS } from "@/lib/referral";
 import type { ReferralStats } from "@/lib/referral";
+import { Header } from "@/components/header";
 import {
   trackReferralCodeCopied,
   trackReferralShareClicked,
@@ -39,7 +39,7 @@ export default function ReferralPage() {
   }
 
   const shareText =
-    "成約コーチ AIで営業スキルアップ中！今なら紹介特典で¥1,000 OFFで始められます";
+    "成約コーチAIで営業スキルアップ中！今なら紹介特典で¥1,000 OFFで始められます";
 
   function handleShareLine() {
     trackReferralShareClicked("line");
@@ -99,23 +99,7 @@ export default function ReferralPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-card-border bg-background/90 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">
-              SC
-            </span>
-            <span className="font-bold text-foreground">成約コーチ AI</span>
-          </Link>
-          <Link
-            href="/roleplay"
-            className="rounded-lg border border-card-border px-3 py-1.5 text-xs text-muted transition hover:text-foreground"
-          >
-            ロープレに戻る
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <main className="mx-auto max-w-2xl px-4 py-12">
         <div className="animate-fade-in-up space-y-8">
@@ -263,40 +247,6 @@ export default function ReferralPage() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Team Discount Section */}
-          <div className="rounded-2xl border border-card-border bg-card p-6">
-            <h2 className="mb-2 text-sm font-medium text-muted">
-              チーム導入割引
-            </h2>
-            <p className="mb-4 text-xs text-muted">
-              営業チームでの導入なら、さらにお得な割引が適用されます
-            </p>
-            <div className="space-y-2">
-              {TEAM_DISCOUNT_TIERS.map((tier) => (
-                <div
-                  key={tier.label}
-                  className="flex items-center justify-between rounded-xl border border-card-border px-4 py-3"
-                >
-                  <div>
-                    <div className="text-sm font-medium">{tier.label}</div>
-                    <div className="text-[10px] text-muted">
-                      {tier.min}〜{tier.max === Infinity ? "" : tier.max}
-                      人
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-bold text-accent">
-                      ¥{tier.pricePerPerson.toLocaleString()}/人
-                    </div>
-                    <div className="text-[10px] text-muted">
-                      {tier.discount}% OFF
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
 

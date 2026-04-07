@@ -26,7 +26,7 @@ export default function BlogPage() {
             {
               "@type": "CollectionPage",
               "@id": `${siteUrl}/blog#webpage`,
-              name: "営業ノウハウブログ | 成約コーチ AI",
+              name: "営業ノウハウブログ | 成約コーチAI",
               description:
                 "営業ロープレの効果的な練習方法、クロージングテクニック、成約率を上げるメソッドを解説。AI活用法から営業研修のコツまで実践的なノウハウを発信。",
               url: `${siteUrl}/blog`,
@@ -140,7 +140,7 @@ export default function BlogPage() {
       <section className="border-t border-card-border px-6 py-24">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold">
-            成約コーチ AIで営業力を鍛えよう
+            成約コーチAIで営業力を鍛えよう
           </h2>
           <p className="mb-8 text-muted">
             記事で学んだテクニックを、AIロープレで実践練習。

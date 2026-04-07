@@ -269,7 +269,7 @@ export default function WorksheetPage() {
         ],
         tool: {
           "@type": "HowToTool",
-          name: "成約コーチ AI ワークシート",
+          name: "成約コーチAI ワークシート",
         },
       },
       {

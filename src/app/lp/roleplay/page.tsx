@@ -447,7 +447,7 @@ export default function RoleplayLP() {
       {
         "@type": "SoftwareApplication",
         "@id": `${siteUrl}/lp/roleplay#application`,
-        name: "成約コーチ AI — 営業ロープレ",
+        name: "成約コーチAI — 営業ロープレ",
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         url: `${siteUrl}/lp/roleplay`,
@@ -528,7 +528,7 @@ export default function RoleplayLP() {
             AIがセリングポイント・競合分析・成約トークスクリプトを自動生成。
           </p>
 
-          <div data-hero-cta>
+          <div id="analyzer" data-hero-cta>
             <SalesAnalyzer />
           </div>
 
@@ -580,7 +580,7 @@ export default function RoleplayLP() {
           </div>
 
           <p className="mt-4 text-center text-lg font-bold text-accent sm:text-xl">
-            成約コーチ AIなら、この3つを全部解決します
+            成約コーチAIなら、この3つを全部解決します
           </p>
         </div>
       </section>
@@ -591,7 +591,7 @@ export default function RoleplayLP() {
       <section className="px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl">
-            成約コーチ AIの5つの武器
+            成約コーチAIの5つの武器
           </h2>
           <p className="mb-12 text-center text-sm text-muted sm:text-base">
             営業ロープレに必要なすべてが揃っています
@@ -947,7 +947,7 @@ export default function RoleplayLP() {
         ctaText="無料で営業武器を作成"
         subtitle="URLを入れるだけ・登録不要"
         trackingId="lp_roleplay_sticky"
-        ctaHref="/lp/roleplay"
+        ctaHref="#analyzer"
       />
       <RoleplayLpExitPopup />
       <ScrollSlideIn sessionKey="lp-roleplay-slide-in">

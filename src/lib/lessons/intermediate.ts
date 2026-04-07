@@ -246,7 +246,8 @@ export const intermediateLessons: Lesson[] = [
 <p>誘導尋問にならないように、言葉にはせずうなづいて、心の中で「そうですよね」という雰囲気づくりが重要です。</p>
 
 <div class="example-ng">
-<p><strong>絶対NG：</strong>「〜ですよね？」-- これが一番ダメ。これは誘導尋問になってしまう。人は誘導尋問でYESと言うが心では嫌となる可能性が高い。</p>
+<p><strong>絶対NG：</strong>「〜ですよね？」</p>
+<p>これが一番ダメ。これは誘導尋問になってしまう。人は誘導尋問でYESと言うが心では嫌となる可能性が高い。</p>
 </div>
 
 <!-- WORKSHEET -->
@@ -557,13 +558,13 @@ export const intermediateLessons: Lesson[] = [
 <h3>プロスペクト理論</h3>
 <p>人は得をするよりも<strong>損をしたくない</strong>。損をしたくないという気持ちは、得したい気持ちの<strong>「2倍」</strong>強いのです。</p>
 <ul>
-  <li>A「100%の確率で50万もらえる」-- 選択率80%</li>
-  <li>B「50%の確率で100万もらえる」-- 選択率20%</li>
+  <li>A「100%の確率で50万もらえる」<span class="ann">選択率80%</span></li>
+  <li>B「50%の確率で100万もらえる」<span class="ann">選択率20%</span></li>
 </ul>
 <p>↓ 損の場面になると...</p>
 <ul>
-  <li>A「100%の確率で50万失う」-- 選択率5%</li>
-  <li>B「50%の確率で100万失う」-- 選択率95%</li>
+  <li>A「100%の確率で50万失う」<span class="ann">選択率5%</span></li>
+  <li>B「50%の確率で100万失う」<span class="ann">選択率95%</span></li>
 </ul>
 <p>人は「得」の時には「堅実」な人が多いが、「損」の時には「ギャンブラー」になる人が多い。</p>
 
@@ -581,7 +582,7 @@ export const intermediateLessons: Lesson[] = [
 <ul>
   <li><strong>1.</strong> 商品・サービスの特徴</li>
   <li><strong>2.</strong> 逆セールスポイント（○○じゃないと／このままだと／ウチじゃないと）</li>
-  <li><strong>3.</strong> 逆ベネフィット（○○ない／できない／ならない）-- 嫌がるゆさぶりフレーズ</li>
+  <li><strong>3.</strong> 逆ベネフィット（○○ない／できない／ならない）<span class="ann-accent">嫌がるゆさぶりフレーズ</span></li>
 </ul>
 <p>一番伝えたいのは逆ベネフィット。それが浮かないように前の2つを考える感じです。</p>
 <p><strong>「○○様に限って決して当てはまらないですが」</strong>と敬意を持つことが必要です。敵意を出すのはNG＝これを出すと負けです。</p>

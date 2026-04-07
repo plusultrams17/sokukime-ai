@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer";
 export const metadata: Metadata = {
   title: "リアルタイムAIコーチ機能",
   description:
-    "成約コーチ AIのリアルタイムコーチ機能。ロープレ中にAIが成約メソッドのテクニックを分析し、リアルタイムでアドバイスします。",
+    "成約コーチAIのリアルタイムコーチ機能。ロープレ中にAIが成約メソッドのテクニックを分析し、リアルタイムでアドバイスします。",
   alternates: { canonical: "/features/coach" },
 };
 

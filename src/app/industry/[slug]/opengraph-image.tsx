@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getIndustryBySlug, getAllIndustrySlugs } from "@/data/industries";
 
-export const alt = "成約コーチ AI 業種別ロープレ";
+export const alt = "成約コーチAI 業種別ロープレ";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -96,7 +96,7 @@ export default async function OgImage({
                 color: "#ffffff",
               }}
             >
-              成約コーチ AI
+              成約コーチAI
             </div>
           </div>
 

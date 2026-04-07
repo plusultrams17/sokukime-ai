@@ -49,7 +49,7 @@ export function ShareCard({ score, rank, totalSessions }: ShareCardProps) {
         style={{ background: "linear-gradient(135deg, #1B6B5A, #155A4A)" }}
       >
         <div className="mb-4 text-center text-sm font-bold text-white/80">
-          成約コーチ AI
+          成約コーチAI
         </div>
         <div className="mb-2 text-center">
           <span

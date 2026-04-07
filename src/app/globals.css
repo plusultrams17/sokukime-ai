@@ -340,6 +340,110 @@ body {
   background: var(--blob-pink);
 }
 
+/* ── Diagnosis page — gallery aesthetic ── */
+
+@keyframes diagnosis-fade {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.diagnosis-fade-in {
+  animation: diagnosis-fade 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Pentagon outline draw animation */
+@keyframes diagnosis-draw {
+  from { stroke-dashoffset: 600; }
+  to { stroke-dashoffset: 0; }
+}
+
+.intro-pentagon-draw {
+  stroke-dasharray: 600;
+  animation: diagnosis-draw 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Vertex pulse */
+@keyframes vertex-breathe {
+  0%, 100% { opacity: 0.5; transform-origin: center; }
+  50% { opacity: 1; }
+}
+
+.intro-vertex-pulse {
+  animation: vertex-breathe 3s ease-in-out infinite;
+}
+
+/* Dot pop on answer */
+@keyframes dot-pop {
+  0% { r: 2.5; }
+  50% { r: 6; }
+  100% { r: 4; }
+}
+
+.diagnosis-dot-pop {
+  animation: dot-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Result: data shape reveal */
+@keyframes data-reveal {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.diagnosis-data-reveal {
+  transform-origin: center;
+  animation: data-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+/* Result: edge lines draw */
+@keyframes line-draw {
+  from { opacity: 0; }
+  to { opacity: 0.7; }
+}
+
+.diagnosis-line-draw {
+  animation: line-draw 0.4s ease-out both;
+}
+
+/* Result: vertex pop */
+@keyframes vertex-pop {
+  0% { r: 0; opacity: 0; }
+  60% { r: 7; }
+  100% { r: 5; opacity: 1; }
+}
+
+.diagnosis-vertex-pop {
+  animation: vertex-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Result: bar fill */
+.diagnosis-bar-fill {
+  transform-origin: left;
+  animation: diagnosis-fade 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Result: ambient glow pulse */
+@keyframes result-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.diagnosis-result-glow {
+  animation: result-glow 4s ease-in-out infinite;
+}
+
+/* CTA button hover glow */
+.diagnosis-cta {
+  box-shadow: 0 4px 24px rgba(255, 159, 28, 0.15),
+    0 4px 24px rgba(244, 63, 94, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.diagnosis-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(255, 159, 28, 0.25),
+    0 8px 32px rgba(244, 63, 94, 0.15);
+}
+
 /* Blog article typography — educational platform style */
 
 .blog-content h2 {
@@ -686,6 +790,52 @@ body {
   font-size: 0.8125rem;
 }
 
+/* ── Annotation badge (replaces inline " -- note" pattern) ── */
+.blog-content .ann {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+
+.blog-content .ann-accent {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.5;
+}
+
+/* ── Step list: quote + annotation separated ── */
+.blog-content .step-list {
+  counter-reset: none;
+}
+
+.blog-content .step-list li {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.blog-content .step-list li:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.blog-content .step-list .quote {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--foreground);
+  font-weight: 500;
+}
+
 /* ── Responsive adjustments for example blocks ── */
 @media (max-width: 640px) {
   .blog-content .example-ng,
@@ -704,6 +854,15 @@ body {
     font-size: 1.25rem;
     top: 0.5rem;
     right: 0.625rem;
+  }
+
+  .blog-content ul {
+    padding: 0.75rem 1rem 0.75rem 1.25rem;
+  }
+
+  .blog-content ul li {
+    font-size: 0.875rem;
+    padding-left: 0.875rem;
   }
 }
 
@@ -2796,6 +2955,14 @@ body {
 
 .animate-slide-out-right {
   animation: slideOutRight 0.3s ease-in forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out forwards;
 }
 
 /* ── Accessibility: Reduced Motion ── */

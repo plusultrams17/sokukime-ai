@@ -120,7 +120,7 @@ export default function RootLoading() {
           />
         </svg>
         <p className="text-sm font-medium text-muted tracking-wide animate-pulse">
-          成約コーチ AI
+          成約コーチAI
         </p>
       </div>
     </div>

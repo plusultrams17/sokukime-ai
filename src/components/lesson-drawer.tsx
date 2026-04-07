@@ -23,23 +23,28 @@ interface LessonDrawerProps {
   open: boolean;
   onClose: () => void;
   currentStepNumber?: number;
+  lessonSlug?: string;
 }
 
-export function LessonDrawer({ open, onClose, currentStepNumber }: LessonDrawerProps) {
+export function LessonDrawer({ open, onClose, currentStepNumber, lessonSlug }: LessonDrawerProps) {
   const [lessons] = useState<Lesson[]>(() => getAllLessons());
   const [selectedSlug, setSelectedSlug] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"theory" | "examples">("theory");
 
-  // Auto-select lesson based on current step
+  // Auto-select lesson: lessonSlug > STEP_LESSON_MAP[currentStepNumber] > first lesson
   useEffect(() => {
     if (!open) return;
-    const stepSlug = currentStepNumber ? STEP_LESSON_MAP[currentStepNumber] : undefined;
-    if (stepSlug && lessons.some((l) => l.slug === stepSlug)) {
-      setSelectedSlug(stepSlug);
-    } else if (!selectedSlug && lessons.length > 0) {
-      setSelectedSlug(lessons[0].slug);
+    if (lessonSlug && lessons.some((l) => l.slug === lessonSlug)) {
+      setSelectedSlug(lessonSlug);
+    } else {
+      const stepSlug = currentStepNumber ? STEP_LESSON_MAP[currentStepNumber] : undefined;
+      if (stepSlug && lessons.some((l) => l.slug === stepSlug)) {
+        setSelectedSlug(stepSlug);
+      } else if (!selectedSlug && lessons.length > 0) {
+        setSelectedSlug(lessons[0].slug);
+      }
     }
-  }, [open, currentStepNumber, lessons, selectedSlug]);
+  }, [open, currentStepNumber, lessonSlug, lessons, selectedSlug]);
 
   // ESC key to close
   const handleKeyDown = useCallback(

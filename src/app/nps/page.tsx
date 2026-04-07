@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -12,28 +12,13 @@ function NPSContent() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (score !== null && score >= 0 && score <= 10) {
-      // Record the NPS score immediately
-      fetch("/api/nps", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ score }),
-      }).catch(() => {});
-    }
-  }, [score]);
-
   const handleSubmitFeedback = async () => {
-    if (!feedback.trim()) {
-      setSubmitted(true);
-      return;
-    }
     setSubmitting(true);
     try {
       await fetch("/api/nps", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ score, feedback }),
+        body: JSON.stringify({ score, feedback: feedback.trim() || null }),
       });
     } catch { /* ignore */ }
     setSubmitted(true);
@@ -52,6 +37,7 @@ function NPSContent() {
   }
 
   if (submitted) {
+    const category = score <= 6 ? "detractor" : score <= 8 ? "passive" : "promoter";
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-6">
         <div className="mx-auto max-w-md text-center">
@@ -60,12 +46,32 @@ function NPSContent() {
           <p className="mb-6 text-sm text-muted">
             いただいたフィードバックは、サービス改善に活用させていただきます。
           </p>
-          <Link
-            href="/roleplay"
-            className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover"
-          >
-            ロープレを始める
-          </Link>
+          <div className="space-y-3">
+            {category === "promoter" && (
+              <Link
+                href="/referral"
+                className="block w-full rounded-xl border border-accent/30 bg-accent/5 px-6 py-4 text-sm transition hover:bg-accent/10"
+              >
+                <div className="font-bold text-accent">友達に紹介して ¥1,000 OFF</div>
+                <div className="mt-1 text-xs text-muted">紹介リンクをシェアするだけ</div>
+              </Link>
+            )}
+            {category === "detractor" && (
+              <a
+                href="mailto:support@seiyaku-coach.com?subject=サービス改善のご要望"
+                className="block w-full rounded-xl border border-card-border bg-card px-6 py-4 text-sm transition hover:border-accent/30"
+              >
+                <div className="font-bold">サポートに直接相談する</div>
+                <div className="mt-1 text-xs text-muted">ご不満な点を詳しくお聞かせください</div>
+              </a>
+            )}
+            <Link
+              href="/roleplay"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover"
+            >
+              ロープレを始める
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -84,9 +90,9 @@ function NPSContent() {
         <div className="rounded-2xl border border-card-border bg-card p-8">
           <div className="mb-4 text-center">
             <span className={`inline-flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold ${
-              category === "promoter" ? "bg-green-100 text-green-600" :
-              category === "passive" ? "bg-yellow-100 text-yellow-600" :
-              "bg-red-100 text-red-600"
+              category === "promoter" ? "bg-green-500/10 text-green-500" :
+              category === "passive" ? "bg-yellow-500/10 text-yellow-500" :
+              "bg-red-500/10 text-red-500"
             }`}>
               {score}
             </span>

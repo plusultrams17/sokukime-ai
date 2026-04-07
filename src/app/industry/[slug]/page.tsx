@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     keywords: industry.keywords,
     openGraph: {
       type: "article",
-      title: `${industry.metaTitle} | 成約コーチ AI`,
+      title: `${industry.metaTitle} | 成約コーチAI`,
       description: industry.metaDescription,
       locale: "ja_JP",
     },
@@ -275,7 +275,7 @@ export default async function IndustryPage({ params }: Props) {
               しかし、従来のロープレ研修では練習相手の確保が難しく、フィードバックも属人的になりがちでした。
             </p>
             <p>
-              成約コーチ AIの
+              成約コーチAIの
               <Link href="/roleplay" className="text-accent hover:underline">AIロープレ機能</Link>
               なら、{industry.name}業界でよくある{industry.stats.commonPainPoint}
               といった課題に特化したシナリオを24時間いつでも練習可能。

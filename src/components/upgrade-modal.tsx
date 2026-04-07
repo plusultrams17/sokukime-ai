@@ -183,7 +183,7 @@ export function UpgradeModal({
             <span className="text-sm text-muted line-through">¥50,000〜</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-accent">成約コーチ AI Pro</span>
+            <span className="text-sm font-bold text-accent">成約コーチAI Pro</span>
             {billing === "monthly" ? (
               <span className="text-lg font-bold text-accent">
                 ¥2,980<span className="text-xs font-normal text-muted">/月</span>

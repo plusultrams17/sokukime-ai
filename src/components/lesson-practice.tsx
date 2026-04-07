@@ -13,6 +13,8 @@ import {
 import type { PracticeProfile } from "@/lib/practice-profile";
 import type { Lesson } from "@/lib/lessons/types";
 import type { ScoreResult } from "@/lib/scoring";
+import { getAdjacentLessons } from "@/lib/lessons";
+import { LESSON_FOCUS_MAP } from "@/lib/lessons/focus-instructions";
 
 type Phase = "ready" | "chat" | "score";
 
@@ -155,11 +157,13 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
     setIsEditing(false);
   }
 
-  // Build productContext: lesson prompt + user's detail info
-  const fullProductContext = [
-    lesson.practicePrompt,
-    productDetail && `【商材の詳細情報】\n${productDetail}`,
-  ].filter(Boolean).join("\n\n");
+  // Build productContext: user's product detail info only
+  const fullProductContext = productDetail || undefined;
+
+  // Build lessonFocus: lesson-specific AI customer behavior + scoring hint
+  const focus = LESSON_FOCUS_MAP[slug];
+  const lessonFocus = focus ? focus.customerBehavior : undefined;
+  const scoringHint = focus ? focus.scoringHint : undefined;
 
   const chatEndpoint = isLoggedIn ? "/api/chat" : "/api/chat/guest";
   const scoreEndpoint = isLoggedIn ? "/api/score" : "/api/score/guest";
@@ -459,24 +463,47 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
     );
   }
 
-  // ── Chat phase — use editable settings ──
+  // ── Chat phase — fullscreen overlay ──
   if (phase === "chat") {
     return (
-      <div className="flex flex-col" style={{ height: "70vh" }}>
-        <ChatUI
-          industry={industry}
-          product={product}
-          difficulty={difficulty}
-          scene={scene}
-          customerType={customerType}
-          productContext={fullProductContext}
-          chatEndpoint={chatEndpoint}
-          scoreEndpoint={scoreEndpoint}
-          onFinish={(result) => {
-            setScore(result);
-            setPhase("score");
-          }}
-        />
+      <div className="fixed inset-0 z-50 flex flex-col bg-white">
+        {/* Mini header */}
+        <div className="flex h-12 shrink-0 items-center justify-between border-b border-gray-200 px-4">
+          <span className="text-sm font-bold text-foreground truncate mr-4">
+            Lesson {lesson.order}: {lesson.title}
+          </span>
+          <button
+            type="button"
+            onClick={() => setPhase("ready")}
+            className="flex shrink-0 items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-bold text-gray-600 transition hover:bg-gray-50"
+          >
+            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            終了
+          </button>
+        </div>
+        {/* ChatUI fills remaining space */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <ChatUI
+            industry={industry}
+            product={product}
+            difficulty={difficulty}
+            scene={scene}
+            customerType={customerType}
+            productContext={fullProductContext}
+            lessonFocus={lessonFocus}
+            scoringFocus={scoringHint}
+            chatEndpoint={chatEndpoint}
+            scoreEndpoint={scoreEndpoint}
+            lessonSlug={slug}
+            onFinish={(result) => {
+              setScore(result);
+              setPhase("score");
+            }}
+          />
+        </div>
       </div>
     );
   }
@@ -499,8 +526,8 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
       </div>
 
       {/* Practice context reminder */}
-      <div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+      <div className="mb-6 rounded-lg border border-card-border bg-card px-4 py-3">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
           <span>{product} / {industry}</span>
           <span>{sceneLabel}</span>
           <span className={`rounded-full border px-1.5 py-0.5 text-[10px] font-bold ${getDifficultyBadgeColor(difficulty)}`}>
@@ -511,7 +538,7 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
 
       {/* Summary */}
       {score?.summary && (
-        <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
+        <div className="mb-6 rounded-xl border border-card-border bg-card p-5">
           <p className="text-sm leading-relaxed text-muted">{score.summary}</p>
         </div>
       )}
@@ -519,11 +546,11 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
       {/* Strengths & Improvements */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
         {score?.strengths && score.strengths.length > 0 && (
-          <div className="rounded-xl border border-green-200 bg-green-50 p-4">
-            <p className="text-xs font-bold text-green-700 mb-2">良かった点</p>
+          <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-4">
+            <p className="text-xs font-bold text-green-500 mb-2">良かった点</p>
             <ul className="space-y-1">
               {score.strengths.map((s, i) => (
-                <li key={i} className="text-sm text-green-800 flex items-start gap-1.5">
+                <li key={i} className="text-sm text-foreground flex items-start gap-1.5">
                   <svg className="w-3.5 h-3.5 text-green-500 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                   {s}
                 </li>
@@ -532,12 +559,12 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
           </div>
         )}
         {score?.improvements && score.improvements.length > 0 && (
-          <div className="rounded-xl border border-orange-200 bg-orange-50 p-4">
-            <p className="text-xs font-bold text-orange-700 mb-2">改善ポイント</p>
+          <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
+            <p className="text-xs font-bold text-accent mb-2">改善ポイント</p>
             <ul className="space-y-1">
               {score.improvements.map((s, i) => (
-                <li key={i} className="text-sm text-orange-800 flex items-start gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-orange-500 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg>
+                <li key={i} className="text-sm text-foreground flex items-start gap-1.5">
+                  <svg className="w-3.5 h-3.5 text-accent mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg>
                   {s}
                 </li>
               ))}
@@ -548,24 +575,28 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
 
       {/* Actions */}
       <div className="space-y-3 text-center">
-        <button
-          onClick={() => {
-            setScore(null);
-            setPhase("ready");
-          }}
-          className="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold text-white transition hover:opacity-90"
-          style={{ backgroundColor: color }}
-        >
-          もう一度練習する
-        </button>
-
-        <div>
-          <Link
-            href="/worksheet"
-            className="text-sm font-medium text-muted hover:text-foreground transition"
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            onClick={() => {
+              setScore(null);
+              setPhase("ready");
+            }}
+            className="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold text-white transition hover:opacity-90"
+            style={{ backgroundColor: color }}
           >
-            ワークシートで商談準備する →
-          </Link>
+            もう一度練習する
+          </button>
+          {(() => {
+            const { next } = getAdjacentLessons(slug);
+            return next ? (
+              <Link
+                href={`/learn/${next.slug}`}
+                className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 px-8 text-sm font-bold text-accent transition hover:bg-accent/5"
+              >
+                次のレッスンへ →
+              </Link>
+            ) : null;
+          })()}
         </div>
 
         {!isLoggedIn && (

@@ -59,14 +59,14 @@ export async function GET(request: NextRequest) {
 function htmlPage(title: string, body: string): string {
   return `<!DOCTYPE html>
 <html lang="ja">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | 成約コーチ AI</title></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | 成約コーチAI</title></head>
 <body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
 <div style="max-width:480px;margin:0 auto;padding:64px 16px;text-align:center">
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
     <h1 style="font-size:20px;color:#111;margin:0 0 16px">${title}</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">${body}</p>
     <a href="${APP_URL}" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:bold">
-      成約コーチ AIに戻る
+      成約コーチAIに戻る
     </a>
   </div>
 </div>

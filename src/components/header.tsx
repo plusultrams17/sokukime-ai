@@ -7,11 +7,17 @@ import { UserMenu } from "@/components/user-menu";
 import { Logo } from "@/components/logo";
 import { trackCTAClick } from "@/lib/tracking";
 
-const navLinks = [
+const navLinksPublic = [
   { href: "/learn", label: "学習コース" },
   { href: "/try-roleplay", label: "AIロープレ体験" },
   { href: "/pricing", label: "料金プラン" },
-  { href: "/faq", label: "FAQ" },
+];
+
+const navLinksLoggedIn = [
+  { href: "/learn", label: "学習コース" },
+  { href: "/roleplay", label: "AIロープレ" },
+  { href: "/challenge", label: "チャレンジ" },
+  { href: "/pricing", label: "料金プラン" },
 ];
 
 export function Header() {
@@ -36,6 +42,8 @@ export function Header() {
       }
     });
   }, []);
+
+  const navLinks = isLoggedIn ? navLinksLoggedIn : navLinksPublic;
 
   return (
     <>
@@ -109,6 +117,15 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {isLoggedIn && (
+            <Link
+              href="/dashboard"
+              className="mobile-menu__link"
+              onClick={() => setOpen(false)}
+            >
+              ダッシュボード
+            </Link>
+          )}
           <div className="mobile-menu__divider" />
           {isLoggedIn ? (
             plan === "free" ? (

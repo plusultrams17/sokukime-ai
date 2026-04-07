@@ -46,7 +46,7 @@ export default function ProgramLayout({
                 "営業心理学に基づく成約5ステップメソッドを22レッスン+認定試験で体系的に学べる買い切り型オンライン営業プログラム。反論切り返しテンプレート30パターン・トークスクリプトテンプレート・AIコーチProアクセス権付き。",
               brand: {
                 "@type": "Organization",
-                name: "成約コーチ AI",
+                name: "成約コーチAI",
               },
               offers: {
                 "@type": "Offer",

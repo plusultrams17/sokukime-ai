@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "edge";
-export const alt = "営業スコア | 成約コーチ AI";
+export const alt = "営業スコア | 成約コーチAI";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -190,7 +190,7 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <span style={{ fontSize: "24px", fontWeight: 800, color: "#f97316" }}>
-              成約コーチ AI
+              成約コーチAI
             </span>
             <span style={{ fontSize: "16px", color: "#6b7280" }}>
               30項目の行動チェックリストでAI採点

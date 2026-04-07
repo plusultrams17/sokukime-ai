@@ -244,7 +244,7 @@ export function CancelSaveModal({
                 {offer.type === "comparison" && (
                   <div className="mb-4 rounded-xl border border-card-border p-4">
                     <div className="mb-2 text-xs font-medium text-muted">
-                      成約コーチ AI だけの特長
+                      成約コーチAI だけの特長
                     </div>
                     <div className="space-y-2 text-xs">
                       <div className="flex items-center gap-2">

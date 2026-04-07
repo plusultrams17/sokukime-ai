@@ -56,6 +56,26 @@ const tools = [
     keywords: ["成約率 計算", "営業 KPI"],
     time: "約1分",
   },
+  {
+    slug: "objection-scenario",
+    name: "「考えます」切り返しシナリオ",
+    description:
+      "商談中に「考えます」と言われたら？ あなたの選択でストーリーが分岐。3つのルートで正解パターンを体験学習できます。",
+    icon: "",
+    image: "",
+    keywords: ["考えます 切り返し", "反論処理 シナリオ"],
+    time: "約2分",
+  },
+  {
+    slug: "industry-weakness",
+    name: "業種別「弱点スキル」ランキング",
+    description:
+      "12,000人超の診断データから判明した業種別の弱点スキル。あなたの業界の「あるある」が見つかります。",
+    icon: "",
+    image: "",
+    keywords: ["営業 弱点", "業種別 ランキング"],
+    time: "閲覧のみ",
+  },
 ];
 
 const SITE_URL =
@@ -104,7 +124,7 @@ export default function ToolsPage() {
             営業力を鍛える<span className="text-accent">無料ツール</span>
           </h1>
           <p className="mx-auto max-w-2xl text-base text-white/70 leading-relaxed sm:text-lg">
-            今すぐ使える4つの営業支援ツール。
+            今すぐ使える6つの営業支援ツール。
             <br className="hidden sm:block" />
             診断・生成・学習・分析で、あなたの営業スキルを底上げします。
           </p>
@@ -206,7 +226,7 @@ export default function ToolsPage() {
               しかし、多くの営業パーソンは日々の業務に追われ、自分のスキルを客観的に評価する機会がありません。
             </p>
             <p>
-              成約コーチ AIの無料ツールは、この課題を解決するために開発されました。
+              成約コーチAIの無料ツールは、この課題を解決するために開発されました。
               営業力診断テストであなたの強みと弱みを可視化し、
               トークスクリプト生成ツールで営業の「型」を手に入れ、
               反論切り返しトーク集で実践的な対処法を学び、

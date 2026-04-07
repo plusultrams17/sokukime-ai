@@ -11,7 +11,7 @@ function getResend(): Resend | null {
   return resendClient;
 }
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "成約コーチ AI <onboarding@resend.dev>";
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "成約コーチAI <onboarding@resend.dev>";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
 
 /** Common email footer with unsubscribe link (特定電子メール法 compliance) */
@@ -20,7 +20,7 @@ function emailFooter(unsubscribeUrl?: string): string {
     ? `<a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline">配信停止</a>　|　`
     : "";
   return `<p style="font-size:11px;color:#9ca3af;text-align:center;margin:16px 0 0">
-    ${unsubLine}© 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
+    ${unsubLine}© 成約コーチAI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
   </p>`;
 }
 
@@ -28,7 +28,7 @@ function emailFooter(unsubscribeUrl?: string): string {
 
 function welcomeEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "成約コーチ AIへようこそ！まず営業の「型」を学びましょう",
+    subject: "成約コーチAIへようこそ！まず営業の「型」を学びましょう",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -36,10 +36,10 @@ function welcomeEmail(unsubscribeUrl?: string): { subject: string; html: string 
 <body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
 <div style="max-width:560px;margin:0 auto;padding:32px 16px">
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
-    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">成約コーチ AIへようこそ！</h1>
+    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">成約コーチAIへようこそ！</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
       登録ありがとうございます。<br>
-      成約コーチ AIは、営業心理学に基づく<strong>5ステップメソッド</strong>で営業力を鍛えるAIコーチです。
+      成約コーチAIは、営業心理学に基づく<strong>5ステップメソッド</strong>で営業力を鍛えるAIコーチです。
     </p>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 8px">
       <strong>おすすめの始め方：</strong>
@@ -961,7 +961,7 @@ function winback7DaysEmail(unsubscribeUrl?: string): { subject: string; html: st
 
 function winback30DaysEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "営業成績、伸び悩んでいませんか？ 成約コーチ AIで突破口を",
+    subject: "営業成績、伸び悩んでいませんか？ 成約コーチAIで突破口を",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -975,7 +975,7 @@ function winback30DaysEmail(unsubscribeUrl?: string): { subject: string; html: s
       その後、営業成績はいかがですか？
     </p>
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
-      <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>成約コーチ AIは進化し続けています</strong></p>
+      <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>成約コーチAIは進化し続けています</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
         <li>AIコーチの精度が<strong>さらに向上</strong></li>
         <li>あなたのスコア履歴は<strong>そのまま残っています</strong></li>
@@ -1116,7 +1116,7 @@ function referralNudgeEmail(unsubscribeUrl?: string): { subject: string; html: s
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">友達紹介で ¥1,000 OFF</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      成約コーチ AIで営業力を鍛えていますか？<br>
+      成約コーチAIで営業力を鍛えていますか？<br>
       同僚や営業仲間にもシェアして、<strong>お互いに ¥1,000 OFF</strong> を手に入れましょう。
     </p>
     <div style="background:#f0fdf4;border-radius:8px;padding:16px;margin:0 0 16px">
@@ -1153,7 +1153,7 @@ function referralNudgeEmail(unsubscribeUrl?: string): { subject: string; html: s
 
 function npsSurveyEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "1問だけ聞かせてください — 成約コーチ AIの満足度調査",
+    subject: "1問だけ聞かせてください — 成約コーチAIの満足度調査",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -1163,12 +1163,12 @@ function npsSurveyEmail(unsubscribeUrl?: string): { subject: string; html: strin
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">ご利用ありがとうございます！</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      成約コーチ AIをご利用いただき2週間が経ちました。<br>
+      成約コーチAIをご利用いただき2週間が経ちました。<br>
       <strong>1問だけ</strong>聞かせてください。
     </p>
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 24px">
       <p style="font-size:14px;color:#1e40af;margin:0 0 12px;font-weight:bold;text-align:center">
-        成約コーチ AIを同僚に勧めたいと思いますか？
+        成約コーチAIを同僚に勧めたいと思いますか？
       </p>
       <p style="font-size:12px;color:#374151;text-align:center;margin:0 0 8px">0（全く勧めない）〜 10（強く勧めたい）</p>
       <div style="text-align:center">
@@ -1321,7 +1321,7 @@ function streakMilestoneEmail(unsubscribeUrl?: string): { subject: string; html:
 function cronFailureAlertEmail(data: AdminAlertData): { subject: string; html: string } {
   const nowStr = new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
   return {
-    subject: `[成約コーチ AI] ⚠️ Cronジョブ異常アラート`,
+    subject: `[成約コーチAI] ⚠️ Cronジョブ異常アラート`,
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -1346,7 +1346,7 @@ function cronFailureAlertEmail(data: AdminAlertData): { subject: string; html: s
     </div>
   </div>
   <p style="font-size:11px;color:#9ca3af;text-align:center;margin:16px 0 0">
-    © 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
+    © 成約コーチAI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
   </p>
 </div>
 </body>
@@ -1373,7 +1373,7 @@ function adminAlertEmail(data: AdminAlertData): { subject: string; html: string 
   const nowStr = new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
 
   return {
-    subject: `[成約コーチ AI] ${emoji} ${label}`,
+    subject: `[成約コーチAI] ${emoji} ${label}`,
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -1404,7 +1404,7 @@ function adminAlertEmail(data: AdminAlertData): { subject: string; html: string 
     </div>
   </div>
   <p style="font-size:11px;color:#9ca3af;text-align:center;margin:16px 0 0">
-    © 成約コーチ AI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
+    © 成約コーチAI　|　<a href="${APP_URL}" style="color:#9ca3af">seiyaku-coach.vercel.app</a>
   </p>
 </div>
 </body>
@@ -1416,7 +1416,7 @@ function adminAlertEmail(data: AdminAlertData): { subject: string; html: string 
 function weeklyRevenueReportEmail(data: WeeklyRevenueData): { subject: string; html: string } {
   const weekDate = new Date().toLocaleDateString("ja-JP", { month: "long", day: "numeric" });
   return {
-    subject: `[成約コーチ AI] 週次レポート ${weekDate} — MRR ¥${data.mrr.toLocaleString()}`,
+    subject: `[成約コーチAI] 週次レポート ${weekDate} — MRR ¥${data.mrr.toLocaleString()}`,
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -1466,7 +1466,7 @@ function weeklyRevenueReportEmail(data: WeeklyRevenueData): { subject: string; h
     </div>
   </div>
   <p style="font-size:11px;color:#9ca3af;text-align:center;margin:16px 0 0">
-    © 成約コーチ AI — Admin Report
+    © 成約コーチAI — Admin Report
   </p>
 </div>
 </body>
@@ -1487,7 +1487,7 @@ function monthlyToAnnualEmail(unsubscribeUrl?: string): { subject: string; html:
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">年間プランで2ヶ月分お得に</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      いつも成約コーチ AIをご利用いただきありがとうございます。
+      いつも成約コーチAIをご利用いただきありがとうございます。
     </p>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
       月額プランを継続いただいている感謝を込めて、<strong>年間プランのご案内</strong>です。

@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer";
 export const metadata: Metadata = {
   title: "シナリオカスタマイズ機能",
   description:
-    "成約コーチ AIのシナリオカスタマイズ機能。営業シーン、お客さんのタイプ、難易度を自由に設定して、リアルな営業ロープレを練習できます。",
+    "成約コーチAIのシナリオカスタマイズ機能。営業シーン、お客さんのタイプ、難易度を自由に設定して、リアルな営業ロープレを練習できます。",
   alternates: { canonical: "/features/scenarios" },
 };
 

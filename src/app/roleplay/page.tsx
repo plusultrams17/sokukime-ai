@@ -645,10 +645,12 @@ export default function RoleplayPage() {
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
           <Logo size="sm" />
           <div className="flex items-center gap-3">
-            {/* Usage indicator */}
-            {usage && usage.plan === "free" && phase === "setup" && (
+            {/* Usage indicator — free users and trial users */}
+            {usage && (usage.plan === "free" || usage.isTrial) && phase === "setup" && (
               <div className="flex items-center gap-2" style={isPixarPhase ? { border: '0.12em solid #4d4c4a', borderRadius: '2em', padding: '0.25em 0.7em', fontSize: '0.78em', fontWeight: 700, background: '#f5f1e8' } : undefined}>
-                <span style={isPixarPhase ? { color: '#6a6560' } : undefined} className={isPixarPhase ? '' : 'text-muted'}>残り:</span>
+                <span style={isPixarPhase ? { color: '#6a6560' } : undefined} className={isPixarPhase ? '' : 'text-muted'}>
+                  {usage.isTrial ? "トライアル:" : "残り:"}
+                </span>
                 <span
                   style={isPixarPhase ? {
                     fontWeight: 800,
@@ -678,10 +680,10 @@ export default function RoleplayPage() {
                   </div>
                 )}
                 <div
-                  style={isPixarPhase ? { border: '0.12em solid #4d4c4a', borderRadius: '2em', padding: '0.2em 0.6em', fontSize: '0.72em', fontWeight: 800, background: '#f48a58', color: '#fff', boxShadow: '0.08em 0.08em 0 #c4693d' } : undefined}
-                  className={isPixarPhase ? '' : 'rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent'}
+                  style={isPixarPhase ? { border: '0.12em solid #4d4c4a', borderRadius: '2em', padding: '0.2em 0.6em', fontSize: '0.72em', fontWeight: 800, background: usage?.isTrial ? '#f5f1e8' : '#f48a58', color: usage?.isTrial ? '#f48a58' : '#fff', boxShadow: usage?.isTrial ? 'none' : '0.08em 0.08em 0 #c4693d' } : undefined}
+                  className={isPixarPhase ? '' : (usage?.isTrial ? 'rounded-full border border-accent px-3 py-1 text-xs font-medium text-accent' : 'rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent')}
                 >
-                  Pro
+                  {usage?.isTrial ? "トライアル" : "Pro"}
                 </div>
               </div>
             )}
@@ -724,7 +726,7 @@ export default function RoleplayPage() {
                     // Signal auto-start; the effect will fire once state is flushed
                     setPendingAutoStart(true);
                   }}
-                  disabled={isCheckingUsage || (usage !== null && usage.plan === "free" && !usage.canStart)}
+                  disabled={isCheckingUsage || (usage !== null && !usage.canStart)}
                   className="pixar-card text-left transition-transform active:scale-[0.98] hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
                   style={{
                     padding: '1.1em 1em',
@@ -821,6 +823,44 @@ export default function RoleplayPage() {
                     }}
                   >
                     7日間無料でProを試す →
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* Daily Limit Banner for Trial Users (simple mode) */}
+            {usage && usage.isTrial && !usage.canStart && (
+              <div className="pixar-card" style={{ borderColor: '#f48a58', background: 'linear-gradient(135deg, #fff8f3, #fefcf7)' }}>
+                <div className="text-center">
+                  <p style={{ fontSize: '1.1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.2em' }}>
+                    本日のトライアル回数（{usage.limit}回）を使い切りました
+                  </p>
+                  <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
+                    Proプランに登録すると<span style={{ color: '#f48a58', fontWeight: 800 }}>無制限</span>で練習できます。<br />
+                    明日もトライアルとして{usage.limit}回まで練習可能です。
+                  </p>
+                  <a
+                    href="/pricing"
+                    onClick={() => {
+                      trackUpgradePromptClicked({ trigger: "trial_limit_banner" });
+                    }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: '3em',
+                      padding: '0 2em',
+                      borderRadius: '2em',
+                      background: '#f48a58',
+                      color: '#fff',
+                      fontWeight: 800,
+                      fontSize: '0.95em',
+                      textDecoration: 'none',
+                      border: '0.12em solid #c4693d',
+                      boxShadow: '0.12em 0.12em 0 #c4693d',
+                    }}
+                  >
+                    Proプランで無制限に練習する →
                   </a>
                 </div>
               </div>
@@ -1277,15 +1317,13 @@ export default function RoleplayPage() {
                     今日のロープレは終了 — でもまだ伸びしろがあります
                   </p>
                   <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
-                    繰り返し練習することで<span style={{ color: '#f48a58', fontWeight: 800 }}>スコアの改善が期待</span>できます。<br />
-                    Proなら無制限に練習でき、全5カテゴリの詳細フィードバックも見れます。
+                    繰り返し練習することで<br className="sm:hidden" /><span style={{ color: '#f48a58', fontWeight: 800 }}>スコアの改善が期待</span>できます。<br />
+                    Proなら無制限に練習できます。
                   </p>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5em', marginBottom: '0.5em' }}>
-                    <div style={{ display: 'flex', gap: '0.8em', fontSize: '0.72em', color: '#6a6560' }}>
-                      <span>無制限ロープレ</span>
-                      <span>全スコア開放</span>
-                      <span>AI改善アドバイス</span>
-                    </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5em', marginBottom: '0.5em', fontSize: '0.72em', color: '#6a6560' }}>
+                    <span>無制限ロープレ</span>
+                    <span>全スコア開放</span>
+                    <span>AI改善アドバイス</span>
                   </div>
                   <a
                     href="/pricing"
@@ -1317,13 +1355,61 @@ export default function RoleplayPage() {
               </div>
             )}
 
+            {/* Daily Limit Banner for Trial Users */}
+            {usage && usage.isTrial && !usage.canStart && (
+              <div className="pixar-card" style={{ borderColor: '#f48a58', background: 'linear-gradient(135deg, #fff8f3, #fefcf7)' }}>
+                <div className="text-center">
+                  <p style={{ fontSize: '1.1em', fontWeight: 800, color: '#4d4c4a', marginBottom: '0.2em' }}>
+                    本日のトライアル回数（{usage.limit}回）を使い切りました
+                  </p>
+                  <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
+                    Proプランに登録すると<span style={{ color: '#f48a58', fontWeight: 800 }}>無制限</span>で練習できます。<br />
+                    明日もトライアルとして{usage.limit}回まで練習可能です。
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5em', marginBottom: '0.5em' }}>
+                    <div style={{ display: 'flex', gap: '0.8em', fontSize: '0.72em', color: '#6a6560' }}>
+                      <span>無制限ロープレ</span>
+                      <span>全スコア開放</span>
+                      <span>AI改善アドバイス</span>
+                    </div>
+                  </div>
+                  <a
+                    href="/pricing"
+                    onClick={() => {
+                      trackUpgradePromptClicked({ trigger: "trial_limit_banner" });
+                    }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: '3em',
+                      padding: '0 2em',
+                      borderRadius: '2em',
+                      background: '#f48a58',
+                      color: '#fff',
+                      fontWeight: 800,
+                      fontSize: '0.95em',
+                      textDecoration: 'none',
+                      border: '0.12em solid #c4693d',
+                      boxShadow: '0.12em 0.12em 0 #c4693d',
+                    }}
+                  >
+                    Proプランで無制限に練習する →
+                  </a>
+                  <p style={{ fontSize: '0.72em', color: '#a09a90', marginTop: '0.5em' }}>
+                    ¥2,980/月 ・ いつでも解約OK ・ 経費精算OK
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Action: Start Button */}
             <button
               onClick={handleStartRoleplay}
-              disabled={!canStart || isCheckingUsage || (usage !== null && usage.plan === "free" && !usage.canStart)}
+              disabled={!canStart || isCheckingUsage || (usage !== null && !usage.canStart)}
               className="pixar-start-btn"
             >
-              {isCheckingUsage ? "確認中..." : usage && usage.plan === "free" && !usage.canStart ? "本日の無料回数を使い切りました" : "ロープレを開始する"}
+              {isCheckingUsage ? "確認中..." : usage && !usage.canStart ? (usage.isTrial ? "本日のトライアル回数を使い切りました" : "本日の無料回数を使い切りました") : "ロープレを開始する"}
             </button>
           </div>
         </div>
@@ -1395,6 +1481,7 @@ export default function RoleplayPage() {
         <ScoreCard
           score={score}
           plan={usage?.plan}
+          industry={industry}
           onUpgrade={() => {
             setUpgradeModalTrigger("score");
             setShowUpgradeModal(true);

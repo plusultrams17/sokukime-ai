@@ -46,8 +46,8 @@ const includedItems = [
     description: "アプローチからクロージングまで、すぐに使える営業台本",
   },
   {
-    label: "AIコーチ Pro アクセス権",
-    description: "無制限AIロープレ+全5カテゴリ詳細スコア+AI改善アドバイス",
+    label: "AIコーチ Pro 1ヶ月アクセス権",
+    description: "無制限AIロープレ+全5カテゴリ詳細スコア+AI改善アドバイス（購入後1ヶ月間有効）",
   },
 ];
 
@@ -142,7 +142,7 @@ const faqItems = [
   {
     question: "返金はできますか？",
     answer:
-      "本商品はデジタルコンテンツのため、特定商取引法に基づくクーリングオフの対象外となります。購入後の返品・返金は原則お受けしておりません。ただし、コンテンツに重大な不備がある場合はサポート（seiyaku.coach.ai@gmail.com）までご連絡ください。購入前に無料の学習コースで内容の一部をご確認いただけます。",
+      "本商品はデジタルコンテンツのため、特定商取引法に基づくクーリングオフの対象外となります。購入後の返品・返金は原則お受けしておりません。ただし、コンテンツに重大な不備がある場合はサポート（support@seiyaku-coach.com）までご連絡ください。購入前に無料の学習コースで内容の一部をご確認いただけます。",
   },
   {
     question: "いつまで見られますか？",
@@ -152,7 +152,7 @@ const faqItems = [
   {
     question: "AIコーチ（月額サブスクリプション）とは別ですか？",
     answer:
-      "はい、別の商品です。本プログラムは「学習教材+テンプレート」の買い切り商品です。AIコーチ Pro（月額¥2,980）は無制限AIロープレ+詳細スコアのサブスクリプションサービスです。本プログラムにはAIコーチ Proのアクセス権も含まれていますので、両方を個別に購入する必要はありません。",
+      "はい、別の商品です。本プログラムは「学習教材+テンプレート」の買い切り商品です。AIコーチ Pro（月額¥2,980）は無制限AIロープレ+詳細スコアのサブスクリプションサービスです。本プログラムにはAIコーチ Proの1ヶ月アクセス権が含まれています。1ヶ月後も継続したい場合は月額プランに移行できます。",
   },
   {
     question: "営業未経験でも大丈夫ですか？",
@@ -205,7 +205,7 @@ export default function ProgramPage() {
       <section className="relative overflow-hidden py-20 sm:py-28">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <p className="mb-4 inline-block rounded-full border border-lp-cta/30 bg-lp-cta/5 px-4 py-1.5 text-xs font-bold text-lp-cta">
-            先着30名限定 — 特別価格で提供中
+            買い切りプログラム — Pro 1ヶ月分付き
           </p>
           <h1 className="mb-6 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
             営業の「型」を身につければ、
@@ -453,7 +453,7 @@ export default function ProgramPage() {
         <div className="mx-auto max-w-4xl px-6">
           <div className="relative mx-auto max-w-lg rounded-2xl border-2 border-lp-cta bg-card p-8 sm:p-10">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-lp-cta px-4 py-1 text-xs font-bold text-white">
-              先着30名限定価格
+              オールインワン買い切り
             </div>
 
             <div className="mb-6 text-center">
@@ -526,10 +526,10 @@ export default function ProgramPage() {
           {/* Included value callout */}
           <div className="mx-auto mt-6 max-w-lg rounded-xl border border-lp-cta/20 bg-lp-cta/5 p-4 text-center">
             <p className="text-sm font-bold text-foreground">
-              AIコーチ Pro アクセス権付き
+              AIコーチ Pro 1ヶ月分付き
             </p>
             <p className="mt-1 text-xs text-muted">
-              AIコーチ Pro（月額¥2,980相当）+ 22レッスン学習教材・テンプレートがすべて含まれています
+              AIコーチ Pro（月額¥2,980相当）の1ヶ月アクセス権 + 22レッスン学習教材・テンプレート（無期限）がすべて含まれています
             </p>
           </div>
         </div>
@@ -581,7 +581,7 @@ export default function ProgramPage() {
             営業の「型」を今日から身につけよう
           </h2>
           <p className="mb-8 text-sm text-muted">
-            先着30名限定・特別価格で提供中。営業研修1回分以下の費用で、体系的な営業スキルを学べます。
+            営業研修1回分以下の費用で、体系的な営業スキルを学べます。
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <button

@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/json-ld";
 export const metadata: Metadata = {
   title: "活用シーン",
   description:
-    "成約コーチ AIの活用シーン。新人研修、チームのスキル底上げ、個人事業主の営業練習、テレアポ練習など、様々な場面で活用できます。",
+    "成約コーチAIの活用シーン。新人研修、チームのスキル底上げ、個人事業主の営業練習、テレアポ練習など、様々な場面で活用できます。",
   alternates: { canonical: "/use-cases" },
 };
 
@@ -91,9 +91,9 @@ export default function UseCasesPage() {
             {
               "@type": "WebPage",
               "@id": `${siteUrl}/use-cases#webpage`,
-              name: "活用シーン | 成約コーチ AI",
+              name: "活用シーン | 成約コーチAI",
               description:
-                "成約コーチ AIは、新人営業研修、チームの営業力底上げ、個人事業主の自主トレ、テレアポ練習など幅広い営業シーンで活用できるAIロープレツールです。",
+                "成約コーチAIは、新人営業研修、チームの営業力底上げ、個人事業主の自主トレ、テレアポ練習など幅広い営業シーンで活用できるAIロープレツールです。",
               url: `${siteUrl}/use-cases`,
               isPartOf: { "@id": `${siteUrl}/#website` },
               inLanguage: "ja",
@@ -115,10 +115,10 @@ export default function UseCasesPage() {
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="mb-4 text-4xl font-bold">活用シーン</h1>
           <p className="text-lg text-muted">
-            あらゆる営業シーンで成約コーチ AIを活用できます
+            あらゆる営業シーンで成約コーチAIを活用できます
           </p>
           <p className="mx-auto mt-6 max-w-3xl text-sm text-muted leading-relaxed text-left">
-            成約コーチ AIは、新人営業マンの研修（<strong className="text-foreground">独り立ちまでの期間を短縮</strong>）、営業チームのスキル底上げ（<strong className="text-foreground">共通の型でチーム力向上</strong>）、個人事業主・フリーランスの自主トレ、テレアポ・電話営業の練習（<strong className="text-foreground">切り返し力を強化</strong>）など、幅広い営業シーンで活用できます。6業種（不動産・保険・SaaS・人材・教育・物販）に対応。
+            成約コーチAIは、新人営業マンの研修（<strong className="text-foreground">独り立ちまでの期間を短縮</strong>）、営業チームのスキル底上げ（<strong className="text-foreground">共通の型でチーム力向上</strong>）、個人事業主・フリーランスの自主トレ、テレアポ・電話営業の練習（<strong className="text-foreground">切り返し力を強化</strong>）など、幅広い営業シーンで活用できます。6業種（不動産・保険・SaaS・人材・教育・物販）に対応。
           </p>
         </div>
       </section>

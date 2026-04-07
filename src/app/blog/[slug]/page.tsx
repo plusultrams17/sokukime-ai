@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       modifiedTime: post.updatedAt,
       tags: post.tags,
       locale: "ja_JP",
-      siteName: "成約コーチ AI",
+      siteName: "成約コーチAI",
     },
     twitter: {
       card: "summary_large_image",
@@ -173,7 +173,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-2">
                 <span className="inline-block h-3 w-3 rounded-full bg-accent" />
-                <span className="font-medium text-foreground">成約コーチ AI</span>
+                <span className="font-medium text-foreground">成約コーチAI</span>
               </div>
               <time dateTime={post.publishedAt}>
                 {new Date(post.publishedAt).toLocaleDateString("ja-JP", {
@@ -227,7 +227,7 @@ export default async function BlogPostPage({ params }: Props) {
               この営業テクニックをAIで練習する
             </h2>
             <p className="mb-6 text-muted">
-              成約コーチ AIなら、成約メソッドに基づいたAIロープレが無料で体験できます。
+              成約コーチAIなら、成約メソッドに基づいたAIロープレが無料で体験できます。
               <br className="hidden sm:block" />
               記事で学んだテクニックを実践して、本番で成約できる営業力を身につけましょう。
             </p>

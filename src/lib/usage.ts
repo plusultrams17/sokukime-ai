@@ -2,12 +2,15 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { getTeamMembership } from "@/lib/team";
 
 export const FREE_DAILY_LIMIT = 1;
+export const TRIAL_DAILY_LIMIT = 5;
 
 export interface UsageStatus {
   used: number;
   limit: number;
   canStart: boolean;
   plan: "free" | "pro";
+  /** true when the user is on a trial (reverse-trial or Stripe trialing) */
+  isTrial?: boolean;
   totalSessions?: number;
   streak?: number;
 }
@@ -19,7 +22,11 @@ export async function getUsageStatus(
   const today = new Date().toISOString().split("T")[0];
 
   const [profileResult, usageResult] = await Promise.all([
-    supabase.from("profiles").select("plan").eq("id", userId).single(),
+    supabase
+      .from("profiles")
+      .select("plan, subscription_status, trial_ends_at, stripe_subscription_id")
+      .eq("id", userId)
+      .single(),
     supabase
       .from("usage_records")
       .select("id", { count: "exact", head: true })
@@ -29,6 +36,9 @@ export async function getUsageStatus(
 
   let plan = (profileResult.data?.plan || "free") as "free" | "pro";
   const used = usageResult.count || 0;
+  const subscriptionStatus = profileResult.data?.subscription_status as string | null;
+  const trialEndsAt = profileResult.data?.trial_ends_at as string | null;
+  const stripeSubId = profileResult.data?.stripe_subscription_id as string | null;
 
   // Team members get Pro-equivalent access
   if (plan !== "pro") {
@@ -39,6 +49,24 @@ export async function getUsageStatus(
   }
 
   if (plan === "pro") {
+    // Detect trial state:
+    // 1. Stripe trial: subscription_status === "trialing"
+    // 2. Reverse trial: trial_ends_at is set AND no stripe_subscription_id
+    const isTrial =
+      subscriptionStatus === "trialing" ||
+      (!!(trialEndsAt) && !stripeSubId);
+
+    if (isTrial) {
+      return {
+        used,
+        limit: TRIAL_DAILY_LIMIT,
+        canStart: used < TRIAL_DAILY_LIMIT,
+        plan,
+        isTrial: true,
+      };
+    }
+
+    // Paid Pro or program purchase — unlimited
     return { used, limit: Infinity, canStart: true, plan };
   }
 

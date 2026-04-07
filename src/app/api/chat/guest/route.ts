@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext } =
+    const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus } =
       await request.json();
 
     const client = getOpenAIClient();
@@ -101,10 +101,11 @@ export async function POST(request: NextRequest) {
     const customerInfo = customerContext
       ? `\n\n## お客さんのペルソナ詳細\n以下の情報を踏まえてお客さんを演じてください:\n${customerContext}`
       : "";
+    const lessonFocusInfo = lessonFocus ? `\n\n${lessonFocus}` : "";
 
     const personaInstructions = persona ? `\n\n${persona.systemPromptInstructions}` : "";
 
-    const systemContent = `${SYSTEM_PROMPT}${personaInstructions}${productInfo}${customerInfo}
+    const systemContent = `${SYSTEM_PROMPT}${personaInstructions}${productInfo}${customerInfo}${lessonFocusInfo}
 
 ## 今回のシナリオ
 - お客さんの属性: ${customerTypeMap[customerType] || "個人のお客さん"}
