@@ -79,12 +79,7 @@ export async function POST() {
       customer: customerId,
       client_reference_id: user.id,
       mode: "payment",
-      payment_method_types: ["card", "konbini"],
-      payment_method_options: {
-        konbini: {
-          expires_after_days: 3,
-        },
-      },
+      allow_promotion_codes: true,
       line_items: [
         {
           price: priceId,
