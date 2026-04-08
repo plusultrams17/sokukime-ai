@@ -201,20 +201,15 @@ function calcScore(
   scenario: ChallengeScenario,
   timeLeft: number,
 ): { total: number; timeScore: number; contentScore: number; grade: string } {
-  // Time score: 0-40 points (proportional to remaining time)
   const timeScore = Math.round((timeLeft / 60) * 40);
-
-  // Content score: 0-60 points (keyword matching + length)
   const lower = answer.toLowerCase();
   const matched = scenario.keywords.filter((kw) =>
     lower.includes(kw.toLowerCase()),
   ).length;
-  const keywordRatio = Math.min(matched / 5, 1); // Cap at 5 keywords
-  const lengthBonus = Math.min(answer.length / 80, 1); // Bonus for substantive answers
+  const keywordRatio = Math.min(matched / 5, 1);
+  const lengthBonus = Math.min(answer.length / 80, 1);
   const contentScore = Math.round(keywordRatio * 45 + lengthBonus * 15);
-
   const total = Math.min(timeScore + contentScore, 100);
-
   const grade =
     total >= 90
       ? "S"
@@ -225,7 +220,6 @@ function calcScore(
           : total >= 35
             ? "C"
             : "D";
-
   return { total, timeScore, contentScore, grade };
 }
 
@@ -267,16 +261,14 @@ function CountdownTimer({
   return (
     <div className="rc-timer-wrap">
       <svg width="140" height="140" viewBox="0 0 120 120">
-        {/* Background ring */}
         <circle
           cx="60"
           cy="60"
           r={radius}
           fill="none"
-          stroke="#1E293B"
+          stroke="rgba(148,163,184,0.1)"
           strokeWidth="8"
         />
-        {/* Progress ring */}
         <circle
           cx="60"
           cy="60"
@@ -301,7 +293,7 @@ function CountdownTimer({
         >
           {timeLeft}
         </span>
-        <span className="text-[10px] font-medium text-[#64748B] tracking-wider">
+        <span className="text-[10px] font-medium tracking-wider" style={{ color: "#64748B" }}>
           SEC
         </span>
       </div>
@@ -336,15 +328,15 @@ function IntroScreen({ onStart }: { onStart: () => void }) {
         </div>
       </div>
 
-      <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">
+      <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: "#5EEAD4" }}>
         Rebuttal Challenge
       </p>
-      <h2 className="mb-3 text-2xl font-bold text-foreground sm:text-3xl">
+      <h2 className="mb-3 text-2xl font-bold sm:text-3xl" style={{ color: "#F1F5F9" }}>
         60秒 切り返しチャレンジ
       </h2>
-      <p className="mb-8 text-sm leading-relaxed text-muted">
+      <p className="mb-8 text-sm leading-relaxed" style={{ color: "#94A3B8" }}>
         賃貸物件の内見中、お客さんの反論に
-        <strong className="text-foreground">60秒以内</strong>
+        <strong style={{ color: "#E2E8F0" }}>60秒以内</strong>
         で切り返せ。
         <br />
         即座に採点＋模範トークを表示します。
@@ -360,17 +352,14 @@ function IntroScreen({ onStart }: { onStart: () => void }) {
             label: "模範トーク＋テクニック解説付き",
           },
         ].map((rule, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-3 rounded-xl border border-card-border bg-card px-4 py-3"
-          >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10">
+          <div key={i} className="rc-rule-card">
+            <div className="rc-rule-icon">
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="var(--accent)"
+                stroke="#5EEAD4"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -378,7 +367,7 @@ function IntroScreen({ onStart }: { onStart: () => void }) {
                 <path d={rule.icon} />
               </svg>
             </div>
-            <span className="text-sm font-medium text-foreground">
+            <span className="text-sm font-medium" style={{ color: "#E2E8F0" }}>
               {rule.label}
             </span>
           </div>
@@ -400,7 +389,7 @@ function IntroScreen({ onStart }: { onStart: () => void }) {
         </span>
       </button>
 
-      <p className="mt-4 text-xs text-muted">
+      <p className="mt-4 text-xs" style={{ color: "#64748B" }}>
         全{SCENARIOS.length}問 ・ 賃貸物件の内見シーン
       </p>
     </div>
@@ -439,7 +428,6 @@ function ChallengeScreen({
     };
   }, []);
 
-  // Auto-submit when time runs out
   useEffect(() => {
     if (timeLeft === 0 && !isSubmitted) {
       handleSubmit();
@@ -459,7 +447,7 @@ function ChallengeScreen({
     <div className="animate-fade-in-up mx-auto max-w-lg">
       {/* Question header */}
       <div className="mb-6 flex items-center justify-between">
-        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent">
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: "#5EEAD4" }}>
           Question {questionNum}/{SCENARIOS.length}
         </p>
         <div className="flex items-center gap-2">
@@ -470,11 +458,9 @@ function ChallengeScreen({
               style={{
                 width: i + 1 === questionNum ? 16 : 6,
                 background:
-                  i + 1 < questionNum
-                    ? "var(--accent)"
-                    : i + 1 === questionNum
-                      ? "var(--accent)"
-                      : "#1E293B",
+                  i + 1 <= questionNum
+                    ? "#5EEAD4"
+                    : "rgba(148,163,184,0.15)",
               }}
             />
           ))}
@@ -487,23 +473,23 @@ function ChallengeScreen({
       </div>
 
       {/* Situation */}
-      <p className="mb-4 text-sm leading-relaxed text-muted">
+      <p className="mb-4 text-sm leading-relaxed" style={{ color: "#94A3B8" }}>
         {scenario.situation}
       </p>
 
       {/* Customer objection */}
       <div className="rc-objection-card mb-6">
-        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.15em] text-muted">
+        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: "#64748B" }}>
           お客さん
         </p>
-        <p className="text-base font-medium leading-relaxed text-foreground">
+        <p className="text-base font-medium leading-relaxed" style={{ color: "#F1F5F9" }}>
           &ldquo;{scenario.customerSays}&rdquo;
         </p>
       </div>
 
       {/* Answer input */}
       <div className="mb-4">
-        <label className="mb-2 block text-sm font-bold text-foreground">
+        <label className="mb-2 block text-sm font-bold" style={{ color: "#E2E8F0" }}>
           あなたの切り返し
         </label>
         <textarea
@@ -513,9 +499,9 @@ function ChallengeScreen({
           disabled={isSubmitted}
           placeholder="60秒以内にお客さんへの返答を入力..."
           rows={4}
-          className="w-full rounded-xl border border-card-border bg-white px-4 py-3 text-sm leading-relaxed text-foreground outline-none transition-all duration-200 placeholder:text-[#B4B0A8] focus:border-accent focus:shadow-[0_0_0_3px_rgba(249,115,22,0.1)] disabled:opacity-50 resize-none"
+          className="rc-textarea"
         />
-        <p className="mt-1 text-right text-xs text-muted">
+        <p className="mt-1 text-right text-xs" style={{ color: "#64748B" }}>
           {answer.length}文字
         </p>
       </div>
@@ -524,7 +510,7 @@ function ChallengeScreen({
       <button
         onClick={handleSubmit}
         disabled={isSubmitted || answer.trim().length === 0}
-        className="w-full rounded-xl bg-accent py-3.5 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed"
+        className="rc-submit-btn"
       >
         {isSubmitted ? "採点中..." : "回答を提出する"}
       </button>
@@ -573,30 +559,30 @@ function ResultScreen({
 
       {/* Score breakdown */}
       <div className="mb-6 grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-card-border bg-card p-3 text-center">
-          <p className="text-2xl font-black text-foreground">{score.total}</p>
-          <p className="text-[10px] font-medium text-muted">総合スコア</p>
+        <div className="rc-score-card">
+          <p className="text-2xl font-black" style={{ color: "#F1F5F9" }}>{score.total}</p>
+          <p className="text-[10px] font-medium" style={{ color: "#64748B" }}>総合スコア</p>
         </div>
-        <div className="rounded-xl border border-card-border bg-card p-3 text-center">
-          <p className="text-2xl font-black text-foreground">
+        <div className="rc-score-card">
+          <p className="text-2xl font-black" style={{ color: "#F1F5F9" }}>
             {score.timeScore}
           </p>
-          <p className="text-[10px] font-medium text-muted">スピード</p>
+          <p className="text-[10px] font-medium" style={{ color: "#64748B" }}>スピード</p>
         </div>
-        <div className="rounded-xl border border-card-border bg-card p-3 text-center">
-          <p className="text-2xl font-black text-foreground">
+        <div className="rc-score-card">
+          <p className="text-2xl font-black" style={{ color: "#F1F5F9" }}>
             {score.contentScore}
           </p>
-          <p className="text-[10px] font-medium text-muted">内容</p>
+          <p className="text-[10px] font-medium" style={{ color: "#64748B" }}>内容</p>
         </div>
       </div>
 
       {/* Your answer */}
-      <div className="mb-4 rounded-xl border border-card-border bg-card px-5 py-4">
-        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.15em] text-muted">
+      <div className="rc-answer-card mb-4">
+        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: "#64748B" }}>
           あなたの回答
         </p>
-        <p className="text-sm leading-relaxed text-foreground">
+        <p className="text-sm leading-relaxed" style={{ color: "#E2E8F0" }}>
           {answer || "（未回答）"}
         </p>
       </div>
@@ -611,13 +597,13 @@ function ResultScreen({
             type="button"
           >
             <div className="flex flex-col items-center gap-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full" style={{ background: "rgba(27,107,90,0.15)" }}>
                 <svg
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="var(--accent)"
+                  stroke="#5EEAD4"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -625,24 +611,24 @@ function ResultScreen({
                   <path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                 </svg>
               </div>
-              <span className="text-sm font-bold text-accent">
+              <span className="text-sm font-bold" style={{ color: "#5EEAD4" }}>
                 タップして模範トークを見る
               </span>
             </div>
           </button>
           {/* Back — model answer */}
           <div className="rc-flip-back">
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.15em] text-accent">
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: "#5EEAD4" }}>
               Model Answer
             </p>
-            <p className="mb-4 text-sm leading-relaxed text-foreground">
+            <p className="mb-4 text-sm leading-relaxed" style={{ color: "#E2E8F0" }}>
               {scenario.modelAnswer}
             </p>
-            <div className="rounded-lg bg-accent/5 border border-accent/20 px-3 py-2">
-              <p className="text-xs font-bold text-accent">
+            <div className="rounded-lg px-3 py-2" style={{ background: "rgba(27,107,90,0.1)", border: "1px solid rgba(27,107,90,0.2)" }}>
+              <p className="text-xs font-bold" style={{ color: "#5EEAD4" }}>
                 {scenario.technique}
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-muted">
+              <p className="mt-1 text-xs leading-relaxed" style={{ color: "#94A3B8" }}>
                 {scenario.tip}
               </p>
             </div>
@@ -653,18 +639,12 @@ function ResultScreen({
       {/* Actions */}
       <div className="space-y-3">
         {isLast ? (
-          <button
-            onClick={onFinish}
-            className="w-full rounded-xl bg-accent py-3.5 text-sm font-bold text-white transition hover:bg-accent-hover"
-          >
+          <button onClick={onFinish} className="rc-submit-btn">
             最終結果を見る
           </button>
         ) : (
-          <button
-            onClick={onNext}
-            className="w-full rounded-xl bg-accent py-3.5 text-sm font-bold text-white transition hover:bg-accent-hover"
-          >
-            次の問題へ →
+          <button onClick={onNext} className="rc-submit-btn">
+            次の問題へ
           </button>
         )}
       </div>
@@ -706,7 +686,7 @@ function SummaryScreen({
     <div className="animate-fade-in-up mx-auto max-w-lg">
       {/* Final grade */}
       <div className="mb-8 text-center">
-        <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-muted">
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: "#64748B" }}>
           Final Result
         </p>
         <div
@@ -719,9 +699,9 @@ function SummaryScreen({
         >
           <span className="rc-grade-letter">{avgGrade}</span>
         </div>
-        <p className="mt-4 text-3xl font-black text-foreground">
+        <p className="mt-4 text-3xl font-black" style={{ color: "#F1F5F9" }}>
           {avgScore}
-          <span className="text-lg font-medium text-muted">/100</span>
+          <span className="text-lg font-medium" style={{ color: "#64748B" }}>/100</span>
         </p>
         <p className="mt-1 text-sm font-bold" style={{ color: gradeColor }}>
           {GRADE_LABELS[avgGrade]}
@@ -733,7 +713,7 @@ function SummaryScreen({
         {results.map((r, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 rounded-xl border border-card-border bg-card px-4 py-3"
+            className="rc-rule-card"
           >
             <span
               className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black text-white"
@@ -742,10 +722,10 @@ function SummaryScreen({
               {r.score.grade}
             </span>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-foreground truncate">
+              <p className="text-xs font-medium truncate" style={{ color: "#E2E8F0" }}>
                 Q{i + 1}: &ldquo;{r.scenario.customerSays.slice(0, 30)}…&rdquo;
               </p>
-              <div className="mt-1 h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden">
+              <div className="rc-progress-bar-bg mt-1">
                 <div
                   className="h-full rounded-full transition-all duration-700"
                   style={{
@@ -755,7 +735,7 @@ function SummaryScreen({
                 />
               </div>
             </div>
-            <span className="text-sm font-bold text-foreground tabular-nums">
+            <span className="text-sm font-bold tabular-nums" style={{ color: "#E2E8F0" }}>
               {r.score.total}
             </span>
           </div>
@@ -764,16 +744,10 @@ function SummaryScreen({
 
       {/* Actions */}
       <div className="space-y-3">
-        <button
-          onClick={onRetry}
-          className="w-full rounded-xl bg-accent py-3.5 text-sm font-bold text-white transition hover:bg-accent-hover"
-        >
+        <button onClick={onRetry} className="rc-submit-btn">
           もう一度チャレンジ
         </button>
-        <Link
-          href="/try-roleplay"
-          className="block w-full rounded-xl border border-card-border bg-card py-3.5 text-center text-sm font-medium text-muted transition hover:border-foreground/20 hover:text-foreground"
-        >
+        <Link href="/try-roleplay" className="rc-secondary-btn">
           AIロープレで実践する
         </Link>
 
@@ -783,7 +757,7 @@ function SummaryScreen({
             href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-card-border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition hover:border-foreground/20"
+            className="rc-share-btn"
           >
             <svg
               width="14"
@@ -809,21 +783,15 @@ function SummaryScreen({
       </div>
 
       {/* Related tools */}
-      <div className="mt-8 pt-6 border-t border-card-border">
-        <p className="mb-3 text-center text-xs font-bold text-muted uppercase tracking-wider">
+      <div className="mt-8 pt-6" style={{ borderTop: "1px solid rgba(148,163,184,0.12)" }}>
+        <p className="mb-3 text-center text-xs font-bold uppercase tracking-wider" style={{ color: "#64748B" }}>
           Related Tools
         </p>
         <div className="grid grid-cols-2 gap-3">
-          <Link
-            href="/tools/objection-handbook"
-            className="rounded-xl border border-card-border bg-card p-3 text-center text-xs font-medium text-foreground transition hover:-translate-y-0.5 hover:shadow-sm"
-          >
+          <Link href="/tools/objection-handbook" className="rc-related-card">
             反論切り返しトーク集
           </Link>
-          <Link
-            href="/tools/objection-scenario"
-            className="rounded-xl border border-card-border bg-card p-3 text-center text-xs font-medium text-foreground transition hover:-translate-y-0.5 hover:shadow-sm"
-          >
+          <Link href="/tools/objection-scenario" className="rc-related-card">
             「考えます」シナリオ
           </Link>
         </div>
@@ -919,23 +887,29 @@ export default function RebuttalChallengePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="rc-page min-h-screen">
       <Header />
 
-      <main className="mx-auto max-w-2xl px-6 py-12">
-        {/* Title — always visible */}
-        <div className="mb-10 text-center">
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-muted">
-            60-Second Rebuttal Challenge
-          </p>
-          <h1 className="mb-2 text-2xl font-bold text-foreground sm:text-3xl">
-            60秒<span className="text-accent">切り返し</span>チャレンジ
+      {/* Hero section */}
+      <div className="rc-hero">
+        <div className="relative z-10">
+          <span className="rc-hero-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="13" r="8" />
+              <path d="M12 9v4l2 2" />
+            </svg>
+            60 SEC CHALLENGE
+          </span>
+          <h1>
+            60秒<span className="rc-accent">切り返し</span>チャレンジ
           </h1>
-          <p className="text-sm text-muted">
+          <p className="rc-hero-sub">
             お客さんの反論に、制限時間内に切り返せ
           </p>
         </div>
+      </div>
 
+      <main className="mx-auto max-w-2xl px-6 pb-12">
         {/* Phase content */}
         {phase === "intro" && <IntroScreen onStart={handleStart} />}
 
