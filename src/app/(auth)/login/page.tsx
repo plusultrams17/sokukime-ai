@@ -67,14 +67,13 @@ function LoginForm() {
           10秒で始められます
         </p>
 
-        {/* 7日間無料トライアル訴求（強化版） */}
+        {/* 無料プラン訴求 */}
         <div className="rounded-xl border-2 border-accent bg-gradient-to-br from-accent/10 to-accent/5 px-5 py-4 text-center">
-          <div className="text-2xl mb-1" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
           <p className="text-base font-extrabold text-accent mb-1">
-            Proの全機能を <span className="text-lg">7日間無料</span> で試せる
+            Googleアカウントだけで<span className="text-lg">今すぐ開始</span>
           </p>
           <p className="text-[11px] text-muted">
-            登録だけで開始・いつでもキャンセル可能・カード不要
+            クレジットカード不要・無料プランですぐにロープレ練習できます
           </p>
         </div>
 
@@ -104,14 +103,14 @@ function LoginForm() {
 
         </div>
 
-        {/* Free Plan 価値訴求（強化版） */}
+        {/* Free Plan 価値訴求 */}
         <div className="rounded-xl border border-card-border bg-card/50 p-4 space-y-2">
-          <div className="text-xs font-bold text-foreground mb-2">無料アカウントに含まれるもの:</div>
+          <div className="text-xs font-bold text-foreground mb-2">無料プランに含まれるもの:</div>
           <ul className="space-y-1.5">
             {[
-              "毎日1回のAIロープレ（3日で現在地のスコアが確定）",
-              "5カテゴリ別の詳細スコアリング",
-              "リアルタイムAIコーチング",
+              "毎日1回のAIロープレ練習",
+              "AIスコアリング（1カテゴリ）",
+              "22レッスンの学習コース",
               "クレジットカード不要",
             ].map((item) => (
               <li key={item} className="flex items-start gap-2 text-xs text-muted leading-relaxed">
@@ -120,10 +119,13 @@ function LoginForm() {
               </li>
             ))}
           </ul>
+          <p className="text-[10px] text-accent/70 pt-1">
+            Proプラン（¥2,980/月）で全5カテゴリ詳細スコア・無制限ロープレに対応
+          </p>
         </div>
       </div>
 
-      {stats && (
+      {stats && stats.totalUsers >= 50 && (
         <p className="text-center text-xs text-muted">
           <span className="font-bold text-foreground">{stats.totalUsers.toLocaleString()}人</span>のユーザーが利用中・累計<span className="font-bold text-foreground">{stats.totalSessions.toLocaleString()}回</span>のロープレ実績
         </p>
