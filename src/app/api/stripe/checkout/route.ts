@@ -209,8 +209,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error("Checkout error:", error);
+    const message =
+      error instanceof Error ? error.message : "不明なエラーが発生しました";
     return NextResponse.json(
-      { error: "チェックアウトセッションの作成に失敗しました" },
+      { error: `チェックアウトエラー: ${message}` },
       { status: 500 }
     );
   }
