@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { trackCTAClick, trackCheckoutStarted } from "@/lib/tracking";
+import { createClient } from "@/lib/supabase/client";
 
 interface UpgradeModalProps {
   open: boolean;
@@ -23,6 +24,7 @@ export function UpgradeModal({
   trigger = "limit",
 }: UpgradeModalProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [billing, setBilling] = useState<"monthly" | "annual">("annual");
   const [stats, setStats] = useState<{ totalUsers: number; totalSessions: number } | null>(null);
 
@@ -39,8 +41,20 @@ export function UpgradeModal({
 
   async function handleUpgrade() {
     setIsLoading(true);
+    setErrorMsg("");
     trackCTAClick("upgrade_modal_pro", "upgrade_modal", "/api/stripe/checkout");
     trackCheckoutStarted();
+
+    // Client-side auth check
+    const supabase = createClient();
+    if (supabase) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = "/login?redirect=/pricing";
+        return;
+      }
+    }
+
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
@@ -50,10 +64,17 @@ export function UpgradeModal({
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+        return;
       }
+      if (data.error === "Unauthorized") {
+        window.location.href = "/login?redirect=/pricing";
+        return;
+      }
+      setErrorMsg(data.error || "エラーが発生しました。もう一度お試しください。");
     } catch {
-      setIsLoading(false);
+      setErrorMsg("チェックアウトの開始に失敗しました。もう一度お試しください。");
     }
+    setIsLoading(false);
   }
 
   const scoreDiff =
@@ -218,6 +239,11 @@ export function UpgradeModal({
           >
             {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
           </button>
+          {errorMsg && (
+            <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400 text-center">
+              {errorMsg}
+            </div>
+          )}
           <div className="text-center text-[11px] text-muted">
             今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで全機能無料 ・ いつでも解約OK
           </div>

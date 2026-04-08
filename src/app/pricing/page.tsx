@@ -10,6 +10,7 @@ import { trackCTAClick, trackCheckoutStarted, trackPricingPageView, trackCheckou
 import { PricingExitPopup } from "@/components/exit-popups/pricing-exit-popup";
 import { UserReviews } from "@/components/user-reviews";
 import { getActivePromotion } from "@/lib/promotions";
+import { createClient } from "@/lib/supabase/client";
 
 const features = [
   { name: "学習コース（22レッスン）", free: "全レッスン", pro: "全レッスン" },
@@ -51,6 +52,7 @@ const faqItems = [
 
 export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [promoOpen, setPromoOpen] = useState(false);
   const [activePromo] = useState(() => getActivePromotion());
@@ -64,9 +66,21 @@ export default function PricingPage() {
 
   async function handleUpgrade() {
     setIsLoading(true);
+    setErrorMsg("");
     trackCTAClick("pricing_pro", "pricing_page", "/api/stripe/checkout");
     trackCheckoutStarted();
     trackCheckoutStart({});
+
+    // Client-side auth check — redirect to login before hitting API
+    const supabase = createClient();
+    if (supabase) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = "/login?redirect=/pricing";
+        return;
+      }
+    }
+
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
@@ -76,11 +90,15 @@ export default function PricingPage() {
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
-      } else if (data.error === "Unauthorized") {
-        window.location.href = "/signup";
+        return;
       }
+      if (data.error === "Unauthorized") {
+        window.location.href = "/login?redirect=/pricing";
+        return;
+      }
+      setErrorMsg(data.error || "エラーが発生しました。もう一度お試しください。");
     } catch {
-      alert("チェックアウトの開始に失敗しました。もう一度お試しください。");
+      setErrorMsg("チェックアウトの開始に失敗しました。もう一度お試しください。");
     }
     setIsLoading(false);
   }
@@ -277,6 +295,11 @@ export default function PricingPage() {
             >
               {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
             </button>
+            {errorMsg && (
+              <div className="mt-2 rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400 text-center">
+                {errorMsg}
+              </div>
+            )}
             <p className="mt-2 text-center text-[11px] text-muted">
               いつでも解約OK ・ 14日間返金保証
             </p>
@@ -414,6 +437,11 @@ export default function PricingPage() {
             >
               {isLoading ? "処理中..." : "0円で今すぐ始める"}
             </button>
+          {errorMsg && (
+            <div className="mx-auto mt-3 max-w-md rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400">
+              {errorMsg}
+            </div>
+          )}
         </div>
       </div>
 
