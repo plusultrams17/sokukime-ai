@@ -57,9 +57,26 @@ export default function PricingPage() {
   const [promoCode, setPromoCode] = useState("");
   const [promoOpen, setPromoOpen] = useState(false);
   const [activePromo] = useState(() => getActivePromotion());
+  const [currentPlan, setCurrentPlan] = useState<"free" | "pro" | null>(null);
 
   useEffect(() => {
     trackPricingPageView({});
+    // Check current plan to show appropriate UI
+    const supabase = createClient();
+    if (supabase) {
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user) {
+          supabase
+            .from("profiles")
+            .select("plan")
+            .eq("id", user.id)
+            .single()
+            .then(({ data }) => {
+              setCurrentPlan((data?.plan as "free" | "pro") || "free");
+            });
+        }
+      });
+    }
   }, []);
 
   // ¥2,980 is already tax-inclusive (per tokushoho/terms)
@@ -279,34 +296,60 @@ export default function PricingPage() {
               </div>
             )}
 
-            {/* 7日間無料バナー */}
-            <div className="mb-4 rounded-xl border-2 border-accent bg-accent/5 px-4 py-3 text-center">
-              <p className="text-sm font-extrabold text-accent">
-                最初の7日間は無料
-              </p>
-              <p className="mt-0.5 text-xs text-muted">
-                トライアル中いつでもキャンセルOK。その後 ¥{monthlyPrice.toLocaleString()}/月
-              </p>
-            </div>
+            {currentPlan === "pro" ? (
+              /* Pro会員向け表示 */
+              <div className="mb-4 rounded-xl border-2 border-green-500/30 bg-green-500/5 px-4 py-4 text-center">
+                <p className="text-sm font-extrabold text-green-400">
+                  Proプラン利用中
+                </p>
+                <p className="mt-1 text-xs text-muted">
+                  全機能をご利用いただけます
+                </p>
+              </div>
+            ) : (
+              /* 未登録・Free会員向け表示 */
+              <>
+                {/* 7日間無料バナー */}
+                <div className="mb-4 rounded-xl border-2 border-accent bg-accent/5 px-4 py-3 text-center">
+                  <p className="text-sm font-extrabold text-accent">
+                    最初の7日間は無料
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted">
+                    トライアル中いつでもキャンセルOK。その後 ¥{monthlyPrice.toLocaleString()}/月
+                  </p>
+                </div>
+              </>
+            )}
 
-            <button
-              onClick={handleUpgrade}
-              disabled={isLoading}
-              className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
-            >
-              {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
-            </button>
+            {currentPlan === "pro" ? (
+              <Link
+                href="/roleplay"
+                className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover"
+              >
+                ロープレを始める
+              </Link>
+            ) : (
+              <button
+                onClick={handleUpgrade}
+                disabled={isLoading}
+                className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
+              >
+                {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
+              </button>
+            )}
             {errorMsg && (
               <div className="mt-2 rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400 text-center">
                 {errorMsg}
               </div>
             )}
-            <p className="mt-2 text-center text-[11px] text-muted">
-              いつでも解約OK ・ 14日間返金保証
-            </p>
+            {currentPlan !== "pro" && (
+              <p className="mt-2 text-center text-[11px] text-muted">
+                いつでも解約OK ・ 14日間返金保証
+              </p>
+            )}
 
             {/* Promo Code Input */}
-            <div className="mt-4 text-center">
+            {currentPlan !== "pro" && <div className="mt-4 text-center">
               {!promoOpen ? (
                 <button
                   onClick={() => setPromoOpen(true)}
@@ -331,7 +374,7 @@ export default function PricingPage() {
                   </button>
                 </div>
               )}
-            </div>
+            </div>}
 
             <div className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
               {features.map((f) => (
@@ -427,23 +470,25 @@ export default function PricingPage() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <p className="mb-5 text-muted">
-            0円で全機能を体験。7日間のトライアル後もいつでも解約OK
-          </p>
-          <button
-              onClick={handleUpgrade}
-              disabled={isLoading}
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60 sm:min-w-[240px]"
-            >
-              {isLoading ? "処理中..." : "0円で今すぐ始める"}
-            </button>
-          {errorMsg && (
-            <div className="mx-auto mt-3 max-w-md rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400">
-              {errorMsg}
-            </div>
-          )}
-        </div>
+        {currentPlan !== "pro" && (
+          <div className="mt-16 text-center">
+            <p className="mb-5 text-muted">
+              0円で全機能を体験。7日間のトライアル後もいつでも解約OK
+            </p>
+            <button
+                onClick={handleUpgrade}
+                disabled={isLoading}
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60 sm:min-w-[240px]"
+              >
+                {isLoading ? "処理中..." : "0円で今すぐ始める"}
+              </button>
+            {errorMsg && (
+              <div className="mx-auto mt-3 max-w-md rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400">
+                {errorMsg}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Footer */}

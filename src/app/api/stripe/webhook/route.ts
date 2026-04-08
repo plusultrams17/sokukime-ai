@@ -618,6 +618,14 @@ export async function POST(request: NextRequest) {
         .eq("stripe_customer_id", customerId)
         .eq("subscription_status", "past_due");
 
+      // Fallback: trialing → active 遷移を確実に処理
+      // (subscription.updated イベントが漏れた場合のセーフティネット)
+      await supabaseAdmin
+        .from("profiles")
+        .update({ subscription_status: "active", plan: "pro" })
+        .eq("stripe_customer_id", customerId)
+        .eq("subscription_status", "trialing");
+
       // Clean up dunning email records so they don't block future dunning cycles
       const { data: recoveredProfile } = await supabaseAdmin
         .from("profiles")

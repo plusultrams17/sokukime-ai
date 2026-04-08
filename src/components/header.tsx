@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { UserMenu } from "@/components/user-menu";
 import { Logo } from "@/components/logo";
 import { trackCTAClick } from "@/lib/tracking";
+import { CancelSaveModal } from "@/components/cancel-save-modal";
 
 const navLinksPublic = [
   { href: "/learn", label: "学習コース" },
@@ -21,9 +23,12 @@ const navLinksLoggedIn = [
 ];
 
 export function Header() {
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [plan, setPlan] = useState<"free" | "pro">("free");
+  const [email, setEmail] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
@@ -31,6 +36,7 @@ export function Header() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setIsLoggedIn(!!user);
       if (user) {
+        setEmail(user.email || null);
         supabase
           .from("profiles")
           .select("plan")
@@ -56,6 +62,28 @@ export function Header() {
       }
     });
   }, []);
+
+  async function handleLogout() {
+    const supabase = createClient();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+    setOpen(false);
+    router.push("/");
+    router.refresh();
+  }
+
+  async function handleManageSubscription() {
+    try {
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch {
+      // ignore
+    }
+  }
 
   const navLinks = isLoggedIn ? navLinksLoggedIn : navLinksPublic;
 
@@ -121,6 +149,23 @@ export function Header() {
         className={`mobile-menu lg:hidden ${open ? "mobile-menu--open" : ""}`}
       >
         <nav className="mobile-menu__nav">
+          {/* User info (logged in) */}
+          {isLoggedIn && email && (
+            <div className="px-1 pb-2">
+              <div className="text-xs text-muted truncate">{email}</div>
+              <div className="mt-0.5 text-xs font-medium">
+                {plan === "pro" ? (
+                  <span className="text-accent">Pro プラン</span>
+                ) : (
+                  <span className="text-muted">無料プラン</span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {isLoggedIn && <div className="mobile-menu__divider" />}
+
+          {/* Main nav links */}
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -131,25 +176,85 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <div className="mobile-menu__divider" />
-          {isLoggedIn ? (
-            plan === "free" ? (
+
+          {/* Logged-in user menu items */}
+          {isLoggedIn && (
+            <>
+              <div className="mobile-menu__divider" />
               <Link
                 href="/pricing"
-                className="nav-btn mobile-menu__cta"
-                onClick={() => { setOpen(false); trackCTAClick("header_upgrade_mobile", "mobile_menu", "/pricing"); }}
-              >
-                <span>Proにアップグレード</span>
-              </Link>
-            ) : (
-              <Link
-                href="/roleplay"
-                className="nav-btn mobile-menu__cta"
+                className="mobile-menu__link"
                 onClick={() => setOpen(false)}
               >
-                <span>ロープレを始める</span>
+                料金プラン
               </Link>
-            )
+              <Link
+                href="/referral"
+                className="mobile-menu__link flex items-center gap-2"
+                onClick={() => setOpen(false)}
+              >
+                友達を紹介
+                <span className="rounded-full bg-green-500/10 px-1.5 py-0.5 text-[10px] font-bold text-green-500">
+                  ¥1,000 OFF
+                </span>
+              </Link>
+              <Link
+                href="/settings"
+                className="mobile-menu__link"
+                onClick={() => setOpen(false)}
+              >
+                設定
+              </Link>
+              <Link
+                href="/changelog"
+                className="mobile-menu__link"
+                onClick={() => setOpen(false)}
+              >
+                更新情報
+              </Link>
+              {plan === "pro" && (
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    setShowCancelModal(true);
+                  }}
+                  className="mobile-menu__link w-full text-left"
+                >
+                  サブスクリプション管理
+                </button>
+              )}
+            </>
+          )}
+
+          <div className="mobile-menu__divider" />
+
+          {/* CTA / Auth actions */}
+          {isLoggedIn ? (
+            <>
+              {plan === "free" ? (
+                <Link
+                  href="/pricing"
+                  className="nav-btn mobile-menu__cta"
+                  onClick={() => { setOpen(false); trackCTAClick("header_upgrade_mobile", "mobile_menu", "/pricing"); }}
+                >
+                  <span>Proにアップグレード</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/roleplay"
+                  className="nav-btn mobile-menu__cta"
+                  onClick={() => setOpen(false)}
+                >
+                  <span>ロープレを始める</span>
+                </Link>
+              )}
+              <button
+                onClick={handleLogout}
+                className="mobile-menu__link w-full text-left text-red-500"
+              >
+                ログアウト
+              </button>
+            </>
           ) : (
             <>
               <Link
@@ -173,6 +278,11 @@ export function Header() {
     </header>
     {/* Spacer to offset fixed header height */}
     <div className="h-16" />
+    <CancelSaveModal
+      open={showCancelModal}
+      onClose={() => setShowCancelModal(false)}
+      onProceedToCancel={handleManageSubscription}
+    />
     </>
   );
 }
