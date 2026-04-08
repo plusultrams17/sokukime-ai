@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -29,21 +30,56 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { data: conversion } = await supabase
+  // Use admin client for cross-user referral operations
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !supabaseServiceKey) {
+    return NextResponse.json({ error: "Config error" }, { status: 500 });
+  }
+  const admin = createAdminClient(supabaseUrl, supabaseServiceKey);
+
+  const { data: conversion } = await admin
     .from("referral_conversions")
     .select("id, referrer_id, status")
     .eq("id", conversionId)
     .eq("referrer_id", user.id)
     .single();
 
-  if (!conversion || conversion.status === "rewarded") {
+  if (!conversion) {
     return NextResponse.json(
-      { error: "Invalid or already rewarded" },
+      { error: "Conversion not found" },
+      { status: 404 }
+    );
+  }
+
+  // Idempotency: already rewarded
+  if (conversion.status === "rewarded") {
+    return NextResponse.json({ success: true, already: true });
+  }
+
+  // Must be in converted_pro status
+  if (conversion.status !== "converted_pro") {
+    return NextResponse.json(
+      { error: "Friend has not converted to Pro yet" },
       { status: 400 }
     );
   }
 
   const stripe = getStripe();
+
+  // 紹介者のサブスクリプション確認
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("stripe_subscription_id")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile?.stripe_subscription_id) {
+    return NextResponse.json(
+      { error: "Proプランに登録すると自動適用されます" },
+      { status: 400 }
+    );
+  }
 
   try {
     // 紹介者の¥1,000 OFFクーポンを作成/取得
@@ -60,21 +96,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // 紹介者のサブスクリプションにクーポンを適用
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("stripe_subscription_id")
-      .eq("id", user.id)
-      .single();
+    await stripe.subscriptions.update(profile.stripe_subscription_id, {
+      discounts: [{ coupon: coupon.id }],
+    });
 
-    if (profile?.stripe_subscription_id) {
-      await stripe.subscriptions.update(profile.stripe_subscription_id, {
-        discounts: [{ coupon: coupon.id }],
-      });
-    }
-
-    // コンバージョンのステータスを更新
-    await supabase
+    // ステータスを更新（admin clientで確実に）
+    await admin
       .from("referral_conversions")
       .update({
         status: "rewarded",

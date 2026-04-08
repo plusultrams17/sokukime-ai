@@ -56,31 +56,36 @@ export async function GET(request: NextRequest) {
           .eq("user_id", user.id);
 
         if (!count || count === 0) {
-          // Record referral if applicable
-          if (refCode) {
+          // Service role credentials for admin operations (referral + trial)
+          const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+          const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+          // Record referral if applicable (use admin client to bypass RLS)
+          if (refCode && supabaseUrl && supabaseServiceKey) {
             try {
-              const { data: referralCode } = await supabase
+              const adminForRef = createAdminClient(supabaseUrl, supabaseServiceKey);
+              const { data: referralCode } = await adminForRef
                 .from("referral_codes")
                 .select("user_id")
                 .eq("code", refCode.toUpperCase())
                 .single();
 
               if (referralCode && referralCode.user_id !== user.id) {
-                await supabase.from("referral_conversions").insert({
-                  referrer_id: referralCode.user_id,
-                  referee_id: user.id,
-                  status: "signed_up",
-                });
+                await adminForRef.from("referral_conversions").upsert(
+                  {
+                    referrer_id: referralCode.user_id,
+                    referee_id: user.id,
+                    status: "signed_up",
+                  },
+                  { onConflict: "referrer_id,referee_id" }
+                );
               }
             } catch {
-              // Ignore referral errors
+              // Referral tracking failure should not block signup
             }
           }
 
           // Activate reverse trial — 7-day free Pro access
-          // Uses service role to bypass RLS for profile update
-          const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-          const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
           if (supabaseUrl && supabaseServiceKey) {
             try {
               const admin = createAdminClient(supabaseUrl, supabaseServiceKey);

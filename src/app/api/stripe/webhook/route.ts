@@ -213,7 +213,7 @@ export async function POST(request: NextRequest) {
             .eq("id", referral.referrer_id)
             .single();
 
-          if (referrerProfile?.stripe_subscription_id) {
+          if (referrerProfile) {
             try {
               let coupon: Stripe.Coupon;
               try {
@@ -228,26 +228,71 @@ export async function POST(request: NextRequest) {
                 });
               }
 
-              await stripe.subscriptions.update(
-                referrerProfile.stripe_subscription_id,
-                { discounts: [{ coupon: coupon.id }] }
-              );
+              if (referrerProfile.stripe_subscription_id) {
+                // 紹介者がPro会員: クーポンを即時適用
+                await stripe.subscriptions.update(
+                  referrerProfile.stripe_subscription_id,
+                  { discounts: [{ coupon: coupon.id }] }
+                );
 
-              await supabaseAdmin
-                .from("referral_conversions")
-                .update({
-                  status: "rewarded",
-                  referrer_coupon_id: coupon.id,
-                  rewarded_at: new Date().toISOString(),
-                })
-                .eq("id", referral.id);
+                await supabaseAdmin
+                  .from("referral_conversions")
+                  .update({
+                    status: "rewarded",
+                    referrer_coupon_id: coupon.id,
+                    rewarded_at: new Date().toISOString(),
+                  })
+                  .eq("id", referral.id);
+              } else {
+                // 紹介者がFreeプラン: Pro登録時に自動適用されるよう記録のみ
+                // status を converted_pro のままにし、apply-reward で後から適用可能
+                await supabaseAdmin
+                  .from("referral_conversions")
+                  .update({
+                    referrer_coupon_id: coupon.id,
+                  })
+                  .eq("id", referral.id);
+              }
 
-              // 紹介者に報酬通知メールを送信
+              // 紹介者に通知メールを送信（Pro/Free問わず）
               if (referrerProfile.email) {
                 sendTransactionalEmail(referrerProfile.email, "referral_reward", referrerProfile.id);
               }
             } catch (err) {
               console.error("Referral reward error:", err);
+            }
+          }
+        }
+      }
+
+      // 紹介者本人がPro登録した場合: 保留中の報酬を自動適用
+      if (profile) {
+        const { data: pendingRewards } = await supabaseAdmin
+          .from("referral_conversions")
+          .select("id, referrer_coupon_id")
+          .eq("referrer_id", profile.id)
+          .eq("status", "converted_pro");
+
+        if (pendingRewards && pendingRewards.length > 0 && subscriptionId) {
+          for (const pending of pendingRewards) {
+            try {
+              const couponId = pending.referrer_coupon_id || "referral_1000off";
+              await stripe.subscriptions.update(subscriptionId, {
+                discounts: [{ coupon: couponId }],
+              });
+
+              await supabaseAdmin
+                .from("referral_conversions")
+                .update({
+                  status: "rewarded",
+                  rewarded_at: new Date().toISOString(),
+                })
+                .eq("id", pending.id);
+
+              // 1つだけ適用（複数保留がある場合は次月以降）
+              break;
+            } catch (err) {
+              console.error("Pending referral reward error:", err);
             }
           }
         }

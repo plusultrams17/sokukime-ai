@@ -105,12 +105,20 @@ export async function POST(request: NextRequest) {
     let promotionCodeId: string | undefined;
 
     // 1. 被紹介者の場合、¥1,000 OFFクーポンを適用
-    const { data: referral } = await supabase
-      .from("referral_conversions")
-      .select("id")
-      .eq("referee_id", user.id)
-      .eq("status", "signed_up")
-      .single();
+    // Use admin client to bypass RLS (referee has no SELECT policy on referral_conversions)
+    const supabaseUrlRef = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKeyRef = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    let referral: { id: string } | null = null;
+    if (supabaseUrlRef && supabaseServiceKeyRef) {
+      const adminRef = createAdminClient(supabaseUrlRef, supabaseServiceKeyRef);
+      const { data } = await adminRef
+        .from("referral_conversions")
+        .select("id")
+        .eq("referee_id", user.id)
+        .eq("status", "signed_up")
+        .single();
+      referral = data;
+    }
 
     if (referral) {
       try {

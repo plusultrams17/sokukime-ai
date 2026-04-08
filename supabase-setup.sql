@@ -170,6 +170,8 @@ CREATE POLICY "Users insert own referral code" ON referral_codes FOR INSERT WITH
 CREATE POLICY "Anyone can lookup referral code" ON referral_codes FOR SELECT USING (true);
 
 CREATE POLICY "Referrers read own conversions" ON referral_conversions FOR SELECT USING (auth.uid() = referrer_id);
+CREATE POLICY "Referees read own conversions" ON referral_conversions FOR SELECT USING (auth.uid() = referee_id);
+CREATE POLICY "Referees insert own conversions" ON referral_conversions FOR INSERT WITH CHECK (auth.uid() = referee_id);
 
 -- ── 業種いいね (Industry Likes) ──
 CREATE TABLE public.industry_likes (
