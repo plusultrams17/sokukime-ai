@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
     // Parse billing period and promo code from request body
     let billing: "monthly" | "annual" = "monthly";
     let promoCode: string | undefined;
+    let utmParams: Record<string, string> = {};
     try {
       const body = await request.json();
       if (body.billing === "annual") {
@@ -29,6 +30,11 @@ export async function POST(request: NextRequest) {
       }
       if (body.promoCode && typeof body.promoCode === "string") {
         promoCode = body.promoCode.trim();
+      }
+      if (body.utm && typeof body.utm === "object") {
+        for (const [k, v] of Object.entries(body.utm)) {
+          if (typeof v === "string" && v.length < 200) utmParams[k] = v;
+        }
       }
     } catch {
       // Default to monthly if no body
@@ -49,7 +55,7 @@ export async function POST(request: NextRequest) {
         const admin = createAdminClient(supabaseUrl, supabaseServiceKey);
         const { data: newProfile, error: insertError } = await admin
           .from("profiles")
-          .upsert({ id: user.id, email: user.email }, { onConflict: "id" })
+          .upsert({ id: user.id, ...(user.email ? { email: user.email } : {}) }, { onConflict: "id" })
           .select("stripe_customer_id, email")
           .single();
         if (insertError) {
@@ -81,10 +87,39 @@ export async function POST(request: NextRequest) {
       });
       customerId = customer.id;
 
-      await supabase
+      const { error: cidError } = await supabase
         .from("profiles")
         .update({ stripe_customer_id: customerId })
         .eq("id", user.id);
+
+      if (cidError) {
+        console.error("[checkout] stripe_customer_id save failed:", cidError);
+      }
+    }
+
+    // Guard: prevent duplicate subscriptions (active, trialing, or past_due)
+    if (customerId) {
+      const existingSubs = await stripe.subscriptions.list({
+        customer: customerId,
+        status: "active",
+        limit: 1,
+      });
+      const trialingSubs = await stripe.subscriptions.list({
+        customer: customerId,
+        status: "trialing",
+        limit: 1,
+      });
+      const pastDueSubs = await stripe.subscriptions.list({
+        customer: customerId,
+        status: "past_due",
+        limit: 1,
+      });
+      if (existingSubs.data.length > 0 || trialingSubs.data.length > 0 || pastDueSubs.data.length > 0) {
+        return NextResponse.json(
+          { error: "既にProプランに登録されています。" },
+          { status: 400 }
+        );
+      }
     }
 
     // Use annual or monthly price ID
@@ -205,7 +240,7 @@ export async function POST(request: NextRequest) {
       locale: "ja",
       subscription_data: {
         trial_period_days: 7,
-        metadata: { supabase_user_id: user.id },
+        metadata: { supabase_user_id: user.id, ...utmParams },
       },
     });
 

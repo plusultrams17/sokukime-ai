@@ -36,7 +36,7 @@ export function SalesTriviaPopup() {
 
   return (
     <div
-      className="fixed right-4 bottom-4 z-50 w-[340px] max-w-[calc(100vw-2rem)] animate-slide-up"
+      className="fixed right-2 bottom-2 z-50 w-[320px] max-w-[calc(100vw-1rem)] animate-slide-up sm:right-4 sm:bottom-4 sm:w-[340px] sm:max-w-[calc(100vw-2rem)]"
     >
       <div
         className="rounded-2xl border border-white/10 p-4 shadow-2xl backdrop-blur-xl"
@@ -68,7 +68,7 @@ export function SalesTriviaPopup() {
           </div>
           <button
             onClick={dismiss}
-            className="flex h-6 w-6 items-center justify-center rounded-full text-white/30 transition hover:bg-white/10 hover:text-white/60"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-white/30 transition hover:bg-white/10 hover:text-white/60"
             aria-label="閉じる"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">

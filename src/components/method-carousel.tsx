@@ -26,7 +26,8 @@ export function MethodCarousel({ children }: MethodCarouselProps) {
     if (!track) return;
     const parent = track.parentElement;
     if (!parent) return;
-    const cardWidth = 312;
+    // Card width is 18em (288px at 16px base) + gap; use viewport-aware scroll distance
+    const cardWidth = Math.min(312, parent.clientWidth * 0.85);
     parent.scrollBy({ left: dir === "left" ? -cardWidth : cardWidth, behavior: "smooth" });
   }, []);
 

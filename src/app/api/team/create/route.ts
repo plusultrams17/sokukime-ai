@@ -54,11 +54,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Add the owner as a team member
-    await supabase.from("team_members").insert({
+    const { error: memberError } = await supabase.from("team_members").insert({
       org_id: org.id,
       user_id: user.id,
       role: "owner",
     });
+    if (memberError) {
+      console.error("Team member insert error:", memberError);
+      // Clean up the org since the owner can't be added
+      await supabase.from("organizations").delete().eq("id", org.id);
+      return NextResponse.json(
+        { error: "チームメンバーの追加に失敗しました" },
+        { status: 500 }
+      );
+    }
 
     // Get user's Stripe customer ID if exists
     const { data: profile } = await supabase

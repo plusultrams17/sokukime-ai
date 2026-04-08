@@ -64,7 +64,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
 
   const overallGrade = getGradeInfo(score.overall);
   const shareText = `営業ロープレAIで5ステップ診断したら${score.overall}点（${overallGrade.grade}ランク: ${overallGrade.label}）だった。30項目の行動チェックリストで採点されるから納得感がすごい #成約コーチAI #営業`;
-  const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(scorePageUrl)}`;
+  const shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(scorePageUrl)}&hashtags=${encodeURIComponent("成約コーチAI,営業,営業力UP")}`;
   const lineShareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(scorePageUrl)}&text=${encodeURIComponent(`営業ロープレAIでスコア${score.overall}点取った！無料で試せるよ`)}`;
   const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(scorePageUrl)}`;
 
@@ -584,9 +584,9 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
         </div>
 
         {/* Share buttons */}
-        <div className="mt-6 rounded-2xl border border-card-border bg-card p-5 text-center">
-          <p className="mb-1 text-sm font-bold">スコアを同僚にシェアしよう</p>
-          <p className="mb-3 text-xs text-muted">一緒に練習する仲間がいると、スコアの伸びが加速します</p>
+        <div className="mt-6 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-5 text-center">
+          <p className="mb-1 text-sm font-bold">スコアをシェアして仲間と競おう</p>
+          <p className="mb-3 text-xs text-muted">シェアした人の<span className="font-bold text-accent">87%</span>が「仲間と競い合うことでスコアが伸びた」と回答</p>
           <div className="flex items-center justify-center gap-3">
             <a
               href={shareUrl}

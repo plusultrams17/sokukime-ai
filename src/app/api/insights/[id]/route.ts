@@ -36,7 +36,7 @@ export async function GET(
         .select("*", { count: "exact", head: true })
         .eq("user_id", user.id)
         .eq("used_date", today)
-        .eq("action_type", "view");
+        .eq("action", "view");
 
       if ((count || 0) >= 3) {
         return NextResponse.json(
@@ -51,7 +51,7 @@ export async function GET(
       .from("insights")
       .select("*")
       .eq("id", id)
-      .eq("status", "published")
+      .eq("status", "active")
       .single();
 
     if (error || !insight) {
@@ -62,15 +62,15 @@ export async function GET(
     await supabase.from("insight_interactions").insert({
       user_id: user.id,
       insight_id: id,
-      interaction_type: "view",
+      action: "view",
     });
 
     // Record usage for Free limit tracking
-    const today = new Date().toISOString().split("T")[0];
+    const todayForUsage = new Date().toISOString().split("T")[0];
     await supabase.from("insight_usage").insert({
       user_id: user.id,
-      used_date: today,
-      action_type: "view",
+      used_date: todayForUsage,
+      action: "view",
     });
 
     return NextResponse.json({ insight });

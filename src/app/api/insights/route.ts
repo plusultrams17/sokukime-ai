@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .from("insights")
       .select("*")
-      .eq("status", "published")
+      .eq("status", "active")
       .lte("published_date", today)
       .order("published_date", { ascending: false })
       .limit(50);

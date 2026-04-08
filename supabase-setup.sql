@@ -533,6 +533,13 @@ ALTER TABLE sales_talk_cache ENABLE ROW LEVEL SECURITY;
 -- All authenticated users can read cache (shared resource)
 CREATE POLICY "Authenticated users read sales talk cache" ON sales_talk_cache
   FOR SELECT USING (auth.role() = 'authenticated');
+-- Allow authenticated users to write cache entries
+CREATE POLICY "Authenticated users insert sales talk cache" ON sales_talk_cache
+  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+-- Allow users to delete their own insight interactions (unsave)
+CREATE POLICY "Users delete own insight interactions" ON insight_interactions
+  FOR DELETE USING (auth.uid() = user_id);
 
 -- =============================================
 -- 法人チームプラン（Organizations & Team Members）

@@ -50,16 +50,25 @@ export async function GET(request: NextRequest) {
 
     if (user) {
       try {
-        const { count } = await supabase
-          .from("usage_records")
-          .select("id", { count: "exact", head: true })
-          .eq("user_id", user.id);
+        // Service role credentials for admin operations (referral + trial)
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-        if (!count || count === 0) {
-          // Service role credentials for admin operations (referral + trial)
-          const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-          const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        // Detect first-time user by checking trial_ends_at (not usage_records — avoids infinite re-activation)
+        let isFirstTime = true;
+        if (supabaseUrl && supabaseServiceKey) {
+          const adminCheck = createAdminClient(supabaseUrl, supabaseServiceKey);
+          const { data: existingProfile } = await adminCheck
+            .from("profiles")
+            .select("trial_ends_at")
+            .eq("id", user.id)
+            .single();
+          if (existingProfile?.trial_ends_at) {
+            isFirstTime = false;
+          }
+        }
 
+        if (isFirstTime) {
           // Record referral if applicable (use admin client to bypass RLS)
           if (refCode && supabaseUrl && supabaseServiceKey) {
             try {
@@ -71,31 +80,35 @@ export async function GET(request: NextRequest) {
                 .single();
 
               if (referralCode && referralCode.user_id !== user.id) {
+                // ignoreDuplicates prevents regressing status if user already converted
                 await adminForRef.from("referral_conversions").upsert(
                   {
                     referrer_id: referralCode.user_id,
                     referee_id: user.id,
                     status: "signed_up",
                   },
-                  { onConflict: "referrer_id,referee_id" }
+                  { onConflict: "referrer_id,referee_id", ignoreDuplicates: true }
                 );
               }
-            } catch {
-              // Referral tracking failure should not block signup
+            } catch (err) {
+              console.error("[auth/callback] Referral tracking failed:", err);
             }
           }
 
           // Activate reverse trial — 7-day free Pro access
+          // Use upsert to handle race condition where profile row may not exist yet
           if (supabaseUrl && supabaseServiceKey) {
             try {
               const admin = createAdminClient(supabaseUrl, supabaseServiceKey);
               const trialEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-              await admin.from("profiles").update({
+              await admin.from("profiles").upsert({
+                id: user.id,
+                ...(user.email ? { email: user.email } : {}),
                 plan: "pro",
                 trial_ends_at: trialEnd,
-              }).eq("id", user.id);
-            } catch {
-              // Trial activation failure should not block signup
+              }, { onConflict: "id" });
+            } catch (err) {
+              console.error("[auth/callback] Reverse trial activation failed:", err);
             }
           }
 

@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         .delete()
         .eq("user_id", user.id)
         .eq("insight_id", insightId)
-        .eq("interaction_type", "save");
+        .eq("action", "save");
 
       return NextResponse.json({ success: true });
     }
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const { error } = await supabase.from("insight_interactions").insert({
       user_id: user.id,
       insight_id: insightId,
-      interaction_type: type,
+      action: type,
     });
 
     if (error) {

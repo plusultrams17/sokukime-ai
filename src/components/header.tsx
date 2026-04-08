@@ -14,10 +14,10 @@ const navLinksPublic = [
 ];
 
 const navLinksLoggedIn = [
-  { href: "/learn", label: "学習コース" },
   { href: "/roleplay", label: "AIロープレ" },
+  { href: "/dashboard", label: "ダッシュボード" },
+  { href: "/learn", label: "学習コース" },
   { href: "/challenge", label: "チャレンジ" },
-  { href: "/pricing", label: "料金プラン" },
 ];
 
 export function Header() {
@@ -117,15 +117,6 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          {isLoggedIn && (
-            <Link
-              href="/dashboard"
-              className="mobile-menu__link"
-              onClick={() => setOpen(false)}
-            >
-              ダッシュボード
-            </Link>
-          )}
           <div className="mobile-menu__divider" />
           {isLoggedIn ? (
             plan === "free" ? (

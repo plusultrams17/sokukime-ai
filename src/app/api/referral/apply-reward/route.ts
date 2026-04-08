@@ -96,8 +96,13 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Preserve existing discounts and append new one (avoid replacing active discounts)
+    const currentSub = await stripe.subscriptions.retrieve(profile.stripe_subscription_id);
+    const existingDiscounts = (currentSub.discounts || [])
+      .filter((d): d is Stripe.Discount => typeof d !== "string" && !!d.id)
+      .map(d => ({ discount: d.id }));
     await stripe.subscriptions.update(profile.stripe_subscription_id, {
-      discounts: [{ coupon: coupon.id }],
+      discounts: [...existingDiscounts, { coupon: coupon.id }],
     });
 
     // ステータスを更新（admin clientで確実に）

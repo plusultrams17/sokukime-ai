@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { SalesTriviaCard } from "@/components/sales-trivia-card";
+import { getGradeInfo } from "@/lib/grade";
 
 interface DashboardData {
   totalSessions: number;
@@ -22,19 +23,37 @@ interface DashboardData {
 }
 
 function getScoreColor(score: number) {
-  if (score >= 80) return "text-green-500";
-  if (score >= 60) return "text-yellow-500";
-  if (score >= 40) return "text-orange-500";
-  return "text-red-500";
+  return getGradeInfo(score).color;
 }
 
-function getGrade(score: number) {
-  if (score >= 90) return "S";
-  if (score >= 80) return "A";
-  if (score >= 70) return "B";
-  if (score >= 60) return "C";
-  if (score >= 40) return "D";
-  return "E";
+/** Rank thresholds aligned with src/lib/grade.ts GRADES */
+const RANK_THRESHOLDS = [
+  { min: 81, grade: "S" as const, next: null },
+  { min: 61, grade: "A" as const, next: "S" as const },
+  { min: 41, grade: "B" as const, next: "A" as const },
+  { min: 21, grade: "C" as const, next: "B" as const },
+  { min: 0,  grade: "D" as const, next: "C" as const },
+];
+
+function getRankProgress(score: number) {
+  for (let i = 0; i < RANK_THRESHOLDS.length; i++) {
+    const t = RANK_THRESHOLDS[i];
+    if (score >= t.min) {
+      if (!t.next) {
+        return { grade: t.grade, nextGrade: null, pointsToNext: 0, progress: 100 };
+      }
+      const nextMin = RANK_THRESHOLDS[i - 1].min;
+      const rangeSize = nextMin - t.min;
+      const pointsInRange = score - t.min;
+      return {
+        grade: t.grade,
+        nextGrade: t.next,
+        pointsToNext: nextMin - score,
+        progress: Math.round((pointsInRange / rangeSize) * 100),
+      };
+    }
+  }
+  return { grade: "D" as const, nextGrade: "C" as const, pointsToNext: 21 - score, progress: 0 };
 }
 
 /** Map scoring categories to learning course levels */
@@ -55,7 +74,7 @@ function ScoreChart({ history }: { history: { score: number; date: string }[] })
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="min-w-[280px]" style={{ height: `${height + 24}px` }}>
+      <div className="min-w-[240px] sm:min-w-[280px]" style={{ height: `${height + 24}px` }}>
         <svg viewBox={`0 0 ${width} ${height + 20}`} className="w-full h-full" preserveAspectRatio="none">
           {[40, 80].map((v) => (
             <line
@@ -102,6 +121,109 @@ function ScoreChart({ history }: { history: { score: number; date: string }[] })
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function NPSInline() {
+  const [selectedScore, setSelectedScore] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState("");
+  const [phase, setPhase] = useState<"ask" | "followup" | "done">("ask");
+  const [submitting, setSubmitting] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("nps_answered")) setDismissed(true);
+  }, []);
+
+  if (dismissed || phase === "done") return null;
+
+  const handleScore = (score: number) => {
+    setSelectedScore(score);
+    setPhase("followup");
+  };
+
+  const handleFollowup = async () => {
+    setSubmitting(true);
+    try {
+      await fetch("/api/nps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          score: selectedScore,
+          feedback: feedback.trim() || null,
+        }),
+      });
+    } catch { /* ignore */ }
+    localStorage.setItem("nps_answered", "1");
+    setPhase("done");
+  };
+
+  const category = selectedScore !== null
+    ? selectedScore <= 6 ? "detractor" : selectedScore <= 8 ? "passive" : "promoter"
+    : null;
+
+  const followUpText: Record<string, string> = {
+    detractor: "改善すべき点を教えてください。",
+    passive: "もっと良くするために何ができるでしょうか？",
+    promoter: "特に気に入っている点を教えてください！",
+  };
+
+  return (
+    <div className="rounded-xl border border-card-border bg-card p-5">
+      {phase === "ask" && (
+        <>
+          <p className="mb-1 text-sm font-bold text-center">
+            このサービスを友人・同僚に薦める可能性はどのくらいですか？
+          </p>
+          <p className="mb-4 text-xs text-muted text-center">
+            0（全く薦めない）〜 10（強く薦める）
+          </p>
+          <div className="flex justify-center gap-1.5">
+            {Array.from({ length: 11 }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => handleScore(i)}
+                className={`h-9 w-9 rounded-lg text-sm font-bold transition ${
+                  i <= 6
+                    ? "border border-card-border hover:border-red-400 hover:bg-red-400/10 hover:text-red-400"
+                    : i <= 8
+                    ? "border border-card-border hover:border-yellow-500 hover:bg-yellow-500/10 hover:text-yellow-500"
+                    : "border border-card-border hover:border-green-500 hover:bg-green-500/10 hover:text-green-500"
+                }`}
+              >
+                {i}
+              </button>
+            ))}
+          </div>
+          <div className="flex justify-between mt-2 text-[10px] text-muted px-0.5">
+            <span>全く薦めない</span>
+            <span>強く薦める</span>
+          </div>
+        </>
+      )}
+
+      {phase === "followup" && category && (
+        <>
+          <p className="mb-3 text-sm text-center text-muted">
+            {followUpText[category]}（任意）
+          </p>
+          <textarea
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="自由にご記入ください..."
+            rows={3}
+            className="w-full rounded-lg border border-card-border bg-background px-4 py-3 text-sm focus:border-accent focus:outline-none resize-none mb-3"
+          />
+          <button
+            onClick={handleFollowup}
+            disabled={submitting}
+            className="w-full rounded-lg bg-accent py-2.5 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-50"
+          >
+            {feedback.trim() ? "送信する" : "スキップ"}
+          </button>
+        </>
+      )}
     </div>
   );
 }
@@ -213,34 +335,47 @@ export default function DashboardPage() {
 
       <div className="mx-auto max-w-4xl px-6 py-10">
 
-        {/* Hero: Quick Actions — always visible, always at top */}
+        {/* Hero: Quick Actions */}
         <div className="mb-8">
-          <h1 className="mb-1 text-2xl font-bold">今日も練習しよう</h1>
+          <h1 className="mb-1 text-2xl font-bold">
+            {hasScores ? "今日も練習しよう" : "営業力をスコア化しよう"}
+          </h1>
           <p className="mb-5 text-sm text-muted">
             {hasScores
               ? `最新スコア ${data.latestScore}点${data.scoreTrend > 0 ? `（+${data.scoreTrend}）` : ""} -- ${data.weakestCategory ? `${data.weakestCategory.name}を重点的に` : "この調子で続けましょう"}`
-              : "まずはAIロープレを試して、あなたの営業力をスコア化しましょう"}
+              : "3分のAIロープレであなたの営業力が5段階でわかります"}
           </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/roleplay"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover"
-            >
-              AIロープレを始める
-            </Link>
-            <Link
-              href="/learn"
-              className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 px-8 text-sm font-bold text-accent transition hover:bg-accent/5"
-            >
-              レッスンで学ぶ
-            </Link>
-            <Link
-              href="/referral"
-              className="inline-flex h-12 items-center justify-center rounded-xl border border-card-border px-6 text-sm font-medium text-muted transition hover:text-foreground hover:border-accent/30"
-            >
-              友達を紹介して¥1,000 OFF
-            </Link>
-          </div>
+          {!hasScores ? (
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <Link
+                href="/roleplay"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover"
+              >
+                AIロープレを始める
+              </Link>
+              <Link
+                href="/learn"
+                className="text-sm text-muted hover:text-accent transition ml-1"
+              >
+                まずレッスンで学ぶ →
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/roleplay"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover"
+              >
+                AIロープレを始める
+              </Link>
+              <Link
+                href="/learn"
+                className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-accent/30 px-8 text-sm font-bold text-accent transition hover:bg-accent/5"
+              >
+                レッスンで学ぶ
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Trial Banner — compact, essential for conversion */}
@@ -276,24 +411,66 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* 今日の営業豆知識 */}
-        <div className="mb-6">
-          <SalesTriviaCard />
-        </div>
+        {/* 今日の営業豆知識 — 新規ユーザーのみ */}
+        {!hasScores && (
+          <div className="mb-6">
+            <SalesTriviaCard />
+          </div>
+        )}
+
+        {/* Rank Card — 既存ユーザーのみ */}
+        {hasScores && (() => {
+          const rank = getRankProgress(data.avgScore);
+          const gradeInfo = getGradeInfo(data.avgScore);
+          return (
+            <div className="mb-6 rounded-xl border border-card-border bg-card p-5">
+              <div className="flex items-center gap-4">
+                <div className={`text-5xl font-black ${gradeInfo.color}`}>
+                  {rank.grade}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-bold mb-1">
+                    {rank.grade} ランク
+                    <span className="ml-2 text-xs font-normal text-muted">
+                      平均 {data.avgScore}点
+                    </span>
+                  </div>
+                  {rank.nextGrade ? (
+                    <>
+                      <div className="h-2 overflow-hidden rounded-full bg-card-border mb-1">
+                        <div
+                          className={`h-full rounded-full ${gradeInfo.barClass} transition-all duration-700`}
+                          style={{ width: `${rank.progress}%` }}
+                        />
+                      </div>
+                      <div className="text-xs text-muted">
+                        {rank.nextGrade}ランクまであと{rank.pointsToNext}点
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-sm font-medium text-green-400">
+                      最高ランク達成
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Stats — 3 cards max, only when scores exist */}
         {hasScores && (
-          <div className="mb-6 grid grid-cols-3 gap-3">
-            <div className="rounded-xl border border-card-border bg-card p-4 text-center">
-              <div className="text-xs text-muted mb-1">ベスト</div>
-              <div className={`text-2xl font-bold ${getScoreColor(data.bestScore)}`}>
+          <div className="mb-6 grid grid-cols-3 gap-2 sm:gap-3">
+            <div className="rounded-xl border border-card-border bg-card p-3 text-center sm:p-4">
+              <div className="text-[10px] text-muted mb-1 sm:text-xs">ベスト</div>
+              <div className={`text-xl font-bold sm:text-2xl ${getScoreColor(data.bestScore)}`}>
                 {data.bestScore}
               </div>
-              <div className="text-[11px] text-muted">ランク {getGrade(data.bestScore)}</div>
+              <div className="text-[10px] text-muted sm:text-[11px]">ランク {getGradeInfo(data.bestScore).grade}</div>
             </div>
-            <div className="rounded-xl border border-card-border bg-card p-4 text-center">
-              <div className="text-xs text-muted mb-1">最新</div>
-              <div className={`text-2xl font-bold ${getScoreColor(data.latestScore)}`}>
+            <div className="rounded-xl border border-card-border bg-card p-3 text-center sm:p-4">
+              <div className="text-[10px] text-muted mb-1 sm:text-xs">最新</div>
+              <div className={`text-xl font-bold sm:text-2xl ${getScoreColor(data.latestScore)}`}>
                 {data.latestScore}
               </div>
               {data.scoreTrend !== 0 && (
@@ -302,10 +479,10 @@ export default function DashboardPage() {
                 </div>
               )}
             </div>
-            <div className="rounded-xl border border-card-border bg-card p-4 text-center">
-              <div className="text-xs text-muted mb-1">練習回数</div>
-              <div className="text-2xl font-bold">{data.totalSessions}</div>
-              <div className="text-[11px] text-muted">セッション</div>
+            <div className="rounded-xl border border-card-border bg-card p-3 text-center sm:p-4">
+              <div className="text-[10px] text-muted mb-1 sm:text-xs">練習回数</div>
+              <div className="text-xl font-bold sm:text-2xl">{data.totalSessions}</div>
+              <div className="text-[10px] text-muted sm:text-[11px]">セッション</div>
             </div>
           </div>
         )}
@@ -353,38 +530,20 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Empty State — for users with sessions but no scores yet */}
-        {!hasScores && (
-          <div className="mb-6 rounded-xl border border-card-border bg-card p-6 text-center">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            <h2 className="mb-1 text-base font-bold">まだスコアがありません</h2>
-            <p className="mb-4 text-sm text-muted">
-              ロープレを完了するとスコアが記録されます
-            </p>
-            <Link
-              href="/roleplay"
-              className="inline-flex h-10 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
-            >
-              最初のロープレを始める
+        {/* Pro CTA — 既存フリーユーザーのみ、控えめ表示 */}
+        {data.plan === "free" && hasScores && (
+          <div className="mb-6 text-center text-sm text-muted">
+            Proなら無制限ロープレ + AIコーチ（7日間無料）
+            <Link href="/pricing" className="ml-1 text-accent hover:underline font-medium">
+              詳しく見る →
             </Link>
           </div>
         )}
 
-        {/* Single Upgrade CTA for free users — one clear spot, not scattered */}
-        {data.plan === "free" && (
-          <div className="mb-6 rounded-xl border border-accent/30 bg-gradient-to-br from-accent/5 to-transparent p-5 text-center">
-            <p className="mb-1 text-sm font-bold">Proなら無制限ロープレ + AIコーチで短期間にスコアアップ</p>
-            <p className="mb-3 text-xs text-muted">
-              7日間完全無料 -- ¥2,980/月 -- いつでも解約OK
-            </p>
-            <Link
-              href="/pricing"
-              className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
-            >
-              7日間無料でProを試す
-            </Link>
-          </div>
-        )}
+        {/* NPS Survey — ページ最下部 */}
+        <div className="mb-6">
+          <NPSInline />
+        </div>
       </div>
 
       <Footer />

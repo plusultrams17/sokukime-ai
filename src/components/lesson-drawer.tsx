@@ -91,7 +91,7 @@ export function LessonDrawer({ open, onClose, currentStepNumber, lessonSlug }: L
       {/* Panel — right slide on desktop, bottom slide on mobile */}
       <div
         className={`fixed z-50 flex flex-col bg-background transition-[transform,visibility] duration-300 ease-out
-          inset-x-0 bottom-0 top-0 md:inset-y-0 md:left-auto md:right-0 md:w-[420px]
+          inset-x-0 bottom-0 top-0 md:inset-y-0 md:left-auto md:right-0 md:w-[380px] lg:w-[420px]
           ${open ? "visible translate-x-0 translate-y-0" : "invisible translate-y-full md:translate-y-0 md:translate-x-full"}`}
         role="dialog"
         aria-modal={open}

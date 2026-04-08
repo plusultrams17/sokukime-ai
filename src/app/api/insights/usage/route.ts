@@ -33,7 +33,7 @@ export async function GET(_request: NextRequest) {
       .select("*", { count: "exact", head: true })
       .eq("user_id", user.id)
       .eq("used_date", today)
-      .eq("action_type", "view");
+      .eq("action", "view");
 
     return NextResponse.json({
       viewedToday: count || 0,

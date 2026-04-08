@@ -142,15 +142,15 @@ export default function FeaturesPage() {
           <h2 className="mb-8 text-center text-2xl font-bold">
             従来の営業練習との違い
           </h2>
-          <div className="overflow-hidden rounded-2xl border border-card-border">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto rounded-2xl border border-card-border">
+            <table className="w-full min-w-[480px] text-sm">
               <thead>
                 <tr className="border-b border-card-border bg-card">
-                  <th className="px-6 py-4 text-left text-muted font-medium" />
-                  <th className="px-6 py-4 text-center text-muted font-medium">
+                  <th className="px-3 py-3 text-left text-muted font-medium sm:px-6 sm:py-4" />
+                  <th className="px-3 py-3 text-center text-muted font-medium sm:px-6 sm:py-4">
                     従来のロープレ
                   </th>
-                  <th className="px-6 py-4 text-center font-bold text-accent">
+                  <th className="px-3 py-3 text-center font-bold text-accent sm:px-6 sm:py-4">
                     成約コーチAI
                   </th>
                 </tr>
@@ -168,11 +168,11 @@ export default function FeaturesPage() {
                     key={label}
                     className="border-b border-card-border last:border-0"
                   >
-                    <td className="px-6 py-3 font-medium">{label}</td>
-                    <td className="px-6 py-3 text-center text-muted">
+                    <td className="px-3 py-3 font-medium sm:px-6">{label}</td>
+                    <td className="px-3 py-3 text-center text-muted sm:px-6">
                       {traditional}
                     </td>
-                    <td className="px-6 py-3 text-center text-accent font-medium">
+                    <td className="px-3 py-3 text-center text-accent font-medium sm:px-6">
                       {ai}
                     </td>
                   </tr>

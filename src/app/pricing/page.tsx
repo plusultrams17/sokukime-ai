@@ -11,6 +11,7 @@ import { PricingExitPopup } from "@/components/exit-popups/pricing-exit-popup";
 import { UserReviews } from "@/components/user-reviews";
 import { getActivePromotion } from "@/lib/promotions";
 import { createClient } from "@/lib/supabase/client";
+import { getStoredUTM } from "@/components/utm-tracker";
 
 const features = [
   { name: "学習コース（22レッスン）", free: "全レッスン", pro: "全レッスン" },
@@ -85,7 +86,7 @@ export default function PricingPage() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...(promoCode ? { promoCode } : {}) }),
+        body: JSON.stringify({ ...(promoCode ? { promoCode } : {}), utm: getStoredUTM() }),
       });
       const data = await res.json();
       if (data.url) {

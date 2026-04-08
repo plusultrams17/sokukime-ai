@@ -51,15 +51,15 @@ export async function POST(request: NextRequest) {
     // Check cache first
     const { data: cached } = await supabase
       .from("sales_talk_cache")
-      .select("sales_talk_ja")
+      .select("talk_script")
       .eq("insight_id", insightId)
       .eq("industry_slug", industrySlug)
       .eq("product_hash", productHash)
       .single();
 
-    if (cached?.sales_talk_ja) {
+    if (cached?.talk_script) {
       try {
-        const patterns = JSON.parse(cached.sales_talk_ja);
+        const patterns = JSON.parse(cached.talk_script);
         return NextResponse.json({ patterns: patterns.patterns || patterns });
       } catch {
         // Invalid cached JSON, regenerate
@@ -135,15 +135,14 @@ JSON形式で返してください:
       insight_id: insightId,
       industry_slug: industrySlug,
       product_hash: productHash,
-      sales_talk_ja: JSON.stringify(parsed),
+      talk_script: JSON.stringify(parsed),
     });
 
     // Record convert interaction
     await supabase.from("insight_interactions").insert({
       user_id: user.id,
       insight_id: insightId,
-      interaction_type: "convert",
-      metadata: { industry: industrySlug, product: product || null },
+      action: "convert",
     });
 
     return NextResponse.json({ patterns });

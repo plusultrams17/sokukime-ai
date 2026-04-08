@@ -52,7 +52,7 @@ export default function ReferralPage() {
   function handleShareX() {
     trackReferralShareClicked("x");
     window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+      `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&hashtags=${encodeURIComponent("成約コーチAI,営業,営業力UP")}`,
       "_blank"
     );
   }
@@ -164,21 +164,21 @@ export default function ReferralPage() {
               <h2 className="mb-4 text-sm font-medium text-muted">
                 紹介の成果
               </h2>
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-3 gap-2 text-center sm:gap-4">
                 <div>
-                  <div className="text-2xl font-bold text-accent">
+                  <div className="text-xl font-bold text-accent sm:text-2xl">
                     {stats.totalReferrals}
                   </div>
                   <div className="text-[10px] text-muted">紹介した人数</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-accent">
+                  <div className="text-xl font-bold text-accent sm:text-2xl">
                     {stats.convertedToPro}
                   </div>
                   <div className="text-[10px] text-muted">Pro変換</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-accent">
+                  <div className="text-xl font-bold text-accent sm:text-2xl">
                     ¥{stats.totalRewardsEarned.toLocaleString()}
                   </div>
                   <div className="text-[10px] text-muted">獲得報酬</div>

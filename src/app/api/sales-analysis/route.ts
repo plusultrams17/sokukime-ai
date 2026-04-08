@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { createClient } from "@/lib/supabase/server";
 
 const ANALYSIS_PROMPT = `あなたは成約5ステップメソッドの専門コンサルタントです。
 与えられた商材・サービス情報を分析し、営業現場で即座に使える武器を作成してください。
@@ -66,6 +67,15 @@ function getAnthropicClient(): Anthropic | null {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient();
+    if (!supabase) {
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "ログインが必要です" }, { status: 401 });
+    }
+
     const body = await request.json();
     const { url, productName, industry } = body;
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { trackCTAClick, trackCheckoutStarted } from "@/lib/tracking";
 import { createClient } from "@/lib/supabase/client";
+import { getStoredUTM } from "@/components/utm-tracker";
 
 interface UpgradeModalProps {
   open: boolean;
@@ -59,7 +60,7 @@ export function UpgradeModal({
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ billing }),
+        body: JSON.stringify({ billing, utm: getStoredUTM() }),
       });
       const data = await res.json();
       if (data.url) {

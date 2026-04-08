@@ -53,7 +53,11 @@ export async function POST() {
     );
   }
 
-  await recordUsage(supabase, user.id);
+  const { error: usageError } = await recordUsage(supabase, user.id);
+  if (usageError) {
+    console.error("Usage record insert failed:", usageError);
+    return NextResponse.json({ error: "使用記録の保存に失敗しました" }, { status: 500 });
+  }
 
   // Send onboarding emails based on total roleplay count (fire-and-forget)
   if (user.email) {

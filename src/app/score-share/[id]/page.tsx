@@ -81,15 +81,15 @@ export default async function ScoreSharePage(
 
       <div className="mx-auto max-w-lg px-6 py-12">
         {/* Score Hero */}
-        <div className="mb-8 rounded-2xl border border-card-border bg-card p-8 text-center">
+        <div className="mb-8 rounded-2xl border border-card-border bg-card p-5 text-center sm:p-8">
           <div className="mb-2 text-sm text-muted">営業ロープレ AIスコア</div>
-          <div className="flex items-center justify-center gap-4">
-            <span className={`text-7xl font-black ${gi.color}`}>
+          <div className="flex items-center justify-center gap-3 sm:gap-4">
+            <span className={`text-5xl font-black sm:text-7xl ${gi.color}`}>
               {score.overall_score}
             </span>
-            <span className="text-4xl font-black text-muted/30">/ 100</span>
+            <span className="text-2xl font-black text-muted/30 sm:text-4xl">/ 100</span>
           </div>
-          <div className={`mt-2 text-2xl font-bold ${gi.color}`}>
+          <div className={`mt-2 text-xl font-bold sm:text-2xl ${gi.color}`}>
             {gi.grade}ランク: {gi.label}
           </div>
           {score.industry && (

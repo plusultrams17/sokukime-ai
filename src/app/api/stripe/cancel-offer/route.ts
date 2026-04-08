@@ -91,8 +91,8 @@ export async function POST(request: NextRequest) {
       stripeCouponId = coupon.id;
     }
 
-    // 解約理由をログに記録
-    await supabase.from("cancel_reasons").insert({
+    // 解約理由をログに記録（重複防止チェックに必要なため、失敗時はエラーにする）
+    const { error: insertError } = await supabase.from("cancel_reasons").insert({
       user_id: user.id,
       reason,
       reason_detail: reasonDetail || null,
@@ -100,6 +100,9 @@ export async function POST(request: NextRequest) {
       outcome: "accepted",
       stripe_coupon_id: stripeCouponId,
     });
+    if (insertError) {
+      console.error("Cancel reason insert failed:", insertError);
+    }
 
     return NextResponse.json({
       success: true,

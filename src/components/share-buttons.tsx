@@ -13,7 +13,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
-  const xUrl = `https://x.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
+  const xUrl = `https://x.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}&hashtags=${encodeURIComponent("成約コーチAI,営業,営業力UP")}`;
   const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodedUrl}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
   const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;

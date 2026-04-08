@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,22 +45,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "招待の有効期限が切れています" }, { status: 410 });
     }
 
-    // Verify the user's email matches the invitation (if they have a profile)
+    // Verify the user's email matches the invitation
     const { data: profile } = await supabase
       .from("profiles")
       .select("email")
       .eq("id", user.id)
       .single();
 
-    if (profile?.email && profile.email.toLowerCase() !== invitation.email.toLowerCase()) {
+    // Use profile email or auth email — reject if neither matches the invitation
+    const userEmail = profile?.email || user.email;
+    if (!userEmail || userEmail.toLowerCase() !== invitation.email.toLowerCase()) {
       return NextResponse.json(
         { error: `この招待は ${invitation.email} 宛てです。該当するアカウントでログインしてください。` },
         { status: 403 }
       );
     }
 
+    // Use admin client for cross-user operations (INSERT team_members, UPDATE team_invitations)
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
+    const admin = createAdminClient(supabaseUrl, supabaseServiceKey);
+
     // Check if already a member of this org
-    const { data: existingMember } = await supabase
+    const { data: existingMember } = await admin
       .from("team_members")
       .select("id")
       .eq("org_id", invitation.org_id)
@@ -68,7 +79,7 @@ export async function POST(request: NextRequest) {
 
     if (existingMember) {
       // Mark invitation as accepted anyway
-      await supabase
+      await admin
         .from("team_invitations")
         .update({ status: "accepted" })
         .eq("id", invitation.id);
@@ -77,13 +88,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Check member count vs limit
-    const { data: org } = await supabase
+    const { data: org } = await admin
       .from("organizations")
       .select("max_members")
       .eq("id", invitation.org_id)
       .single();
 
-    const { count: memberCount } = await supabase
+    const { count: memberCount } = await admin
       .from("team_members")
       .select("id", { count: "exact", head: true })
       .eq("org_id", invitation.org_id);
@@ -96,7 +107,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Add user to team
-    const { error: joinError } = await supabase
+    const { error: joinError } = await admin
       .from("team_members")
       .insert({
         org_id: invitation.org_id,
@@ -110,7 +121,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Mark invitation as accepted
-    await supabase
+    await admin
       .from("team_invitations")
       .update({ status: "accepted" })
       .eq("id", invitation.id);

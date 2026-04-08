@@ -86,6 +86,16 @@ const tools = [
     keywords: ["反論 切り返し", "60秒 チャレンジ"],
     time: "約5分",
   },
+  {
+    slug: "virtual-roleplay",
+    name: "3Dバーチャル営業ロープレ",
+    description:
+      "3D仮想空間の社長室でAI相手に商談体験。リアルな訪問営業シーンをバーチャルで再現。懐疑的な社長に業務効率化SaaSを提案せよ。",
+    icon: "",
+    image: "",
+    keywords: ["3D ロープレ", "バーチャル 商談"],
+    time: "約5分",
+  },
 ];
 
 const SITE_URL =
@@ -134,7 +144,7 @@ export default function ToolsPage() {
             営業力を鍛える<span className="text-accent">無料ツール</span>
           </h1>
           <p className="mx-auto max-w-2xl text-base text-white/70 leading-relaxed sm:text-lg">
-            今すぐ使える7つの営業支援ツール。
+            今すぐ使える8つの営業支援ツール。
             <br className="hidden sm:block" />
             診断・生成・学習・分析で、あなたの営業スキルを底上げします。
           </p>

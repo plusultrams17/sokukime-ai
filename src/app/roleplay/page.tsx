@@ -748,38 +748,20 @@ export default function RoleplayPage() {
                     setPendingAutoStart(true);
                   }}
                   disabled={isCheckingUsage || (usage !== null && !usage.canStart)}
-                  className="pixar-card text-left transition-transform active:scale-[0.98] hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
-                  style={{
-                    padding: '1.1em 1em',
-                    background: '#fdfaf3',
-                    borderColor: '#d4cabb',
-                    cursor: 'pointer',
-                  }}
+                  className="pixar-card text-left transition-transform active:scale-[0.98] hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer bg-[#fdfaf3] border-[#d4cabb] p-3 sm:p-4"
                   aria-label={`${t.name}のロープレを開始: ${t.description}`}
                 >
                   <div className="flex items-start gap-3">
                     {t.icon ? (
                       <div
                         aria-hidden="true"
-                        style={{
-                          fontSize: '2rem',
-                          lineHeight: 1,
-                          flexShrink: 0,
-                        }}
+                        className="shrink-0 text-2xl leading-none sm:text-[2rem]"
                       >
                         {t.icon}
                       </div>
                     ) : null}
                     <div className="flex-1 min-w-0">
-                      <div
-                        style={{
-                          fontSize: '1.1rem',
-                          fontWeight: 800,
-                          color: '#4d4c4a',
-                          marginBottom: '0.25em',
-                          lineHeight: 1.3,
-                        }}
-                      >
+                      <div className="text-base font-extrabold text-[#4d4c4a] mb-1 leading-snug sm:text-lg">
                         {t.name}
                       </div>
                       <div

@@ -66,7 +66,7 @@ export async function POST() {
     }
 
     const admin = createAdminClient(supabaseUrl, supabaseServiceKey);
-    await admin
+    const { error: syncError } = await admin
       .from("profiles")
       .update({
         plan: "pro",
@@ -74,6 +74,11 @@ export async function POST() {
         subscription_status: activeSub.status,
       })
       .eq("id", user.id);
+
+    if (syncError) {
+      console.error("Stripe sync profile update failed:", syncError);
+      return NextResponse.json({ error: "Sync failed", synced: false }, { status: 500 });
+    }
 
     return NextResponse.json({
       synced: true,

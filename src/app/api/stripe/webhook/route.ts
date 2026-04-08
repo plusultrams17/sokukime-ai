@@ -150,14 +150,36 @@ export async function POST(request: NextRequest) {
       // ── Subscription checkout (existing logic) ──
       const subscriptionId = session.subscription as string;
 
-      await supabaseAdmin
+      // Get actual subscription status from Stripe (usually "trialing" with trial_period_days)
+      let subStatus = "active";
+      if (subscriptionId) {
+        try {
+          const sub = await stripe.subscriptions.retrieve(subscriptionId);
+          subStatus = sub.status; // "trialing", "active", etc.
+        } catch {
+          // Fallback to "active" if retrieval fails
+        }
+      }
+
+      // Use client_reference_id as primary match (set in checkout), fallback to stripe_customer_id
+      const userId = session.client_reference_id;
+      const profileMatch = userId
+        ? { field: "id", value: userId }
+        : { field: "stripe_customer_id", value: customerId };
+
+      const { error: subUpgradeError } = await supabaseAdmin
         .from("profiles")
         .update({
           plan: "pro",
           stripe_subscription_id: subscriptionId,
-          subscription_status: "active",
+          subscription_status: subStatus,
+          stripe_customer_id: customerId,
         })
-        .eq("stripe_customer_id", customerId);
+        .eq(profileMatch.field, profileMatch.value);
+
+      if (subUpgradeError) {
+        console.error("[webhook] CRITICAL: Pro upgrade failed after payment:", subUpgradeError, { userId, customerId });
+      }
 
       // Track purchase via GA4 Measurement Protocol (use actual amount from session)
       const amountTotal = session.amount_total ? session.amount_total : 0;
@@ -173,7 +195,7 @@ export async function POST(request: NextRequest) {
       const { data: newProProfile } = await supabaseAdmin
         .from("profiles")
         .select("id, email")
-        .eq("stripe_customer_id", customerId)
+        .eq(profileMatch.field, profileMatch.value)
         .single();
 
       if (newProProfile?.email) {
@@ -229,10 +251,16 @@ export async function POST(request: NextRequest) {
               }
 
               if (referrerProfile.stripe_subscription_id) {
-                // 紹介者がPro会員: クーポンを即時適用
+                // 紹介者がPro会員: クーポンを即時適用（既存割引を保持）
+                const referrerSub = await stripe.subscriptions.retrieve(
+                  referrerProfile.stripe_subscription_id
+                );
+                const existingDiscounts = (referrerSub.discounts || [])
+                  .filter((d): d is Stripe.Discount => typeof d !== "string" && !!d.id)
+                  .map(d => ({ discount: d.id }));
                 await stripe.subscriptions.update(
                   referrerProfile.stripe_subscription_id,
-                  { discounts: [{ coupon: coupon.id }] }
+                  { discounts: [...existingDiscounts, { coupon: coupon.id }] }
                 );
 
                 await supabaseAdmin
@@ -277,8 +305,13 @@ export async function POST(request: NextRequest) {
           for (const pending of pendingRewards) {
             try {
               const couponId = pending.referrer_coupon_id || "referral_1000off";
+              // Preserve existing discounts when appending referral reward
+              const pendingSub = await stripe.subscriptions.retrieve(subscriptionId);
+              const existingPendingDiscounts = (pendingSub.discounts || [])
+                .filter((d): d is Stripe.Discount => typeof d !== "string" && !!d.id)
+                .map(d => ({ discount: d.id }));
               await stripe.subscriptions.update(subscriptionId, {
-                discounts: [{ coupon: couponId }],
+                discounts: [...existingPendingDiscounts, { coupon: couponId }],
               });
 
               await supabaseAdmin
@@ -307,15 +340,34 @@ export async function POST(request: NextRequest) {
       const status = subscription.status;
 
       // Never downgrade program purchasers via subscription events
-      const { data: subUpdProfile } = await supabaseAdmin
+      // Fallback to subscription metadata if stripe_customer_id match fails
+      let subUpdProfile: { subscription_status: string | null } | null = null;
+      const { data: subUpdByCustomer } = await supabaseAdmin
         .from("profiles")
         .select("subscription_status")
         .eq("stripe_customer_id", customerId)
         .single();
+      subUpdProfile = subUpdByCustomer;
+
+      if (!subUpdProfile && subscription.metadata?.supabase_user_id) {
+        const { data: subUpdByUserId } = await supabaseAdmin
+          .from("profiles")
+          .select("subscription_status")
+          .eq("id", subscription.metadata.supabase_user_id)
+          .single();
+        subUpdProfile = subUpdByUserId;
+      }
 
       if (subUpdProfile?.subscription_status === "program") {
         break;
       }
+
+      // Determine profile match field (stripe_customer_id primary, supabase_user_id fallback)
+      const subUpdMatch = subUpdByCustomer
+        ? { field: "stripe_customer_id", value: customerId }
+        : subscription.metadata?.supabase_user_id
+          ? { field: "id", value: subscription.metadata.supabase_user_id }
+          : { field: "stripe_customer_id", value: customerId };
 
       // 一時停止の検知
       if (subscription.pause_collection) {
@@ -328,7 +380,7 @@ export async function POST(request: NextRequest) {
               ? new Date(subscription.pause_collection.resumes_at * 1000).toISOString()
               : null,
           })
-          .eq("stripe_customer_id", customerId);
+          .eq(subUpdMatch.field, subUpdMatch.value);
         break;
       }
 
@@ -343,7 +395,7 @@ export async function POST(request: NextRequest) {
           pause_start: null,
           pause_resume_date: null,
         })
-        .eq("stripe_customer_id", customerId);
+        .eq(subUpdMatch.field, subUpdMatch.value);
 
       break;
     }
@@ -372,7 +424,7 @@ export async function POST(request: NextRequest) {
         break;
       }
 
-      await supabaseAdmin
+      const { error: cancelError } = await supabaseAdmin
         .from("profiles")
         .update({
           plan: "free",
@@ -380,6 +432,10 @@ export async function POST(request: NextRequest) {
           stripe_subscription_id: null,
         })
         .eq("stripe_customer_id", customerId);
+
+      if (cancelError) {
+        console.error("[webhook] CRITICAL: Cancellation downgrade failed:", cancelError, { customerId });
+      }
 
       // Send win-back email on cancellation
       const { data: canceledProfile } = await supabaseAdmin
