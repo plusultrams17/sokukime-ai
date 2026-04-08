@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { getActivePromotion } from "@/lib/promotions";
 
 export async function POST(request: NextRequest) {
@@ -33,16 +34,42 @@ export async function POST(request: NextRequest) {
       // Default to monthly if no body
     }
 
-    // Get or create Stripe customer
-    const { data: profile, error: profileError } = await supabase
+    // Get or create profile + Stripe customer
+    let { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("stripe_customer_id, email")
       .eq("id", user.id)
       .single();
 
+    // Profile missing (trigger may have failed) — create it with service role (bypasses RLS)
+    if (profileError && profileError.code === "PGRST116") {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      if (supabaseUrl && supabaseServiceKey) {
+        const admin = createAdminClient(supabaseUrl, supabaseServiceKey);
+        const { data: newProfile, error: insertError } = await admin
+          .from("profiles")
+          .upsert({ id: user.id, email: user.email }, { onConflict: "id" })
+          .select("stripe_customer_id, email")
+          .single();
+        if (insertError) {
+          console.error("Profile creation failed (stripe/checkout):", insertError);
+          return NextResponse.json(
+            { error: "プロフィールの作成に失敗しました。再度お試しください。" },
+            { status: 500 }
+          );
+        }
+        profile = newProfile;
+        profileError = null;
+      }
+    }
+
     if (profileError) {
       console.error("Profile query failed (stripe/checkout):", profileError);
-      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+      return NextResponse.json(
+        { error: "プロフィール情報の取得に失敗しました。再度お試しください。" },
+        { status: 503 }
+      );
     }
 
     let customerId = profile?.stripe_customer_id;
