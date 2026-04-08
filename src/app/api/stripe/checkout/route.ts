@@ -184,12 +184,7 @@ export async function POST(request: NextRequest) {
       customer: customerId,
       client_reference_id: user.id,
       mode: "subscription",
-      payment_method_types: ["card", "konbini"],
-      payment_method_options: {
-        konbini: {
-          expires_after_days: 3,
-        },
-      },
+      payment_method_types: ["card"],
       line_items: [
         {
           price: priceId,
@@ -209,10 +204,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error("Checkout error:", error);
-    const message =
-      error instanceof Error ? error.message : "不明なエラーが発生しました";
     return NextResponse.json(
-      { error: `チェックアウトエラー: ${message}` },
+      { error: "チェックアウトの開始に失敗しました。時間をおいて再度お試しください。" },
       { status: 500 }
     );
   }

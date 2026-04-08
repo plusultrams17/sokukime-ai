@@ -41,7 +41,7 @@ const faqItems = [
   {
     question: "支払い方法は？",
     answer:
-      "クレジットカード（Visa, Mastercard, JCB, American Express）およびコンビニ決済に対応しています。Stripeによる安全な決済です。",
+      "クレジットカード（Visa, Mastercard, JCB, American Express）に対応しています。Stripeによる安全な決済です。",
   },
   {
     question: "無料プランとProの違いは？",
@@ -350,7 +350,7 @@ export default function PricingPage() {
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-muted sm:gap-x-4 sm:text-sm">
           <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM14.707 8.707a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg> 14日間返金保証</span>
           <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg> Stripe安全決済</span>
-          <span className="flex items-center gap-1">コンビニ決済対応</span>
+          <span className="flex items-center gap-1">JCB / Visa / Mastercard</span>
           <span className="flex items-center gap-1">経費精算・領収書OK</span>
         </div>
 
