@@ -4867,16 +4867,9 @@ export const blogPosts: BlogPost[] = [
 ];
 
 // Auto-generated SEO articles (run: node scripts/generate-seo-articles.mjs)
-let generatedPosts: BlogPost[] = [];
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const mod = require("./blog-generated");
-  if (mod?.generatedBlogPosts) generatedPosts = mod.generatedBlogPosts;
-} catch {
-  // blog-generated.ts not yet created — skip
-}
+import { generatedBlogPosts } from "./blog-generated";
 
-const allPosts: BlogPost[] = [...blogPosts, ...generatedPosts];
+const allPosts: BlogPost[] = [...blogPosts, ...generatedBlogPosts];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
   return allPosts.find((p) => p.slug === slug);

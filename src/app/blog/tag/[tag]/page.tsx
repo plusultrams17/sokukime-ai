@@ -12,7 +12,7 @@ interface Props {
 
 export function generateStaticParams() {
   return getAllTags().map((tag) => ({
-    tag: encodeURIComponent(tag),
+    tag,
   }));
 }
 
