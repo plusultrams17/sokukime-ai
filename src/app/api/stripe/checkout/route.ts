@@ -122,11 +122,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Use annual or monthly price ID
+    // Use annual or monthly price ID (trim to prevent \n from env vars)
     const priceId =
       billing === "annual" && process.env.STRIPE_PRO_ANNUAL_PRICE_ID
-        ? process.env.STRIPE_PRO_ANNUAL_PRICE_ID
-        : process.env.STRIPE_PRO_PRICE_ID;
+        ? process.env.STRIPE_PRO_ANNUAL_PRICE_ID.trim()
+        : process.env.STRIPE_PRO_PRICE_ID?.trim();
 
     if (!priceId) {
       return NextResponse.json(

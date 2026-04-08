@@ -18,7 +18,7 @@ function getBaseUrl(): string {
 
 export async function POST() {
   // Step 1: Check env vars
-  const priceId = process.env.STRIPE_PROGRAM_PRICE_ID;
+  const priceId = process.env.STRIPE_PROGRAM_PRICE_ID?.trim();
   const stripeKey = process.env.STRIPE_SECRET_KEY;
   const baseUrl = getBaseUrl();
 
