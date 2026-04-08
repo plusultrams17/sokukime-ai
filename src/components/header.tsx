@@ -36,8 +36,22 @@ export function Header() {
           .select("plan")
           .eq("id", user.id)
           .single()
-          .then(({ data }) => {
-            if (data?.plan) setPlan(data.plan as "free" | "pro");
+          .then(({ data, error }) => {
+            if (error) {
+              console.warn("[header] profiles query failed:", error.message);
+            }
+            const dbPlan = (data?.plan as "free" | "pro") || "free";
+            setPlan(dbPlan);
+
+            // Fallback: DBがfreeでもStripeにサブスクがある可能性（Webhook遅延等）
+            if (dbPlan === "free") {
+              fetch("/api/stripe/sync", { method: "POST" })
+                .then((r) => r.json())
+                .then((syncData) => {
+                  if (syncData?.plan === "pro") setPlan("pro");
+                })
+                .catch(() => {});
+            }
           });
       }
     });
