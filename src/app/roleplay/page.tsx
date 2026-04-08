@@ -62,6 +62,16 @@ function UpgradeToast() {
     if (searchParams.get("upgraded") === "true") {
       setShow(true);
       trackCheckoutComplete({});
+      // Webhook が遅延/未到達の場合に備え、Stripe から直接ステータスを同期
+      fetch("/api/stripe/sync", { method: "POST" })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.synced) {
+            // 使用量を再取得してUIに反映
+            window.dispatchEvent(new Event("usage-refresh"));
+          }
+        })
+        .catch(() => {});
     }
   }, [searchParams]);
 
@@ -402,6 +412,16 @@ export default function RoleplayPage() {
     customerFileContent && `お客さんの資料内容: ${customerFileContent}`,
   ].filter(Boolean).join("\n") || "";
 
+  // Fetch usage helper (reusable for initial load + post-upgrade refresh)
+  const fetchUsage = () => {
+    fetch("/api/usage")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.error) setUsage(data);
+      })
+      .catch(() => {});
+  };
+
   // Check auth state and fetch usage on mount
   useEffect(() => {
     const supabase = createClient();
@@ -412,17 +432,18 @@ export default function RoleplayPage() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
         setIsGuest(false);
-        // Fetch usage for logged-in users
-        fetch("/api/usage")
-          .then((r) => r.json())
-          .then((data) => {
-            if (!data.error) setUsage(data);
-          })
-          .catch(() => {});
+        fetchUsage();
       } else {
         setIsGuest(true);
       }
     });
+  }, []);
+
+  // Listen for usage-refresh event (fired after Stripe sync on upgrade)
+  useEffect(() => {
+    const handler = () => fetchUsage();
+    window.addEventListener("usage-refresh", handler);
+    return () => window.removeEventListener("usage-refresh", handler);
   }, []);
 
   // Load saved practice profile on mount (pre-fill form with user's last settings)
