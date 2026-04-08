@@ -4,6 +4,18 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Header } from "@/components/header";
 
+/* Force dark background on body when this page is mounted */
+function DarkBodyEffect() {
+  useEffect(() => {
+    const prev = document.body.style.background;
+    document.body.style.background = "#0B0F1A";
+    return () => {
+      document.body.style.background = prev;
+    };
+  }, []);
+  return null;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    SCENARIO DATA — 賃貸物件の内見 反論切り返しチャレンジ
 ═══════════════════════════════════════════════════════════════ */
@@ -887,7 +899,8 @@ export default function RebuttalChallengePage() {
   }, []);
 
   return (
-    <div className="rc-page min-h-screen">
+    <div className="rc-page min-h-screen" style={{ background: "#0B0F1A", color: "#E2E8F0" }}>
+      <DarkBodyEffect />
       <Header />
 
       {/* Hero section */}
