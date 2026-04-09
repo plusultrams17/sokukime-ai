@@ -68,7 +68,7 @@ export function SalesTriviaPopup() {
           </div>
           <button
             onClick={dismiss}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-white/30 transition hover:bg-white/10 hover:text-white/60"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-white/30 transition hover:bg-white/10 hover:text-white/60"
             aria-label="閉じる"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">

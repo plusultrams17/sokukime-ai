@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, use } from "react";
 import Link from "next/link";
 import { getChallenge } from "@/lib/challenges";
 import { Header } from "@/components/header";
+import { createClient } from "@/lib/supabase/client";
 
 interface ChallengeResult {
   score: number;
@@ -26,10 +27,20 @@ export default function ChallengePlayPage({
   const [response, setResponse] = useState("");
   const [timeLeft, setTimeLeft] = useState(60);
   const [result, setResult] = useState<ChallengeResult | null>(null);
+  const [isGuest, setIsGuest] = useState(true);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const startTimeRef = useRef(0);
   const responseRef = useRef("");
+
+  // Check auth status
+  useEffect(() => {
+    const supabase = createClient();
+    if (!supabase) return;
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) setIsGuest(false);
+    });
+  }, []);
 
   // Keep responseRef in sync
   useEffect(() => {
@@ -382,10 +393,28 @@ export default function ChallengePlayPage({
               </div>
             )}
 
+            {/* Guest signup CTA */}
+            {isGuest && (
+              <div className="rounded-2xl border border-accent/30 bg-accent/5 p-6 text-center">
+                <p className="mb-1 text-lg font-bold text-foreground">
+                  スコアを記録してもっと伸ばそう
+                </p>
+                <p className="mb-4 text-sm text-muted">
+                  無料登録でスコア履歴を保存。成長を実感できます。
+                </p>
+                <Link
+                  href="/login?redirect=/challenge"
+                  className="inline-flex h-11 items-center justify-center rounded-xl bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
+                >
+                  無料で登録する
+                </Link>
+              </div>
+            )}
+
             {/* Share + CTAs */}
             <div className="space-y-3">
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`60秒チャレンジ「${challenge.title}」で${result.score}点取った！ #成約コーチAI #営業`)}&url=${encodeURIComponent("https://seiyaku-coach.vercel.app/challenge")}`}
+                href={`https://x.com/intent/tweet?text=${encodeURIComponent(`60秒チャレンジ「${challenge.title}」で${result.score}点取った！`)}&url=${encodeURIComponent("https://seiyaku-coach.vercel.app/challenge")}&hashtags=${encodeURIComponent("成約コーチAI,営業,営業力UP")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-[#1DA1F2]/20 bg-[#1DA1F2]/10 text-sm font-bold text-[#1DA1F2] transition hover:bg-[#1DA1F2]/20"
@@ -394,7 +423,7 @@ export default function ChallengePlayPage({
               </a>
               <div className="grid grid-cols-2 gap-3">
                 <Link
-                  href="/try-roleplay"
+                  href="/roleplay"
                   className="flex h-12 items-center justify-center rounded-xl bg-accent text-sm font-bold text-white transition hover:bg-accent-hover"
                 >
                   フル商談に挑戦

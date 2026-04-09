@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 };
 
 const difficultyBadge = {
-  beginner: { label: "初級", color: "bg-green-500/20 text-green-400 border-green-500/30" },
-  intermediate: { label: "中級", color: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" },
-  advanced: { label: "上級", color: "bg-red-500/20 text-red-400 border-red-500/30" },
+  beginner: { label: "初級", stars: "★", color: "bg-emerald-600 text-white border-emerald-400/50 shadow-[0_0_8px_rgba(16,185,129,0.4)]" },
+  intermediate: { label: "中級", stars: "★★", color: "bg-amber-600 text-white border-amber-400/50 shadow-[0_0_8px_rgba(245,158,11,0.4)]" },
+  advanced: { label: "上級", stars: "★★★", color: "bg-red-600 text-white border-red-400/50 shadow-[0_0_8px_rgba(239,68,68,0.4)]" },
 };
 
 export default function ChallengePage() {
@@ -34,16 +34,52 @@ export default function ChallengePage() {
             3Dバーチャル商談で実戦トレーニング。60秒切り返しで瞬発力を鍛えよう。
           </p>
 
-          {/* Hero Video */}
-          <div className="relative mx-auto max-w-4xl">
-            <video
-              src="/images/challenges/challenge-hero.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full rounded-xl"
+          {/* Hero Image — animated HUD frame */}
+          <div className="relative mx-auto max-w-4xl overflow-hidden rounded-xl aspect-[16/7]">
+            {/* Background image with drift */}
+            <Image
+              src="/images/challenges/challenge-hero.png"
+              alt="営業チャレンジ — 3Dバーチャル商談イメージ"
+              fill
+              priority
+              className="object-cover animate-[hero-drift_20s_ease-in-out_infinite_alternate]"
+              style={{ objectPosition: "center 40%" }}
             />
+            {/* Vignette */}
+            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.6)]" />
+
+            {/* ── Animated corner brackets ── */}
+            {/* Top-left */}
+            <div className="pointer-events-none absolute top-3 left-3 h-8 w-8 sm:top-5 sm:left-5 sm:h-10 sm:w-10">
+              <span className="absolute top-0 left-0 h-full w-[2px] bg-lp-cta animate-[corner-pulse_2s_ease-in-out_infinite]" />
+              <span className="absolute top-0 left-0 h-[2px] w-full bg-lp-cta animate-[corner-pulse_2s_ease-in-out_infinite]" />
+            </div>
+            {/* Top-right */}
+            <div className="pointer-events-none absolute top-3 right-3 h-8 w-8 sm:top-5 sm:right-5 sm:h-10 sm:w-10">
+              <span className="absolute top-0 right-0 h-full w-[2px] bg-lp-cta animate-[corner-pulse_2s_ease-in-out_infinite_0.5s]" />
+              <span className="absolute top-0 right-0 h-[2px] w-full bg-lp-cta animate-[corner-pulse_2s_ease-in-out_infinite_0.5s]" />
+            </div>
+            {/* Bottom-left */}
+            <div className="pointer-events-none absolute bottom-3 left-3 h-8 w-8 sm:bottom-5 sm:left-5 sm:h-10 sm:w-10">
+              <span className="absolute bottom-0 left-0 h-full w-[2px] bg-lp-cta animate-[corner-pulse_2s_ease-in-out_infinite_1s]" />
+              <span className="absolute bottom-0 left-0 h-[2px] w-full bg-lp-cta animate-[corner-pulse_2s_ease-in-out_infinite_1s]" />
+            </div>
+            {/* Bottom-right */}
+            <div className="pointer-events-none absolute bottom-3 right-3 h-8 w-8 sm:bottom-5 sm:right-5 sm:h-10 sm:w-10">
+              <span className="absolute bottom-0 right-0 h-full w-[2px] bg-lp-cta animate-[corner-pulse_2s_ease-in-out_infinite_1.5s]" />
+              <span className="absolute bottom-0 right-0 h-[2px] w-full bg-lp-cta animate-[corner-pulse_2s_ease-in-out_infinite_1.5s]" />
+            </div>
+
+            {/* ── Horizontal scan line ── */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-lp-cta/40 to-transparent animate-[scan-line_4s_linear_infinite]" />
+            </div>
+
+            {/* ── Corner glow dots ── */}
+            <div className="pointer-events-none absolute top-3 left-3 h-1.5 w-1.5 rounded-full bg-lp-cta animate-[dot-blink_1.5s_ease-in-out_infinite] sm:top-5 sm:left-5" />
+            <div className="pointer-events-none absolute top-3 right-3 h-1.5 w-1.5 rounded-full bg-lp-cta animate-[dot-blink_1.5s_ease-in-out_infinite_0.4s] sm:top-5 sm:right-5" />
+            <div className="pointer-events-none absolute bottom-3 left-3 h-1.5 w-1.5 rounded-full bg-lp-cta animate-[dot-blink_1.5s_ease-in-out_infinite_0.8s] sm:bottom-5 sm:left-5" />
+            <div className="pointer-events-none absolute bottom-3 right-3 h-1.5 w-1.5 rounded-full bg-lp-cta animate-[dot-blink_1.5s_ease-in-out_infinite_1.2s] sm:bottom-5 sm:right-5" />
           </div>
         </div>
       </section>
@@ -79,12 +115,13 @@ export default function ChallengePage() {
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                       <div className="absolute top-3 right-3">
-                        <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold backdrop-blur-sm ${badge.color}`}>
+                        <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold backdrop-blur-sm ${badge.color}`}>
+                          <span className="text-[9px] tracking-tight opacity-90">{badge.stars}</span>
                           {badge.label}
                         </span>
                       </div>
                       <div className="absolute inset-x-0 bottom-0 flex flex-col p-4">
-                        <h3 className="mb-1 text-base font-bold text-white transition group-hover:text-accent">
+                        <h3 className="mb-1 text-base font-bold text-white transition group-hover:text-lp-cta">
                           {s.shortTitle}
                         </h3>
                         <p className="mb-3 flex-1 text-xs leading-relaxed text-white/80">
@@ -92,7 +129,7 @@ export default function ChallengePage() {
                         </p>
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] text-white/60">{s.customerType}</span>
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/30 text-accent backdrop-blur-sm transition group-hover:bg-accent group-hover:text-white">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/30 text-accent backdrop-blur-sm transition group-hover:bg-lp-cta group-hover:text-white">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                               <polygon points="5 3 19 12 5 21 5 3" />
                             </svg>
@@ -112,11 +149,12 @@ export default function ChallengePage() {
                 >
                   <div className="mb-3 flex items-start justify-between">
                     <span className="text-3xl">{s.emoji}</span>
-                    <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold ${badge.color}`}>
+                    <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold ${badge.color}`}>
+                      <span className="text-[9px] tracking-tight opacity-90">{badge.stars}</span>
                       {badge.label}
                     </span>
                   </div>
-                  <h3 className="mb-1 text-base font-bold text-white transition group-hover:text-accent">
+                  <h3 className="mb-1 text-base font-bold text-white transition group-hover:text-lp-cta">
                     {s.shortTitle}
                   </h3>
                   <p className="mb-3 flex-1 text-xs leading-relaxed text-white/70">
@@ -124,7 +162,7 @@ export default function ChallengePage() {
                   </p>
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] text-white/50">{s.customerType}</span>
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20 text-accent transition group-hover:bg-accent group-hover:text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20 text-accent transition group-hover:bg-lp-cta group-hover:text-white">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polygon points="5 3 19 12 5 21 5 3" />
                       </svg>
@@ -152,7 +190,7 @@ export default function ChallengePage() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    <h2 className="mb-1 text-lg font-bold text-foreground transition group-hover:text-accent">
+                    <h2 className="mb-1 text-lg font-bold text-foreground transition group-hover:text-lp-cta">
                       {c.title}
                     </h2>
                     <p className="mb-3 text-sm text-muted">{c.description}</p>
@@ -165,7 +203,7 @@ export default function ChallengePage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent transition group-hover:bg-accent group-hover:text-white">
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent transition group-hover:bg-lp-cta group-hover:text-white">
                     <svg
                       width="20"
                       height="20"

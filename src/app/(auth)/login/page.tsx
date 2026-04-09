@@ -110,7 +110,7 @@ function LoginForm() {
             {[
               "毎日1回のAIロープレ練習",
               "AIスコアリング（1カテゴリ）",
-              "22レッスンの学習コース",
+              "基本3レッスンの学習コース",
               "クレジットカード不要",
             ].map((item) => (
               <li key={item} className="flex items-start gap-2 text-xs text-muted leading-relaxed">
@@ -120,7 +120,7 @@ function LoginForm() {
             ))}
           </ul>
           <p className="text-[10px] text-accent/70 pt-1">
-            Proプラン（¥2,980/月）で全5カテゴリ詳細スコア・無制限ロープレに対応
+            Proプラン（¥2,980/月）で全22レッスン・全5カテゴリ詳細スコア・無制限ロープレに対応
           </p>
         </div>
       </div>

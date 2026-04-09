@@ -119,7 +119,7 @@ export function IndustryCards() {
             <div className="ind-image">
               <Image
                 src={`/images/industries/${industry.slug}.png`}
-                alt={`${industry.name}営業イメージ`}
+                alt={`${industry.name}${industry.name.endsWith("営業") ? "" : "営業"}イメージ`}
                 fill
                 className="object-cover rounded-[0.25rem]"
                 sizes="(max-width: 640px) 50vw, 14rem"

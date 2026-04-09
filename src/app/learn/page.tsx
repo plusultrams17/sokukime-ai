@@ -289,7 +289,7 @@ export default function LearnPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              href="/try-roleplay"
+              href="/roleplay"
               className="rounded-lg bg-accent px-6 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
             >
               無料でAIロープレを試す

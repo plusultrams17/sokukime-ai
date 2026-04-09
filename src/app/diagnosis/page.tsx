@@ -833,7 +833,7 @@ function ResultScreen({
       >
         {overall >= 80 ? (
           <>
-            <Link href="/try-roleplay" className="lp-cta-btn w-full text-center">
+            <Link href="/roleplay" className="lp-cta-btn w-full text-center">
               Sランクの実力、AIロープレで証明する
             </Link>
             <Link
@@ -845,7 +845,7 @@ function ResultScreen({
           </>
         ) : overall >= 60 ? (
           <>
-            <Link href="/try-roleplay" className="lp-cta-btn w-full text-center">
+            <Link href="/roleplay" className="lp-cta-btn w-full text-center">
               AIロープレで{SKILLS[minIndex].name}を克服する
             </Link>
             <p className="text-xs text-muted">
@@ -864,7 +864,7 @@ function ResultScreen({
               まず{SKILLS[minIndex].name}の「型」を学ぶ
             </Link>
             <Link
-              href="/try-roleplay"
+              href="/roleplay"
               className="flex h-12 w-full items-center justify-center rounded border border-card-border bg-card text-sm font-medium text-muted transition hover:border-foreground/20 hover:text-foreground"
             >
               AIロープレを試してみる

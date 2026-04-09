@@ -18,7 +18,7 @@ function CTAButton({ className = "" }: { className?: string }) {
 function SecondaryCTA({ className = "" }: { className?: string }) {
   return (
     <Link
-      href="/try-roleplay"
+      href="/roleplay"
       scroll={true}
       className={`lp-cta-secondary ${className}`}
     >
@@ -53,7 +53,7 @@ export default function Home() {
             priceCurrency: "JPY",
             name: "無料プラン",
             description:
-              "22レッスン学習コース・業種別トークスクリプト・AIロープレ1日1回・成約スコアリング",
+              "基本3レッスン・業種別トークスクリプト一部・AIロープレ1日1回・成約スコア1カテゴリ",
             availability: "https://schema.org/InStock",
           },
           {

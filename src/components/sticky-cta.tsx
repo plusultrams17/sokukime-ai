@@ -79,7 +79,7 @@ export function StickyCTA({
                   onCtaClick();
                 }
               }}
-              className="flex h-10 w-full items-center justify-center rounded-xl bg-accent px-5 text-sm font-bold text-white shadow-sm transition hover:bg-accent-hover sm:w-auto"
+              className="flex h-11 w-full items-center justify-center rounded-xl bg-accent px-5 text-sm font-bold text-white shadow-sm transition hover:bg-accent-hover sm:h-10 sm:w-auto"
             >
               {ctaText}
             </Link>

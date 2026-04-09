@@ -437,7 +437,7 @@ export default function IndustryWeaknessPage() {
             「考えます」切り返しシナリオに挑戦
           </Link>
           <Link
-            href="/try-roleplay"
+            href="/roleplay"
             className="block w-full rounded-xl border border-card-border bg-card py-3.5 text-center text-sm font-medium text-muted transition hover:border-foreground/20 hover:text-foreground"
           >
             AIロープレを試してみる

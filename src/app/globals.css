@@ -50,6 +50,24 @@ body {
   }
 }
 
+/* ── Hero drift (Ken Burns) ── */
+@keyframes hero-drift {
+  0%   { transform: scale(1.08) translate(-1%, -1%); }
+  100% { transform: scale(1.15) translate(1%, 1%); }
+}
+@keyframes corner-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+@keyframes scan-line {
+  0%   { top: -2%; }
+  100% { top: 102%; }
+}
+@keyframes dot-blink {
+  0%, 100% { opacity: 0.3; box-shadow: 0 0 3px var(--lp-cta); }
+  50%      { opacity: 1;   box-shadow: 0 0 8px var(--lp-cta); }
+}
+
 /* ── LP (BizReach-style) ── */
 
 @keyframes lp-shine {

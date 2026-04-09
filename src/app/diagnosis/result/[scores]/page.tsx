@@ -288,7 +288,7 @@ export default async function DiagnosisResultPage({ params }: Props) {
           </Link>
           <p className="text-[10px] text-muted">30秒 ・ 5問 ・ 登録不要</p>
           <Link
-            href="/try-roleplay"
+            href="/roleplay"
             className="block w-full rounded-xl border border-card-border bg-card py-3.5 text-center text-sm font-medium text-muted transition hover:border-foreground/20 hover:text-foreground"
           >
             AIロープレを試してみる

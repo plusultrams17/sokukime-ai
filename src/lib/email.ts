@@ -125,7 +125,7 @@ function thirdRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">3回目のロープレ、素晴らしい！</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      3回続けたあなたは、すでに<strong>上位10%</strong>の行動力です。<br>
+      3回続けたあなたは、すでに<strong>素晴らしい行動力</strong>の持ち主です。<br>
       ここから本当の上達フェーズに入ります。
     </p>
     <div style="background:#fffbeb;border-radius:8px;padding:16px;margin:0 0 16px">
@@ -189,7 +189,7 @@ function trialExpiring3DaysEmail(unsubscribeUrl?: string): { subject: string; ht
       </ul>
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
-      トライアル期間中にスコアが伸びた方の<strong>87%</strong>が、そのままProプランを継続されています。
+      トライアル期間中にスコアの伸びを実感された方の<strong>多く</strong>が、そのままProプランを継続されています。
     </p>
     <div style="text-align:center;margin:0 0 24px">
       <a href="${APP_URL}/roleplay" style="display:inline-block;background:#1B6B5A;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
@@ -357,7 +357,7 @@ function inactiveReminderEmail(unsubscribeUrl?: string): { subject: string; html
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>1回5分で維持できます</strong></p>
       <p style="font-size:13px;color:#374151;line-height:1.6;margin:0">
-        研究によると、学んだスキルは<strong>1週間練習しないと40%減少</strong>します。<br>
+        学んだスキルは、<strong>練習しないと徐々に失われていく</strong>ものです。<br>
         でも、1日5分のAIロープレを続ければ、スキルを維持・向上できます。
       </p>
     </div>
@@ -459,7 +459,7 @@ function proWelcomeEmail(unsubscribeUrl?: string): { subject: string; html: stri
       </ol>
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
-      Proユーザーの平均：初月のスコアが<strong>23%向上</strong>しています。<br>
+      Proユーザーは無制限の練習で、<strong>初月からスコアの伸び</strong>を実感されています。<br>
       早速始めましょう！
     </p>
     <div style="text-align:center;margin:0 0 24px">
@@ -539,7 +539,7 @@ function proOnboardingDay1Email(unsubscribeUrl?: string): { subject: string; htm
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">Pro初日を最大限活用しましょう！</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
       Proプラン初日です！<br>
-      初日に<strong>3回以上ロープレ</strong>した方は、1ヶ月後のスコアが平均<strong>30%高い</strong>というデータがあります。
+      初日に<strong>3回以上ロープレ</strong>することで、早い段階から自分の強み・弱みを把握でき、<strong>効率的な上達</strong>につながります。
     </p>
     <div style="background:#f0fdf4;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#166534;margin:0 0 8px"><strong>今日やるべき3つのこと</strong></p>
@@ -934,7 +934,7 @@ function winback7DaysEmail(unsubscribeUrl?: string): { subject: string; html: st
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
         <li>1日1回 → スコア<strong>維持</strong>がやっと</li>
         <li>1日3回以上 → スコアが<strong>平均20点UP</strong></li>
-        <li>練習なし → 1週間で<strong>スキルが40%低下</strong></li>
+        <li>練習なし → <strong>スキルが徐々に低下</strong></li>
       </ul>
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
@@ -1008,7 +1008,7 @@ function winback30DaysEmail(unsubscribeUrl?: string): { subject: string; html: s
 
 function powerUserUpgradeEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "あなたは上位3%のヘビーユーザーです — Proで一気に伸ばしませんか？",
+    subject: "毎日練習を続けるあなたへ — Proで一気に伸ばしませんか？",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -1018,7 +1018,7 @@ function powerUserUpgradeEmail(unsubscribeUrl?: string): { subject: string; html
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">毎日の練習、素晴らしいです！</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      3日以上連続でロープレしているあなたは、<strong>全ユーザーの上位3%</strong>です。<br>
+      3日以上連続でロープレを続けているあなたの<strong>継続力は本物</strong>です。<br>
       毎日制限にぶつかっていませんか？
     </p>
     <div style="background:#fef3c7;border-radius:8px;padding:16px;margin:0 0 16px;border:1px solid #fcd34d">
@@ -1209,7 +1209,7 @@ function atRiskInterventionEmail(unsubscribeUrl?: string): { subject: string; ht
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">営業スキルは「使わないと落ちる」</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      研究によると、営業スキルは練習を止めて<strong>2週間で最大20%低下</strong>することが分かっています。
+      営業スキルは、練習を止めると<strong>徐々に感覚が鈍っていく</strong>ものです。
     </p>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
       たった5分のロープレで感覚を取り戻せます。今日1回だけ練習してみませんか？
@@ -1249,9 +1249,9 @@ function predictiveChurnEmail(unsubscribeUrl?: string): { subject: string; html:
       忙しいときこそ、<strong>短い5分間の練習</strong>で感覚を維持しましょう。
     </p>
     <div style="background:#f0fdf4;border-radius:8px;padding:16px;margin:0 0 16px">
-      <p style="font-size:13px;color:#166534;margin:0 0 8px"><strong>研究データより</strong></p>
+      <p style="font-size:13px;color:#166534;margin:0 0 8px"><strong>スキル維持のポイント</strong></p>
       <p style="font-size:13px;color:#374151;line-height:1.6;margin:0">
-        営業スキルは<strong>2週間の空白で約30%</strong>低下するとされています。<br>
+        営業スキルは<strong>しばらく使わないと感覚が鈍りやすい</strong>ものです。<br>
         週2-3回の短い練習でスキルを維持できます。
       </p>
     </div>

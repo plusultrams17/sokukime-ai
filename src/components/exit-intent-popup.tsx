@@ -145,7 +145,7 @@ export function ExitIntentPopup({
         <div className="mb-2 flex justify-end">
           <button
             onClick={dismiss}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-muted transition hover:bg-gray-100 hover:text-foreground"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-gray-100 hover:text-foreground"
             aria-label="閉じる"
           >
             <svg

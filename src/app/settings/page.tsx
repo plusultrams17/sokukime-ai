@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Logo } from "@/components/logo";
 
 export default function SettingsPage() {
   const [email, setEmail] = useState<string | null>(null);
@@ -64,9 +65,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-6">
-          <Link href="/" className="text-lg font-bold">
-            成約コーチAI
-          </Link>
+          <Logo size="sm" />
           <Link
             href="/dashboard"
             className="rounded-lg border border-card-border px-4 py-1.5 text-sm text-muted transition hover:text-foreground"

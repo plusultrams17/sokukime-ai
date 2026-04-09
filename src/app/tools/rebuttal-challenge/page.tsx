@@ -759,7 +759,7 @@ function SummaryScreen({
         <button onClick={onRetry} className="rc-submit-btn">
           もう一度チャレンジ
         </button>
-        <Link href="/try-roleplay" className="rc-secondary-btn">
+        <Link href="/roleplay" className="rc-secondary-btn">
           AIロープレで実践する
         </Link>
 

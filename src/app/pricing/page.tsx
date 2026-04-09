@@ -14,7 +14,7 @@ import { createClient } from "@/lib/supabase/client";
 import { getStoredUTM } from "@/components/utm-tracker";
 
 const features = [
-  { name: "学習コース（22レッスン）", free: "全レッスン", pro: "全レッスン" },
+  { name: "学習コース（22レッスン）", free: "基本3レッスン", pro: "全22レッスン" },
   { name: "業種別トークスクリプト", free: "一部閲覧", pro: "全業種対応" },
   { name: "切り返し話法テンプレート", free: "基本パターン", pro: "30パターン" },
   { name: "AIロープレ", free: "1日1回", pro: "無制限" },
@@ -47,7 +47,7 @@ const faqItems = [
   {
     question: "無料プランとProの違いは？",
     answer:
-      "無料プランでも22レッスンは全て受講可能。Proでは全業種コンテンツ・AIロープレ無制限・全5カテゴリの詳細スコア+AI改善アドバイスが使えます。",
+      "無料プランでは基本3レッスン・AIロープレ1日1回・スコア1カテゴリが利用可能。Proでは全22レッスン・全業種コンテンツ・AIロープレ無制限・全5カテゴリの詳細スコア+AI改善アドバイスが使えます。",
   },
 ];
 
@@ -148,7 +148,7 @@ export default function PricingPage() {
               name: "無料プラン",
               price: "0",
               priceCurrency: "JPY",
-              description: "22レッスン学習コース・業種別トークスクリプト・AIロープレ1日1回・成約スコア1カテゴリ",
+              description: "基本3レッスン・業種別トークスクリプト一部・AIロープレ1日1回・成約スコア1カテゴリ",
               availability: "https://schema.org/InStock",
               url: `${siteUrl}/pricing`,
             },
@@ -227,7 +227,7 @@ export default function PricingPage() {
                 まずは試してみたい方に
               </p>
               <p className="mt-1 text-xs text-yellow-600/80">
-                ※ AIロープレは1日1回・スコアは1カテゴリのみ
+                ※ 学習コースは基本3レッスン・AIロープレは1日1回・スコアは1カテゴリのみ
               </p>
             </div>
 
@@ -250,7 +250,7 @@ export default function PricingPage() {
                   <span className="text-muted min-w-0">{f.name}</span>
                   <span
                     className={`shrink-0 ${
-                      f.free === "−" || f.free === "1日1回" || f.free === "1カテゴリ" || f.free === "一部閲覧" || f.free === "基本パターン"
+                      f.free === "−" || f.free === "1日1回" || f.free === "1カテゴリ" || f.free === "一部閲覧" || f.free === "基本3レッスン" || f.free === "基本パターン"
                         ? "text-muted"
                         : "text-foreground"
                     }`}
@@ -473,14 +473,14 @@ export default function PricingPage() {
         {currentPlan !== "pro" && (
           <div className="mt-16 text-center">
             <p className="mb-5 text-muted">
-              0円で全機能を体験。7日間のトライアル後もいつでも解約OK
+              7日間の無料トライアルで全機能をお試し。いつでも解約OK
             </p>
             <button
                 onClick={handleUpgrade}
                 disabled={isLoading}
                 className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60 sm:min-w-[240px]"
               >
-                {isLoading ? "処理中..." : "0円で今すぐ始める"}
+                {isLoading ? "処理中..." : "無料トライアルを始める"}
               </button>
             {errorMsg && (
               <div className="mx-auto mt-3 max-w-md rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400">

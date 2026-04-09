@@ -11,7 +11,8 @@ import { CancelSaveModal } from "@/components/cancel-save-modal";
 
 const navLinksPublic = [
   { href: "/learn", label: "学習コース" },
-  { href: "/try-roleplay", label: "AIロープレ体験" },
+  { href: "/roleplay", label: "AIロープレ" },
+  { href: "/challenge", label: "チャレンジ" },
   { href: "/pricing", label: "料金プラン" },
 ];
 
@@ -123,7 +124,7 @@ export function Header() {
               <Link href="/login" className="header-link">
                 ログイン
               </Link>
-              <Link href="/try-roleplay" className="nav-btn" onClick={() => trackCTAClick("header_try", "header", "/try-roleplay")}>
+              <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_try", "header", "/roleplay")}>
                 <span>無料で試す</span>
               </Link>
             </>
@@ -265,9 +266,9 @@ export function Header() {
                 ログイン
               </Link>
               <Link
-                href="/try-roleplay"
+                href="/roleplay"
                 className="nav-btn mobile-menu__cta"
-                onClick={() => { setOpen(false); trackCTAClick("header_try_mobile", "mobile_menu", "/try-roleplay"); }}
+                onClick={() => { setOpen(false); trackCTAClick("header_try_mobile", "mobile_menu", "/roleplay"); }}
               >
                 <span>無料で試す</span>
               </Link>

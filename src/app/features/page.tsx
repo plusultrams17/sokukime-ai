@@ -41,7 +41,7 @@ const features = [
     icon: "",
     image: "/images/pages/feature-scoring.png",
     title: "成約スコアリング",
-    desc: "5ステップそれぞれを20点満点で採点。総合スコアとランク（S〜E）で実力を可視化します。",
+    desc: "5ステップそれぞれを20点満点で採点。総合スコアとランク（S〜D）で実力を可視化します。",
     href: "/features/scoring",
     highlights: [
       "5カテゴリ×20点の100点満点",
@@ -91,7 +91,7 @@ export default function FeaturesPage() {
             AI × 成約メソッドで、効率的に営業力を鍛える
           </p>
           <p className="mx-auto mt-6 max-w-3xl text-sm text-muted leading-relaxed text-left">
-            成約コーチAIの主要機能は、(1) <strong className="text-foreground">AIロープレ</strong>（業種・難易度カスタマイズ対応、3営業シーン×4顧客タイプ×3難易度）、(2) <strong className="text-foreground">リアルタイムAIコーチ</strong>（商談中にテクニックを自動分析・提案）、(3) <strong className="text-foreground">成約スコアリング</strong>（5ステップ×20点の100点満点で採点）の3つです。従来の対面ロープレ（1回¥50,000〜・週1-2回が限度）と比較して、月額¥2,980で24時間無制限に練習できます。
+            成約コーチAIの主要機能は、(1) <strong className="text-foreground">AIロープレ</strong>（業種・難易度カスタマイズ対応、3営業シーン×4顧客タイプ×3難易度）、(2) <strong className="text-foreground">リアルタイムAIコーチ</strong>（商談中にテクニックを自動分析・提案）、(3) <strong className="text-foreground">成約スコアリング</strong>（5ステップ×20点の100点満点で採点）の3つです。無料プランでは1日1回のAIロープレ練習が可能。Proプラン（月額¥2,980）なら24時間無制限に練習できます。
           </p>
         </div>
       </section>
@@ -217,10 +217,10 @@ export default function FeaturesPage() {
       <section className="border-t border-card-border px-6 py-20">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-2xl font-bold">
-            すべての機能を無料で体験
+            無料で営業力を鍛え始める
           </h2>
           <p className="mb-8 text-sm text-muted">
-            クレジットカード不要。1日1回無料でAIロープレを体験できます。
+            クレジットカード不要。無料プランで基本3レッスンとAIロープレ（1日1回）を体験できます。
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link

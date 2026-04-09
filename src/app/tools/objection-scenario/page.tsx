@@ -461,7 +461,7 @@ function ResultView({
           別のルートを試す
         </button>
         <Link
-          href="/try-roleplay"
+          href="/roleplay"
           className="block w-full rounded-xl border border-card-border bg-card py-3.5 text-sm font-medium text-muted transition hover:border-foreground/20 hover:text-foreground"
         >
           AIロープレで実践する
