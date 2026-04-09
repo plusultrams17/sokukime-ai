@@ -26,7 +26,7 @@ export function UpgradeModal({
 }: UpgradeModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [billing, setBilling] = useState<"monthly" | "annual">("annual");
+  const [billing] = useState<"monthly" | "annual">("monthly");
   const [stats, setStats] = useState<{ totalUsers: number; totalSessions: number } | null>(null);
 
   useEffect(() => {
@@ -138,7 +138,7 @@ export function UpgradeModal({
             <p className="mb-5 text-center text-sm text-muted">
               Proなら全5カテゴリの弱点がわかり、
               <br />
-              <span className="font-medium text-foreground">集中練習でスコアが2倍速く改善します。</span>
+              <span className="font-medium text-foreground">集中練習で効率的にスコアを伸ばせます。</span>
             </p>
           </>
         )}
@@ -173,31 +173,6 @@ export function UpgradeModal({
           </div>
         </div>
 
-        {/* Billing toggle */}
-        <div className="mb-3 flex items-center justify-center gap-1 rounded-xl bg-background p-1">
-          <button
-            onClick={() => setBilling("monthly")}
-            className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
-              billing === "monthly"
-                ? "bg-card text-foreground shadow-sm"
-                : "text-muted hover:text-foreground"
-            }`}
-          >
-            月払い
-          </button>
-          <button
-            onClick={() => setBilling("annual")}
-            className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
-              billing === "annual"
-                ? "bg-card text-foreground shadow-sm"
-                : "text-muted hover:text-foreground"
-            }`}
-          >
-            年払い
-            <span className="ml-1 text-green-500">2ヶ月無料</span>
-          </button>
-        </div>
-
         {/* Price comparison */}
         <div className="mb-4 rounded-xl border border-accent/30 bg-accent/5 p-4">
           <div className="mb-2 flex items-center justify-between">
@@ -206,18 +181,9 @@ export function UpgradeModal({
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm font-bold text-accent">成約コーチAI Pro</span>
-            {billing === "monthly" ? (
-              <span className="text-lg font-bold text-accent">
-                ¥2,980<span className="text-xs font-normal text-muted">/月</span>
-              </span>
-            ) : (
-              <div className="text-right">
-                <span className="text-lg font-bold text-accent">
-                  ¥29,800<span className="text-xs font-normal text-muted">/年</span>
-                </span>
-                <div className="text-[10px] text-green-500">実質¥2,483/月</div>
-              </div>
-            )}
+            <span className="text-lg font-bold text-accent">
+              ¥2,980<span className="text-xs font-normal text-muted">/月</span>
+            </span>
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
+import { getGrade } from "@/lib/grade";
 
 export const runtime = "edge";
 
@@ -37,8 +38,7 @@ export async function GET(request: NextRequest) {
   const maxIndex = scores.indexOf(Math.max(...scores));
   const typeName = TYPES[maxIndex];
 
-  const grade =
-    overall >= 80 ? "S" : overall >= 70 ? "A" : overall >= 60 ? "B" : overall >= 50 ? "C" : "D";
+  const grade = getGrade(overall);
 
   // Pentagon geometry
   const cx = 200;

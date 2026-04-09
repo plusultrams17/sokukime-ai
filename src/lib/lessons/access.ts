@@ -20,12 +20,25 @@ export async function getPurchaseStatus(
 
   if (!user) return { purchased: false };
 
-  const { data } = await supabase
+  // Check program_purchases (one-time purchase)
+  const { data: purchaseData } = await supabase
     .from("program_purchases")
     .select("id")
     .eq("user_id", user.id)
     .limit(1)
     .maybeSingle();
 
-  return { purchased: !!data };
+  if (purchaseData) return { purchased: true };
+
+  // Check for active Pro subscription (paid, not trial)
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("plan, subscription_status")
+    .eq("id", user.id)
+    .single();
+
+  const isPaidPro =
+    profile?.plan === "pro" && profile?.subscription_status === "active";
+
+  return { purchased: isPaidPro };
 }

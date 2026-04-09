@@ -13,6 +13,7 @@ import {
 import type { PracticeProfile } from "@/lib/practice-profile";
 import type { Lesson } from "@/lib/lessons/types";
 import type { ScoreResult } from "@/lib/scoring";
+import { getGrade } from "@/lib/grade";
 import { getAdjacentLessons } from "@/lib/lessons";
 import { LESSON_FOCUS_MAP } from "@/lib/lessons/focus-instructions";
 
@@ -63,12 +64,7 @@ function getDifficultyBadgeColor(value: string): string {
 }
 
 function getRank(score: number): string {
-  if (score >= 90) return "S";
-  if (score >= 80) return "A";
-  if (score >= 70) return "B";
-  if (score >= 60) return "C";
-  if (score >= 40) return "D";
-  return "E";
+  return getGrade(score);
 }
 
 function getScoreColor(score: number): string {

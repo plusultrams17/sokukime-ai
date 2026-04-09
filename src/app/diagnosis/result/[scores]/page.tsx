@@ -8,6 +8,7 @@ import {
   getPercentile,
   parseScores,
 } from "@/lib/diagnosis-data";
+import { getGrade } from "@/lib/grade";
 
 type Props = {
   params: Promise<{ scores: string }>;
@@ -66,16 +67,7 @@ export default async function DiagnosisResultPage({ params }: Props) {
   const minIndex = scores.indexOf(Math.min(...scores));
   const type = getComboType(scores);
   const percentile = getPercentile(overall);
-  const grade =
-    overall >= 80
-      ? "S"
-      : overall >= 70
-        ? "A"
-        : overall >= 60
-          ? "B"
-          : overall >= 50
-            ? "C"
-            : "D";
+  const grade = getGrade(overall);
 
   const size = 280;
   const cx = size / 2;

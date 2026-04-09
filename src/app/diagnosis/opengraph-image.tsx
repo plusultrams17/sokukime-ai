@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { getGrade } from "@/lib/grade";
 
 export const runtime = "edge";
 export const alt = "営業力診断結果 — 成約コーチAI";
@@ -35,8 +36,7 @@ export default async function Image() {
   const overall = Math.round(scores.reduce((a, b) => a + b, 0) / 5);
   const maxIndex = scores.indexOf(Math.max(...scores));
   const typeName = TYPES[maxIndex];
-  const grade =
-    overall >= 80 ? "S" : overall >= 70 ? "A" : overall >= 60 ? "B" : overall >= 50 ? "C" : "D";
+  const grade = getGrade(overall);
 
   const cx = 200;
   const cy = 200;

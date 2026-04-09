@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ChatUI } from "@/app/roleplay/chat-ui";
 import { RadarChart } from "@/components/radar-chart";
 import type { ScoreResult } from "@/lib/scoring";
+import { getGrade } from "@/lib/grade";
 
 /* ─── Session keys (must match /try-roleplay/page.tsx) ─── */
 const GUEST_SETUP_KEY = "guest-roleplay-setup";
@@ -182,16 +183,7 @@ export default function GuestChatPage() {
 /* ─── Guest Score Screen with Signup CTA ─── */
 
 function GuestScoreScreen({ score }: { score: ScoreResult }) {
-  const rank =
-    score.overall >= 90
-      ? "S"
-      : score.overall >= 80
-      ? "A"
-      : score.overall >= 70
-      ? "B"
-      : score.overall >= 60
-      ? "C"
-      : "D";
+  const rank = getGrade(score.overall);
 
   const scoreColor =
     score.overall >= 80

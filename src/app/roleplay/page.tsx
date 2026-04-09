@@ -13,6 +13,7 @@ import { WelcomeModal } from "@/components/welcome-modal";
 import { EmailVerificationModal } from "@/components/email-verification-modal";
 import type { OnboardingPreset } from "@/components/welcome-modal";
 import { RadarChart } from "@/components/radar-chart";
+import { getGrade } from "@/lib/grade";
 import { createClient } from "@/lib/supabase/client";
 import type { UsageStatus } from "@/lib/usage";
 import type { ScoreResult } from "@/lib/scoring";
@@ -1605,7 +1606,7 @@ function AuthGateContent({
                   <span className="text-2xl font-black text-muted/30">/ 100</span>
                 </div>
                 <div className="mt-1 text-sm font-bold text-muted">
-                  ランク: {previewScore.overall >= 90 ? "S" : previewScore.overall >= 80 ? "A" : previewScore.overall >= 70 ? "B" : previewScore.overall >= 60 ? "C" : "D"}
+                  ランク: {getGrade(previewScore.overall)}
                 </div>
               </div>
 
