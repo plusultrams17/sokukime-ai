@@ -142,7 +142,7 @@ ${isB2B ? `- 取引タイプ: B2B（法人取引）─ 営業マンの「${produ
     });
 
     const assistantMessage =
-      response.choices[0]?.message?.content ?? getDefaultResponse();
+      response.choices[0]?.message?.content || getDefaultResponse();
 
     return NextResponse.json({ message: assistantMessage });
   } catch (error) {

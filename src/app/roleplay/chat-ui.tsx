@@ -178,9 +178,11 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
       }).then((r) => r.json()).catch(() => ({ message: "（通信エラー）" })),
     ]);
 
+    const assistantContent = chatRes.message || chatRes.error || "（通信エラーが発生しました。もう一度お試しください）";
+
     const finalMessages: Message[] = [
       ...newMessages,
-      { role: "assistant", content: chatRes.message },
+      { role: "assistant", content: assistantContent },
     ];
     setMessages(finalMessages);
     setIsLoading(false);
