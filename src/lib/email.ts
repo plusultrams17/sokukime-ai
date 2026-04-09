@@ -933,7 +933,7 @@ function winback7DaysEmail(unsubscribeUrl?: string): { subject: string; html: st
       <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>練習量とスコアの関係</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
         <li>1日1回 → スコア<strong>維持</strong>がやっと</li>
-        <li>1日3回以上 → スコアが<strong>平均20点UP</strong></li>
+        <li>1日3回以上 → スコアが<strong>着実にUP</strong>する傾向</li>
         <li>練習なし → <strong>スキルが徐々に低下</strong></li>
       </ul>
     </div>
@@ -1276,7 +1276,7 @@ function predictiveChurnEmail(unsubscribeUrl?: string): { subject: string; html:
   };
 }
 
-/** Streak milestone celebration email — 競合失敗分析: 習慣形成メールがDAUを20-30%向上 */
+/** Streak milestone celebration email — 競合失敗分析: 習慣形成メールがDAU向上に寄与 */
 function streakMilestoneEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
     subject: "🔥 ストリーク達成おめでとうございます！",
