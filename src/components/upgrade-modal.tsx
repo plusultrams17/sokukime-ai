@@ -148,7 +148,7 @@ export function UpgradeModal({
               この機能はProプラン限定です
             </h2>
             <p className="mb-5 text-center text-sm text-muted">
-              全機能を使って営業力を最大限に鍛えましょう
+              Proプランで営業力を最大限に鍛えましょう
             </p>
           </>
         )}
@@ -238,7 +238,7 @@ export function UpgradeModal({
             disabled={isLoading}
             className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
           >
-            {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
+            {isLoading ? "処理中..." : "7日間無料でAIロープレを試す"}
           </button>
           {errorMsg && (
             <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400 text-center">
@@ -246,7 +246,7 @@ export function UpgradeModal({
             </div>
           )}
           <div className="text-center text-[11px] text-muted">
-            今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで全機能無料 ・ いつでも解約OK
+            今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで無料 ・ いつでも解約OK
           </div>
           <button
             onClick={onClose}

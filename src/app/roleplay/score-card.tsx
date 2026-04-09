@@ -634,7 +634,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
               }}
               className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
             >
-              7日間無料で全機能を試す
+              7日間無料でAIロープレを試す
             </button>
             <p className="mt-2 text-[11px] text-muted">
               14日間返金保証・いつでも解約OK・違約金なし

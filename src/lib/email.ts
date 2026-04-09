@@ -167,7 +167,7 @@ function thirdRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
 
 function trialExpiring3DaysEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "無料トライアル残り3日 — Proの全機能を使い切りましたか？",
+    subject: "無料トライアル残り3日 — AIロープレは試しましたか？",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -178,7 +178,7 @@ function trialExpiring3DaysEmail(unsubscribeUrl?: string): { subject: string; ht
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">トライアル残り3日です</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
       7日間の無料トライアルが<strong>あと3日</strong>で終了します。<br>
-      Proプランの全機能は使い切れましたか？
+      AIロープレは試しましたか？
     </p>
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>残り3日でやっておきたいこと</strong></p>

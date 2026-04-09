@@ -32,7 +32,7 @@ const faqItems = [
   {
     question: "7日間の無料トライアルとは？",
     answer:
-      "Proプランに申し込むと、最初の7日間は無料で全機能をお試しいただけます。トライアル期間中にいつでもキャンセル可能で、キャンセルすれば一切課金されません。",
+      "Proプランに申し込むと、最初の7日間は無料でAIロープレ（1日5回）をお試しいただけます。トライアル期間中にいつでもキャンセル可能で、キャンセルすれば一切課金されません。トライアル終了後、全22レッスン・無制限ロープレなどPro全機能が解放されます。",
   },
   {
     question: "いつでも解約できますか？",
@@ -316,7 +316,7 @@ export default function PricingPage() {
                     最初の7日間は無料
                   </p>
                   <p className="mt-0.5 text-xs text-muted">
-                    トライアル中いつでもキャンセルOK。その後 ¥{monthlyPrice.toLocaleString()}/月
+                    基本3レッスン・AIロープレ1日5回をお試し。いつでもキャンセルOK
                   </p>
                 </div>
               </>
@@ -335,7 +335,7 @@ export default function PricingPage() {
                 disabled={isLoading}
                 className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
               >
-                {isLoading ? "処理中..." : "無料で7日間すべての機能を使う"}
+                {isLoading ? "処理中..." : "7日間無料でAIロープレを試す"}
               </button>
             )}
             {errorMsg && (
@@ -474,7 +474,7 @@ export default function PricingPage() {
         {currentPlan !== "pro" && (
           <div className="mt-16 text-center">
             <p className="mb-5 text-muted">
-              7日間の無料トライアルで全機能をお試し。いつでも解約OK
+              7日間の無料トライアルでAIロープレをお試し。いつでも解約OK
             </p>
             <button
                 onClick={handleUpgrade}
