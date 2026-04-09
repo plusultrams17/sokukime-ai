@@ -84,7 +84,7 @@ export default function FeaturesPage() {
       />
       <Header />
 
-      <section className="px-6 pt-32 pb-16">
+      <section className="px-4 sm:px-6 pt-32 pb-16">
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="mb-4 text-4xl font-bold">機能紹介</h1>
           <p className="text-lg text-muted">
@@ -96,7 +96,7 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      <section className="px-6 pb-20">
+      <section className="px-4 sm:px-6 pb-20">
         <div className="mx-auto max-w-4xl space-y-8">
           {features.map((f) => (
             <div
@@ -137,7 +137,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* Comparison */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 sm:px-6 py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-8 text-center text-2xl font-bold">
             従来の営業練習との違い
@@ -184,7 +184,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* Related Content */}
-      <section className="border-t border-card-border px-6 py-16">
+      <section className="border-t border-card-border px-4 sm:px-6 py-16">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-8 text-center text-2xl font-bold">関連コンテンツ</h2>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -214,7 +214,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 sm:px-6 py-20">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-2xl font-bold">
             無料で営業力を鍛え始める

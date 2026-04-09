@@ -135,7 +135,7 @@ export default function ToolsPage() {
       <Header />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f1729] to-[#1a2744] px-6 pt-24 pb-16 sm:pt-32 sm:pb-20">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f1729] to-[#1a2744] px-4 sm:px-6 pt-24 pb-16 sm:pt-32 sm:pb-20">
         <div className="relative z-10 mx-auto max-w-4xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
             登録不要・完全無料
@@ -152,7 +152,7 @@ export default function ToolsPage() {
       </section>
 
       {/* Tools Grid */}
-      <section className="px-6 py-16 sm:py-24">
+      <section className="px-4 sm:px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-5xl">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {tools.map((tool) => (
@@ -210,7 +210,7 @@ export default function ToolsPage() {
       </section>
 
       {/* Pro Upsell */}
-      <section className="px-6 pb-8">
+      <section className="px-4 sm:px-6 pb-8">
         <div className="mx-auto max-w-3xl">
           <div className="rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-8 text-center">
             <h2 className="mb-2 text-xl font-bold text-foreground sm:text-2xl">
@@ -235,7 +235,7 @@ export default function ToolsPage() {
       </section>
 
       {/* SEO Content */}
-      <section className="px-6 pb-16 sm:pb-24">
+      <section className="px-4 sm:px-6 pb-16 sm:pb-24">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-6 text-2xl font-bold text-foreground sm:text-3xl">
             なぜ無料の営業ツールが必要なのか
@@ -269,7 +269,7 @@ export default function ToolsPage() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 pb-16 sm:pb-24">
+      <section className="px-4 sm:px-6 pb-16 sm:pb-24">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">
             ツールで見つけた課題をAIロープレで克服
@@ -312,7 +312,7 @@ export default function ToolsPage() {
       </section>
 
       {/* Industry link */}
-      <section className="px-6 pb-16 sm:pb-24">
+      <section className="px-4 sm:px-6 pb-16 sm:pb-24">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm text-muted">
             業種別の営業ロープレもあります →{" "}

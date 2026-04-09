@@ -332,13 +332,13 @@ export default function Home() {
             <span className="hidden sm:inline text-card-border">|</span>
             <span>いつでも退会OK</span>
           </div>
-          {/* Pro plan anchoring */}
-          <div className="mt-6 mx-auto max-w-md rounded-lg border border-card-border bg-background px-4 py-3 sm:mt-8 sm:px-6 sm:py-4">
-            <p className="text-xs text-muted mb-1">本格的に営業力を伸ばしたい方へ</p>
+          {/* Free-first value prop */}
+          <div className="mt-6 mx-auto max-w-md rounded-lg border border-accent/30 bg-accent/5 px-4 py-3 sm:mt-8 sm:px-6 sm:py-4">
             <p className="text-sm font-bold text-foreground">
-              Proプラン <span style={{ color: "var(--lp-cta)" }}>¥2,980</span><span className="text-muted font-normal">/月（税込）</span>
+              無料プランでできること
             </p>
-            <p className="text-xs text-muted mt-1">全業種トークスクリプト・AIロープレ無制限・7日間無料トライアル付き</p>
+            <p className="text-xs text-muted mt-1">AIロープレ体験・スコア診断・基本レッスン3本</p>
+            <p className="text-xs text-muted">すべて無料、登録30秒</p>
           </div>
         </div>
       </section>

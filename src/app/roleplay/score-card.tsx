@@ -586,7 +586,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
         {/* Share buttons */}
         <div className="mt-6 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-5 text-center">
           <p className="mb-1 text-sm font-bold">スコアをシェアして仲間と競おう</p>
-          <p className="mb-3 text-xs text-muted">シェアした人の<span className="font-bold text-accent">87%</span>が「仲間と競い合うことでスコアが伸びた」と回答</p>
+          <p className="mb-3 text-xs text-muted">仲間と一緒に練習するとモチベーションが続きやすくなります</p>
           <div className="flex items-center justify-center gap-3">
             <a
               href={shareUrl}

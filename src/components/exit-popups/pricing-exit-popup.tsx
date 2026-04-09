@@ -60,7 +60,7 @@ export function PricingExitPopup() {
 
           {/* Risk removal */}
           <p className="mb-4 text-center text-xs text-muted">
-            &#10003; 登録不要　&#10003; 完全無料　&#10003; 60秒で開始
+            &#10003; 登録不要　&#10003; 基本レッスン無料　&#10003; 60秒で開始
           </p>
 
           {/* CTA — free learn primary */}

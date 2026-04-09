@@ -301,7 +301,7 @@ export default function WorksheetPage() {
       <Header />
 
       {/* Hero */}
-      <section className="px-6 pt-32 pb-6">
+      <section className="px-4 sm:px-6 pt-32 pb-6">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="mb-2 text-2xl font-bold text-[#1E293B] sm:text-3xl">
             営業準備ワークシート
@@ -339,7 +339,7 @@ export default function WorksheetPage() {
       ) : (
       <>
       {/* Industry Input */}
-      <section className="px-6 pb-4">
+      <section className="px-4 sm:px-6 pb-4">
         <div className="mx-auto max-w-3xl">
           <div className="rounded-[14px] border border-[#E8E4DD] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
             <label className="mb-2 block text-sm font-bold text-[#1E293B]">
@@ -372,7 +372,7 @@ export default function WorksheetPage() {
       </section>
 
       {/* Worksheet */}
-      <section className="px-6 pb-16">
+      <section className="px-4 sm:px-6 pb-16">
         <div className="mx-auto max-w-3xl">
           {/* Sticky Tab Bar + Progress */}
           <div className="sticky top-0 z-10 -mx-6 bg-[#FAFAF8]/95 px-6 pb-2 pt-3 backdrop-blur-sm">
@@ -416,7 +416,7 @@ export default function WorksheetPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-[#E8E4DD] px-6 py-16">
+      <section className="border-t border-[#E8E4DD] px-4 sm:px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-3 text-xl font-bold text-[#1E293B]">
             準備ができたら、ロープレで実践しよう

@@ -16,8 +16,7 @@ const grades = [
   { grade: "A", range: "80-89", color: "text-green-400", desc: "高い営業力。あと少しでマスターレベル。" },
   { grade: "B", range: "60-79", color: "text-yellow-400", desc: "基本は身についている。応用力を磨きましょう。" },
   { grade: "C", range: "40-59", color: "text-orange-400", desc: "伸びしろ大。特定のステップを重点練習。" },
-  { grade: "D", range: "20-39", color: "text-red-400", desc: "基本の型から練習しましょう。" },
-  { grade: "E", range: "0-19", color: "text-red-400", desc: "まずはアプローチの型から始めましょう。" },
+  { grade: "D", range: "0-39", color: "text-red-400", desc: "基本の型から練習しましょう。まずはアプローチから。" },
 ];
 
 const categories = [
@@ -171,7 +170,7 @@ export default function ScoringFeaturePage() {
                 icon: "",
                 image: "/images/pages/scoring-total.png",
                 title: "総合スコア & ランク",
-                desc: "100点満点の総合評価とS〜Eのランク表示",
+                desc: "100点満点の総合評価とS〜Dのランク表示",
               },
               {
                 icon: "",

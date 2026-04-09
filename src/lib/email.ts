@@ -56,7 +56,7 @@ function welcomeEmail(unsubscribeUrl?: string): { subject: string; html: string 
     </div>
     <div style="background:#fff7ed;border-radius:8px;padding:12px 16px;margin:0 0 8px;text-align:center">
       <p style="font-size:13px;color:#f97316;font-weight:bold;margin:0 0 4px">
-        🎁 7日間の無料Pro体験が始まりました！
+        7日間の無料Pro体験が始まりました
       </p>
       <p style="font-size:12px;color:#374151;margin:0">
         無制限ロープレ・AIコーチ・詳細スコアが7日間すべて無料。
@@ -83,7 +83,7 @@ function firstRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">初回ロープレ、お疲れさまでした！</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
       AIとの商談練習、いかがでしたか？<br>
-      最初は緊張するかもしれませんが、回数を重ねるごとに<strong>確実にスコアは上がります。</strong>
+      最初は緊張するかもしれませんが、回数を重ねるごとに<strong>スコアの傾向が見えてきます。</strong>
     </p>
     <div style="background:#f0fdf4;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#166534;margin:0 0 8px"><strong>スコアの伸ばし方</strong></p>
@@ -94,7 +94,7 @@ function firstRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
       </ul>
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
-      研究によると、営業スキルの定着には<strong>最低20回の反復練習</strong>が必要とされています。<br>
+      繰り返し練習することで営業スキルは定着していきます。<br>
       まずは毎日1回のロープレを3日間続けてみましょう。
     </p>
     <div style="text-align:center;margin:0 0 24px">
@@ -103,7 +103,7 @@ function firstRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      スコアが20点上がったユーザーの平均練習回数は7回です
+      練習を重ねるほどスコアの伸びを実感できます
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}
@@ -123,10 +123,10 @@ function thirdRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
 <body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
 <div style="max-width:560px;margin:0 auto;padding:32px 16px">
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
-    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">3回目のロープレ、素晴らしい！</h1>
+    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">3回目のロープレ完了</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      3回続けたあなたは、すでに<strong>素晴らしい行動力</strong>の持ち主です。<br>
-      ここから本当の上達フェーズに入ります。
+      3回続けた実績が、本格的な上達フェーズへの入口です。<br>
+      ここからさらにスコアが伸びてきます。
     </p>
     <div style="background:#fffbeb;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>無料プランの制限</strong></p>
@@ -1016,7 +1016,7 @@ function powerUserUpgradeEmail(unsubscribeUrl?: string): { subject: string; html
 <body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
 <div style="max-width:560px;margin:0 auto;padding:32px 16px">
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
-    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">毎日の練習、素晴らしいです！</h1>
+    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">毎日の練習、継続中です</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
       3日以上連続でロープレを続けているあなたの<strong>継続力は本物</strong>です。<br>
       毎日制限にぶつかっていませんか？
@@ -1287,11 +1287,10 @@ function streakMilestoneEmail(unsubscribeUrl?: string): { subject: string; html:
 <body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
 <div style="max-width:560px;margin:0 auto;padding:32px 16px">
   <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
-    <div style="text-align:center;font-size:48px;margin:0 0 16px">🔥</div>
-    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">連続練習記録を更新中！</h1>
+    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">連続練習記録を更新中</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      毎日の練習を続けているあなたは、本当に素晴らしいです。<br>
-      研究によると、<strong>毎日練習を続ける営業マンは、週1回の人より3倍速くスコアが伸びます。</strong>
+      毎日の継続が、着実に成果につながっています。<br>
+      <strong>毎日練習を続けることで、着実にスキルが定着していきます。</strong>
     </p>
     <div style="background:#fff7ed;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>ストリーク継続のコツ</strong></p>

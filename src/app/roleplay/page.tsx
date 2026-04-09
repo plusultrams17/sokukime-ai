@@ -1605,7 +1605,7 @@ function AuthGateContent({
                   <span className="text-2xl font-black text-muted/30">/ 100</span>
                 </div>
                 <div className="mt-1 text-sm font-bold text-muted">
-                  ランク: {previewScore.overall >= 90 ? "S" : previewScore.overall >= 80 ? "A" : previewScore.overall >= 70 ? "B" : previewScore.overall >= 60 ? "C" : previewScore.overall >= 40 ? "D" : "E"}
+                  ランク: {previewScore.overall >= 90 ? "S" : previewScore.overall >= 80 ? "A" : previewScore.overall >= 70 ? "B" : previewScore.overall >= 60 ? "C" : "D"}
                 </div>
               </div>
 

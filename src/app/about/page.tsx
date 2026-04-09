@@ -67,9 +67,9 @@ export default function AboutPage() {
       <Header />
 
       {/* Hero */}
-      <section className="px-6 pt-32 pb-20">
+      <section className="px-4 sm:px-6 pt-32 pb-20">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="mb-6 text-4xl font-bold leading-tight">
+          <h1 className="mb-6 text-2xl sm:text-4xl font-bold leading-tight">
             営業の「練習」を、
             <br />
             <span className="text-accent">もっと身近に。</span>
@@ -86,7 +86,7 @@ export default function AboutPage() {
       <section className="border-t border-card-border px-4 py-10 sm:px-6 sm:py-12">
         <div className="mx-auto max-w-3xl">
           <p className="text-sm leading-relaxed text-muted">
-            <strong className="text-foreground">成約コーチAI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間無制限ロープレで解決します。
+            <strong className="text-foreground">成約コーチAI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間ロープレ（Proなら無制限）で解決します。
           </p>
         </div>
       </section>
@@ -201,8 +201,8 @@ export default function AboutPage() {
               </p>
               <p>
                 営業研修は1回5万円以上が相場。しかも月1回の集合研修では、
-                <strong className="text-foreground">87%の内容が30日以内に忘れられる</strong>
-                というデータがあります（ES Research調べ）。
+                <strong className="text-foreground">学んだ内容の大半が30日以内に忘れられる</strong>
+                と言われています。
                 先輩へのロープレ依頼も、相手の時間を奪う負い目があり、十分な回数をこなせないのが現実です。
               </p>
               <p>

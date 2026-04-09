@@ -179,7 +179,7 @@ function NPSInline() {
           <p className="mb-4 text-xs text-muted text-center">
             0（全く薦めない）〜 10（強く薦める）
           </p>
-          <div className="flex justify-center gap-1.5">
+          <div className="flex flex-wrap justify-center gap-1.5">
             {Array.from({ length: 11 }, (_, i) => (
               <button
                 key={i}
@@ -289,7 +289,7 @@ export default function DashboardPage() {
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">1</span>
                 <div>
                   <p className="text-sm font-medium text-foreground">営業の型を学ぶ（5分）</p>
-                  <p className="text-xs text-muted">22レッスンで基本を把握</p>
+                  <p className="text-xs text-muted">レッスンで基本を把握</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -389,7 +389,7 @@ export default function DashboardPage() {
                     Pro体験中 -- 残り{data.trialDaysRemaining}日
                   </div>
                   <div className="text-xs text-muted">
-                    無制限ロープレ・AIコーチ・詳細スコアが無料で使えます
+                    1日5回のロープレ・AIコーチが無料で使えます
                   </div>
                 </div>
               </div>

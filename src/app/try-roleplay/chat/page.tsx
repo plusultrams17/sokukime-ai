@@ -191,9 +191,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
       ? "B"
       : score.overall >= 60
       ? "C"
-      : score.overall >= 40
-      ? "D"
-      : "E";
+      : "D";
 
   const scoreColor =
     score.overall >= 80

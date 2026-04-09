@@ -50,7 +50,7 @@ export function ReferralPrompt({ score }: ReferralPromptProps) {
         </button>
 
         <div className="mb-2"><svg className="h-5 w-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <h3 className="mb-1 text-sm font-bold">素晴らしいスコアです！</h3>
+        <h3 className="mb-1 text-sm font-bold">スコア70点以上を達成</h3>
         <p className="mb-3 text-xs text-muted">
           友達に紹介して、お互い ¥1,000 OFF で営業力アップしませんか？
         </p>
