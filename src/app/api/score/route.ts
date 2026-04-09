@@ -25,6 +25,22 @@ export async function POST(request: NextRequest) {
     const input = await request.json();
     const result = await scoreConversation(input);
 
+    // Check user plan — free users only see 1 category
+    const FREE_VISIBLE_CATEGORIES = 1;
+    let userPlan: "free" | "pro" = "free";
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("plan, subscription_status")
+        .eq("id", user.id)
+        .single();
+      if (profile?.plan === "pro" || profile?.subscription_status === "trialing") {
+        userPlan = "pro";
+      }
+    } catch {
+      // Default to free if profile fetch fails
+    }
+
     // Persist score for dashboard history + shareable link
     let scoreId: string | null = null;
     let previousBest: number | null = null;
@@ -61,8 +77,16 @@ export async function POST(request: NextRequest) {
       // Score save failure should not block response
     }
 
+    // Filter categories for free users (server-side gate)
+    const filteredResult = userPlan === "pro"
+      ? result
+      : {
+          ...result,
+          categories: result.categories.slice(0, FREE_VISIBLE_CATEGORIES),
+        };
+
     return NextResponse.json({
-      ...result,
+      ...filteredResult,
       scoreId,
       previousScore: previousBest,
     });

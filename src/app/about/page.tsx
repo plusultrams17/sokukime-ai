@@ -83,7 +83,7 @@ export default function AboutPage() {
       </section>
 
       {/* AEO Definition */}
-      <section className="border-t border-card-border px-6 py-12">
+      <section className="border-t border-card-border px-4 py-10 sm:px-6 sm:py-12">
         <div className="mx-auto max-w-3xl">
           <p className="text-sm leading-relaxed text-muted">
             <strong className="text-foreground">成約コーチAI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間無制限ロープレで解決します。
@@ -92,7 +92,7 @@ export default function AboutPage() {
       </section>
 
       {/* Problem */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-8 text-2xl font-bold">解決したい課題</h2>
           <div className="space-y-6 text-sm leading-relaxed text-muted">
@@ -129,7 +129,7 @@ export default function AboutPage() {
       </section>
 
       {/* Method */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-4 text-2xl font-bold">成約5ステップメソッドとは</h2>
           <p className="mb-8 text-sm text-muted leading-relaxed">
@@ -182,7 +182,7 @@ export default function AboutPage() {
       </section>
 
       {/* Founder Credibility — 競合失敗分析: 信頼性の欠如が最大の離脱要因 */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-8 text-2xl font-bold">開発の背景</h2>
           <div className="rounded-2xl border border-card-border bg-card p-6 sm:p-8">
@@ -255,7 +255,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-8 text-2xl font-bold">大切にしていること</h2>
           <div className="grid gap-6 sm:grid-cols-3">
@@ -274,7 +274,7 @@ export default function AboutPage() {
       </section>
 
       {/* Related Links */}
-      <section className="border-t border-card-border px-6 py-16">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-16">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-6 text-xl font-bold">もっと詳しく</h2>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -311,7 +311,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-2xl font-bold">
             営業力を鍛える、新しい方法を試してみませんか？

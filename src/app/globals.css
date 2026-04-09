@@ -68,6 +68,53 @@ body {
   50%      { opacity: 1;   box-shadow: 0 0 8px var(--lp-cta); }
 }
 
+/* ── Fire / Burning text effect (Challenge page) ── */
+@keyframes fire-flicker {
+  0%, 100% { text-shadow: 0 0 4px #f97316, 0 0 11px #f97316, 0 0 19px #ea580c, 0 0 40px #ea580c; }
+  25%      { text-shadow: 0 0 4px #f97316, 0 0 14px #f97316, 0 0 22px #ea580c, 0 0 50px #dc2626; }
+  50%      { text-shadow: 0 0 6px #f97316, 0 0 17px #fb923c, 0 0 25px #ea580c, 0 0 55px #dc2626, 0 -3px 60px #dc2626; }
+  75%      { text-shadow: 0 0 4px #f97316, 0 0 12px #f97316, 0 0 20px #ea580c, 0 0 45px #ea580c; }
+}
+@keyframes fire-badge-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(249,115,22,0.4), 0 0 20px rgba(249,115,22,0.2); }
+  50%      { box-shadow: 0 0 12px rgba(249,115,22,0.6), 0 0 30px rgba(249,115,22,0.3), 0 0 50px rgba(234,88,12,0.15); }
+}
+@keyframes fire-ember {
+  0%   { transform: translateY(0) scale(1); opacity: 0.8; }
+  50%  { opacity: 1; }
+  100% { transform: translateY(-60px) scale(0); opacity: 0; }
+}
+@keyframes fire-wave {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.fire-text {
+  color: #fff;
+  animation: fire-flicker 2s ease-in-out infinite;
+}
+.fire-text-accent {
+  color: #fbbf24;
+  text-shadow: 0 0 8px #f97316, 0 0 20px #ea580c, 0 0 40px rgba(234,88,12,0.4);
+  animation: fire-flicker-accent 2s ease-in-out infinite;
+}
+@keyframes fire-flicker-accent {
+  0%, 100% { color: #fbbf24; text-shadow: 0 0 8px #f97316, 0 0 20px #ea580c, 0 0 40px rgba(234,88,12,0.4); }
+  50%      { color: #fde68a; text-shadow: 0 0 12px #fb923c, 0 0 28px #f97316, 0 0 50px rgba(234,88,12,0.5); }
+}
+.fire-badge {
+  animation: fire-badge-glow 2s ease-in-out infinite;
+}
+.fire-ember {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f97316;
+  animation: fire-ember 1.5s ease-out infinite;
+  pointer-events: none;
+}
+
 /* ── LP (BizReach-style) ── */
 
 @keyframes lp-shine {

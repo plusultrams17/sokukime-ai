@@ -367,7 +367,7 @@ export default function WorksheetLP() {
       {/* ═══════════════════════════════════════════════
           1. HERO
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 pt-24 pb-16 sm:pt-32 sm:pb-24">
+      <section className="relative overflow-hidden px-4 pt-24 sm:px-6 pb-16 sm:pt-32 sm:pb-24">
         {/* Decorative blobs */}
         <div
           className="blob blob-teal"
@@ -446,7 +446,7 @@ export default function WorksheetLP() {
       {/* ═══════════════════════════════════════════════
           2. CHALLENGE / EMPATHY
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-20">
+      <section className="px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2
             className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl"
@@ -506,7 +506,7 @@ export default function WorksheetLP() {
       {/* ═══════════════════════════════════════════════
           3. FEATURE DETAILS
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div
           className="blob blob-pink"
           style={{ width: 300, height: 300, top: -40, left: -60 }}
@@ -566,7 +566,7 @@ export default function WorksheetLP() {
       {/* ═══════════════════════════════════════════════
           4. USE CASES / SCENES
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-24">
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-4xl">
           <h2
             className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl"
@@ -631,7 +631,7 @@ export default function WorksheetLP() {
       {/* ═══════════════════════════════════════════════
           5. CROSS-LINKS (Other Features)
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-20">
+      <section className="px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl">
             ワークシートと一緒に使うと、もっと効果的
@@ -711,7 +711,7 @@ export default function WorksheetLP() {
       {/* ═══════════════════════════════════════════════
           6. FAQ
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div
           className="blob blob-cream"
           style={{ width: 250, height: 250, bottom: -40, left: -60 }}
@@ -758,7 +758,7 @@ export default function WorksheetLP() {
       {/* ═══════════════════════════════════════════════
           7. FINAL CTA
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div
           className="blob blob-teal"
           style={{ width: 400, height: 400, top: -100, left: "30%" }}

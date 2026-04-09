@@ -60,6 +60,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check daily usage limit (server-side gate)
+    const { getUsageStatus } = await import("@/lib/usage");
+    const usage = await getUsageStatus(supabase, user.id);
+    if (!usage.canStart && usage.plan === "free") {
+      return NextResponse.json(
+        { error: "本日のロープレ上限に達しました。Proプランで無制限に練習できます。", limitReached: true },
+        { status: 403 }
+      );
+    }
+
     const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus } =
       await request.json();
 

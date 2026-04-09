@@ -155,7 +155,7 @@ export default function IndustryWeaknessPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto max-w-2xl px-6 pt-24 pb-20">
+      <main className="mx-auto max-w-2xl px-4 pt-24 pb-20 sm:px-6">
         {/* Hero */}
         <div className="mb-10 text-center">
           <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.4em] text-muted">

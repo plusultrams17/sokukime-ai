@@ -197,7 +197,7 @@ export default function ExamPage() {
     <div className="min-h-screen bg-white">
       <Header />
 
-      <div className="pt-24 px-6 pb-20">
+      <div className="pt-20 px-4 pb-16 sm:pt-24 sm:px-6 sm:pb-20">
         <div className="mx-auto max-w-3xl">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-muted mb-8">
@@ -276,7 +276,7 @@ export default function ExamPage() {
 
               {/* Exam specs */}
               <div className="border-t border-b border-gray-200 py-4 mb-8">
-                <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="grid grid-cols-3 gap-2 text-center sm:gap-4">
                   <div>
                     <p className="text-2xl font-bold text-foreground">
                       {TOTAL_QUESTIONS}

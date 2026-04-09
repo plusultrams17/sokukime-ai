@@ -526,7 +526,7 @@ export default function ObjectionScenarioPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto max-w-2xl px-6 py-12">
+      <main className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
         {/* Title */}
         <div className="mb-10 text-center">
           <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-muted">

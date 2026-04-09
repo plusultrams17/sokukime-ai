@@ -151,7 +151,7 @@ export default function InsightsPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-4xl px-6 py-10">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
         <div className="mb-8">
           <div className="mb-2 h-4 w-32 animate-pulse rounded bg-card-border" />
           <div className="h-8 w-64 animate-pulse rounded bg-card-border" />
@@ -179,7 +179,7 @@ export default function InsightsPage() {
       <Header />
 
       <div
-        className={`mx-auto max-w-4xl px-6 py-10 ${
+        className={`mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 ${
           panelOpen ? "lg:mr-[400px] lg:max-w-3xl" : ""
         }`}
       >

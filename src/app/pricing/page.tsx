@@ -83,6 +83,7 @@ export default function PricingPage() {
   const monthlyPrice = 2980;
 
   async function handleUpgrade() {
+    if (isLoading) return; // Prevent duplicate clicks
     setIsLoading(true);
     setErrorMsg("");
     trackCTAClick("pricing_pro", "pricing_page", "/api/stripe/checkout");

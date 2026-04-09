@@ -33,19 +33,28 @@ export default function SettingsPage() {
     load();
   }, []);
 
+  const [actionLoading, setActionLoading] = useState<"billing" | "logout" | null>(null);
+
   async function handleManageSubscription() {
+    if (actionLoading) return;
+    setActionLoading("billing");
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else {
+        setActionLoading(null);
       }
     } catch {
       alert("サブスクリプション管理画面を開けませんでした。もう一度お試しください。");
+      setActionLoading(null);
     }
   }
 
   async function handleLogout() {
+    if (actionLoading) return;
+    setActionLoading("logout");
     const supabase = createClient();
     if (supabase) {
       await supabase.auth.signOut();
@@ -64,7 +73,7 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-6">
+        <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4 sm:px-6">
           <Logo size="sm" />
           <Link
             href="/dashboard"
@@ -75,7 +84,7 @@ export default function SettingsPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-2xl px-6 py-8">
+      <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8">
         <h1 className="mb-6 text-xl font-bold">設定</h1>
 
         {/* Account */}
@@ -101,9 +110,10 @@ export default function SettingsPage() {
           {plan === "pro" ? (
             <button
               onClick={handleManageSubscription}
-              className="inline-flex h-9 items-center rounded-lg bg-accent px-4 text-sm font-bold text-white transition hover:bg-accent-hover"
+              disabled={actionLoading === "billing"}
+              className="inline-flex h-9 items-center rounded-lg bg-accent px-4 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
             >
-              請求・サブスクリプション管理
+              {actionLoading === "billing" ? "読み込み中..." : "請求・サブスクリプション管理"}
             </button>
           ) : (
             <div className="flex items-center justify-between">
@@ -133,9 +143,10 @@ export default function SettingsPage() {
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="w-full rounded-xl border border-card-border bg-card p-4 text-sm text-muted transition hover:text-red-500 hover:border-red-200"
+          disabled={actionLoading === "logout"}
+          className="w-full rounded-xl border border-card-border bg-card p-4 text-sm text-muted transition hover:text-red-500 hover:border-red-200 disabled:opacity-60"
         >
-          ログアウト
+          {actionLoading === "logout" ? "ログアウト中..." : "ログアウト"}
         </button>
       </div>
     </div>

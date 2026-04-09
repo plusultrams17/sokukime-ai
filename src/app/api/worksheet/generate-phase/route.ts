@@ -166,6 +166,17 @@ function getAnthropicClient(): Anthropic | null {
 
 export async function POST(request: NextRequest) {
   try {
+    // Auth check: require logged-in user to prevent API abuse (Anthropic costs)
+    const { createClient } = await import("@/lib/supabase/server");
+    const supabase = await createClient();
+    if (!supabase) {
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { industry, phase, productInfo, targetInfo } = await request.json();
 
     if (!industry || phase === undefined || !PHASE_PROMPTS[phase]) {

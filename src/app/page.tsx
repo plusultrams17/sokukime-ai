@@ -102,7 +102,7 @@ export default function Home() {
           1. HERO — Text overlaid on full-width visual
       ═══════════════════════════════════════════════ */}
       <section
-        className="relative -mt-16 w-full overflow-hidden"
+        className="relative -mt-16 w-full overflow-hidden pt-10 sm:pt-0"
         style={{ backgroundColor: "#1a1a1a", minHeight: "100dvh" }}
       >
         {/* Background image — bottom-aligned so mountain/path stays low */}
@@ -148,7 +148,7 @@ export default function Home() {
             >
               あなたの営業力、何点？
               <br />
-              <span className="lp-highlight-hero">弱点がわかれば、売れる。</span>
+              <span className="lp-highlight-hero">弱点がわかれば、<br className="sm:hidden" />売れる。</span>
             </p>
 
             {/* Sub heading */}
@@ -250,17 +250,17 @@ export default function Home() {
             sizes="100vw"
             className="w-full"
           />
-          <div className="absolute top-2 left-2 space-y-1.5 sm:top-8 sm:left-8 sm:space-y-3 lg:top-12 lg:left-12">
+          <div className="absolute top-1 left-1 space-y-1 sm:top-8 sm:left-8 sm:space-y-3 lg:top-12 lg:left-12">
             {[
               { value: "5カテゴリ", label: "スコアで弱点を可視化" },
               { value: "3分", label: "1回のロープレ所要時間" },
               { value: "22レッスン", label: "体系的な営業メソッド" },
             ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-1.5 rounded-lg bg-white/85 px-2 py-1.5 shadow-md backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-3">
-                <span className="shrink-0 text-[11px] font-bold sm:text-base lg:text-lg" style={{ color: "var(--lp-cta)" }}>
+              <div key={i} className="flex items-center gap-1 rounded-md bg-white/85 px-1.5 py-1 shadow-md backdrop-blur-sm sm:gap-2 sm:rounded-lg sm:px-4 sm:py-3">
+                <span className="shrink-0 text-[9px] font-bold sm:text-base lg:text-lg" style={{ color: "var(--lp-cta)" }}>
                   {stat.value}
                 </span>
-                <p className="text-[10px] leading-snug text-foreground sm:text-sm lg:text-base">
+                <p className="text-[8px] leading-snug text-foreground sm:text-sm lg:text-base">
                   {stat.label}
                 </p>
               </div>

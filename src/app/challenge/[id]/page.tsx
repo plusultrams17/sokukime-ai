@@ -155,7 +155,7 @@ export default function ChallengePlayPage({
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="mx-auto max-w-2xl px-6 pt-24 pb-16 sm:pt-28">
+      <div className="mx-auto max-w-2xl px-4 pt-20 pb-12 sm:px-6 sm:pt-28 sm:pb-16">
         {/* INTRO phase */}
         {phase === "intro" && (
           <div className="animate-fade-in-up space-y-6">

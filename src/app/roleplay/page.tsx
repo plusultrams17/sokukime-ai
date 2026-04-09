@@ -729,7 +729,7 @@ export default function RoleplayPage() {
             {/* Title */}
             <div className="text-center">
               <h1 className="mb-1 text-2xl font-extrabold" style={{ color: '#4d4c4a' }}>
-                業種を選ぶだけで、すぐ始められます
+                業種を選ぶだけで、<br className="sm:hidden" />すぐ始められます
               </h1>
               <p className="text-sm font-semibold" style={{ color: '#8a8680', marginBottom: '0.8em' }}>
                 あなたの業種をタップすると、3秒でロープレ開始

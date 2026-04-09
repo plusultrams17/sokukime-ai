@@ -2426,10 +2426,12 @@ function SceneManager({
       <OrbitControls
         ref={controlsRef}
         enablePan={false}
+        enableZoom={false}
         minDistance={2}
         maxDistance={7}
         minPolarAngle={Math.PI / 6}
         maxPolarAngle={Math.PI / 2.2}
+        touches={{ ONE: 1, TWO: 2 }}
       />
     </>
   );
@@ -2487,7 +2489,7 @@ function ChoiceCard({ choice, index, onSelect }: { choice: GameChoice; index: nu
     <button
       onClick={() => onSelect(choice)}
       onMouseEnter={() => soundEngine.playHover()}
-      className="group flex items-start gap-2.5 rounded-xl border border-white/10 bg-white/5 p-3 text-left transition-all hover:border-accent/40 hover:bg-accent/10 active:scale-[0.98] sm:p-4"
+      className="group flex items-start gap-2.5 rounded-xl border border-white/10 bg-white/5 p-3.5 text-left transition-all hover:border-accent/40 hover:bg-accent/10 active:scale-[0.98] active:bg-accent/15 sm:p-4"
     >
       <span className="mt-0.5 text-lg sm:text-xl">{choice.icon}</span>
       <span className="min-w-0 flex-1 text-xs font-medium leading-relaxed text-white/90 sm:text-sm">
@@ -3007,7 +3009,7 @@ export default function FullscreenScene({ scenarioId }: { scenarioId?: string })
               initSound();
               startPlaying();
             }}
-            className="absolute bottom-8 right-6 rounded-lg bg-white/10 px-4 py-2 text-xs text-white/50 transition hover:bg-white/20 hover:text-white/80"
+            className="absolute bottom-6 right-4 rounded-lg bg-white/15 px-5 py-3 text-sm text-white/60 transition hover:bg-white/25 hover:text-white/90 active:bg-white/30 sm:bottom-8 sm:right-6 sm:px-4 sm:py-2 sm:text-xs"
           >
             スキップ &gt;
           </button>
@@ -3198,8 +3200,8 @@ export default function FullscreenScene({ scenarioId }: { scenarioId?: string })
 
       {/* ─── RESULTS ─── */}
       {gamePhase === "ended" && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1a2744]/95 p-5 text-center backdrop-blur-md sm:p-8">
+        <div className="absolute inset-0 z-20 flex items-start justify-center overflow-y-auto bg-black/70 px-3 py-4 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6">
+          <div className="my-auto w-full max-w-md rounded-2xl border border-white/10 bg-[#1a2744]/95 p-4 text-center backdrop-blur-md sm:p-8">
             <div className="mb-2 text-5xl">{ending.emoji}</div>
             <h2 className="mb-2 text-xl font-bold text-white sm:text-2xl">{ending.title}</h2>
             <p className="mb-4 text-sm leading-relaxed text-white/60">{ending.description}</p>

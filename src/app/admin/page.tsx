@@ -157,7 +157,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-card-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="text-lg font-bold">成約コーチAI</Link>
           <div className="flex items-center gap-3">
             <span className="text-xs text-muted">
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-6 py-8">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
         <h1 className="mb-2 text-2xl font-bold">Revenue Dashboard</h1>
         <p className="mb-4 text-sm text-muted">収益・ユーザー・自動化メトリクスの一覧</p>
 

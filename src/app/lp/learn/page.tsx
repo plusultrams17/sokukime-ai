@@ -337,7 +337,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           1. HERO
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 pt-24 pb-16 sm:pt-32 sm:pb-24">
+      <section className="relative overflow-hidden px-4 pt-24 sm:px-6 pb-16 sm:pt-32 sm:pb-24">
         <div
           className="blob blob-teal"
           style={{ width: 350, height: 350, top: -80, right: -100 }}
@@ -436,7 +436,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           2. METHOD OVERVIEW (5ステップ)
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-24">
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-4xl">
           <h2
             className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl"
@@ -508,7 +508,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           3. CURRICULUM DETAILS
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div
           className="blob blob-pink"
           style={{ width: 300, height: 300, top: -40, left: -60 }}
@@ -588,7 +588,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           4. LEARNING FLOW (4ステップ)
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-24">
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-4xl">
           <h2
             className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl"
@@ -655,7 +655,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           5. COMPARISON TABLE
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div
           className="blob blob-cream"
           style={{ width: 300, height: 300, bottom: -60, right: -80 }}
@@ -786,7 +786,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           6. FOR MANAGERS (法人向け)
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-24">
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-4xl">
           <div className="rounded-2xl bg-foreground p-8 sm:p-12 text-center">
             <p className="mb-2 text-sm font-medium text-accent tracking-wide">
@@ -860,7 +860,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           7. CROSS-LINKS
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-20">
+      <section className="px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl">
             学んだことを実践で磨く
@@ -940,7 +940,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           8. FAQ
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div
           className="blob blob-teal"
           style={{ width: 250, height: 250, bottom: -40, left: -60 }}
@@ -987,7 +987,7 @@ export default function LearnLP() {
       {/* ═══════════════════════════════════════════════
           9. FINAL CTA
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div
           className="blob blob-cream"
           style={{ width: 400, height: 400, top: -100, left: "30%" }}

@@ -507,7 +507,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           1. HERO — 即座に価値を体験
       ═══════════════════════════════════════════════ */}
-      <section className="relative z-0 overflow-hidden px-6 pt-20 pb-16 sm:pt-28 sm:pb-20">
+      <section className="relative z-0 overflow-hidden px-4 pt-20 sm:px-6 pb-16 sm:pt-28 sm:pb-20">
         <div className="hero-city" aria-hidden="true" />
 
         <div className="relative z-10 mx-auto max-w-4xl text-center">
@@ -550,7 +550,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           2. PAIN POINTS / EMPATHY
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-20">
+      <section className="px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
             こんなお悩みありませんか？
@@ -588,7 +588,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           3. FEATURE DETAILS
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-20">
+      <section className="px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-6xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl">
             成約コーチAIの5つの武器
@@ -676,7 +676,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           5. HOW IT WORKS
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div className="blob blob-pink" style={{ width: 300, height: 300, top: -40, right: -60 }} />
         <div className="relative z-10 mx-auto max-w-5xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>
@@ -706,7 +706,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           6. INDUSTRIES
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-20">
+      <section className="px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-3 text-2xl font-bold text-foreground sm:text-3xl">
             あらゆる業種・商材に対応
@@ -727,7 +727,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           7. PRICING (SIMPLIFIED)
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-24">
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl">
             シンプルな料金プラン
@@ -809,7 +809,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           8. CROSS-SELL
       ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-16 sm:py-20">
+      <section className="px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl">
             ロープレ以外にも
@@ -865,7 +865,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           9. FAQ
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div className="blob blob-cream" style={{ width: 250, height: 250, bottom: -40, left: -60 }} />
         <div className="relative z-10 mx-auto max-w-3xl">
           <h2 className="mb-4 text-center text-2xl font-bold text-foreground sm:text-3xl">
@@ -898,7 +898,7 @@ export default function RoleplayLP() {
       {/* ═══════════════════════════════════════════════
           10. FINAL CTA
       ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-6 py-16 sm:py-24">
+      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
         <div className="blob blob-teal" style={{ width: 400, height: 400, top: -100, left: "30%" }} />
         <div className="relative z-10 mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl" style={{ textWrap: "balance" } as React.CSSProperties}>

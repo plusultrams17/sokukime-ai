@@ -251,9 +251,9 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
   };
 
   return (
-    <div className="flex flex-1 flex-col md:flex-row overflow-hidden">
+    <div className="flex flex-1 flex-col md:flex-row overflow-hidden min-h-0">
       {/* Main chat area */}
-      <div className="flex flex-1 flex-col min-w-0">
+      <div className="flex flex-1 flex-col min-w-0 min-h-0">
         {/* Step progress bar - sticky */}
         <div className="sticky top-0 z-30 border-b border-card-border bg-card px-3 py-2 sm:px-4">
           <div className="mx-auto max-w-3xl">

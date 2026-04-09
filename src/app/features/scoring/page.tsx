@@ -124,7 +124,7 @@ export default function ScoringFeaturePage() {
       </section>
 
       {/* Grade */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-8 text-2xl font-bold">ランク評価</h2>
           <div className="overflow-hidden rounded-2xl border border-card-border">
@@ -162,7 +162,7 @@ export default function ScoringFeaturePage() {
       </section>
 
       {/* What you get */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-8 text-2xl font-bold">スコアカードでわかること</h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -206,7 +206,7 @@ export default function ScoringFeaturePage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-card-border px-6 py-20">
+      <section className="border-t border-card-border px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-2xl font-bold">
             あなたの営業力は何点？

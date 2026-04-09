@@ -32,7 +32,7 @@ export default function ScriptGeneratorPage() {
       <JsonLd data={jsonLdData} />
       <Header />
 
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f1729] to-[#1a2744] px-6 pt-24 pb-16 sm:pt-32 sm:pb-20">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f1729] to-[#1a2744] px-4 pt-24 pb-16 sm:px-6 sm:pt-32 sm:pb-20">
         <div className="relative z-10 mx-auto max-w-4xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm"><Image src="/images/misc/tool-script-generator.png" alt="" width={24} height={24} className="rounded" /> 約1分・登録不要</div>
           <h1 className="mb-4 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
@@ -44,7 +44,7 @@ export default function ScriptGeneratorPage() {
         </div>
       </section>
 
-      <section className="px-6 py-10 sm:py-14">
+      <section className="px-4 py-10 sm:px-6 sm:py-14">
         <div className="mx-auto max-w-4xl">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="flex items-center gap-4 rounded-2xl border border-card-border bg-white p-5">
@@ -78,14 +78,14 @@ export default function ScriptGeneratorPage() {
         </div>
       </section>
 
-      <section className="px-6 pb-16 sm:pb-24">
+      <section className="px-4 pb-16 sm:px-6 sm:pb-24">
         <div className="mx-auto max-w-4xl">
           <ScriptGeneratorClient />
         </div>
       </section>
 
       {/* 5-Step Explanation (collapsed) */}
-      <section className="px-6 pb-16 sm:pb-24">
+      <section className="px-4 pb-16 sm:px-6 sm:pb-24">
         <div className="mx-auto max-w-3xl">
           <details className="group rounded-2xl border border-card-border bg-white shadow-sm">
             <summary className="flex cursor-pointer items-center justify-between px-6 py-5 text-base font-bold text-foreground [&::-webkit-details-marker]:hidden list-none sm:text-lg">
@@ -111,7 +111,7 @@ export default function ScriptGeneratorPage() {
       </section>
 
       {/* Related */}
-      <section className="px-6 pb-16 sm:pb-24">
+      <section className="px-4 pb-16 sm:px-6 sm:pb-24">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 text-xl font-bold text-foreground">関連ツール</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

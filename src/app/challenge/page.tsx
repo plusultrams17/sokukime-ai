@@ -24,14 +24,34 @@ export default function ChallengePage() {
       <Header />
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0c0c10] to-[#1a1a24] px-6 pt-24 pb-10 sm:pt-32 sm:pb-14">
         <div className="relative z-10 mx-auto max-w-4xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-4 py-1.5 text-sm font-bold text-accent">
+          {/* Fire embers (decorative floating particles) */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            {[...Array(8)].map((_, i) => (
+              <span
+                key={i}
+                className="fire-ember"
+                style={{
+                  left: `${15 + i * 10}%`,
+                  bottom: '40%',
+                  animationDelay: `${i * 0.3}s`,
+                  animationDuration: `${1.2 + (i % 3) * 0.4}s`,
+                  width: `${3 + (i % 3)}px`,
+                  height: `${3 + (i % 3)}px`,
+                  background: i % 2 === 0 ? '#f97316' : '#fbbf24',
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="fire-badge mb-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-4 py-1.5 text-sm font-bold text-accent">
             営業力トレーニング
           </div>
-          <h1 className="mb-4 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-            <span className="text-accent">営業</span>チャレンジ
+          <h1 className="fire-text mb-4 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+            <span className="fire-text-accent">営業</span>チャレンジ
           </h1>
           <p className="mx-auto max-w-2xl text-base text-white/85 leading-relaxed sm:text-lg mb-10">
-            3Dバーチャル商談で実戦トレーニング。60秒切り返しで瞬発力を鍛えよう。
+            <span className="fire-text" style={{ animationDelay: '0.5s' }}>3Dバーチャル<br className="sm:hidden" />商談で実戦トレーニング。</span><br className="hidden sm:inline" />
+            <span className="fire-text" style={{ animationDelay: '1s' }}>60秒切り返しで瞬発力を鍛えよう。</span>
           </p>
 
           {/* Hero Image — animated HUD frame */}

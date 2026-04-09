@@ -135,7 +135,7 @@ export default function TeamPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="mx-auto max-w-4xl px-6 py-12">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
         <h1 className="mb-2 text-3xl font-bold">チーム管理</h1>
         <p className="mb-8 text-muted">法人チームプランの管理ダッシュボード</p>
 
@@ -158,7 +158,7 @@ export default function TeamPage() {
             <p className="mb-6 text-sm text-muted">
               法人チームプラン（¥20,000/月・5名まで）でチーム全員の営業力を底上げしましょう。
             </p>
-            <div className="mx-auto flex max-w-md items-center gap-3">
+            <div className="mx-auto flex max-w-md flex-col items-stretch gap-3 sm:flex-row sm:items-center">
               <input
                 type="text"
                 value={orgName}
