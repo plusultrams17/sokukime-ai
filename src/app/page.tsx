@@ -142,13 +142,13 @@ export default function Home() {
             <p
               className="lp-heading mb-5 leading-[1.3] text-white sm:mb-7"
               style={{
-                fontSize: "clamp(30px, 6vw, 52px)",
+                fontSize: "clamp(26px, 6vw, 52px)",
                 textShadow: "0 2px 20px rgba(0,0,0,0.3)",
               }}
             >
               あなたの営業力、何点？
               <br />
-              <span className="lp-highlight-hero">弱点がわかれば、<br className="sm:hidden" />売れる。</span>
+              <span className="lp-highlight-hero">弱点がわかれば、売れる。</span>
             </p>
 
             {/* Sub heading */}
@@ -238,7 +238,7 @@ export default function Home() {
       <section style={{ backgroundColor: "#f7f8ea" }}>
         <div className="lp-section pb-0">
           <p className="lp-heading text-center" style={{ marginBottom: "-30px" }}>
-            5カテゴリの<span className="lp-highlight">スコア</span>で弱点が一目瞭然
+            5カテゴリの<span className="lp-highlight">スコア</span>で<br className="sm:hidden" />弱点が一目瞭然
           </p>
         </div>
         <div className="relative w-full">
