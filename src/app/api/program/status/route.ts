@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getPurchaseStatus } from "@/lib/lessons/access";
 
+// Force dynamic — no caching at edge/CDN
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET() {
   const supabase = await createClient();
   if (!supabase) {

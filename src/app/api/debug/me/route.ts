@@ -2,6 +2,13 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getPurchaseStatus } from "@/lib/lessons/access";
 
+// Force dynamic — no caching at edge/CDN
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+// Version marker to verify which build is serving
+const DEBUG_VERSION = "v3-tester-full-fix-2026-04-10";
+
 /**
  * 診断用: 自分のプロフィール状態を確認するためのエンドポイント
  * 認証必須。自分の情報だけ返す。
@@ -28,6 +35,13 @@ export async function GET() {
     .eq("id", user.id)
     .single();
 
+  // access.ts と全く同じ SELECT を再現してみる
+  const { data: narrowProfile, error: narrowProfileError } = await supabase
+    .from("profiles")
+    .select("plan, subscription_status, is_tester, tester_expires_at")
+    .eq("id", user.id)
+    .single();
+
   // 買い切りプログラム履歴
   const { data: purchases } = await supabase
     .from("program_purchases")
@@ -43,7 +57,20 @@ export async function GET() {
   // 統合判定
   const status = await getPurchaseStatus(supabase);
 
+  // 手動でテスター判定を再現
+  const testerExpiresAt = narrowProfile?.tester_expires_at as
+    | string
+    | null
+    | undefined;
+  const manualIsTesterActive =
+    narrowProfile?.is_tester === true &&
+    (testerExpiresAt === null ||
+      testerExpiresAt === undefined ||
+      new Date(testerExpiresAt) > new Date());
+
   return NextResponse.json({
+    _version: DEBUG_VERSION,
+    _serverTime: new Date().toISOString(),
     authenticated: true,
     user: {
       id: user.id,
@@ -51,6 +78,9 @@ export async function GET() {
     },
     profile,
     profileError: profileError?.message,
+    narrowProfile,
+    narrowProfileError: narrowProfileError?.message,
+    manualIsTesterActive,
     purchases,
     testerRedemptions,
     unifiedStatus: status,
