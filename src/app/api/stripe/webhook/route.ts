@@ -150,12 +150,26 @@ export async function POST(request: NextRequest) {
       // ── Subscription checkout (existing logic) ──
       const subscriptionId = session.subscription as string;
 
-      // Get actual subscription status from Stripe (usually "trialing" with trial_period_days)
+      // Get actual subscription status + applied coupon from Stripe
+      // (usually "trialing" with trial_period_days)
       let subStatus = "active";
+      let checkoutCouponId: string | null = null;
       if (subscriptionId) {
         try {
-          const sub = await stripe.subscriptions.retrieve(subscriptionId);
+          // expand discounts so we get Discount objects (not just IDs)
+          const sub = await stripe.subscriptions.retrieve(subscriptionId, {
+            expand: ["discounts"],
+          });
           subStatus = sub.status; // "trialing", "active", etc.
+          // Extract first coupon ID from discounts for campaign attribution
+          for (const d of sub.discounts || []) {
+            if (typeof d === "string") continue; // unexpanded — skip
+            const src = d.source;
+            if (!src?.coupon) continue;
+            checkoutCouponId =
+              typeof src.coupon === "string" ? src.coupon : src.coupon.id;
+            break;
+          }
         } catch {
           // Fallback to "active" if retrieval fails
         }
@@ -174,6 +188,13 @@ export async function POST(request: NextRequest) {
           stripe_subscription_id: subscriptionId,
           subscription_status: subStatus,
           stripe_customer_id: customerId,
+          // Campaign attribution: which coupon (if any) brought this user in
+          ...(checkoutCouponId
+            ? {
+                checkout_coupon_id: checkoutCouponId,
+                checkout_coupon_applied_at: new Date().toISOString(),
+              }
+            : {}),
         })
         .eq(profileMatch.field, profileMatch.value);
 
