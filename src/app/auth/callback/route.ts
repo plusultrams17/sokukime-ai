@@ -118,6 +118,10 @@ export async function GET(request: NextRequest) {
           }
 
           // First-time user welcome
+          // If a non-/roleplay redirect was specified (e.g. /activate?code=XXX), honor it without welcome param
+          if (redirect && !redirect.startsWith("/roleplay")) {
+            return NextResponse.redirect(`${origin}${redirect}`);
+          }
           if (redirect && redirect !== "/roleplay" && redirect.startsWith("/roleplay")) {
             const redirectUrl = new URL(redirect, origin);
             redirectUrl.searchParams.set("welcome", "true");

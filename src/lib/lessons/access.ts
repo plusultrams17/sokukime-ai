@@ -30,15 +30,23 @@ export async function getPurchaseStatus(
 
   if (purchaseData) return { purchased: true };
 
-  // Check for active Pro subscription (paid, not trial)
+  // Check for active Pro subscription (paid, not trial) OR tester access
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan, subscription_status")
+    .select("plan, subscription_status, is_tester, tester_expires_at")
     .eq("id", user.id)
     .single();
 
   const isPaidPro =
     profile?.plan === "pro" && profile?.subscription_status === "active";
 
-  return { purchased: isPaidPro };
+  // Tester access counts as Pro (until expiry)
+  const testerExpiresAt = profile?.tester_expires_at as string | null | undefined;
+  const isTesterActive =
+    profile?.is_tester === true &&
+    (testerExpiresAt === null ||
+      testerExpiresAt === undefined ||
+      new Date(testerExpiresAt) > new Date());
+
+  return { purchased: isPaidPro || isTesterActive };
 }

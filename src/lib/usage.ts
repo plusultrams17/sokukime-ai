@@ -24,7 +24,7 @@ export async function getUsageStatus(
   const [profileResult, usageResult] = await Promise.all([
     supabase
       .from("profiles")
-      .select("plan, subscription_status, trial_ends_at, stripe_subscription_id")
+      .select("plan, subscription_status, trial_ends_at, stripe_subscription_id, is_tester, tester_expires_at")
       .eq("id", userId)
       .single(),
     supabase
@@ -39,6 +39,16 @@ export async function getUsageStatus(
   const subscriptionStatus = profileResult.data?.subscription_status as string | null;
   const trialEndsAt = profileResult.data?.trial_ends_at as string | null;
   const stripeSubId = profileResult.data?.stripe_subscription_id as string | null;
+  const isTester = profileResult.data?.is_tester === true;
+  const testerExpiresAt = profileResult.data?.tester_expires_at as string | null;
+
+  // Tester access: tester flag set + (no expiry OR expiry in future) = unlimited Pro
+  const isTesterActive =
+    isTester && (testerExpiresAt === null || new Date(testerExpiresAt) > new Date());
+
+  if (isTesterActive) {
+    return { used, limit: Infinity, canStart: true, plan: "pro" };
+  }
 
   // Team members get Pro-equivalent access
   if (plan !== "pro") {
