@@ -131,6 +131,8 @@ export async function POST(request: NextRequest) {
         : null;
 
     // 4. Update profile (set tester flag + Pro)
+    // Clear trial_ends_at so the cron's reverse-trial-expiry job doesn't
+    // downgrade testers when their original 7-day reverse trial would have ended.
     const { error: profileError } = await admin
       .from("profiles")
       .update({
@@ -139,6 +141,7 @@ export async function POST(request: NextRequest) {
         tester_code: code,
         plan: "pro",
         subscription_status: "active",
+        trial_ends_at: null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);

@@ -28,7 +28,7 @@ export async function GET() {
       .eq("user_id", user.id);
 
     // Fetch plan + trial info, then streak with plan info for Streak Shield
-    const profileResult = await supabase.from("profiles").select("plan, trial_ends_at, stripe_subscription_id").eq("id", user.id).single();
+    const profileResult = await supabase.from("profiles").select("plan, trial_ends_at, stripe_subscription_id, is_tester, tester_expires_at").eq("id", user.id).single();
     if (profileResult.error) {
       console.error("Profile query failed (dashboard):", profileResult.error);
       return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
@@ -66,9 +66,15 @@ export async function GET() {
       }))
       .reverse();
 
-    // Calculate reverse trial days remaining
+    // Active tester = unlimited Pro — do NOT show trial banner
+    const testerExpiresAt = profile?.tester_expires_at as string | null;
+    const isTesterActive =
+      profile?.is_tester === true &&
+      (testerExpiresAt === null || (testerExpiresAt && new Date(testerExpiresAt) > new Date()));
+
+    // Calculate reverse trial days remaining (skip for active testers)
     let trialDaysRemaining: number | null = null;
-    if (profile?.trial_ends_at && !profile?.stripe_subscription_id) {
+    if (!isTesterActive && profile?.trial_ends_at && !profile?.stripe_subscription_id) {
       const trialEnd = new Date(profile.trial_ends_at);
       const remaining = Math.ceil((trialEnd.getTime() - Date.now()) / 86400000);
       if (remaining > 0) trialDaysRemaining = remaining;
