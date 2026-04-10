@@ -16,11 +16,46 @@ type Status =
   | "already"
   | "error";
 
+type AccessTier = "basic" | "intermediate" | "full";
+
 interface CodeInfo {
   code: string;
   description: string;
   durationDays: number | null;
+  accessTier: AccessTier;
 }
+
+const TIER_FEATURES: Record<
+  AccessTier,
+  { label: string; items: string[] }
+> = {
+  basic: {
+    label: "ベーシックプラン",
+    items: [
+      "AIロープレ無制限",
+      "学習コース: 初級1〜3（3レッスン）",
+      "スコア・AI改善アドバイス",
+    ],
+  },
+  intermediate: {
+    label: "プロプラン",
+    items: [
+      "AIロープレ無制限",
+      "学習コース: 初級1〜8 + 中級1〜7（15レッスン）",
+      "全5カテゴリの詳細スコア",
+      "AI改善アドバイス + テンプレート",
+    ],
+  },
+  full: {
+    label: "プラチナプラン",
+    items: [
+      "AIロープレ無制限",
+      "全22レッスンの学習コース（初級・中級・上級）",
+      "全5カテゴリの詳細スコア",
+      "AI改善アドバイス + テンプレート30パターン",
+    ],
+  },
+};
 
 function ActivateForm() {
   const searchParams = useSearchParams();
@@ -68,6 +103,7 @@ function ActivateForm() {
             code: data.code,
             description: data.description,
             durationDays: data.durationDays,
+            accessTier: (data.accessTier as AccessTier) || "full",
           });
           setStatus(loggedIn ? "ready" : "needs-login");
         } catch {
@@ -103,6 +139,7 @@ function ActivateForm() {
         code: data.code,
         description: data.description,
         durationDays: data.durationDays,
+        accessTier: (data.accessTier as AccessTier) || "full",
       });
     } catch {
       setErrorMsg("コードの検証に失敗しました");
@@ -363,25 +400,17 @@ function ActivateForm() {
 
               <div className="rounded-xl border border-card-border bg-card/50 p-4 text-left">
                 <p className="mb-2 text-xs font-bold text-foreground">
-                  利用できる機能:
+                  {TIER_FEATURES[codeInfo?.accessTier || "full"].label} で利用できる機能:
                 </p>
                 <ul className="space-y-1.5 text-xs text-muted">
-                  <li className="flex items-start gap-2">
-                    <span className="text-accent">•</span>
-                    AIロープレ無制限
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-accent">•</span>
-                    全22レッスンの学習コース
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-accent">•</span>
-                    全5カテゴリの詳細スコア
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-accent">•</span>
-                    AI改善アドバイス + テンプレート30パターン
-                  </li>
+                  {TIER_FEATURES[codeInfo?.accessTier || "full"].items.map(
+                    (item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="text-accent">•</span>
+                        {item}
+                      </li>
+                    ),
+                  )}
                 </ul>
               </div>
 

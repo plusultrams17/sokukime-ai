@@ -6,7 +6,7 @@ export async function GET() {
   const supabase = await createClient();
   if (!supabase) {
     return NextResponse.json(
-      { purchased: false, authenticated: false },
+      { purchased: false, tier: null, authenticated: false },
       { status: 200 },
     );
   }
@@ -16,14 +16,19 @@ export async function GET() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return NextResponse.json({ purchased: false, authenticated: false });
+    return NextResponse.json({
+      purchased: false,
+      tier: null,
+      authenticated: false,
+    });
   }
 
   // Unified access check: program_purchases OR active Pro subscription OR tester
-  const { purchased } = await getPurchaseStatus(supabase);
+  const { purchased, tier } = await getPurchaseStatus(supabase);
 
   return NextResponse.json({
     purchased,
+    tier,
     authenticated: true,
   });
 }

@@ -23,7 +23,9 @@ export async function GET(request: NextRequest) {
 
   const { data: codeRow } = await supabase
     .from("tester_codes")
-    .select("code, description, duration_days, max_uses, current_uses, active")
+    .select(
+      "code, description, duration_days, max_uses, current_uses, active, access_tier",
+    )
     .eq("code", code)
     .maybeSingle();
 
@@ -47,6 +49,7 @@ export async function GET(request: NextRequest) {
     code: codeRow.code,
     description: codeRow.description,
     durationDays: codeRow.duration_days,
+    accessTier: codeRow.access_tier || "full",
   });
 }
 
@@ -88,7 +91,9 @@ export async function POST(request: NextRequest) {
     // 1. Validate the code
     const { data: codeRow, error: codeError } = await admin
       .from("tester_codes")
-      .select("code, description, duration_days, max_uses, current_uses, active")
+      .select(
+        "code, description, duration_days, max_uses, current_uses, active, access_tier",
+      )
       .eq("code", code)
       .maybeSingle();
 
@@ -130,15 +135,17 @@ export async function POST(request: NextRequest) {
         ? new Date(Date.now() + codeRow.duration_days * 24 * 60 * 60 * 1000).toISOString()
         : null;
 
-    // 4. Update profile (set tester flag + Pro)
+    // 4. Update profile (set tester flag + Pro + access tier)
     // Clear trial_ends_at so the cron's reverse-trial-expiry job doesn't
     // downgrade testers when their original 7-day reverse trial would have ended.
+    const accessTier = (codeRow.access_tier as string) || "full";
     const { error: profileError } = await admin
       .from("profiles")
       .update({
         is_tester: true,
         tester_expires_at: expiresAt,
         tester_code: code,
+        tester_access_tier: accessTier,
         plan: "pro",
         subscription_status: "active",
         trial_ends_at: null,
@@ -180,6 +187,7 @@ export async function POST(request: NextRequest) {
       description: codeRow.description,
       expiresAt,
       durationDays: codeRow.duration_days,
+      accessTier,
     });
   } catch (error) {
     console.error("[activate] unexpected error:", error);

@@ -6,7 +6,10 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getLessonsByLevel, getAllLessons } from "@/lib/lessons";
 import { LessonScene } from "@/components/lesson-scenes";
-import { isLessonFree } from "@/lib/lessons/access";
+import {
+  isLessonAccessibleForTier,
+  type AccessTier,
+} from "@/lib/lessons/access";
 
 interface Progress {
   completedLessons: string[];
@@ -61,13 +64,13 @@ export default function LearnPage() {
     quizScores: {},
   });
   const [activeCard, setActiveCard] = useState<string | null>(null);
-  const [purchased, setPurchased] = useState(false);
+  const [tier, setTier] = useState<AccessTier | null>(null);
 
   useEffect(() => {
     setProgress(getProgress());
     fetch("/api/program/status")
       .then((r) => r.json())
-      .then((d) => setPurchased(d.purchased))
+      .then((d) => setTier(d.tier ?? null))
       .catch(() => {});
   }, []);
 
@@ -184,8 +187,10 @@ export default function LearnPage() {
                     const isCompleted =
                       progress.completedLessons.includes(lesson.slug);
                     const score = progress.quizScores[lesson.slug];
-                    const free = isLessonFree(lesson.slug);
-                    const locked = !free && !purchased;
+                    const locked = !isLessonAccessibleForTier(
+                      lesson.slug,
+                      tier,
+                    );
 
                     return (
                       <Link
@@ -274,7 +279,7 @@ export default function LearnPage() {
       {/* Certification Exam */}
       <section className="px-4 pb-8 sm:px-6">
         <div className="mx-auto max-w-5xl">
-          <ExamCard progress={progress} purchased={purchased} />
+          <ExamCard progress={progress} purchased={tier === "full"} />
         </div>
       </section>
 

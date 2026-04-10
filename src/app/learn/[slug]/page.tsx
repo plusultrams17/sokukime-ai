@@ -10,7 +10,11 @@ import type { QuizQuestion } from "@/lib/lessons";
 import { getSectionDiagram } from "@/components/lesson-diagrams";
 import { LessonScene } from "@/components/lesson-scenes";
 import { LessonPractice } from "@/components/lesson-practice";
-import { isLessonFree, FREE_LESSON_SLUGS } from "@/lib/lessons/access";
+import {
+  isLessonAccessibleForTier,
+  FREE_LESSON_SLUGS,
+  type AccessTier,
+} from "@/lib/lessons/access";
 import { processExamplesHtml } from "@/lib/lessons/process-html";
 
 const TABS = ["理論", "トーク例", "確認クイズ", "実践練習"];
@@ -47,7 +51,7 @@ export default function LessonPage() {
   const { prev, next } = getAdjacentLessons(slug);
 
   const [activeTab, setActiveTab] = useState(0);
-  const [purchased, setPurchased] = useState(false);
+  const [tier, setTier] = useState<AccessTier | null>(null);
   const [statusLoaded, setStatusLoaded] = useState(false);
 
   // Learning flow state
@@ -67,7 +71,7 @@ export default function LessonPage() {
     fetch("/api/program/status")
       .then((r) => r.json())
       .then((d) => {
-        setPurchased(d.purchased);
+        setTier(d.tier ?? null);
         setStatusLoaded(true);
       })
       .catch(() => setStatusLoaded(true));
@@ -103,8 +107,7 @@ export default function LessonPage() {
     return -1;
   }
 
-  const free = isLessonFree(slug);
-  const locked = statusLoaded && !free && !purchased;
+  const locked = statusLoaded && !isLessonAccessibleForTier(slug, tier);
 
   const markCompleted = useCallback(
     (finalScore: number) => {
