@@ -200,7 +200,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "2〜6週間",
       commonPainPoint: "ニーズ喚起から提案への移行",
-      improvementPotential: "成約率15%→30%",
+      improvementPotential: "提案への橋渡しに改善余地",
     },
   },
 
@@ -351,7 +351,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "1〜3ヶ月",
       commonPainPoint: "内見後のクロージング",
-      improvementPotential: "成約率10%→25%",
+      improvementPotential: "クロージング力で改善見込み",
     },
   },
 
@@ -500,7 +500,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "2〜8週間",
       commonPainPoint: "相見積もりからの選ばれ方",
-      improvementPotential: "成約率25%→45%",
+      improvementPotential: "差別化訴求に大きな余地",
     },
   },
 
@@ -648,7 +648,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "1〜4週間",
       commonPainPoint: "飛び込みからのアポ獲得率",
-      improvementPotential: "成約率20%→40%",
+      improvementPotential: "初回接点の刺さり方に余地",
     },
   },
 
@@ -786,7 +786,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "2〜6週間",
       commonPainPoint: "初期費用への抵抗の克服",
-      improvementPotential: "成約率15%→35%",
+      improvementPotential: "価格反論処理で改善見込み",
     },
   },
 
@@ -904,7 +904,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "即日〜2週間",
       commonPainPoint: "値引き交渉での利益確保",
-      improvementPotential: "成約率20%→40%",
+      improvementPotential: "価格交渉力に改善の余地",
     },
   },
 
@@ -1017,7 +1017,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "1〜3ヶ月",
       commonPainPoint: "テレアポの突破率向上",
-      improvementPotential: "成約率12%→25%",
+      improvementPotential: "初期トーク改善で伸ばせる",
     },
   },
 
@@ -1138,7 +1138,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "1〜6ヶ月",
       commonPainPoint: "デモから有料化への移行",
-      improvementPotential: "成約率18%→32%",
+      improvementPotential: "有料化訴求に改善余地",
     },
   },
 
@@ -1251,7 +1251,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "2週間〜2ヶ月",
       commonPainPoint: "効果の定量化と説明",
-      improvementPotential: "成約率20%→35%",
+      improvementPotential: "価値伝達力で改善見込み",
     },
   },
 
@@ -1363,7 +1363,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "3〜12ヶ月",
       commonPainPoint: "ドクターとの限られた面談時間の活用",
-      improvementPotential: "成約率10%→22%",
+      improvementPotential: "短時間面談の設計に余地",
     },
   },
 
@@ -1475,7 +1475,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "1〜4週間",
       commonPainPoint: "価格以外の差別化ポイント",
-      improvementPotential: "新規獲得率15%→30%",
+      improvementPotential: "新規開拓の刺さり方に余地",
     },
   },
 
@@ -1601,7 +1601,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "即日〜1ヶ月",
       commonPainPoint: "フェア来場からの成約率",
-      improvementPotential: "成約率30%→55%",
+      improvementPotential: "即決クロージングに改善余地",
     },
   },
 
@@ -1739,7 +1739,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "1〜6ヶ月",
       commonPainPoint: "社内検討での案件停滞",
-      improvementPotential: "商談成約率15%→25%",
+      improvementPotential: "検討後押しの仕掛けに余地",
     },
   },
 
@@ -1877,7 +1877,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "2週間〜3ヶ月",
       commonPainPoint: "新規求人獲得の難しさ",
-      improvementPotential: "求人獲得率20%→30%",
+      improvementPotential: "新規開拓力に改善余地",
     },
   },
 
@@ -2020,7 +2020,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "即日〜2週間",
       commonPainPoint: "体験後の入会率の低さ",
-      improvementPotential: "入会率30%→50%",
+      improvementPotential: "入会動機づけに大きな余地",
     },
   },
 
@@ -2163,7 +2163,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "即日〜2ヶ月",
       commonPainPoint: "訪問からの成約率の低さ",
-      improvementPotential: "訪問成約率10%→20%",
+      improvementPotential: "訪問時の刺さり方に改善余地",
     },
   },
 ];
