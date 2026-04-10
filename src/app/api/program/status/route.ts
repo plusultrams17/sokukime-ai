@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getPurchaseStatus } from "@/lib/lessons/access";
 
 export async function GET() {
   const supabase = await createClient();
@@ -18,15 +19,11 @@ export async function GET() {
     return NextResponse.json({ purchased: false, authenticated: false });
   }
 
-  const { data } = await supabase
-    .from("program_purchases")
-    .select("id")
-    .eq("user_id", user.id)
-    .limit(1)
-    .maybeSingle();
+  // Unified access check: program_purchases OR active Pro subscription OR tester
+  const { purchased } = await getPurchaseStatus(supabase);
 
   return NextResponse.json({
-    purchased: !!data,
+    purchased,
     authenticated: true,
   });
 }
