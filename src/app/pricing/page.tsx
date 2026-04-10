@@ -24,7 +24,7 @@ const features = [
 const comparisons = [
   { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", image: "/images/misc/comparison-training.png" },
   { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", image: "/images/misc/comparison-consulting.png" },
-  { name: "成約コーチAI Pro", cost: "¥2,980", frequency: "無制限・24時間・即開始", image: "/images/misc/comparison-ai-pro.png", highlight: true },
+  { name: "成約コーチAI Pro", cost: "¥2,980（税込）", frequency: "無制限・24時間・即開始", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
 
