@@ -62,7 +62,6 @@ export async function GET() {
         profile?.is_tester === true &&
         (!profile?.tester_expires_at ||
           new Date(profile.tester_expires_at) > new Date()),
-      testerTier: profile?.tester_access_tier,
       planIsPro: profile?.plan === "pro",
       subscriptionStatus: profile?.subscription_status,
       finalTier: status.tier,

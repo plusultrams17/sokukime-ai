@@ -84,18 +84,25 @@ export async function getPurchaseStatus(
     return { purchased: true, tier: "full" };
   }
 
-  // Check profile for Pro/tester state
-  const { data: profile } = await supabase
+  // Check profile for Pro/tester state.
+  // NOTE: `tester_access_tier` is OPTIONAL — only select columns that reliably
+  // exist in the DB. Older schemas don't have it, and selecting a missing
+  // column makes the whole query fail silently (profile === null), which
+  // previously caused Pro users to be downgraded to 3 free lessons.
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select(
-      "plan, subscription_status, is_tester, tester_expires_at, tester_access_tier",
-    )
+    .select("plan, subscription_status, is_tester, tester_expires_at")
     .eq("id", user.id)
     .single();
 
+  if (profileError) {
+    console.error("[access] profile query failed:", profileError);
+  }
   if (!profile) return { purchased: false, tier: null };
 
-  // Tester check — priority over paid Pro (activate sets plan=pro too)
+  // Tester check — priority over paid Pro (activate sets plan=pro too).
+  // All active testers get full access to the 22 lessons (roleplay quota
+  // is enforced separately via src/lib/usage.ts).
   const testerExpiresAt = profile.tester_expires_at as string | null | undefined;
   const isTesterActive =
     profile.is_tester === true &&
@@ -104,13 +111,7 @@ export async function getPurchaseStatus(
       new Date(testerExpiresAt) > new Date());
 
   if (isTesterActive) {
-    // Legacy testers (no tier recorded) default to "full"
-    const testerTier =
-      (profile.tester_access_tier as AccessTier | null) || "full";
-    return {
-      purchased: testerTier === "full",
-      tier: testerTier,
-    };
+    return { purchased: true, tier: "full" };
   }
 
   // Pro subscriber = full access to all 22 lessons.

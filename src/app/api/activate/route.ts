@@ -135,17 +135,20 @@ export async function POST(request: NextRequest) {
         ? new Date(Date.now() + codeRow.duration_days * 24 * 60 * 60 * 1000).toISOString()
         : null;
 
-    // 4. Update profile (set tester flag + Pro + access tier)
+    // 4. Update profile (set tester flag + Pro)
     // Clear trial_ends_at so the cron's reverse-trial-expiry job doesn't
     // downgrade testers when their original 7-day reverse trial would have ended.
-    const accessTier = (codeRow.access_tier as string) || "full";
+    //
+    // NOTE: `tester_access_tier` column is NOT written here because it doesn't
+    // exist in the current DB schema. All active testers get full access via
+    // src/lib/lessons/access.ts → getPurchaseStatus(). If tier-based tester
+    // access is needed in the future, add the column + re-enable this write.
     const { error: profileError } = await admin
       .from("profiles")
       .update({
         is_tester: true,
         tester_expires_at: expiresAt,
         tester_code: code,
-        tester_access_tier: accessTier,
         plan: "pro",
         subscription_status: "active",
         trial_ends_at: null,
