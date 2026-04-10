@@ -45,11 +45,12 @@ export async function POST(request: NextRequest) {
 }
 
 // GET: Fetch approved reviews (public)
+// Returns [] on any error so the frontend just hides the section gracefully.
 export async function GET() {
   try {
     const supabase = await createClient();
     if (!supabase) {
-      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+      return NextResponse.json([]);
     }
 
     const { data, error } = await supabase
@@ -60,11 +61,12 @@ export async function GET() {
       .limit(10);
 
     if (error) {
-      return NextResponse.json({ error: "Failed to fetch reviews" }, { status: 500 });
+      // Table may not exist yet — silent fallback
+      return NextResponse.json([]);
     }
 
     return NextResponse.json(data || []);
   } catch {
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return NextResponse.json([]);
   }
 }

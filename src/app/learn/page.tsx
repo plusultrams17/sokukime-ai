@@ -70,8 +70,13 @@ export default function LearnPage() {
     setProgress(getProgress());
     fetch("/api/program/status")
       .then((r) => r.json())
-      .then((d) => setTier(d.tier ?? null))
-      .catch(() => {});
+      .then((d) => {
+        console.log("[learn] /api/program/status response:", d);
+        setTier(d.tier ?? null);
+      })
+      .catch((err) => {
+        console.error("[learn] /api/program/status fetch failed:", err);
+      });
   }, []);
 
   const handleCardTap = useCallback(
