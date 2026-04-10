@@ -113,7 +113,10 @@ export async function getPurchaseStatus(
     };
   }
 
-  // Paid Pro = full access
+  // Paid Pro (after trial ends) = full access to all 22 lessons
+  // NOTE: During 7-day trial (subscription_status='trialing'), user has free-tier
+  //       lessons only (基本3レッスン) but unlimited AIロープレ 1日5回.
+  //       Trial roleplay quota is enforced separately in usage-tracking logic.
   const isPaidPro =
     profile.plan === "pro" && profile.subscription_status === "active";
 

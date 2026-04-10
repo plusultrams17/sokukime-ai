@@ -1541,9 +1541,13 @@ export interface WeeklyRevenueData {
   leadsCaptured: number;
 }
 
+/**
+ * 【legacy】買い切りプログラム購入完了メール。
+ * 2026-04-10 に買い切り販売終了済み。本テンプレートは過去購入者向けWebhook再送用にのみ残置。
+ */
 function programPurchasedEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "【購入完了】成約5ステップ完全攻略プログラム — さっそく学習を始めましょう",
+    subject: "【購入完了】成約コーチAI 完全攻略プログラム — さっそく学習を始めましょう",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -1569,7 +1573,7 @@ function programPurchasedEmail(unsubscribeUrl?: string): { subject: string; html
       </a>
     </div>
     <p style="font-size:12px;color:#6b7280;text-align:center;margin:16px 0 0">
-      買い切り型なので、いつでも何度でも復習できます。
+      ご購入いただいた教材は引き続きアクセスいただけます。いつでも何度でも復習できます。
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}

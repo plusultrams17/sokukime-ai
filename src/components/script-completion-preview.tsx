@@ -72,7 +72,7 @@ export function ScriptCompletionPreview({ showCta = true }: Props) {
       <div className="mx-auto max-w-6xl px-6">
         {/* Section header */}
         <p className="lp-heading mb-3 text-center">
-          プログラムで手に入る
+          Pro会員特典で手に入る
           <br className="sm:hidden" />
           <span className="lp-highlight">完成スクリプト</span>
         </p>
@@ -251,7 +251,7 @@ export function ScriptCompletionPreview({ showCta = true }: Props) {
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                買い切り
+                Pro会員特典
               </span>
             </div>
           </div>
@@ -260,8 +260,8 @@ export function ScriptCompletionPreview({ showCta = true }: Props) {
         {/* CTA */}
         {showCta && (
           <div className="mt-10 text-center sm:mt-12">
-            <Link href="/program" className="lp-cta-secondary">
-              攻略プログラムの詳細を見る →
+            <Link href="/pricing" className="lp-cta-secondary">
+              Proプランの詳細を見る →
             </Link>
           </div>
         )}

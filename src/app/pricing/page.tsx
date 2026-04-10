@@ -265,8 +265,10 @@ export default function PricingPage() {
 
           {/* Pro Plan */}
           <div className="relative rounded-2xl border-2 border-accent bg-card p-5 sm:p-8">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold text-white">
-              おすすめ
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold text-white whitespace-nowrap">
+              {activePromo?.id === "launch2026"
+                ? "🎉 ローンチ記念 先着100名"
+                : "おすすめ"}
             </div>
 
             <div className="mb-6">

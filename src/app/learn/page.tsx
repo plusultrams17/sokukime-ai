@@ -195,7 +195,7 @@ export default function LearnPage() {
                     return (
                       <Link
                         key={lesson.slug}
-                        href={locked ? "/program" : `/learn/${lesson.slug}`}
+                        href={locked ? "/pricing" : `/learn/${lesson.slug}`}
                         onClick={(e) => {
                           if (!locked) handleCardTap(e, lesson.slug);
                         }}
@@ -325,13 +325,13 @@ function ExamCard({ progress, purchased }: { progress: Progress; purchased: bool
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-white/80 rounded-xl">
           <svg className="inline-block h-10 w-10 text-muted mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           <p className="text-sm font-bold text-foreground mb-2">
-            認定試験はプログラム購入後にご利用いただけます
+            認定試験はPro会員限定です
           </p>
           <Link
-            href="/program"
+            href="/pricing"
             className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-hover"
           >
-            教材プログラムを購入する
+            Proプランを見る
           </Link>
         </div>
         <div className="opacity-30 pointer-events-none">

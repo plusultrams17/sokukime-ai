@@ -18,7 +18,7 @@ export default function ProgramResourcesPage() {
           return;
         }
         if (!data.purchased) {
-          window.location.href = "/program";
+          window.location.href = "/pricing";
           return;
         }
         setStatus("ready");
@@ -42,8 +42,8 @@ export default function ProgramResourcesPage() {
       <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: "#f7f8ea" }}>
         <div className="text-center">
           <p className="text-sm text-muted mb-4">アクセスできませんでした</p>
-          <Link href="/program" className="text-sm hover:underline" style={{ color: "#f97316" }}>
-            プログラムページへ戻る
+          <Link href="/pricing" className="text-sm hover:underline" style={{ color: "#f97316" }}>
+            料金プランを見る
           </Link>
         </div>
       </div>
@@ -61,13 +61,13 @@ export default function ProgramResourcesPage() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
-            プログラム購入者限定
+            Pro会員特典
           </div>
           <h1 className="mb-3 text-2xl font-bold text-foreground sm:text-3xl">
             リソースハブ
           </h1>
           <p className="text-sm text-muted leading-relaxed sm:text-base">
-            プログラムに含まれる全ての教材・ツール・特典にここからアクセスできます。
+            Pro会員特典として、全ての教材・ツール・PDF資料にここからアクセスできます。
           </p>
         </div>
       </section>
@@ -102,7 +102,7 @@ export default function ProgramResourcesPage() {
       {/* Section 2: Lesson Materials */}
       <section className="px-6 pb-12">
         <div className="mx-auto max-w-4xl">
-          <SectionHeading>レッスン教���</SectionHeading>
+          <SectionHeading>レッスン教材</SectionHeading>
           <div className="grid gap-4 sm:grid-cols-2">
             <ResourceCard
               href="/learn"
@@ -134,6 +134,53 @@ export default function ProgramResourcesPage() {
         </div>
       </section>
 
+      {/* Section 2.5: PDF Downloads */}
+      <section className="px-6 pb-12">
+        <div className="mx-auto max-w-4xl">
+          <SectionHeading>PDF資料（ダウンロード可）</SectionHeading>
+          <div className="mb-4 rounded-xl border border-orange-200 bg-orange-50 p-4 text-xs text-orange-900">
+            各ページの「<strong>PDFとして保存</strong>」ボタンを押すと、ブラウザの印刷ダイアログから「PDFに保存」を選んで保存できます。印刷用に最適化されたレイアウトで、永久保存版としてお使いいただけます。
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <PdfCard
+              href="/program/resources/print/beginner"
+              title="初級完全ガイド"
+              description="アプローチ・ヒアリング・プレゼンの8レッスンを収録。営業の土台となる基礎技術を体系的に学べるPDF資料。"
+              lessons="8レッスン"
+              color="#0F6E56"
+            />
+            <PdfCard
+              href="/program/resources/print/intermediate"
+              title="中級完全ガイド"
+              description="クロージング技術7レッスンを収録。社会的証明、一貫性、欲求パターンなど決断を後押しする手法を完全網羅。"
+              lessons="7レッスン"
+              color="#2563EB"
+            />
+            <PdfCard
+              href="/program/resources/print/advanced"
+              title="上級完全ガイド"
+              description="反論処理・切り返し技術7レッスンを収録。共感→フック→切り返しの公式で「考えたい」「高い」を突破する技術。"
+              lessons="7レッスン"
+              color="#7C3AED"
+            />
+            <PdfCard
+              href="/program/resources/print/objections"
+              title="反論切り返し30パターン集"
+              description="営業現場でよくある断り文句30パターンへの実践的な切り返しトーク集。NG対応・正しい切り返し・テクニック・コツまで完全網羅。"
+              lessons="30パターン"
+              color="#f97316"
+            />
+            <PdfCard
+              href="/program/resources/print/scripts"
+              title="トークスクリプト集"
+              description="アプローチから反論処理までの5フェーズに対応したトークスクリプト集。訪販・保険・不動産の業種別カスタマイズ例付き。"
+              lessons="5フェーズ"
+              color="#3b82f6"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Section 3: AI Coach Pro (was Section 4) */}
       <section className="px-6 pb-12">
         <div className="mx-auto max-w-4xl">
@@ -143,8 +190,8 @@ export default function ProgramResourcesPage() {
               <div className="flex-1">
                 <h3 className="mb-2 text-lg font-bold text-foreground">AIロープレを始める</h3>
                 <p className="mb-4 text-sm text-muted leading-relaxed">
-                  あなたの商材・業種に合わせた��アルな営業シミュレーション。
-                  Pro特典として無���限のロープレ、全5カテゴリの詳細スコア、AI改善アドバイスが利用可能です。
+                  あなたの商材・業種に合わせたリアルな営業シミュレーション。
+                  Proプランに含まれる無制限ロープレ、全5カテゴリの詳細スコア、AI改善アドバイスが利用可能です。
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <ProBadge>無制限ロープレ</ProBadge>
@@ -177,7 +224,7 @@ export default function ProgramResourcesPage() {
             <ToolCard
               href="/tools/script-generator"
               title="トークスクリプト生成"
-              description="商材情報を入���して業種別トークスクリプトを自動生成"
+              description="商材情報を入力して業種別トークスクリプトを自動生成"
             />
             <ToolCard
               href="/tools/sales-quiz"
@@ -187,7 +234,7 @@ export default function ProgramResourcesPage() {
             <ToolCard
               href="/tools/closing-calculator"
               title="クロージング率計算"
-              description="商談��ータから成約率を算出し改善ポイントを提示"
+              description="商談データから成約率を算出し改善ポイントを提示"
             />
           </div>
         </div>
@@ -259,6 +306,68 @@ function ResourceCard({ href, title, description, icon }: ResourceCardProps) {
         {title}
       </h3>
       <p className="text-xs text-muted leading-relaxed">{description}</p>
+    </Link>
+  );
+}
+
+interface PdfCardProps {
+  href: string;
+  title: string;
+  description: string;
+  lessons: string;
+  color: string;
+}
+
+function PdfCard({ href, title, description, lessons, color }: PdfCardProps) {
+  return (
+    <Link
+      href={href}
+      className="group relative flex flex-col rounded-2xl border border-card-border bg-white p-6 shadow-sm transition hover:border-orange-300 hover:-translate-y-0.5"
+    >
+      <div className="mb-3 flex items-center gap-3">
+        <div
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-white"
+          style={{ backgroundColor: color }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+        </div>
+        <div className="flex-1">
+          <span
+            className="inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold text-white"
+            style={{ backgroundColor: color }}
+          >
+            {lessons}
+          </span>
+        </div>
+        <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[10px] font-bold text-gray-600">
+          PDF
+        </span>
+      </div>
+      <h3 className="mb-2 text-base font-bold text-foreground">{title}</h3>
+      <p className="mb-4 flex-1 text-xs text-muted leading-relaxed">
+        {description}
+      </p>
+      <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+        <span className="text-xs font-medium text-muted">開く</span>
+        <svg
+          className="h-4 w-4 text-muted transition-transform group-hover:translate-x-1"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </div>
     </Link>
   );
 }

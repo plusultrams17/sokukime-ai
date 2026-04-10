@@ -332,30 +332,6 @@ export function SalesQuizClient() {
         </>
       )}
 
-      {/* Program CTA */}
-      <div className="rounded-2xl border-2 border-accent bg-accent/5 p-6 sm:p-8 text-center">
-        <p className="mb-2 text-sm font-medium text-accent">
-          スコアを伸ばしたい方へ
-        </p>
-        <h3 className="mb-3 text-xl font-bold text-foreground">
-          成約5ステップ完全攻略プログラム
-        </h3>
-        <p className="mb-4 text-sm text-muted leading-relaxed">
-          22レッスンで営業の「型」を体系的に習得。弱点を集中的に改善し、成約率を引き上げるための実践プログラムです。
-        </p>
-        <div className="mb-4 flex items-center justify-center gap-2">
-          <span className="text-sm text-muted line-through">¥14,800</span>
-          <span className="text-2xl font-bold text-accent">¥9,800</span>
-          <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">先着30名</span>
-        </div>
-        <Link
-          href="/program"
-          className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
-        >
-          プログラムの詳細を見る
-        </Link>
-      </div>
-
       {/* Actions */}
       <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
         <Link

@@ -1,29 +1,29 @@
 import Link from "next/link";
 
 /**
- * Program CTA shown after free tool completion.
- * Encourages users to check the paid learning program.
+ * Pro plan CTA shown after free tool completion.
+ * Encourages users to upgrade to Pro for the full program.
  */
 export function ProgramUpsellCTA() {
   return (
     <div className="rounded-2xl border-2 border-accent bg-accent/5 p-6 text-center sm:p-8">
       <p className="mb-2 text-sm font-medium text-accent">スコアを伸ばしたい方へ</p>
       <h3 className="mb-3 text-xl font-bold text-foreground">
-        成約5ステップ完全攻略プログラム
+        Proプランで22レッスン全解放
       </h3>
       <p className="mb-4 text-sm text-muted leading-relaxed">
-        22レッスンで営業の「型」を体系的に習得。弱点を集中的に改善し、成約率を引き上げるための実践プログラムです。
+        22レッスンで営業の「型」を体系的に習得。AIロープレ無制限・PDF教材・反論切り返し30パターンすべて使い放題。
       </p>
       <div className="mb-4 flex items-center justify-center gap-2">
-        <span className="text-sm text-muted line-through">¥14,800</span>
-        <span className="text-2xl font-bold text-accent">¥9,800</span>
-        <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">先着30名</span>
+        <span className="text-2xl font-bold text-accent">¥2,980</span>
+        <span className="text-xs text-muted">/月（税込）</span>
+        <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">7日間無料</span>
       </div>
       <Link
-        href="/program"
+        href="/pricing"
         className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-base font-bold text-white transition hover:bg-accent-hover"
       >
-        プログラムの詳細を見る
+        Proプランの詳細を見る
       </Link>
     </div>
   );

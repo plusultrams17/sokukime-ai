@@ -17,6 +17,18 @@ interface ChangelogEntry {
 
 const entries: ChangelogEntry[] = [
   {
+    date: "2026-04-10",
+    version: "2.0.0",
+    title: "Proプラン一本化・ローンチ記念キャンペーン",
+    changes: [
+      "買い切りプログラム（¥9,800）を販売終了し、全機能をProプラン（月額¥2,980）に統合",
+      "全22レッスン・PDF教材・反論切り返し30パターンをPro会員特典として提供",
+      "ローンチ記念キャンペーン開始（先着100名・初月¥980 / 67%OFF）",
+      "既存の買い切りプログラム購入者は引き続き全機能にアクセス可能",
+      "/program は /pricing へリダイレクト、/program/resources は Pro 会員特典ページとして存続",
+    ],
+  },
+  {
     date: "2026-03-30",
     version: "1.5.0",
     title: "設定ページ・更新履歴・Cookie同意バナー",

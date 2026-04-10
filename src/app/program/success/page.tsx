@@ -1,28 +1,18 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { PurchaseFlow } from "./purchase-flow";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "購入完了｜成約5ステップ完全攻略プログラム",
+  title: "ページ移転 | 成約コーチAI",
   robots: { index: false },
 };
 
+/**
+ * 【2026-04-10 廃止】
+ *
+ * 買い切りプログラムの購入完了画面。新規購入停止に伴い、
+ * 既存購入者は /program/resources にアクセスすると資料を閲覧できます。
+ * それ以外の訪問者は /pricing にリダイレクトします。
+ */
 export default function ProgramSuccessPage() {
-  return (
-    <div className="min-h-screen" style={{ backgroundColor: "#f7f8ea" }}>
-      <Header />
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center py-24 text-sm text-muted">
-            読み込み中...
-          </div>
-        }
-      >
-        <PurchaseFlow />
-      </Suspense>
-      <Footer />
-    </div>
-  );
+  redirect("/program/resources");
 }

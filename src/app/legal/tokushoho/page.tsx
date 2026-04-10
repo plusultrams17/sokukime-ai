@@ -10,7 +10,7 @@ export default function TokushohoPage() {
   return (
     <article>
       <h1 className="mb-8 text-3xl font-bold">特定商取引法に基づく表記</h1>
-      <p className="mb-8 text-sm text-muted">最終更新日: 2026年3月15日</p>
+      <p className="mb-8 text-sm text-muted">最終更新日: 2026年4月10日</p>
 
       <div className="overflow-hidden rounded-2xl border border-card-border">
         <table className="w-full">
@@ -40,18 +40,18 @@ export default function TokushohoPage() {
               label="販売価格"
               value={
                 <>
-                  <div className="font-medium mb-1">■ AIコーチ（サブスクリプション）</div>
                   <div>無料プラン: 0円</div>
                   <div>Proプラン: 月額2,980円（税込）</div>
-                  <div className="font-medium mt-3 mb-1">■ 成約5ステップ攻略プログラム（買い切り）</div>
-                  <div>ローンチ記念価格: 9,800円（税込10,780円）</div>
+                  <div className="text-xs mt-2 text-muted">
+                    ※ ローンチ記念キャンペーン期間中は初月980円（税込）でご利用いただけます（先着100名）。
+                  </div>
                   <div className="text-xs mt-1">※ 価格は予告なく変更される場合があります。</div>
                 </>
               }
             />
             <Row
               label="無料トライアル"
-              value="Proプラン初回お申込み時に7日間の無料トライアルをご利用いただけます。トライアル期間中はいつでもキャンセル可能で、キャンセルした場合は課金されません。トライアル終了後に自動的に有料プランに移行します。（買い切りプログラムにはトライアルはありません）"
+              value="Proプラン初回お申込み時に7日間の無料トライアルをご利用いただけます。トライアル期間中はいつでもキャンセル可能で、キャンセルした場合は課金されません。トライアル終了後に自動的に有料プランに移行します。"
             />
             <Row
               label="商品代金以外の必要料金"
@@ -63,39 +63,27 @@ export default function TokushohoPage() {
             />
             <Row
               label="支払い時期"
-              value={
-                <>
-                  <div>■ Proプラン: 申込時に7日間の無料トライアル開始。トライアル終了後に初回課金。以降は毎月自動更新時に課金。</div>
-                  <div className="mt-1">■ 買い切りプログラム: 購入手続き完了時に一括課金。</div>
-                </>
-              }
+              value="申込時に7日間の無料トライアル開始。トライアル終了後に初回課金。以降は毎月自動更新時に課金されます。"
             />
             <Row
               label="サービス提供時期"
-              value={
-                <>
-                  <div>■ Proプラン: お支払い完了後、即時ご利用いただけます。</div>
-                  <div className="mt-1">■ 買い切りプログラム: お支払い完了後、即時アクセス可能。コンテンツは無期限でご利用いただけます。</div>
-                </>
-              }
+              value="お支払い完了後（無料トライアル開始時を含む）、即時ご利用いただけます。"
             />
             <Row
               label="返品・キャンセル"
               value={
                 <>
-                  <div className="font-medium mb-1">■ Proプラン（サブスクリプション）</div>
                   <div>
                     いつでも解約可能です。解約手続き後も、現在の請求期間の終了日までサービスをご利用いただけます。
                   </div>
                   <div className="mt-1">
                     日割りでの返金は行っておりません。
                   </div>
-                  <div className="font-medium mt-3 mb-1">■ 買い切りプログラム</div>
-                  <div>
-                    デジタルコンテンツの性質上、購入後の返品・返金は原則お受けしておりません（特定商取引法第15条の4に基づくクーリングオフの対象外です）。
+                  <div className="mt-3">
+                    初回お申込みから14日以内であれば、seiyaku.coach.ai@gmail.com までご連絡いただくことで全額返金に対応いたします（14日間返金保証）。
                   </div>
-                  <div className="mt-1">
-                    ただし、コンテンツに重大な不備・瑕疵がある場合は、seiyaku.coach.ai@gmail.com までご連絡ください。
+                  <div className="mt-1 text-xs">
+                    ※ デジタルコンテンツの性質上、特定商取引法第15条の4に基づくクーリングオフの対象外です。
                   </div>
                 </>
               }
@@ -118,7 +106,7 @@ export default function TokushohoPage() {
               value={
                 <>
                   <div>当サービスはAIによる営業ロープレ練習ツールおよび営業学習教材であり、営業成果（成約率・売上等）を保証するものではありません。効果には個人差があります。</div>
-                  <div className="mt-1">買い切りプログラムの内容は予告なくアップデート・改善される場合があります。</div>
+                  <div className="mt-1">サービス内容・レッスン・テンプレート等は予告なくアップデート・改善される場合があります。</div>
                 </>
               }
             />
