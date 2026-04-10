@@ -9,10 +9,12 @@ function isValidRedirect(path: string): boolean {
 export async function middleware(request: NextRequest) {
   // If an OAuth code lands on a non-callback page, redirect to /auth/callback
   // Only for page routes (not API routes) as a safety net
+  // NOTE: /activate uses ?code= for tester invitation codes (not OAuth), so exclude it
   const code = request.nextUrl.searchParams.get("code");
   if (
     code &&
     request.nextUrl.pathname !== "/auth/callback" &&
+    request.nextUrl.pathname !== "/activate" &&
     !request.nextUrl.pathname.startsWith("/api/")
   ) {
     const callbackUrl = request.nextUrl.clone();
