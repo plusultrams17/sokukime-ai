@@ -114,17 +114,12 @@ export async function getPurchaseStatus(
   }
 
   // Pro subscriber = full access to all 22 lessons.
-  // This covers BOTH:
-  //   - subscription_status='trialing' (7日間無料トライアル中) — full access so
-  //     users can properly evaluate the product before being charged.
-  //   - subscription_status='active' (paid Pro after trial ends).
-  // Roleplay quota for trial users (5/day) is enforced separately in src/lib/usage.ts.
-  const isPro =
-    profile.plan === "pro" &&
-    (profile.subscription_status === "active" ||
-      profile.subscription_status === "trialing");
-
-  if (isPro) {
+  // We intentionally check only `plan === "pro"` (mirrors src/lib/usage.ts logic)
+  // because the Stripe webhook downgrades `plan` to 'free' on subscription deletion.
+  // So `plan='pro'` is a sufficient proxy for "has an active Pro entitlement" across
+  // all subscription_status values: 'active', 'trialing', 'past_due', 'paused', 'program'.
+  // Roleplay quota (5/day for trialing) is enforced separately in src/lib/usage.ts.
+  if (profile.plan === "pro") {
     return { purchased: true, tier: "full" };
   }
 
