@@ -111,9 +111,13 @@ export function CancelSaveModal({
       if (res.ok) {
         trackCancelOfferAccepted(offer.type);
         handleClose();
+      } else {
+        console.error("[cancel-save-modal] cancel-offer failed:", res.status);
+        alert("割引の適用に失敗しました。時間をおいて再度お試しください。");
       }
-    } catch {
-      // エラー時はそのまま
+    } catch (err) {
+      console.error("[cancel-save-modal] cancel-offer error:", err);
+      alert("割引の適用に失敗しました。通信環境をご確認のうえ再度お試しください。");
     }
     setIsLoading(false);
   }
@@ -138,12 +142,18 @@ export function CancelSaveModal({
             offerType: "pause",
             outcome: "accepted",
           }),
+        }).catch((err) => {
+          console.error("[cancel-save-modal] pause cancel-reason log failed:", err);
         });
         trackCancelOfferAccepted("pause");
         handleClose();
+      } else {
+        console.error("[cancel-save-modal] pause failed:", res.status);
+        alert("一時停止の設定に失敗しました。時間をおいて再度お試しください。");
       }
-    } catch {
-      // エラー時はそのまま
+    } catch (err) {
+      console.error("[cancel-save-modal] pause error:", err);
+      alert("一時停止の設定に失敗しました。通信環境をご確認のうえ再度お試しください。");
     }
     setIsLoading(false);
   }
@@ -151,6 +161,7 @@ export function CancelSaveModal({
   async function handleRejectOffer() {
     if (selectedReason && offer) {
       trackCancelOfferRejected(offer.type);
+      // /api/cancel-reason の失敗は解約フローをブロックしない（ログのみ）
       await fetch("/api/cancel-reason", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -160,7 +171,9 @@ export function CancelSaveModal({
           offerType: offer.type,
           outcome: "rejected",
         }),
-      }).catch(() => {});
+      }).catch((err) => {
+        console.error("[cancel-save-modal] cancel-reason log failed:", err);
+      });
     }
     handleClose();
     onProceedToCancel();

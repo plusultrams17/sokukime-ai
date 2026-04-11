@@ -40,13 +40,18 @@ export default function SettingsPage() {
     setActionLoading("billing");
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" });
-      const data = await res.json();
-      if (data.url) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.url) {
         window.location.href = data.url;
-      } else {
-        setActionLoading(null);
+        return;
       }
-    } catch {
+      console.error("[settings] stripe portal failed:", res.status, data);
+      alert(
+        "サブスクリプション管理画面を開けませんでした。時間をおいて再度お試しください。\n問題が続く場合は support@seiyaku-coach.com までご連絡ください。"
+      );
+      setActionLoading(null);
+    } catch (err) {
+      console.error("[settings] stripe portal error:", err);
       alert("サブスクリプション管理画面を開けませんでした。もう一度お試しください。");
       setActionLoading(null);
     }

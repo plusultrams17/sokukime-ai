@@ -59,12 +59,20 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
   async function handleManageSubscription() {
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" });
-      const data = await res.json();
-      if (data.url) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.url) {
         window.location.href = data.url;
+        return;
       }
-    } catch {
-      // ignore
+      console.error("[user-menu] stripe portal failed:", res.status, data);
+      alert(
+        "サブスクリプション管理画面を開けませんでした。時間をおいて再度お試しください。\n問題が続く場合は support@seiyaku-coach.com までご連絡ください。"
+      );
+    } catch (err) {
+      console.error("[user-menu] stripe portal error:", err);
+      alert(
+        "サブスクリプション管理画面を開けませんでした。通信環境をご確認のうえ再度お試しください。"
+      );
     }
   }
 
