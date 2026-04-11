@@ -8,11 +8,21 @@ import {
   trackRoleplayScoreRequested,
 } from "@/lib/tracking";
 import { LessonDrawer } from "@/components/lesson-drawer";
+import { GuestLoginPromptModal } from "@/components/guest-login-prompt-modal";
+import type { LessonStarter } from "@/lib/lessons/lesson-starters";
 
 interface Message {
   role: "user" | "assistant" | "system";
   content: string;
 }
+
+const STEP_NAME_BY_NUMBER: Record<number, string> = {
+  1: "アプローチ",
+  2: "ヒアリング",
+  3: "プレゼン",
+  4: "クロージング",
+  5: "反論処理",
+};
 
 interface CoachData {
   currentStep: string;
@@ -49,6 +59,25 @@ interface ChatUIProps {
   hideLessonDrawer?: boolean;
   /** Auto-select this lesson in the drawer (e.g. when launched from a lesson page) */
   lessonSlug?: string;
+  /** Subscription plan — "pro" gets unlimited rallies per session, "free"/undefined keeps the 10-turn cap */
+  plan?: "free" | "pro";
+  /**
+   * 上限到達 (Free 累計5回到達) で /api/usage/record が 403 を返した時に親へ通知する。
+   * 親側で upgrade modal を開いてもらう用。
+   * 2026-04-11: カウントは「最初のメッセージ送信時」に行うため。
+   */
+  onUsageLimitReached?: (status: { used: number; limit: number; plan?: string }) => void;
+  /**
+   * /api/usage/record の成功後に新しい usage ステータスを親へ通知する。
+   * Setup 画面の残り回数表示を最新化したいときに使う。
+   */
+  onUsageRecorded?: (status: { used: number; limit: number; canStart: boolean; plan: "free" | "pro" }) => void;
+  /**
+   * レッスン復習用のプリセット開始状態。渡された場合、AIお客さんの openingMessage を
+   * 初期メッセージとして注入し、アプローチから始めずに指定されたステップ（例：反論処理）から開始する。
+   * value-stacking など中盤〜終盤の技法を直接練習したい時に使う。
+   */
+  initialAssistantMessage?: LessonStarter | null;
 }
 
 const STEPS = [
@@ -79,10 +108,16 @@ const STEP_LESSON_MAP: Record<number, { slug: string; label: string }> = {
   5: { slug: "rebuttal-pattern", label: "切り返しの型（共通フレームワーク）" },
 };
 
-export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus, scoringFocus, onFinish, isGuest, onAuthGate, chatEndpoint = "/api/chat", scoreEndpoint = "/api/score", hideLessonDrawer, lessonSlug }: ChatUIProps) {
+export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus, scoringFocus, onFinish, isGuest, onAuthGate, chatEndpoint = "/api/chat", scoreEndpoint = "/api/score", hideLessonDrawer, lessonSlug, plan, onUsageLimitReached, onUsageRecorded, initialAssistantMessage }: ChatUIProps) {
   const isGuestMode = chatEndpoint.includes("guest");
   const showLesson = !isGuestMode && !hideLessonDrawer;
-  const [messages, setMessages] = useState<Message[]>([]);
+  // Pro ユーザーは1セッション内のラリー数を無制限にする。ゲストは常に Free 扱い。
+  const isUnlimitedRally = plan === "pro" && !isGuestMode;
+  const [messages, setMessages] = useState<Message[]>(() =>
+    initialAssistantMessage
+      ? [{ role: "assistant", content: initialAssistantMessage.openingMessage }]
+      : []
+  );
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [turnCount, setTurnCount] = useState(0);
@@ -91,6 +126,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
   const [showCoach, setShowCoach] = useState(true);
   const [showNudge, setShowNudge] = useState(false);
   const [showLessonDrawer, setShowLessonDrawer] = useState(false);
+  const [showGuestLoginModal, setShowGuestLoginModal] = useState(false);
   const nudgeShownRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -110,16 +146,35 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
     return () => clearTimeout(timer);
   }, [messages, isLoading, input]);
 
-  // User speaks first — set initial coach data and focus input
+  // Initial coach data — depends on whether a lesson starter is set
   useEffect(() => {
-    setCoach({
-      currentStep: "アプローチ",
-      stepNumber: 1,
-      detectedTechniques: [],
-      nextTip: "まずは相手を褒めて心理的安全の確保を。2度褒めが理想。その後「ゴール共有」でYESを取ります",
-      examplePhrase: "素敵な会社ですね！今まで○社伺いましたがダントツです。ところで、もしお話聞いて気に入らなかったら断ってくださいね。気に入ったらぜひスタートしてください！",
-    });
+    if (initialAssistantMessage) {
+      // Lesson review mode: start from the specified step with lesson-specific hints
+      const stepNumber = initialAssistantMessage.initialStep ?? 5;
+      setCoach({
+        currentStep: STEP_NAME_BY_NUMBER[stepNumber] ?? "反論処理",
+        stepNumber,
+        detectedTechniques: [],
+        nextTip:
+          initialAssistantMessage.initialCoachTip ??
+          initialAssistantMessage.userHint ??
+          "レッスンで学んだ技法を使って切り返しましょう。",
+        examplePhrase:
+          initialAssistantMessage.initialExamplePhrase ??
+          "お気持ちわかります。ただ一つだけ確認させてください——",
+      });
+    } else {
+      // Default: user speaks first from approach phase
+      setCoach({
+        currentStep: "アプローチ",
+        stepNumber: 1,
+        detectedTechniques: [],
+        nextTip: "まずは相手を褒めて心理的安全の確保を。2度褒めが理想。その後「ゴール共有」でYESを取ります",
+        examplePhrase: "素敵な会社ですね！今まで○社伺いましたがダントツです。ところで、もしお話聞いて気に入らなかったら断ってくださいね。気に入ったらぜひスタートしてください！",
+      });
+    }
     setTimeout(() => inputRef.current?.focus(), 300);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -143,6 +198,42 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
 
   async function sendMessage() {
     if (!input.trim() || isLoading) return;
+
+    // ゲストはメッセージ送信時にGoogleログインモーダルを表示してブロック。
+    // 入力内容は保持したままにして、ログイン後すぐに続けられるようにする。
+    if (isGuest) {
+      setShowGuestLoginModal(true);
+      return;
+    }
+
+    // 2026-04-11: 最初のメッセージ送信時に usage をカウントする。
+    // (これまでは setup 画面の「ロープレ開始」ボタンでカウントしていたが、
+    //  チャット画面を開いただけで離脱してもカウント消費されてしまうため変更)
+    // ゲスト/レッスン埋め込みでないログインユーザーかつ初回送信時のみ記録する。
+    if (turnCount === 0 && !isGuestMode) {
+      try {
+        const usageRes = await fetch("/api/usage/record", { method: "POST" });
+        if (usageRes.status === 403) {
+          // 上限到達 → 親に通知して upgrade modal を出してもらう
+          const data = await usageRes.json().catch(() => ({}));
+          onUsageLimitReached?.({
+            used: data.used ?? 0,
+            limit: data.limit ?? 0,
+            plan: data.plan,
+          });
+          return;
+        }
+        if (usageRes.ok) {
+          const data = await usageRes.json().catch(() => null);
+          if (data && !data.error) {
+            onUsageRecorded?.(data);
+          }
+        }
+        // 401 などの非 403 エラーは無視して送信を許可（ネットワーク問題で進めなくなるのを避ける）
+      } catch {
+        // ネットワークエラー時もメッセージ送信は続行（既存の挙動を踏襲）
+      }
+    }
 
     const userMessage = input.trim();
     setInput("");
@@ -178,7 +269,9 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
       }).then((r) => r.json()).catch(() => ({ message: "（通信エラー）" })),
     ]);
 
-    const assistantContent = chatRes.message || chatRes.error || "（通信エラーが発生しました。もう一度お試しください）";
+    // chatRes.error は内部用の英語コード ("Unauthorized" など) が入る可能性があるため、吹き出しには表示しない。
+    // message が無い場合は常に日本語のフォールバック文を表示する。
+    const assistantContent = chatRes.message || "すみません、少々お待ちください…（通信エラーが発生しました。もう一度お試しください）";
 
     const finalMessages: Message[] = [
       ...newMessages,
@@ -264,8 +357,8 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                 {sceneLabels[scene] || "訪問営業"} │ {product} → {industry}
               </span>
               <div className="flex items-center gap-2 flex-shrink-0">
-                <span className={`text-[11px] sm:text-xs ${turnCount >= maxTurns - 3 && turnCount > 0 ? "font-bold text-accent" : "text-muted"}`}>
-                  {turnCount}/{maxTurns}
+                <span className={`text-[11px] sm:text-xs ${!isUnlimitedRally && turnCount >= maxTurns - 3 && turnCount > 0 ? "font-bold text-accent" : "text-muted"}`}>
+                  {isUnlimitedRally ? `${turnCount}/∞` : `${turnCount}/${maxTurns}`}
                 </span>
                 {showLesson && (
                   <button
@@ -315,8 +408,38 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-4 sm:py-6">
           <div className="mx-auto max-w-3xl space-y-4 sm:space-y-5">
-            {/* First turn guide — user starts the conversation */}
-            {messages.length === 0 && !isLoading && (
+            {/* Lesson review starter guide — shown when user hasn't spoken yet but AI already opened */}
+            {initialAssistantMessage && turnCount === 0 && !isLoading && (
+              <div className="animate-fade-in-up space-y-4 sm:space-y-5">
+                <div className="rounded-xl border border-accent/40 bg-accent/5 px-4 py-3 text-center text-xs sm:text-sm">
+                  <p className="font-bold text-accent mb-1">
+                    レッスン復習モード
+                  </p>
+                  <p className="text-muted leading-relaxed">
+                    {initialAssistantMessage.contextLabel}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-accent/30 bg-accent/5 px-4 py-4 sm:px-5 sm:py-5 text-center">
+                  <div className="mb-2" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}>
+                      <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+                      <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+                      <line x1="12" y1="19" x2="12" y2="23"/>
+                      <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                  </div>
+                  <p className="text-sm sm:text-base font-bold text-foreground mb-1">
+                    お客さんの発言に切り返してください
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    {initialAssistantMessage.userHint}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* First turn guide — user starts the conversation (no lesson starter) */}
+            {!initialAssistantMessage && messages.length === 0 && !isLoading && (
               <div className="animate-fade-in-up space-y-4 sm:space-y-5">
                 <div className="rounded-xl border border-card-border bg-card/50 px-4 py-3 text-center text-xs sm:text-sm text-muted">
                   {sceneLabels[scene] || ""} ロープレ開始 ─ あなたは<span className="font-bold text-accent">営業マン</span>です。<span className="font-bold text-blue-400">{industry || "お客さん"}</span>に{product}を提案してください。
@@ -333,8 +456,8 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
               </div>
             )}
 
-            {/* Scenario intro (after first message) */}
-            {messages.length > 0 && (
+            {/* Scenario intro (after user's first message) */}
+            {turnCount > 0 && (
               <div className="animate-fade-in-up rounded-xl border border-card-border bg-card/50 px-3 py-2 sm:px-4 sm:py-3 text-center text-[11px] sm:text-xs text-muted">
                 {sceneLabels[scene] || ""} ロープレ中 ─ <span className="font-bold text-accent">営業マン</span> vs <span className="font-bold text-blue-400">{industry || "お客さん"}</span>
               </div>
@@ -503,8 +626,8 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
           </div>
         )}
 
-        {/* Remaining turns warning */}
-        {turnCount >= maxTurns - 3 && turnCount > 0 && turnCount < maxTurns && (
+        {/* Remaining turns warning (Free only — Pro has unlimited rallies) */}
+        {!isUnlimitedRally && turnCount >= maxTurns - 3 && turnCount > 0 && turnCount < maxTurns && (
           <div className="border-t border-accent/30 bg-accent/5 px-3 py-2 sm:px-4 text-center">
             <p className="text-xs sm:text-sm font-medium text-accent">
               残り{maxTurns - turnCount}ターン ─ クロージングに入りましょう
@@ -515,7 +638,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
         {/* Input area */}
         <div className="border-t border-card-border bg-background px-3 py-3 sm:px-4 sm:py-4">
           <div className="mx-auto max-w-3xl">
-            {turnCount >= maxTurns ? (
+            {!isUnlimitedRally && turnCount >= maxTurns ? (
               <button
                 onClick={finishAndScore}
                 disabled={isScoring}
@@ -551,13 +674,21 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                 </button>
               </div>
             )}
-            {turnCount > 0 && turnCount < maxTurns && (
+            {turnCount > 0 && (isUnlimitedRally || turnCount < maxTurns) && (
               <button
                 onClick={finishAndScore}
                 disabled={isScoring}
-                className="mt-2 w-full text-center text-xs sm:text-sm text-muted transition hover:text-accent"
+                className={`mt-2 w-full text-center transition ${
+                  isUnlimitedRally
+                    ? "rounded-xl border border-accent/40 bg-accent/5 py-2.5 text-xs sm:text-sm font-bold text-accent hover:bg-accent/10"
+                    : "text-xs sm:text-sm text-muted hover:text-accent"
+                }`}
               >
-                {isScoring ? "採点中..." : "途中で商談を終了して採点する →"}
+                {isScoring
+                  ? "採点中..."
+                  : isUnlimitedRally
+                  ? "商談を終了して採点する →"
+                  : "途中で商談を終了して採点する →"}
               </button>
             )}
           </div>
@@ -679,6 +810,12 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
           lessonSlug={lessonSlug}
         />
       )}
+
+      {/* Guest Google login prompt — shown when an unauthenticated user tries to send a message */}
+      <GuestLoginPromptModal
+        open={showGuestLoginModal}
+        onClose={() => setShowGuestLoginModal(false)}
+      />
     </div>
   );
 }

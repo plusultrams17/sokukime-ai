@@ -16,6 +16,7 @@ import type { ScoreResult } from "@/lib/scoring";
 import { getGrade } from "@/lib/grade";
 import { getAdjacentLessons } from "@/lib/lessons";
 import { LESSON_FOCUS_MAP } from "@/lib/lessons/focus-instructions";
+import { getLessonStarter } from "@/lib/lessons/lesson-starters";
 
 type Phase = "ready" | "chat" | "score";
 
@@ -78,6 +79,7 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
   const [phase, setPhase] = useState<Phase>("ready");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
+  const [plan, setPlan] = useState<"free" | "pro" | undefined>(undefined);
   const [score, setScore] = useState<ScoreResult | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [usingProfile, setUsingProfile] = useState(false);
@@ -116,6 +118,15 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
     supabase.auth.getUser().then(({ data: { user } }) => {
       setIsLoggedIn(!!user);
       setAuthChecked(true);
+      // Fetch plan for Pro users to unlock unlimited rallies
+      if (user) {
+        fetch("/api/usage")
+          .then((r) => r.json())
+          .then((data) => {
+            if (data?.plan) setPlan(data.plan);
+          })
+          .catch(() => {});
+      }
     });
   }, []);
 
@@ -160,6 +171,11 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
   const focus = LESSON_FOCUS_MAP[slug];
   const lessonFocus = focus ? focus.customerBehavior : undefined;
   const scoringHint = focus ? focus.scoringHint : undefined;
+
+  // Lesson review starter: pre-populated AI opening so the user practices
+  // the exact scenario taught in the lesson from turn 1
+  // (e.g. value-stacking starts from "高い" objection, not approach)
+  const lessonStarter = getLessonStarter(slug);
 
   const chatEndpoint = isLoggedIn ? "/api/chat" : "/api/chat/guest";
   const scoreEndpoint = isLoggedIn ? "/api/score" : "/api/score/guest";
@@ -414,10 +430,19 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
         {/* Start button */}
         <div className="rounded-xl border border-accent/20 bg-accent/5 p-5 text-center">
           <p className="text-sm font-bold text-accent mb-1">学んだらすぐ実践</p>
-          <p className="text-xs text-muted mb-4">
-            レッスンで学んだテクニックをAIロープレで実践練習できます。
-            {usingProfile && "（マイ設定で練習します）"}
-          </p>
+          {lessonStarter ? (
+            <p className="text-xs text-muted mb-4 leading-relaxed">
+              {lessonStarter.contextLabel}から開始します。
+              <br />
+              {lessonStarter.userHint}
+              {usingProfile && <><br />（マイ設定で練習します）</>}
+            </p>
+          ) : (
+            <p className="text-xs text-muted mb-4">
+              レッスンで学んだテクニックをAIロープレで実践練習できます。
+              {usingProfile && "（マイ設定で練習します）"}
+            </p>
+          )}
           <button
             onClick={() => setPhase("chat")}
             disabled={!authChecked || !product.trim() || !industry.trim()}
@@ -494,6 +519,8 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
             chatEndpoint={chatEndpoint}
             scoreEndpoint={scoreEndpoint}
             lessonSlug={slug}
+            plan={plan}
+            initialAssistantMessage={lessonStarter}
             onFinish={(result) => {
               setScore(result);
               setPhase("score");
