@@ -9,7 +9,6 @@ import { Footer } from "@/components/footer";
 import { trackCTAClick, trackCheckoutStarted, trackPricingPageView, trackCheckoutStart } from "@/lib/tracking";
 import { PricingExitPopup } from "@/components/exit-popups/pricing-exit-popup";
 import { UserReviews } from "@/components/user-reviews";
-import { getActivePromotion } from "@/lib/promotions";
 import { createClient } from "@/lib/supabase/client";
 import { getStoredUTM } from "@/components/utm-tracker";
 
@@ -17,7 +16,7 @@ const features = [
   { name: "学習コース（22レッスン）", free: "基本3レッスン", pro: "全22レッスン" },
   { name: "業種別トークスクリプト", free: "一部閲覧", pro: "全業種対応" },
   { name: "切り返し話法テンプレート", free: "基本パターン", pro: "30パターン" },
-  { name: "AIロープレ", free: "1日1回", pro: "無制限" },
+  { name: "AIロープレ", free: "累計5回まで", pro: "無制限" },
   { name: "詳細スコア + AI改善", free: "1カテゴリ", pro: "全5カテゴリ" },
 ];
 
@@ -30,14 +29,14 @@ const comparisons = [
 
 const faqItems = [
   {
-    question: "7日間の無料トライアルとは？",
+    question: "無料で試せますか？",
     answer:
-      "Proプランに申し込むと、最初の7日間は無料で全22レッスン・AIロープレ（1日5回）・スコア全5カテゴリ・テンプレート30パターンをお試しいただけます。トライアル期間中にいつでもキャンセル可能で、キャンセルすれば一切課金されません。トライアル終了後に課金が開始され、AIロープレが無制限になります。",
+      "はい。Googleアカウントでログインすると、無料プランでAIロープレを累計5回まで体験できます（日次制限ではなく生涯の上限）。クレジットカード不要で、いつでもProにアップグレードできます。",
   },
   {
     question: "いつでも解約できますか？",
     answer:
-      "はい、いつでも解約できます。解約後も現在の請求期間の終了までProプランをご利用いただけます。14日間返金保証もあります。",
+      "はい、いつでも解約できます。解約後も現在の請求期間の終了までProプランをご利用いただけます。Freeプランで累計5回まで無料でお試しいただけるため、ご納得いただいたうえでお申し込みください。",
   },
   {
     question: "支払い方法は？",
@@ -47,7 +46,7 @@ const faqItems = [
   {
     question: "無料プランとProの違いは？",
     answer:
-      "無料プランでは基本3レッスン・AIロープレ1日1回・スコア1カテゴリが利用可能。Proでは全22レッスン・全業種コンテンツ・AIロープレ無制限・全5カテゴリの詳細スコア+AI改善アドバイスが使えます。",
+      "無料プランでは基本3レッスン・AIロープレ累計5回まで・スコア1カテゴリが利用可能。Proでは全22レッスン・全業種コンテンツ・AIロープレ無制限・全5カテゴリの詳細スコア+AI改善アドバイスが使えます。",
   },
 ];
 
@@ -56,7 +55,6 @@ export default function PricingPage() {
   const [errorMsg, setErrorMsg] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [promoOpen, setPromoOpen] = useState(false);
-  const [activePromo] = useState(() => getActivePromotion());
   const [currentPlan, setCurrentPlan] = useState<"free" | "pro" | null>(null);
 
   useEffect(() => {
@@ -149,7 +147,7 @@ export default function PricingPage() {
               name: "無料プラン",
               price: "0",
               priceCurrency: "JPY",
-              description: "基本3レッスン・業種別トークスクリプト一部・AIロープレ1日1回・成約スコア1カテゴリ",
+              description: "基本3レッスン・業種別トークスクリプト一部・AIロープレ累計5回まで・成約スコア1カテゴリ",
               availability: "https://schema.org/InStock",
               url: `${siteUrl}/pricing`,
             },
@@ -228,7 +226,7 @@ export default function PricingPage() {
                 まずは試してみたい方に
               </p>
               <p className="mt-1 text-xs text-yellow-600/80">
-                ※ 学習コースは基本3レッスン・AIロープレは1日1回・スコアは1カテゴリのみ
+                ※ 学習コースは基本3レッスン・AIロープレは累計5回まで・スコアは1カテゴリのみ
               </p>
             </div>
 
@@ -238,8 +236,8 @@ export default function PricingPage() {
             >
               無料で始める
             </Link>
-            <p className="mt-2 text-center text-[11px] text-accent/60">
-              Proの7日間無料トライアルもあります →
+            <p className="mt-2 text-center text-[11px] text-muted/70">
+              Googleログインで累計5回ロープレ無料体験
             </p>
 
             <div className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
@@ -251,7 +249,7 @@ export default function PricingPage() {
                   <span className="text-muted min-w-0">{f.name}</span>
                   <span
                     className={`shrink-0 ${
-                      f.free === "−" || f.free === "1日1回" || f.free === "1カテゴリ" || f.free === "一部閲覧" || f.free === "基本3レッスン" || f.free === "基本パターン"
+                      f.free === "−" || f.free === "累計5回まで" || f.free === "1カテゴリ" || f.free === "一部閲覧" || f.free === "基本3レッスン" || f.free === "基本パターン"
                         ? "text-muted"
                         : "text-foreground"
                     }`}
@@ -266,9 +264,7 @@ export default function PricingPage() {
           {/* Pro Plan */}
           <div className="relative rounded-2xl border-2 border-accent bg-card p-5 sm:p-8">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold text-white whitespace-nowrap">
-              {activePromo?.id === "launch2026"
-                ? "🎉 ローンチ記念 先着100名"
-                : "おすすめ"}
+              おすすめ
             </div>
 
             <div className="mb-6">
@@ -285,20 +281,6 @@ export default function PricingPage() {
               </p>
             </div>
 
-            {/* Campaign Notice — auto-applied at checkout */}
-            {activePromo && (
-              <div className="mb-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-2.5 text-center">
-                <p className="text-xs font-bold text-accent">
-                  {activePromo.name}適用中
-                </p>
-                <p className="text-[11px] text-muted">
-                  トライアル後の初月 ¥{activePromo.discountPrice.toLocaleString()}
-                  <span className="ml-1 line-through">¥{activePromo.originalPrice.toLocaleString()}</span>
-                  （自動適用）
-                </p>
-              </div>
-            )}
-
             {currentPlan === "pro" ? (
               /* Pro会員向け表示 */
               <div className="mb-4 rounded-xl border-2 border-green-500/30 bg-green-500/5 px-4 py-4 text-center">
@@ -312,13 +294,15 @@ export default function PricingPage() {
             ) : (
               /* 未登録・Free会員向け表示 */
               <>
-                {/* 7日間無料バナー */}
+                {/* 無料体験バナー */}
                 <div className="mb-4 rounded-xl border-2 border-accent bg-accent/5 px-4 py-3 text-center">
                   <p className="text-sm font-extrabold text-accent">
-                    最初の7日間は無料
+                    まずは無料で5回体験
                   </p>
-                  <p className="mt-0.5 text-xs text-muted">
-                    全22レッスン・AIロープレ1日5回をお試し。いつでもキャンセルOK
+                  <p className="mt-0.5 text-xs leading-relaxed text-muted">
+                    Googleログインで累計5回まで無料
+                    <br />
+                    クレジットカード不要
                   </p>
                 </div>
               </>
@@ -337,7 +321,7 @@ export default function PricingPage() {
                 disabled={isLoading}
                 className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
               >
-                {isLoading ? "処理中..." : "7日間無料でAIロープレを試す"}
+                {isLoading ? "処理中..." : "Proにアップグレード"}
               </button>
             )}
             {errorMsg && (
@@ -347,7 +331,7 @@ export default function PricingPage() {
             )}
             {currentPlan !== "pro" && (
               <p className="mt-2 text-center text-[11px] text-muted">
-                いつでも解約OK ・ 14日間返金保証
+                Freeで5回お試し可能 ・ いつでも解約OK
               </p>
             )}
 
@@ -395,7 +379,7 @@ export default function PricingPage() {
 
         {/* Guarantee Badge */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-muted sm:gap-x-4 sm:text-sm">
-          <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM14.707 8.707a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg> 14日間返金保証</span>
+          <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM14.707 8.707a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg> Freeで5回お試し可能</span>
           <span className="flex items-center gap-1"><svg className="inline-block h-4 w-4 text-muted shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg> Stripe安全決済</span>
           <span className="flex items-center gap-1">JCB / Visa / Mastercard</span>
           <span className="flex items-center gap-1">経費精算・領収書OK</span>
@@ -476,14 +460,14 @@ export default function PricingPage() {
         {currentPlan !== "pro" && (
           <div className="mt-16 text-center">
             <p className="mb-5 text-muted">
-              7日間の無料トライアルでAIロープレをお試し。いつでも解約OK
+              ¥2,980/月 ・ Freeで5回お試し可能 ・ いつでも解約OK
             </p>
             <button
                 onClick={handleUpgrade}
                 disabled={isLoading}
                 className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60 sm:min-w-[240px]"
               >
-                {isLoading ? "処理中..." : "無料トライアルを始める"}
+                {isLoading ? "処理中..." : "Proにアップグレード"}
               </button>
             {errorMsg && (
               <div className="mx-auto mt-3 max-w-md rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400">

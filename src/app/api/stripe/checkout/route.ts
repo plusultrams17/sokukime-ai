@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import { getActivePromotion } from "@/lib/promotions";
 
 export async function POST(request: NextRequest) {
   try {
@@ -135,7 +134,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ── Discount resolution (priority: referral > promo code > campaign > allow_promotion_codes) ──
+    // ── Discount resolution (priority: referral > promo code > allow_promotion_codes) ──
+    // 2026-04-11: 季節キャンペーン自動適用を廃止。Free累計5回 → 納得してProへ の導線に統一。
     let discounts: { coupon: string }[] | undefined;
     let promotionCodeId: string | undefined;
 
@@ -191,31 +191,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 3. 季節キャンペーンクーポン自動適用（他の割引がない場合、月額のみ）
-    if (!discounts && !promotionCodeId && billing === "monthly") {
-      const activePromo = getActivePromotion();
-      if (activePromo?.stripeCouponId) {
-        try {
-          let campaignCoupon;
-          try {
-            campaignCoupon = await stripe.coupons.retrieve(activePromo.stripeCouponId);
-          } catch {
-            // キャンペーンクーポンが未作成なら自動作成
-            campaignCoupon = await stripe.coupons.create({
-              id: activePromo.stripeCouponId,
-              amount_off: activePromo.originalPrice - activePromo.discountPrice,
-              currency: "jpy",
-              duration: "once",
-              name: activePromo.name,
-            });
-          }
-          discounts = [{ coupon: campaignCoupon.id }];
-        } catch {
-          // キャンペーンクーポン適用失敗でも決済は続行
-        }
-      }
-    }
-
     // Build discount config for Stripe session
     const discountConfig = discounts
       ? { discounts }
@@ -239,7 +214,8 @@ export async function POST(request: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
       locale: "ja",
       subscription_data: {
-        trial_period_days: 7,
+        // 2026-04 仕様変更: 7日間無料トライアル廃止 → 即課金に変更
+        // Free ユーザーは累計5回のロープレでProアップグレードを促す導線に切り替え
         metadata: { supabase_user_id: user.id, ...utmParams },
       },
     });

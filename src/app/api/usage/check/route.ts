@@ -1,15 +1,25 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getUsageStatus, recordUsage } from "@/lib/usage";
-import { trySendOnboardingEmail } from "@/lib/email";
+import { getUsageStatus } from "@/lib/usage";
 
 const UNVERIFIED_USAGE_LIMIT = 3;
 
+/**
+ * Read-only endpoint: ロープレを実際に「開始可能か」だけチェックする。
+ * `/api/usage/record` と違い usage_records への INSERT はしない。
+ *
+ * 2026-04-11 仕様変更:
+ * カウントタイミングを「ロープレ開始ボタン押下時」から
+ * 「最初のユーザーメッセージ送信時」に変更したため、setup → chat の遷移時には
+ * このエンドポイントで上限のみチェックし、実際の記録は chat-ui.tsx の
+ * sendMessage() から /api/usage/record を呼ぶ。
+ */
 export async function POST() {
   const supabase = await createClient();
   if (!supabase) {
     return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
   }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -18,10 +28,9 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Check if email verification is needed (email signup only, not OAuth)
+  // メール認証チェック（メール登録ユーザーのみ・OAuth は対象外）
   const isOAuthUser = user.app_metadata?.provider !== "email";
   if (!isOAuthUser && !user.email_confirmed_at) {
-    // Count total usage for unverified users
     const { count } = await supabase
       .from("usage_records")
       .select("id", { count: "exact", head: true })
@@ -41,8 +50,6 @@ export async function POST() {
     }
   }
 
-  // Check usage limit before recording
-  // 2026-04 仕様変更: Free は累計5回まで、Pro は無制限
   const status = await getUsageStatus(supabase, user.id);
   if (!status.canStart) {
     return NextResponse.json(
@@ -54,26 +61,5 @@ export async function POST() {
     );
   }
 
-  const { error: usageError } = await recordUsage(supabase, user.id);
-  if (usageError) {
-    console.error("Usage record insert failed:", usageError);
-    return NextResponse.json({ error: "使用記録の保存に失敗しました" }, { status: 500 });
-  }
-
-  // Send onboarding emails based on total roleplay count (fire-and-forget)
-  if (user.email) {
-    const { count: totalCount } = await supabase
-      .from("usage_records")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id);
-
-    if (totalCount === 1) {
-      trySendOnboardingEmail(supabase, user.id, user.email, "first_roleplay");
-    } else if (totalCount === 3) {
-      trySendOnboardingEmail(supabase, user.id, user.email, "third_roleplay");
-    }
-  }
-
-  const updatedStatus = await getUsageStatus(supabase, user.id);
-  return NextResponse.json(updatedStatus);
+  return NextResponse.json(status);
 }

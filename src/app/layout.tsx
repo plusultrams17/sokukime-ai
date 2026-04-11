@@ -4,7 +4,6 @@ import { GoogleAnalytics, MicrosoftClarity } from "@/components/analytics";
 import { ScrollDepthTracker } from "@/components/scroll-depth-tracker";
 import { JsonLd } from "@/components/json-ld";
 import { CookieConsent } from "@/components/cookie-consent";
-import { PromoBanner } from "@/components/promo-banner";
 import { UTMTracker } from "@/components/utm-tracker";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -85,7 +84,6 @@ export default function RootLayout({
         <MicrosoftClarity />
         <ScrollDepthTracker />
         <UTMTracker />
-        <PromoBanner />
         <JsonLd
           data={{
             "@context": "https://schema.org",
