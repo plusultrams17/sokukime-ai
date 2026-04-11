@@ -57,7 +57,11 @@ export async function hasProAccess(
     .eq("id", userId)
     .single();
 
-  if (profile?.plan === "pro") {
+  if (
+    profile?.plan === "starter" ||
+    profile?.plan === "pro" ||
+    profile?.plan === "master"
+  ) {
     return { isPro: true, source: "plan" };
   }
 

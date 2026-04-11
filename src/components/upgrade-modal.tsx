@@ -121,12 +121,12 @@ export function UpgradeModal({
         {trigger === "limit" && (
           <>
             <h2 className="mb-2 text-center text-xl font-bold">
-              このまま練習を止めますか？
+              無料枠の5回を使い切りました
             </h2>
             <p className="mb-5 text-center text-sm text-muted">
-              明日まで待つと、今日の練習で掴んだ感覚が薄れます。
+              今つかんだ感覚を、そのまま伸ばしませんか？
               <br />
-              <span className="font-medium text-foreground">Proなら今すぐ続きを練習できます。</span>
+              <span className="font-medium text-foreground">Proなら月60回まで練習を続けられます。</span>
             </p>
           </>
         )}
@@ -157,7 +157,7 @@ export function UpgradeModal({
         <div className="mb-5 space-y-2">
           <div className="flex items-center gap-2 text-sm">
             <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>ロープレ<span className="font-bold text-accent">無制限</span></span>
+            <span>ロープレ<span className="font-bold text-accent">月60回</span>（毎月1日リセット）</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
@@ -182,13 +182,13 @@ export function UpgradeModal({
           <div className="flex items-center justify-between">
             <span className="text-sm font-bold text-accent">成約コーチAI Pro</span>
             <span className="text-lg font-bold text-accent">
-              ¥2,980<span className="text-xs font-normal text-muted">/月</span>
+              ¥1,980<span className="text-xs font-normal text-muted">/月</span>
             </span>
           </div>
         </div>
 
         <div className="mb-3 text-center text-xs text-muted">
-          14日間返金保証・いつでも解約OK・違約金なし
+          いつでも解約OK・違約金なし・Stripe安全決済
         </div>
 
         {stats && (
@@ -204,7 +204,7 @@ export function UpgradeModal({
             disabled={isLoading}
             className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
           >
-            {isLoading ? "処理中..." : "7日間無料でAIロープレを試す"}
+            {isLoading ? "処理中..." : "Proにアップグレード"}
           </button>
           {errorMsg && (
             <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400 text-center">
@@ -212,13 +212,13 @@ export function UpgradeModal({
             </div>
           )}
           <div className="text-center text-[11px] text-muted">
-            今日スタート → {new Date(Date.now() + 7 * 86400000).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}まで無料 ・ いつでも解約OK
+            ¥1,980/月 ・ いつでも解約OK ・ 経費精算OK
           </div>
           <button
             onClick={onClose}
             className="text-sm text-muted transition hover:text-foreground"
           >
-            {trigger === "limit" ? "明日まで練習を止める" : "今はスキップ"}
+            {trigger === "limit" ? "今はスキップ" : "今はスキップ"}
           </button>
           <Link
             href="/pricing"

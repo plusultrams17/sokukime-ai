@@ -225,7 +225,7 @@ export default function UseCasesPage() {
           </h2>
           <p className="mb-8 text-sm text-muted">
             業種・商材・お客さんのタイプを自由に設定できます。
-            無料で1日1回試せます。
+            Googleログインで累計5回まで無料体験できます。
           </p>
           <Link
             href="/roleplay"

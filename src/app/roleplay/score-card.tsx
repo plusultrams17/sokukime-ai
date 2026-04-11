@@ -13,7 +13,7 @@ import { getBenchmark } from "@/lib/benchmark";
 interface ScoreCardProps {
   score: ScoreResult & { scoreId?: string | null; previousScore?: number | null };
   onRetry: () => void;
-  plan?: "free" | "pro";
+  plan?: "free" | "starter" | "pro" | "master";
   onUpgrade?: () => void;
   industry?: string;
 }
@@ -342,7 +342,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
                         残り{lockedCategories.length}カテゴリの詳細スコアとAI改善アドバイス
                       </p>
                       <p className="mb-4 text-xs text-muted">
-                        弱点を特定して集中的に改善 — 7日間無料で試せます
+                        弱点を特定して集中的に改善 — Proで全開放
                       </p>
                       <span className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition group-hover:bg-accent-hover">
                         Proで全スコアを見る
@@ -625,7 +625,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
               全カテゴリの詳細スコアと改善アドバイスを見ませんか？
             </p>
             <p className="mb-4 text-xs text-muted">
-              Proプランなら無制限ロープレ + 全5カテゴリの詳細フィードバック
+              プロプランなら月60回ロープレ + 全5カテゴリの詳細フィードバック
             </p>
             <button
               onClick={() => {
@@ -634,10 +634,10 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
               }}
               className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
             >
-              7日間無料でAIロープレを試す
+              Proにアップグレード
             </button>
             <p className="mt-2 text-[11px] text-muted">
-              14日間返金保証・いつでも解約OK・違約金なし
+              Freeで5回お試し可能・いつでも解約OK・違約金なし
             </p>
           </div>
         )}

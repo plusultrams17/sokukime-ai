@@ -25,17 +25,23 @@ export async function POST(request: NextRequest) {
     const input = await request.json();
     const result = await scoreConversation(input);
 
-    // Check user plan — free users only see 1 category
+    // Check user plan — free users only see 1 category (全categoryは有料プランのみ)
     const FREE_VISIBLE_CATEGORIES = 1;
-    let userPlan: "free" | "pro" = "free";
+    let isPaidPlan = false;
     try {
       const { data: profile } = await supabase
         .from("profiles")
         .select("plan, subscription_status")
         .eq("id", user.id)
         .single();
-      if (profile?.plan === "pro" || profile?.subscription_status === "trialing") {
-        userPlan = "pro";
+      const rawPlan = profile?.plan;
+      if (
+        rawPlan === "starter" ||
+        rawPlan === "pro" ||
+        rawPlan === "master" ||
+        profile?.subscription_status === "active"
+      ) {
+        isPaidPlan = true;
       }
     } catch {
       // Default to free if profile fetch fails
@@ -78,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Filter categories for free users (server-side gate)
-    const filteredResult = userPlan === "pro"
+    const filteredResult = isPaidPlan
       ? result
       : {
           ...result,

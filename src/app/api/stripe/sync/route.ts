@@ -37,9 +37,17 @@ export async function POST() {
       return NextResponse.json({ synced: false, reason: "no_customer_id" });
     }
 
-    // Already pro — no sync needed
-    if (profile.plan === "pro" && profile.stripe_subscription_id) {
-      return NextResponse.json({ synced: true, plan: "pro", status: profile.subscription_status });
+    // Already on a paid plan — no sync needed
+    const isPaid =
+      profile.plan === "starter" ||
+      profile.plan === "pro" ||
+      profile.plan === "master";
+    if (isPaid && profile.stripe_subscription_id) {
+      return NextResponse.json({
+        synced: true,
+        plan: profile.plan,
+        status: profile.subscription_status,
+      });
     }
 
     // Check Stripe for active subscriptions
@@ -58,6 +66,13 @@ export async function POST() {
       return NextResponse.json({ synced: false, reason: "no_active_subscription" });
     }
 
+    // Determine plan tier from subscription metadata (fallback to "pro")
+    const metaTier = activeSub.metadata?.plan_tier;
+    const planTier: "starter" | "pro" | "master" =
+      metaTier === "starter" || metaTier === "pro" || metaTier === "master"
+        ? metaTier
+        : "pro";
+
     // Sync to Supabase using admin client (bypass RLS)
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -69,7 +84,7 @@ export async function POST() {
     const { error: syncError } = await admin
       .from("profiles")
       .update({
-        plan: "pro",
+        plan: planTier,
         stripe_subscription_id: activeSub.id,
         subscription_status: activeSub.status,
       })
@@ -82,7 +97,7 @@ export async function POST() {
 
     return NextResponse.json({
       synced: true,
-      plan: "pro",
+      plan: planTier,
       status: activeSub.status,
     });
   } catch (error) {

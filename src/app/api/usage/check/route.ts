@@ -52,9 +52,21 @@ export async function POST() {
 
   const status = await getUsageStatus(supabase, user.id);
   if (!status.canStart) {
+    const planLabel =
+      status.plan === "master"
+        ? "マスタープラン"
+        : status.plan === "pro"
+          ? "プロプラン"
+          : status.plan === "starter"
+            ? "スタータープラン"
+            : "無料プラン";
+    const errorMessage =
+      status.plan === "free"
+        ? `無料プランのロープレ累計上限（${status.limit}回）に達しました。上位プランでもっと練習できます。`
+        : `今月の${planLabel}ロープレ上限（${status.limit}回）に達しました。来月1日にリセットされます。`;
     return NextResponse.json(
       {
-        error: "無料プランのロープレ累計上限（5回）に達しました。Proにアップグレードしてください。",
+        error: errorMessage,
         ...status,
       },
       { status: 403 }

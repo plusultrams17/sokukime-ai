@@ -512,7 +512,7 @@ export default function VirtualScene() {
                 <p className="mb-6 text-sm leading-relaxed text-white/60">
                   {userTurns >= 6
                     ? "しっかりとした商談ができましたね！Proプランなら5カテゴリの詳細スコア＋AIフィードバックで、さらに実力を伸ばせます。"
-                    : "もう少し会話を深めると効果的です。Proプランで無制限に練習して、本番に備えましょう。"}
+                    : "もう少し会話を深めると効果的です。Proプランで月60回練習して、本番に備えましょう。"}
                 </p>
                 <div className="flex flex-col gap-2.5">
                   <Link

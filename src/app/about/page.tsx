@@ -86,7 +86,7 @@ export default function AboutPage() {
       <section className="border-t border-card-border px-4 py-10 sm:px-6 sm:py-12">
         <div className="mx-auto max-w-3xl">
           <p className="text-sm leading-relaxed text-muted">
-            <strong className="text-foreground">成約コーチAI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間ロープレ（Proなら無制限）で解決します。
+            <strong className="text-foreground">成約コーチAI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間ロープレ（Proなら月60回）で解決します。
           </p>
         </div>
       </section>
@@ -232,21 +232,21 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* 成果保証 — 競合で欠けていた最大のポイント */}
+          {/* Freeで5回お試し可能 — 課金前にじっくり試せる安心感 */}
           <div className="mt-8 rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 sm:p-8">
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-accent text-xl text-white">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
               <div>
-                <h3 className="mb-2 text-lg font-bold text-foreground">14日間返金保証</h3>
+                <h3 className="mb-2 text-lg font-bold text-foreground">Freeで5回まで無料お試し</h3>
                 <p className="text-sm leading-relaxed text-muted">
-                  Proプランにご満足いただけなかった場合、14日以内であれば
-                  <strong className="text-foreground">全額返金</strong>いたします。
-                  安心してお試しいただけます。
+                  Googleログインだけで、AIロープレを
+                  <strong className="text-foreground">累計5回まで完全無料</strong>でお試しいただけます。
+                  納得いただいたうえで、Proへのアップグレードをご検討ください。
                 </p>
                 <p className="mt-2 text-xs text-muted">
-                  ※ 14日間で7回以上のロープレ実施が条件です。詳細は利用規約をご確認ください。
+                  ※ クレジットカード登録不要・いつでも解約可能・違約金なし
                 </p>
               </div>
             </div>

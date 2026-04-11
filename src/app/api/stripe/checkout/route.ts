@@ -2,6 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
+import type { PlanTier } from "@/lib/plans";
+
+/**
+ * Tier → Stripe Price ID env var の解決
+ * - starter:  STRIPE_STARTER_PRICE_ID  (¥990)
+ * - pro:      STRIPE_PRO_PRICE_ID      (¥1,980)
+ * - master:   STRIPE_MASTER_PRICE_ID   (¥4,980)
+ */
+function resolvePriceId(tier: PlanTier, billing: "monthly" | "annual"): string | null {
+  // 年額は現状proのみ対応 (legacy)
+  if (billing === "annual" && tier === "pro" && process.env.STRIPE_PRO_ANNUAL_PRICE_ID) {
+    return process.env.STRIPE_PRO_ANNUAL_PRICE_ID.trim();
+  }
+  switch (tier) {
+    case "starter":
+      return process.env.STRIPE_STARTER_PRICE_ID?.trim() || null;
+    case "pro":
+      return process.env.STRIPE_PRO_PRICE_ID?.trim() || null;
+    case "master":
+      return process.env.STRIPE_MASTER_PRICE_ID?.trim() || null;
+    default:
+      return null;
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,12 +42,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Parse billing period and promo code from request body
+    // Parse tier, billing period and promo code from request body
+    let tier: PlanTier = "pro"; // 後方互換: tier 未指定なら pro
     let billing: "monthly" | "annual" = "monthly";
     let promoCode: string | undefined;
     let utmParams: Record<string, string> = {};
     try {
       const body = await request.json();
+      if (body.tier && ["starter", "pro", "master"].includes(body.tier)) {
+        tier = body.tier as PlanTier;
+      }
       if (body.billing === "annual") {
         billing = "annual";
       }
@@ -36,7 +64,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch {
-      // Default to monthly if no body
+      // Default to pro/monthly if no body
     }
 
     // Get or create profile + Stripe customer
@@ -115,22 +143,25 @@ export async function POST(request: NextRequest) {
       });
       if (existingSubs.data.length > 0 || trialingSubs.data.length > 0 || pastDueSubs.data.length > 0) {
         return NextResponse.json(
-          { error: "既にProプランに登録されています。" },
+          { error: "既に有料プランに登録されています。プラン変更はマイページから行ってください。" },
           { status: 400 }
         );
       }
     }
 
-    // Use annual or monthly price ID (trim to prevent \n from env vars)
-    const priceId =
-      billing === "annual" && process.env.STRIPE_PRO_ANNUAL_PRICE_ID
-        ? process.env.STRIPE_PRO_ANNUAL_PRICE_ID.trim()
-        : process.env.STRIPE_PRO_PRICE_ID?.trim();
+    // Tier から Price ID を解決
+    const priceId = resolvePriceId(tier, billing);
 
     if (!priceId) {
+      const tierName =
+        tier === "starter" ? "スタータープラン" :
+        tier === "pro" ? "プロプラン" :
+        tier === "master" ? "マスタープラン" : tier;
       return NextResponse.json(
-        { error: "料金プランの設定に問題があります。管理者にお問い合わせください。" },
-        { status: 500 }
+        {
+          error: `${tierName}は現在準備中です。しばらくお待ちください。`,
+        },
+        { status: 503 }
       );
     }
 
@@ -214,10 +245,9 @@ export async function POST(request: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
       locale: "ja",
       subscription_data: {
-        // 2026-04 仕様変更: 7日間無料トライアル廃止 → 即課金に変更
-        // Free ユーザーは累計5回のロープレでProアップグレードを促す導線に切り替え
-        metadata: { supabase_user_id: user.id, ...utmParams },
+        metadata: { supabase_user_id: user.id, plan_tier: tier, ...utmParams },
       },
+      metadata: { supabase_user_id: user.id, plan_tier: tier },
     });
 
     return NextResponse.json({ url: session.url });

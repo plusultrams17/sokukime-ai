@@ -30,7 +30,12 @@ export interface CohortRow {
   retention: number[]; // retention % for month 0, 1, 2, ...
 }
 
-const MONTHLY_PRICE = 2980;
+// 4プラン構成 (2026-04-11〜)
+const TIER_PRICE = {
+  starter: 990,
+  pro: 1980,
+  master: 4980,
+} as const;
 
 /** Calculate all KPIs from live DB data */
 export async function calculateCurrentKPIs(
@@ -44,7 +49,9 @@ export async function calculateCurrentKPIs(
   const [
     mauResult,
     freeResult,
+    starterResult,
     proResult,
+    masterResult,
     newSignupsResult,
     conversionsResult,
     cancellationsResult,
@@ -60,11 +67,21 @@ export async function calculateCurrentKPIs(
       .from("profiles")
       .select("id", { count: "exact", head: true })
       .eq("plan", "free"),
+    // Starter users
+    supabase
+      .from("profiles")
+      .select("id", { count: "exact", head: true })
+      .eq("plan", "starter"),
     // Pro users
     supabase
       .from("profiles")
       .select("id", { count: "exact", head: true })
       .eq("plan", "pro"),
+    // Master users
+    supabase
+      .from("profiles")
+      .select("id", { count: "exact", head: true })
+      .eq("plan", "master"),
     // New signups this month
     supabase
       .from("profiles")
@@ -97,12 +114,19 @@ export async function calculateCurrentKPIs(
   const mau = uniqueUsers.size;
 
   const freeUsers = freeResult.count || 0;
-  const proUsers = proResult.count || 0;
+  const starterUsers = starterResult.count || 0;
+  const proOnlyUsers = proResult.count || 0;
+  const masterUsers = masterResult.count || 0;
+  // proUsers は後方互換のため「全有料プラン合計」を格納
+  const proUsers = starterUsers + proOnlyUsers + masterUsers;
   const newSignups = newSignupsResult.count || 0;
   const churnedUsers = cancellationsResult.count || 0;
 
-  // MRR = pro_users * monthly price
-  const mrr = proUsers * MONTHLY_PRICE;
+  // MRR = Σ(tier users * tier price)
+  const mrr =
+    starterUsers * TIER_PRICE.starter +
+    proOnlyUsers * TIER_PRICE.pro +
+    masterUsers * TIER_PRICE.master;
 
   // CVR = monthly conversions / month-start free users
   const monthlyConversions = conversionsResult.count || 0;
@@ -111,7 +135,7 @@ export async function calculateCurrentKPIs(
       ? Math.round((monthlyConversions / freeUsers) * 10000) / 100
       : 0;
 
-  // Churn = monthly cancellations / (pro + cancelled this month)
+  // Churn = monthly cancellations / (paid + cancelled this month)
   const churnBase = proUsers + churnedUsers;
   const churnRate =
     churnBase > 0
@@ -133,7 +157,7 @@ export async function calculateCurrentKPIs(
   }
 
   // LTV = ARPU / monthly churn rate
-  const arpu = MONTHLY_PRICE;
+  const arpu = proUsers > 0 ? mrr / proUsers : 0;
   const monthlyChurn = churnRate / 100;
   const ltv = monthlyChurn > 0 ? Math.round(arpu / monthlyChurn) : 0;
 

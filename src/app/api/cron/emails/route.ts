@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { sendTrialEmail, sendEngagementEmail, sendTransactionalEmail, sendAdminEmail, sendEmailWithABVariant } from "@/lib/email";
+import { sendEngagementEmail, sendTransactionalEmail, sendAdminEmail, sendEmailWithABVariant } from "@/lib/email";
 import type { WeeklyRevenueData, AdminAlertData } from "@/lib/email";
 import { computeHealthScore, recordHealthScore, predictChurn } from "@/lib/health-score";
 import { getABAssignment, recordABConversion } from "@/lib/ab-test";
@@ -11,11 +11,8 @@ import { sendCRMEvent } from "@/lib/crm-webhook";
  * Cron job: Sends automated emails based on user lifecycle.
  *
  * Runs daily via Vercel Cron. Handles:
- * 1. Trial expiring (last day) → trial_expiring_6days
- * 2. Trial expiring in 3 days → trial_expiring_3days
- * 3. Trial expiring in 1 day → trial_expiring_1day
- * 4. Trial expired (just ended) → trial_expired
- * 5. Inactive users (7+ days no roleplay) → inactive_reminder
+ * 1. Inactive users (7+ days no roleplay) → inactive_reminder
+ * 2. Pre-activation reminders, dunning, win-back, NPS, health score, etc.
  *
  * Protected by CRON_SECRET to prevent unauthorized access.
  */
@@ -36,109 +33,9 @@ export async function GET(request: NextRequest) {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
   const now = new Date();
   const cronStartTime = Date.now();
-  const results = { trial_6days: 0, trial_3days: 0, trial_1day: 0, trial_expired: 0, inactive: 0, no_roleplay: 0, pause_resume: 0, dunning_day4: 0, dunning_day7: 0, winback_7d: 0, winback_30d: 0, power_user: 0, referral_nudge: 0, streak_milestone: 0, pro_day1: 0, pro_day3: 0, pro_day7: 0, weekly_digest: 0, nps_survey: 0, at_risk: 0, monthly_to_annual: 0, reverse_trial_expired: 0, admin_weekly: 0, admin_alerts: 0, predictive_churn: 0, health_scores_recorded: 0, crm_events: 0, ab_tests_applied: 0, errors: 0 };
+  const results = { inactive: 0, no_roleplay: 0, pause_resume: 0, dunning_day4: 0, dunning_day7: 0, winback_7d: 0, winback_30d: 0, power_user: 0, referral_nudge: 0, streak_milestone: 0, pro_day1: 0, pro_day3: 0, pro_day7: 0, weekly_digest: 0, nps_survey: 0, at_risk: 0, monthly_to_annual: 0, admin_weekly: 0, admin_alerts: 0, predictive_churn: 0, health_scores_recorded: 0, crm_events: 0, ab_tests_applied: 0, errors: 0 };
 
-  // ── 1. Trial expiring emails ──
-  // Find users with subscription_status = 'trialing'
-  // and check their trial end date from Stripe metadata or created_at + 7 days
-  const { data: trialingUsers } = await supabase
-    .from("profiles")
-    .select("id, email, created_at, subscription_status, email_unsubscribed")
-    .eq("subscription_status", "trialing")
-    .not("email", "is", null);
-
-  if (trialingUsers) {
-    for (const user of trialingUsers) {
-      if (!user.email || user.email_unsubscribed) continue;
-
-      // Calculate trial end date (7 days after subscription started)
-      // We use the profiles.updated_at or a heuristic based on when status became 'trialing'
-      const { data: emailLog } = await supabase
-        .from("onboarding_emails")
-        .select("email_type")
-        .eq("user_id", user.id)
-        .in("email_type", ["trial_expiring_6days", "trial_expiring_3days", "trial_expiring_1day", "trial_expired"]);
-
-      const sentTypes = new Set(emailLog?.map((e) => e.email_type) || []);
-
-      // Estimate trial start: look for checkout completion or use profile update
-      // For simplicity, we check against profiles.created_at as a baseline
-      // In production, store trial_start in profiles when checkout completes
-      const createdAt = new Date(user.created_at);
-      const trialEndDate = new Date(createdAt.getTime() + 7 * 24 * 60 * 60 * 1000);
-      const daysUntilEnd = Math.ceil((trialEndDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-
-      try {
-        if (daysUntilEnd === 1 && !sentTypes.has("trial_expiring_6days")) {
-          // Last day (today ends) → "トライアル最終日"
-          const sent = await sendTrialEmail(user.email, "trial_expiring_6days", user.id);
-          if (sent) {
-            await supabase.from("onboarding_emails").insert({ user_id: user.id, email_type: "trial_expiring_6days" });
-            results.trial_6days++;
-          }
-        } else if (daysUntilEnd === 2 && !sentTypes.has("trial_expiring_1day")) {
-          // Tomorrow ends → "明日で終了"
-          const sent = await sendTrialEmail(user.email, "trial_expiring_1day", user.id);
-          if (sent) {
-            await supabase.from("onboarding_emails").insert({ user_id: user.id, email_type: "trial_expiring_1day" });
-            results.trial_1day++;
-          }
-        } else if (daysUntilEnd >= 3 && daysUntilEnd <= 4 && !sentTypes.has("trial_expiring_3days")) {
-          // 3-4 days remaining → "残り3日"
-          const sent = await sendTrialEmail(user.email, "trial_expiring_3days", user.id);
-          if (sent) {
-            await supabase.from("onboarding_emails").insert({ user_id: user.id, email_type: "trial_expiring_3days" });
-            results.trial_3days++;
-          }
-        }
-      } catch {
-        results.errors++;
-      }
-    }
-  }
-
-  // ── 2. Trial just expired (users who moved from trialing to active/canceled recently) ──
-  const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const { data: recentlyExpired } = await supabase
-    .from("profiles")
-    .select("id, email, plan, subscription_status, email_unsubscribed")
-    .eq("plan", "free")
-    .in("subscription_status", ["canceled", "none"])
-    .not("email", "is", null);
-
-  if (recentlyExpired) {
-    for (const user of recentlyExpired) {
-      if (!user.email || user.email_unsubscribed) continue;
-
-      const { data: emailLog } = await supabase
-        .from("onboarding_emails")
-        .select("email_type")
-        .eq("user_id", user.id)
-        .eq("email_type", "trial_expired");
-
-      // Only send if they had a trial (check if trial emails were sent)
-      const { data: hadTrial } = await supabase
-        .from("onboarding_emails")
-        .select("id")
-        .eq("user_id", user.id)
-        .in("email_type", ["trial_expiring_6days", "trial_expiring_3days", "trial_expiring_1day"])
-        .limit(1);
-
-      if (hadTrial && hadTrial.length > 0 && (!emailLog || emailLog.length === 0)) {
-        try {
-          const sent = await sendTrialEmail(user.email, "trial_expired", user.id);
-          if (sent) {
-            await supabase.from("onboarding_emails").insert({ user_id: user.id, email_type: "trial_expired" });
-            results.trial_expired++;
-          }
-        } catch {
-          results.errors++;
-        }
-      }
-    }
-  }
-
-  // ── 3. Inactive user reminders (7+ days since last roleplay) ──
+  // ── 1. Inactive user reminders (7+ days since last roleplay) ──
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
@@ -891,36 +788,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // ── 15. Reverse trial expiration ──
-  // Downgrade users whose reverse trial has ended (trial_ends_at < now, plan still 'pro', no Stripe subscription)
-  {
-    const { data: expiredTrials } = await supabase
-      .from("profiles")
-      .select("id, email, email_unsubscribed")
-      .eq("plan", "pro")
-      .is("stripe_subscription_id", null)
-      .lt("trial_ends_at", now.toISOString())
-      .not("trial_ends_at", "is", null);
-
-    if (expiredTrials) {
-      for (const user of expiredTrials) {
-        try {
-          await supabase
-            .from("profiles")
-            .update({ plan: "free", trial_ends_at: null })
-            .eq("id", user.id);
-
-          if (user.email && !user.email_unsubscribed) {
-            await sendTrialEmail(user.email, "trial_expired", user.id);
-          }
-          results.reverse_trial_expired++;
-        } catch {
-          results.errors++;
-        }
-      }
-    }
-  }
-
   // ── 16. Weekly admin revenue report (Mondays only) ──
   const adminEmail = process.env.ADMIN_EMAIL;
   if (adminEmail && now.getDay() === 1) {
@@ -938,15 +805,36 @@ export async function GET(request: NextRequest) {
         .select("id", { count: "exact", head: true })
         .gte("created_at", sevenDaysAgoISO);
 
-      // Pro users
-      const { count: proUsers } = await supabase
-        .from("profiles")
-        .select("id", { count: "exact", head: true })
-        .eq("plan", "pro")
-        .not("stripe_subscription_id", "is", null);
+      // Paid users by tier (4-tier: Starter ¥990 / Pro ¥1,980 / Master ¥4,980)
+      const [
+        { count: starterCount },
+        { count: proCount },
+        { count: masterCount },
+      ] = await Promise.all([
+        supabase
+          .from("profiles")
+          .select("id", { count: "exact", head: true })
+          .eq("plan", "starter")
+          .not("stripe_subscription_id", "is", null),
+        supabase
+          .from("profiles")
+          .select("id", { count: "exact", head: true })
+          .eq("plan", "pro")
+          .not("stripe_subscription_id", "is", null),
+        supabase
+          .from("profiles")
+          .select("id", { count: "exact", head: true })
+          .eq("plan", "master")
+          .not("stripe_subscription_id", "is", null),
+      ]);
 
-      // MRR = pro users * 2980
-      const mrr = (proUsers || 0) * 2980;
+      const proUsers = (starterCount || 0) + (proCount || 0) + (masterCount || 0);
+
+      // MRR = Starter * 990 + Pro * 1980 + Master * 4980
+      const mrr =
+        (starterCount || 0) * 990 +
+        (proCount || 0) * 1980 +
+        (masterCount || 0) * 4980;
 
       // Total sessions
       const { count: totalSessions } = await supabase
@@ -1022,16 +910,38 @@ export async function GET(request: NextRequest) {
         if (sent) results.admin_alerts++;
       }
 
-      // Check MRR drop: compare this week vs last week Pro user count
-      const { count: currentProCount } = await supabase
-        .from("profiles")
-        .select("id", { count: "exact", head: true })
-        .eq("plan", "pro")
-        .not("stripe_subscription_id", "is", null);
+      // Check MRR drop: compare this week vs last week paid user count (4-tier)
+      const [
+        { count: currentStarter },
+        { count: currentPro },
+        { count: currentMaster },
+      ] = await Promise.all([
+        supabase
+          .from("profiles")
+          .select("id", { count: "exact", head: true })
+          .eq("plan", "starter")
+          .not("stripe_subscription_id", "is", null),
+        supabase
+          .from("profiles")
+          .select("id", { count: "exact", head: true })
+          .eq("plan", "pro")
+          .not("stripe_subscription_id", "is", null),
+        supabase
+          .from("profiles")
+          .select("id", { count: "exact", head: true })
+          .eq("plan", "master")
+          .not("stripe_subscription_id", "is", null),
+      ]);
 
-      // Estimate last week's Pro count by checking cancellations in last 7 days
-      const currentMRR = (currentProCount || 0) * 2980;
-      const estimatedPreviousMRR = ((currentProCount || 0) + (churnCount || 0)) * 2980;
+      const currentProCount =
+        (currentStarter || 0) + (currentPro || 0) + (currentMaster || 0);
+
+      // Estimate last week's MRR by adding back churn at weighted avg (¥1,980 Pro baseline)
+      const currentMRR =
+        (currentStarter || 0) * 990 +
+        (currentPro || 0) * 1980 +
+        (currentMaster || 0) * 4980;
+      const estimatedPreviousMRR = currentMRR + (churnCount || 0) * 1980;
 
       if (estimatedPreviousMRR > 0) {
         const mrrDropPercent = Math.round(((estimatedPreviousMRR - currentMRR) / estimatedPreviousMRR) * 100);

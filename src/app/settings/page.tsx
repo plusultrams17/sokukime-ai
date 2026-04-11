@@ -7,8 +7,12 @@ import { Logo } from "@/components/logo";
 
 export default function SettingsPage() {
   const [email, setEmail] = useState<string | null>(null);
-  const [plan, setPlan] = useState<"free" | "pro">("free");
+  const [plan, setPlan] = useState<"free" | "starter" | "pro" | "master">("free");
   const [loading, setLoading] = useState(true);
+
+  const isPaid = plan === "starter" || plan === "pro" || plan === "master";
+  const planLabel =
+    plan === "master" ? "Master" : plan === "pro" ? "Pro" : plan === "starter" ? "Starter" : "Free";
 
   useEffect(() => {
     async function load() {
@@ -26,7 +30,12 @@ export default function SettingsPage() {
         .eq("id", user.id)
         .single();
       if (profile) {
-        setPlan(profile.plan as "free" | "pro");
+        const raw = profile.plan;
+        if (raw === "starter" || raw === "pro" || raw === "master" || raw === "free") {
+          setPlan(raw);
+        } else {
+          setPlan("free");
+        }
       }
       setLoading(false);
     }
@@ -102,8 +111,8 @@ export default function SettingsPage() {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted">プラン</span>
-              <span className={`text-sm font-bold ${plan === "pro" ? "text-accent" : "text-muted"}`}>
-                {plan === "pro" ? "Pro" : "Free"}
+              <span className={`text-sm font-bold ${isPaid ? "text-accent" : "text-muted"}`}>
+                {planLabel}
               </span>
             </div>
           </div>
@@ -112,7 +121,7 @@ export default function SettingsPage() {
         {/* Billing */}
         <div className="mb-4 rounded-xl border border-card-border bg-card p-5">
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">お支払い</h2>
-          {plan === "pro" ? (
+          {isPaid ? (
             <button
               onClick={handleManageSubscription}
               disabled={actionLoading === "billing"}
@@ -122,7 +131,7 @@ export default function SettingsPage() {
             </button>
           ) : (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">Proプランで無制限ロープレ</span>
+              <span className="text-sm text-muted">有料プランなら月30回〜ロープレ</span>
               <Link
                 href="/pricing"
                 className="text-sm font-bold text-accent transition hover:underline"

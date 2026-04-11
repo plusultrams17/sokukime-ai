@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
-import { sendTransactionalEmail, sendTrialEmail } from "@/lib/email";
+import { sendTransactionalEmail } from "@/lib/email";
 import { sendCRMEvent } from "@/lib/crm-webhook";
 
 /** Send server-side event to GA4 via Measurement Protocol */
@@ -39,6 +39,21 @@ function getSupabaseAdmin() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
+}
+
+/**
+ * Stripe subscription の metadata から plan tier を抽出する。
+ * メタデータに plan_tier が無い legacy サブスクは "pro" 扱い
+ * (ユーザー合意: 既存 pro 契約は新 Pro = 月60回 にマッピング)。
+ */
+function resolvePlanTier(
+  metadata: Stripe.Metadata | null | undefined
+): "starter" | "pro" | "master" {
+  const tier = metadata?.plan_tier;
+  if (tier === "starter" || tier === "pro" || tier === "master") {
+    return tier;
+  }
+  return "pro";
 }
 
 export async function POST(request: NextRequest) {
@@ -150,10 +165,13 @@ export async function POST(request: NextRequest) {
       // ── Subscription checkout (existing logic) ──
       const subscriptionId = session.subscription as string;
 
-      // Get actual subscription status + applied coupon from Stripe
-      // (usually "trialing" with trial_period_days)
+      // Get actual subscription status + applied coupon + plan tier from Stripe
       let subStatus = "active";
       let checkoutCouponId: string | null = null;
+      // Default fallback: legacy subs without plan_tier metadata → new Pro
+      let planTier: "starter" | "pro" | "master" = resolvePlanTier(
+        session.metadata,
+      );
       if (subscriptionId) {
         try {
           // expand discounts so we get Discount objects (not just IDs)
@@ -161,6 +179,7 @@ export async function POST(request: NextRequest) {
             expand: ["discounts"],
           });
           subStatus = sub.status; // "trialing", "active", etc.
+          planTier = resolvePlanTier(sub.metadata);
           // Extract first coupon ID from discounts for campaign attribution
           for (const d of sub.discounts || []) {
             if (typeof d === "string") continue; // unexpanded — skip
@@ -184,7 +203,7 @@ export async function POST(request: NextRequest) {
       const { error: subUpgradeError } = await supabaseAdmin
         .from("profiles")
         .update({
-          plan: "pro",
+          plan: planTier,
           stripe_subscription_id: subscriptionId,
           subscription_status: subStatus,
           stripe_customer_id: customerId,
@@ -205,7 +224,7 @@ export async function POST(request: NextRequest) {
       // Track purchase via GA4 Measurement Protocol (use actual amount from session)
       const amountTotal = session.amount_total ? session.amount_total : 0;
       sendGA4Event(customerId, "purchase_completed", {
-        plan: "pro",
+        plan: planTier,
         price: amountTotal,
         currency: "JPY",
         transaction_id: subscriptionId,
@@ -222,9 +241,10 @@ export async function POST(request: NextRequest) {
       if (newProProfile?.email) {
         sendTransactionalEmail(newProProfile.email, "pro_welcome", newProProfile.id);
         // CRM event for Pro conversion
-        sendCRMEvent(supabaseAdmin, "user.pro_conversion", newProProfile.id, newProProfile.email, "pro", {
+        sendCRMEvent(supabaseAdmin, "user.pro_conversion", newProProfile.id, newProProfile.email, planTier, {
           amount: amountTotal,
           billing_interval: amountTotal > 10000 ? "annual" : "monthly",
+          plan_tier: planTier,
         });
       }
 
@@ -406,7 +426,9 @@ export async function POST(request: NextRequest) {
       }
 
       const plan =
-        status === "active" || status === "trialing" ? "pro" : "free";
+        status === "active" || status === "trialing"
+          ? resolvePlanTier(subscription.metadata)
+          : "free";
 
       await supabaseAdmin
         .from("profiles")
@@ -575,32 +597,7 @@ export async function POST(request: NextRequest) {
     }
 
     case "customer.subscription.trial_will_end": {
-      const subscription = event.data.object as Stripe.Subscription;
-      const customerId = subscription.customer as string;
-
-      const { data: trialProfile } = await supabaseAdmin
-        .from("profiles")
-        .select("id, email, email_unsubscribed")
-        .eq("stripe_customer_id", customerId)
-        .single();
-
-      if (trialProfile?.email && !trialProfile.email_unsubscribed) {
-        const { data: alreadySent } = await supabaseAdmin
-          .from("onboarding_emails")
-          .select("id")
-          .eq("user_id", trialProfile.id)
-          .eq("email_type", "trial_expiring_3days")
-          .limit(1);
-
-        if (!alreadySent || alreadySent.length === 0) {
-          sendTrialEmail(trialProfile.email, "trial_expiring_3days", trialProfile.id);
-          await supabaseAdmin.from("onboarding_emails").insert({
-            user_id: trialProfile.id,
-            email_type: "trial_expiring_3days",
-          });
-        }
-      }
-
+      // トライアルは廃止済みのため通常は届かないが、no-op で受け取る。
       break;
     }
 
@@ -625,6 +622,27 @@ export async function POST(request: NextRequest) {
       const invoice = event.data.object as Stripe.Invoice;
       const customerId = invoice.customer as string;
 
+      // Resolve plan_tier from the invoice's subscription (if any).
+      // invoice.paid は既存プランで支払いが成立した通知なので、tier は変えず
+      // subscription_status のみ更新するのが原則。ただし subscription.updated
+      // が漏れた場合のフォールバックとして tier も同期しておく。
+      let invoicePlanTier: "starter" | "pro" | "master" = "pro";
+      // Stripe v20: invoice.subscription は invoice.parent.subscription_details.subscription に移動
+      const subDetails = invoice.parent?.subscription_details;
+      const invoiceSubRef = subDetails?.subscription;
+      const invoiceSubId =
+        typeof invoiceSubRef === "string"
+          ? invoiceSubRef
+          : invoiceSubRef?.id ?? null;
+      if (invoiceSubId) {
+        try {
+          const invSub = await stripe.subscriptions.retrieve(invoiceSubId);
+          invoicePlanTier = resolvePlanTier(invSub.metadata);
+        } catch {
+          // Fall back to default "pro"
+        }
+      }
+
       // Clear past_due status when payment succeeds (recovery from dunning)
       const { data: wasRecovered } = await supabaseAdmin
         .from("profiles")
@@ -635,7 +653,7 @@ export async function POST(request: NextRequest) {
 
       await supabaseAdmin
         .from("profiles")
-        .update({ subscription_status: "active", plan: "pro" })
+        .update({ subscription_status: "active", plan: invoicePlanTier })
         .eq("stripe_customer_id", customerId)
         .eq("subscription_status", "past_due");
 
@@ -643,7 +661,7 @@ export async function POST(request: NextRequest) {
       // (subscription.updated イベントが漏れた場合のセーフティネット)
       await supabaseAdmin
         .from("profiles")
-        .update({ subscription_status: "active", plan: "pro" })
+        .update({ subscription_status: "active", plan: invoicePlanTier })
         .eq("stripe_customer_id", customerId)
         .eq("subscription_status", "trialing");
 
@@ -680,7 +698,7 @@ export async function POST(request: NextRequest) {
       const invoiceAmount = invoice.amount_paid || 0;
       if (invoiceAmount > 0) {
         sendGA4Event(customerId, "subscription_renewed", {
-          plan: "pro",
+          plan: invoicePlanTier,
           price: invoiceAmount,
           currency: "JPY",
         });

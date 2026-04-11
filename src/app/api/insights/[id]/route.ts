@@ -29,7 +29,12 @@ export async function GET(
       return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
     }
 
-    if (profile?.plan !== "pro") {
+    const isPaid =
+      profile?.plan === "starter" ||
+      profile?.plan === "pro" ||
+      profile?.plan === "master";
+
+    if (!isPaid) {
       const today = new Date().toISOString().split("T")[0];
       const { count } = await supabase
         .from("insight_usage")
@@ -40,7 +45,7 @@ export async function GET(
 
       if ((count || 0) >= 3) {
         return NextResponse.json(
-          { error: "本日の無料閲覧上限（3件）に達しました。Proプランにアップグレードすると無制限に閲覧できます。" },
+          { error: "本日の無料閲覧上限（3件）に達しました。有料プラン（Starter ¥990〜）にアップグレードすると無制限に閲覧できます。" },
           { status: 403 }
         );
       }

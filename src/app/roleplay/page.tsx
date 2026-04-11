@@ -86,7 +86,7 @@ function UpgradeToast() {
           Proプランのご利用が開始されました
         </h2>
         <p className="mb-6 text-center text-sm text-muted">
-          無制限ロープレ・全5カテゴリ詳細スコア・AI改善アドバイスが使えます
+          月60回ロープレ・全5カテゴリ詳細スコア・AI改善アドバイスが使えます
         </p>
 
         <div className="mb-6 space-y-3 rounded-xl border border-card-border bg-card p-4">
@@ -698,18 +698,30 @@ export default function RoleplayPage() {
                 {usage.streak}日連続
               </div>
             )}
-            {usage && usage.plan === "pro" && (
+            {usage && (usage.plan === "starter" || usage.plan === "pro" || usage.plan === "master") && (
               <div className="flex items-center gap-2">
-                {usage.totalSessions !== undefined && usage.totalSessions > 0 && (
-                  <div style={isPixarPhase ? { fontSize: '0.68em', fontWeight: 700, color: '#6a6560' } : undefined} className={isPixarPhase ? '' : 'text-[11px] text-muted'}>
-                    累計 {usage.totalSessions} 回
+                {/* 有料プラン: 月次クレジット残数 (Infinity はテスター/チームなので非表示) */}
+                {Number.isFinite(usage.limit) && (
+                  <div className="flex items-center gap-2" style={isPixarPhase ? { border: '0.12em solid #4d4c4a', borderRadius: '2em', padding: '0.25em 0.7em', fontSize: '0.78em', fontWeight: 700, background: '#f5f1e8' } : undefined}>
+                    <span style={isPixarPhase ? { color: '#6a6560' } : undefined} className={isPixarPhase ? '' : 'text-muted'}>
+                      今月:
+                    </span>
+                    <span
+                      style={isPixarPhase ? {
+                        fontWeight: 800,
+                        color: usage.canStart ? '#f48a58' : '#e65e5e',
+                      } : undefined}
+                      className={isPixarPhase ? '' : (usage.canStart ? "font-bold text-accent" : "font-bold text-red-500")}
+                    >
+                      {Math.max(0, usage.limit - usage.used)}/{usage.limit}回
+                    </span>
                   </div>
                 )}
                 <div
                   style={isPixarPhase ? { border: '0.12em solid #4d4c4a', borderRadius: '2em', padding: '0.2em 0.6em', fontSize: '0.72em', fontWeight: 800, background: '#f48a58', color: '#fff', boxShadow: '0.08em 0.08em 0 #c4693d' } : undefined}
                   className={isPixarPhase ? '' : 'rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent'}
                 >
-                  Pro
+                  {usage.plan === "master" ? "Master" : usage.plan === "pro" ? "Pro" : "Starter"}
                 </div>
               </div>
             )}
@@ -807,7 +819,7 @@ export default function RoleplayPage() {
                   </p>
                   <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
                     繰り返し練習することで<span style={{ color: '#f48a58', fontWeight: 800 }}>スコアの改善が期待</span>できます。<br />
-                    Proなら無制限に練習できます。
+                    有料プランなら毎月クレジットがリセットされ継続練習できます。
                   </p>
                   <a
                     href="/pricing"
@@ -1288,10 +1300,10 @@ export default function RoleplayPage() {
                   </p>
                   <p style={{ fontSize: '0.82em', color: '#6a6560', marginBottom: '0.8em', lineHeight: 1.6 }}>
                     繰り返し練習することで<br className="sm:hidden" /><span style={{ color: '#f48a58', fontWeight: 800 }}>スコアの改善が期待</span>できます。<br />
-                    Proなら無制限に練習できます。
+                    有料プランなら毎月クレジットがリセットされ継続練習できます。
                   </p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5em', marginBottom: '0.5em', fontSize: '0.72em', color: '#6a6560' }}>
-                    <span>無制限ロープレ</span>
+                    <span>月60回ロープレ (Pro)</span>
                     <span>全スコア開放</span>
                     <span>AI改善アドバイス</span>
                   </div>
@@ -1316,10 +1328,10 @@ export default function RoleplayPage() {
                       boxShadow: '0.12em 0.12em 0 #c4693d',
                     }}
                   >
-                    Proにアップグレード →
+                    プランを見る →
                   </a>
                   <p style={{ fontSize: '0.72em', color: '#a09a90', marginTop: '0.5em' }}>
-                    ¥2,980/月 ・ いつでも解約OK ・ 経費精算OK
+                    月額¥990〜 ・ いつでも解約OK ・ 経費精算OK
                   </p>
                 </div>
               </div>
@@ -1331,7 +1343,13 @@ export default function RoleplayPage() {
               disabled={!canStart || isCheckingUsage || (usage !== null && !usage.canStart)}
               className="pixar-start-btn"
             >
-              {isCheckingUsage ? "確認中..." : usage && !usage.canStart ? `累計${usage.limit}回を使い切りました` : "ロープレを開始する"}
+              {isCheckingUsage
+                ? "確認中..."
+                : usage && !usage.canStart
+                ? usage.plan === "free"
+                  ? `累計${usage.limit}回を使い切りました`
+                  : `今月の${usage.limit}回を使い切りました`
+                : "ロープレを開始する"}
             </button>
           </div>
         </div>
@@ -1353,12 +1371,20 @@ export default function RoleplayPage() {
           onAuthGate={handleAuthGate}
           onUsageLimitReached={(status) => {
             // 最初のメッセージ送信時に上限到達 → setup に戻して upgrade modal
+            const planFromStatus =
+              status.plan === "starter" ||
+              status.plan === "pro" ||
+              status.plan === "master" ||
+              status.plan === "free"
+                ? status.plan
+                : "free";
             setUsage({
               used: status.used,
               limit: status.limit,
               canStart: false,
-              plan: (status.plan as "free" | "pro") || "free",
-              isTrial: false,
+              plan: planFromStatus,
+              resetUnit: planFromStatus === "free" ? "lifetime" : "month",
+              monthStart: null,
             });
             setPhase("setup");
             setUpgradeModalTrigger("limit");
@@ -1567,7 +1593,7 @@ function AuthGateContent({
                   <li>5カテゴリ別の詳細スコア＆レーダーチャート</li>
                   <li>カテゴリごとの改善ポイント</li>
                   <li>スコア履歴の保存＆推移グラフ</li>
-                  <li>ログイン後は累計5回まで無料（Proなら無制限）</li>
+                  <li>ログイン後は累計5回まで無料（Starter月30回／Pro月60回／Master月200回）</li>
                 </ul>
               </div>
 

@@ -185,10 +185,10 @@ export default function LessonPage() {
             <div className="border border-gray-200 rounded-xl p-8 text-center mb-10">
               <svg className="inline-block h-10 w-10 text-muted mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
               <h2 className="text-lg font-bold text-foreground mb-2">
-                このレッスンはPro会員限定です
+                このレッスンは有料プラン限定です
               </h2>
               <p className="text-sm text-muted mb-6 max-w-md mx-auto">
-                Proプラン（月額¥2,980・7日間無料トライアル）に登録すると、全22レッスン＋認定試験にアクセスできます。
+                Starter（¥990/月30回）・Pro（¥1,980/月60回）・Master（¥4,980/月200回）のいずれかに登録すると、全22レッスン＋認定試験にアクセスできます。
               </p>
               <Link
                 href="/pricing"

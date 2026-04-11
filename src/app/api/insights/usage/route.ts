@@ -25,6 +25,7 @@ export async function GET(_request: NextRequest) {
     }
 
     const plan = profile?.plan || "free";
+    const isPaid = plan === "starter" || plan === "pro" || plan === "master";
 
     // Count today's views
     const today = new Date().toISOString().split("T")[0];
@@ -37,7 +38,7 @@ export async function GET(_request: NextRequest) {
 
     return NextResponse.json({
       viewedToday: count || 0,
-      limit: plan === "pro" ? null : 3,
+      limit: isPaid ? null : 3,
       plan,
     });
   } catch (error) {

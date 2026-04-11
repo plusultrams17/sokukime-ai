@@ -17,9 +17,8 @@ interface DashboardData {
   firstScore: number | null;
   weakestCategory: { name: string; score: number } | null;
   history: { score: number; date: string; difficulty: string }[];
-  plan: "free" | "pro";
+  plan: "free" | "starter" | "pro" | "master";
   streak: number;
-  trialDaysRemaining: number | null;
 }
 
 function getScoreColor(score: number) {
@@ -378,31 +377,6 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Trial Banner — compact, essential for conversion */}
-        {data.trialDaysRemaining !== null && data.trialDaysRemaining > 0 && (
-          <div className="mb-6 rounded-xl border border-accent/30 bg-gradient-to-r from-accent/10 to-accent/5 px-5 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="inline-block h-5 w-5 rounded-full bg-accent" />
-                <div>
-                  <div className="text-sm font-bold text-accent">
-                    Pro体験中 -- 残り{data.trialDaysRemaining}日
-                  </div>
-                  <div className="text-xs text-muted">
-                    1日5回のロープレ・AIコーチが無料で使えます
-                  </div>
-                </div>
-              </div>
-              <Link
-                href="/pricing"
-                className="shrink-0 rounded-lg bg-accent px-4 py-2 text-xs font-bold text-white transition hover:bg-accent-hover"
-              >
-                Proプランを見る
-              </Link>
-            </div>
-          </div>
-        )}
-
         {/* Streak — compact inline badge */}
         {data.streak > 0 && (
           <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 px-5 py-3 flex items-center gap-3">
@@ -530,10 +504,10 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Pro CTA — 既存フリーユーザーのみ、控えめ表示 */}
+        {/* Paid CTA — 既存フリーユーザーのみ、控えめ表示 */}
         {data.plan === "free" && hasScores && (
           <div className="mb-6 text-center text-sm text-muted">
-            Proなら無制限ロープレ + AIコーチ（7日間無料）
+            有料プランなら月30回〜のロープレ + AIコーチ
             <Link href="/pricing" className="ml-1 text-accent hover:underline font-medium">
               詳しく見る →
             </Link>

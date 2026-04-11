@@ -108,7 +108,7 @@ function LoginForm() {
           <div className="text-xs font-bold text-foreground mb-2">無料プランに含まれるもの:</div>
           <ul className="space-y-1.5">
             {[
-              "毎日1回のAIロープレ練習",
+              "累計5回までのAIロープレ練習",
               "AIスコアリング（1カテゴリ）",
               "基本3レッスンの学習コース",
               "クレジットカード不要",
@@ -120,7 +120,7 @@ function LoginForm() {
             ))}
           </ul>
           <p className="text-[10px] text-accent/70 pt-1">
-            Proプラン（¥2,980/月）で全22レッスン・全5カテゴリ詳細スコア・無制限ロープレに対応
+            Proプラン（¥1,980/月）で全22レッスン・全5カテゴリ詳細スコア・月60回ロープレに対応
           </p>
         </div>
       </div>

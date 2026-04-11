@@ -114,13 +114,17 @@ export async function getPurchaseStatus(
     return { purchased: true, tier: "full" };
   }
 
-  // Pro subscriber = full access to all 22 lessons.
-  // We intentionally check only `plan === "pro"` (mirrors src/lib/usage.ts logic)
-  // because the Stripe webhook downgrades `plan` to 'free' on subscription deletion.
-  // So `plan='pro'` is a sufficient proxy for "has an active Pro entitlement" across
-  // all subscription_status values: 'active', 'trialing', 'past_due', 'paused', 'program'.
-  // Roleplay quota (5/day for trialing) is enforced separately in src/lib/usage.ts.
-  if (profile.plan === "pro") {
+  // 有料プラン (Starter / Pro / Master) = 22レッスン全解放。
+  // Stripe webhook が subscription deletion で plan='free' に降格するため、
+  // plan カラム単体で "has an active paid entitlement" のプロキシとして機能する。
+  // subscription_status は 'active' / 'past_due' / 'paused' / 'program' のいずれでも
+  // レッスンアクセスは維持する（ロープレクレジットのみ src/lib/usage.ts で別判定）。
+  // 月次クレジット (Starter=30 / Pro=60 / Master=200) は src/lib/usage.ts で制御。
+  if (
+    profile.plan === "starter" ||
+    profile.plan === "pro" ||
+    profile.plan === "master"
+  ) {
     return { purchased: true, tier: "full" };
   }
 

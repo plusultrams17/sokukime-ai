@@ -8,9 +8,14 @@ import { getAllLessons } from "@/lib/lessons";
 import { FREE_LESSON_SLUGS } from "@/lib/lessons/access";
 import { getLessonBySlug } from "@/lib/lessons";
 
-const TOTAL_QUESTIONS = 20;
+/**
+ * 出題ロジック:
+ *  - 全22レッスン × 各2問 = 44問 出題（全レッスンを必ずカバー）
+ *  - 各レッスンの5問の中から2問をランダム抽出（重複なし）
+ *  - 合格ライン: 80%（36問正解）
+ */
+const QUESTIONS_PER_LESSON = 2;
 const PASS_THRESHOLD = 0.8;
-const PASS_SCORE = Math.ceil(TOTAL_QUESTIONS * PASS_THRESHOLD);
 
 interface ExamQuestion {
   question: string;
@@ -26,6 +31,17 @@ interface ExamResult {
   score: number;
   total: number;
   passed: boolean;
+  /** Time spent on the exam in milliseconds (from start to final submit). */
+  durationMs?: number;
+}
+
+function formatDuration(ms: number): string {
+  if (!Number.isFinite(ms) || ms < 0) return "—";
+  const totalSeconds = Math.round(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes === 0) return `${seconds}秒`;
+  return `${minutes}分${seconds.toString().padStart(2, "0")}秒`;
 }
 
 interface Progress {
@@ -63,20 +79,24 @@ function generateExamQuestions(): ExamQuestion[] {
   const lessons = getAllLessons();
   const pool: ExamQuestion[] = [];
 
+  // 各レッスンから QUESTIONS_PER_LESSON 問をランダム抽出（重複なし）
+  // → 全レッスンを必ずカバーする
   for (const lesson of lessons) {
-    const randomQ =
-      lesson.quiz[Math.floor(Math.random() * lesson.quiz.length)];
-    pool.push({
-      question: randomQ.question,
-      options: randomQ.options,
-      answer: randomQ.answer,
-      lessonSlug: lesson.slug,
-      lessonTitle: lesson.title,
-      level: lesson.level,
-    });
+    const picks = shuffleArray(lesson.quiz).slice(0, QUESTIONS_PER_LESSON);
+    for (const q of picks) {
+      pool.push({
+        question: q.question,
+        options: q.options,
+        answer: q.answer,
+        lessonSlug: lesson.slug,
+        lessonTitle: lesson.title,
+        level: lesson.level,
+      });
+    }
   }
 
-  return shuffleArray(pool).slice(0, TOTAL_QUESTIONS);
+  // プール全体をシャッフル（レッスン順に固まらないよう）
+  return shuffleArray(pool);
 }
 
 type ExamState = "intro" | "inProgress" | "result";
@@ -93,9 +113,14 @@ export default function ExamPage() {
   const [selected, setSelected] = useState<number | null>(null);
   const [purchased, setPurchased] = useState(false);
   const [statusLoaded, setStatusLoaded] = useState(false);
+  const [startedAt, setStartedAt] = useState<number | null>(null);
+  const [elapsedMs, setElapsedMs] = useState(0);
+  const [finalDurationMs, setFinalDurationMs] = useState(0);
 
   const allLessons = useMemo(() => getAllLessons(), []);
   const totalLessons = allLessons.length;
+  const totalQuestions = totalLessons * QUESTIONS_PER_LESSON;
+  const passScore = Math.ceil(totalQuestions * PASS_THRESHOLD);
 
   useEffect(() => {
     setProgress(getProgress());
@@ -120,8 +145,20 @@ export default function ExamPage() {
     setAnswers(new Array(qs.length).fill(null));
     setCurrentQ(0);
     setSelected(null);
+    setStartedAt(Date.now());
+    setElapsedMs(0);
+    setFinalDurationMs(0);
     setExamState("inProgress");
   }
+
+  // Live ticker while exam is in progress
+  useEffect(() => {
+    if (examState !== "inProgress" || startedAt === null) return;
+    const id = window.setInterval(() => {
+      setElapsedMs(Date.now() - startedAt);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [examState, startedAt]);
 
   function submitAnswer() {
     if (selected === null) return;
@@ -139,13 +176,16 @@ export default function ExamPage() {
         if (ans === questions[i].answer) sc++;
       }
 
-      const passed = sc >= PASS_SCORE;
+      const passed = sc >= Math.ceil(questions.length * PASS_THRESHOLD);
+      const durationMs = startedAt !== null ? Date.now() - startedAt : 0;
       const result: ExamResult = {
         date: new Date().toISOString(),
         score: sc,
         total: questions.length,
         passed,
+        durationMs,
       };
+      setFinalDurationMs(durationMs);
 
       const p = getProgress();
       if (!p.examResults) p.examResults = [];
@@ -169,7 +209,9 @@ export default function ExamPage() {
     return s;
   }, [examState, questions, answers]);
 
-  const passed = finalScore >= PASS_SCORE;
+  const passed =
+    questions.length > 0 &&
+    finalScore >= Math.ceil(questions.length * PASS_THRESHOLD);
 
   const weaknessByLevel = useMemo(() => {
     if (examState !== "result")
@@ -220,7 +262,7 @@ export default function ExamPage() {
                   認定試験はPro会員限定です
                 </h2>
                 <p className="text-sm text-muted mb-6 max-w-md mx-auto">
-                  Proプラン（月額¥2,980・7日間無料トライアル）に登録すると、全22レッスン＋認定試験を受験できます。
+                  有料プラン（Starter ¥990〜）に登録すると、全22レッスン＋認定試験を受験できます。
                 </p>
                 <Link
                   href="/pricing"
@@ -269,7 +311,8 @@ export default function ExamPage() {
               </h1>
               <p className="text-base text-muted mb-8 max-w-lg">
                 全{totalLessons}
-                レッスンの内容から出題される認定試験です。
+                レッスンから各2問ずつ、合計{totalQuestions}
+                問を出題します。
                 {PASS_THRESHOLD * 100}
                 %以上の正答で認定証を取得できます。
               </p>
@@ -279,7 +322,7 @@ export default function ExamPage() {
                 <div className="grid grid-cols-3 gap-2 text-center sm:gap-4">
                   <div>
                     <p className="text-2xl font-bold text-foreground">
-                      {TOTAL_QUESTIONS}
+                      {totalQuestions}
                     </p>
                     <p className="text-xs text-muted mt-0.5">出題数</p>
                   </div>
@@ -291,7 +334,7 @@ export default function ExamPage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-foreground">
-                      {PASS_SCORE}/{TOTAL_QUESTIONS}
+                      {passScore}/{totalQuestions}
                     </p>
                     <p className="text-xs text-muted mt-0.5">
                       合格ライン（{PASS_THRESHOLD * 100}%）
@@ -360,28 +403,51 @@ export default function ExamPage() {
                     {[...progress.examResults]
                       .reverse()
                       .slice(0, 5)
-                      .map((r, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center justify-between text-sm py-3 border-b border-gray-100"
-                        >
-                          <span className="text-muted">
-                            {new Date(r.date).toLocaleDateString("ja-JP")}
-                          </span>
-                          <div className="flex items-center gap-3">
-                            <span className="font-bold text-foreground">
-                              {r.score}/{r.total}
-                            </span>
-                            <span
-                              className={`text-xs font-bold ${
-                                r.passed ? "text-green-700" : "text-red-600"
-                              }`}
-                            >
-                              {r.passed ? "合格" : "不合格"}
-                            </span>
+                      .map((r, i) => {
+                        const d = new Date(r.date);
+                        const dateStr = d.toLocaleDateString("ja-JP", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        });
+                        const timeStr = d.toLocaleTimeString("ja-JP", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: false,
+                        });
+                        return (
+                          <div
+                            key={i}
+                            className="flex items-center justify-between text-sm py-3 border-b border-gray-100"
+                          >
+                            <div className="flex flex-col">
+                              <span className="text-muted">{dateStr}</span>
+                              <span className="text-xs text-gray-400">
+                                {timeStr}
+                                {typeof r.durationMs === "number" &&
+                                  r.durationMs > 0 && (
+                                    <>
+                                      {" ・ 所要 "}
+                                      {formatDuration(r.durationMs)}
+                                    </>
+                                  )}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="font-bold text-foreground">
+                                {r.score}/{r.total}
+                              </span>
+                              <span
+                                className={`text-xs font-bold ${
+                                  r.passed ? "text-green-700" : "text-red-600"
+                                }`}
+                              >
+                                {r.passed ? "合格" : "不合格"}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                   </div>
                 </div>
               )}
@@ -410,9 +476,14 @@ export default function ExamPage() {
                   <p className="text-sm font-bold text-foreground">
                     成約メソッド認定試験
                   </p>
-                  <p className="text-xs text-muted">
-                    {currentQ + 1} / {questions.length}
-                  </p>
+                  <div className="flex items-center gap-3 text-xs text-muted">
+                    <span className="font-mono tabular-nums">
+                      ⏱ {formatDuration(elapsedMs)}
+                    </span>
+                    <span>
+                      {currentQ + 1} / {questions.length}
+                    </span>
+                  </div>
                 </div>
                 <div className="h-1.5 bg-gray-100 overflow-hidden">
                   <div
@@ -510,6 +581,14 @@ export default function ExamPage() {
                   {Math.round((finalScore / questions.length) * 100)}%
                   （合格ライン: {PASS_THRESHOLD * 100}%）
                 </p>
+                {finalDurationMs > 0 && (
+                  <p className="mt-1 text-sm text-muted">
+                    所要時間:{" "}
+                    <span className="font-mono tabular-nums text-foreground">
+                      {formatDuration(finalDurationMs)}
+                    </span>
+                  </p>
+                )}
               </div>
 
               {/* Certificate (pass only) */}
@@ -615,7 +694,7 @@ export default function ExamPage() {
                   </p>
                   <p className="text-xs text-muted mb-4 leading-relaxed">
                     メソッドを学んだ今が、一番伸びるタイミングです。<br />
-                    Proプランなら無制限でAIロープレ＆詳細スコアが使えます。
+                    Proプランなら月60回のAIロープレ＆詳細スコアが使えます。
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Link
@@ -628,7 +707,7 @@ export default function ExamPage() {
                       href="/pricing"
                       className="inline-block border border-accent/40 text-accent text-sm font-bold px-6 py-2.5 rounded-lg hover:bg-accent/10 transition"
                     >
-                      Pro 7日間無料トライアル
+                      Proプランを見る
                     </Link>
                   </div>
                 </div>

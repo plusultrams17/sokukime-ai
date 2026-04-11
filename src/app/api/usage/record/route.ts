@@ -42,12 +42,25 @@ export async function POST() {
   }
 
   // Check usage limit before recording
-  // 2026-04 仕様変更: Free は累計5回まで、Pro は無制限
+  //  - Free: 累計5回（生涯）
+  //  - Starter: 月30回 / Pro: 月60回 / Master: 月200回（JST 暦月リセット）
   const status = await getUsageStatus(supabase, user.id);
   if (!status.canStart) {
+    const planLabel =
+      status.plan === "master"
+        ? "マスタープラン"
+        : status.plan === "pro"
+          ? "プロプラン"
+          : status.plan === "starter"
+            ? "スタータープラン"
+            : "無料プラン";
+    const errorMessage =
+      status.plan === "free"
+        ? `無料プランのロープレ累計上限（${status.limit}回）に達しました。上位プランでもっと練習できます。`
+        : `今月の${planLabel}ロープレ上限（${status.limit}回）に達しました。来月1日にリセットされます。`;
     return NextResponse.json(
       {
-        error: "無料プランのロープレ累計上限（5回）に達しました。Proにアップグレードしてください。",
+        error: errorMessage,
         ...status,
       },
       { status: 403 }

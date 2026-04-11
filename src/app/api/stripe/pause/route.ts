@@ -30,7 +30,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
   }
 
-  if (!profile?.stripe_subscription_id || profile.plan !== "pro") {
+  const isPaid =
+    profile?.plan === "starter" ||
+    profile?.plan === "pro" ||
+    profile?.plan === "master";
+
+  if (!profile?.stripe_subscription_id || !isPaid) {
     return NextResponse.json(
       { error: "No active subscription" },
       { status: 400 }

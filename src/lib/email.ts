@@ -56,10 +56,10 @@ function welcomeEmail(unsubscribeUrl?: string): { subject: string; html: string 
     </div>
     <div style="background:#fff7ed;border-radius:8px;padding:12px 16px;margin:0 0 8px;text-align:center">
       <p style="font-size:13px;color:#f97316;font-weight:bold;margin:0 0 4px">
-        7日間の無料Pro体験が始まりました
+        Googleログインで累計5回まで無料
       </p>
       <p style="font-size:12px;color:#374151;margin:0">
-        無制限ロープレ・AIコーチ・詳細スコアが7日間すべて無料。
+        まずは5回のAIロープレで自分の営業力を可視化してみましょう。
       </p>
     </div>
   </div>
@@ -95,7 +95,7 @@ function firstRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
       繰り返し練習することで営業スキルは定着していきます。<br>
-      まずは毎日1回のロープレを3日間続けてみましょう。
+      無料の累計5回を使い切る前に、まず3回続けて傾向を掴みましょう。
     </p>
     <div style="text-align:center;margin:0 0 24px">
       <a href="${APP_URL}/roleplay" style="display:inline-block;background:#1B6B5A;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
@@ -131,15 +131,15 @@ function thirdRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
     <div style="background:#fffbeb;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>無料プランの制限</strong></p>
       <p style="font-size:13px;color:#374151;line-height:1.6;margin:0">
-        無料プランは1日1回まで。成約率を本気で上げるなら、<strong>毎日複数回の集中練習</strong>が効果的です。
+        無料プランは累計5回まで。成約率を本気で上げるなら、<strong>回数を気にせず集中練習</strong>できる環境が効果的です。
       </p>
     </div>
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 24px">
-      <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>Proプランなら</strong></p>
+      <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>有料プランなら</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>ロープレ<strong>無制限</strong>（1日何回でもOK）</li>
+        <li>Starter <strong>月30回</strong> / Pro <strong>月60回</strong> / Master <strong>月200回</strong>から選べる</li>
         <li>商談前のウォームアップに毎回使える</li>
-        <li>月¥2,980 — 営業研修の<strong>1/20以下</strong>のコスト</li>
+        <li>Pro 月¥1,980 — 営業研修1回分の<strong>1/30以下</strong>のコスト</li>
       </ul>
     </div>
     <div style="text-align:center;margin:0 0 16px">
@@ -149,188 +149,12 @@ function thirdRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
     </div>
     <div style="text-align:center;margin:0 0 24px">
       <a href="${APP_URL}/roleplay" style="font-size:13px;color:#1B6B5A;text-decoration:underline">
-        まず今日の無料ロープレを使う
+        まず無料の累計5回を使い切る
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
       いつでもキャンセル可能。まずは1ヶ月試してみてください
     </p>
-  </div>
-  ${emailFooter(unsubscribeUrl)}
-</div>
-</body>
-</html>`,
-  };
-}
-
-// ── Trial Expiration Email Templates ──
-
-function trialExpiring3DaysEmail(unsubscribeUrl?: string): { subject: string; html: string } {
-  return {
-    subject: "無料トライアル残り3日 — AIロープレは試しましたか？",
-    html: `
-<!DOCTYPE html>
-<html lang="ja">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
-<div style="max-width:560px;margin:0 auto;padding:32px 16px">
-  <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
-    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">トライアル残り3日です</h1>
-    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      7日間の無料トライアルが<strong>あと3日</strong>で終了します。<br>
-      AIロープレは試しましたか？
-    </p>
-    <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
-      <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>残り3日でやっておきたいこと</strong></p>
-      <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li><strong>ロープレ3回以上：</strong>無制限の今こそ集中練習のチャンス</li>
-        <li><strong>全5カテゴリのスコア確認：</strong>自分の弱点を把握する</li>
-        <li><strong>AI改善アドバイスを活用：</strong>具体的な改善ポイントを確認</li>
-      </ul>
-    </div>
-    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
-      トライアル期間中にスコアの伸びを実感された方の<strong>多く</strong>が、そのままProプランを継続されています。
-    </p>
-    <div style="text-align:center;margin:0 0 24px">
-      <a href="${APP_URL}/roleplay" style="display:inline-block;background:#1B6B5A;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
-        今すぐロープレする →
-      </a>
-    </div>
-    <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      何もしなければ自動的にProプランに移行します。いつでもキャンセル可能です。
-    </p>
-  </div>
-  ${emailFooter(unsubscribeUrl)}
-</div>
-</body>
-</html>`,
-  };
-}
-
-function trialExpiring6DaysEmail(unsubscribeUrl?: string): { subject: string; html: string } {
-  return {
-    subject: "Proトライアル残り1日 — 最後の無制限ロープレを見逃さないで",
-    html: `
-<!DOCTYPE html>
-<html lang="ja">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
-<div style="max-width:560px;margin:0 auto;padding:32px 16px">
-  <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
-    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">トライアル最終日です</h1>
-    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      Proプランの無料トライアルが<strong>本日中に終了</strong>します。<br>
-      無制限でロープレできる最後のチャンスです。
-    </p>
-    <div style="background:#fef3c7;border-radius:8px;padding:16px;margin:0 0 16px;border:1px solid #fcd34d">
-      <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>明日から変わること</strong></p>
-      <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>ロープレ回数: 無制限 → <strong>1日1回</strong></li>
-        <li>詳細スコア: 全5カテゴリ → <strong>1カテゴリのみ</strong></li>
-        <li>AI改善アドバイス: → <strong>利用不可</strong></li>
-      </ul>
-    </div>
-    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
-      Proを継続する場合は何もしなくてOKです（月額¥2,980）。<br>
-      不要な場合はいつでもキャンセルできます。
-    </p>
-    <div style="text-align:center;margin:0 0 16px">
-      <a href="${APP_URL}/roleplay" style="display:inline-block;background:#1B6B5A;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
-        最後の無制限ロープレへ →
-      </a>
-    </div>
-    <div style="text-align:center">
-      <a href="${APP_URL}/pricing" style="font-size:12px;color:#9ca3af;text-decoration:underline">
-        プランの詳細・キャンセルはこちら
-      </a>
-    </div>
-  </div>
-  ${emailFooter(unsubscribeUrl)}
-</div>
-</body>
-</html>`,
-  };
-}
-
-function trialExpiring1DayEmail(unsubscribeUrl?: string): { subject: string; html: string } {
-  return {
-    subject: "【明日終了】無料トライアルが明日で終わります",
-    html: `
-<!DOCTYPE html>
-<html lang="ja">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
-<div style="max-width:560px;margin:0 auto;padding:32px 16px">
-  <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
-    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">トライアル、明日で終了です</h1>
-    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      7日間の無料トライアルが<strong>明日</strong>で終了します。
-    </p>
-    <div style="background:#fffbeb;border-radius:8px;padding:16px;margin:0 0 16px">
-      <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>明日以降の変更点</strong></p>
-      <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>ロープレが<strong>1日1回</strong>に制限されます</li>
-        <li>詳細スコアが<strong>1カテゴリのみ</strong>になります</li>
-        <li>AI改善アドバイスが<strong>利用不可</strong>になります</li>
-      </ul>
-    </div>
-    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 8px">
-      <strong>Proプランを継続する場合：</strong>何もしなければ自動的にProプラン（月額¥2,980）に移行します。
-    </p>
-    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
-      <strong>継続しない場合：</strong>下のリンクからいつでもキャンセルできます。無料プランに戻るだけで、アカウントやデータは残ります。
-    </p>
-    <div style="text-align:center;margin:0 0 16px">
-      <a href="${APP_URL}/roleplay" style="display:inline-block;background:#1B6B5A;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
-        最後の無制限ロープレ →
-      </a>
-    </div>
-    <div style="text-align:center">
-      <a href="${APP_URL}/pricing" style="font-size:12px;color:#9ca3af;text-decoration:underline">
-        プランの詳細・キャンセルはこちら
-      </a>
-    </div>
-  </div>
-  ${emailFooter(unsubscribeUrl)}
-</div>
-</body>
-</html>`,
-  };
-}
-
-function trialExpiredEmail(unsubscribeUrl?: string): { subject: string; html: string } {
-  return {
-    subject: "トライアルが終了しました — いつでもProに戻れます",
-    html: `
-<!DOCTYPE html>
-<html lang="ja">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f9fafb;font-family:'Hiragino Kaku Gothic Pro','メイリオ',sans-serif">
-<div style="max-width:560px;margin:0 auto;padding:32px 16px">
-  <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e5e7eb">
-    <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">無料トライアルが終了しました</h1>
-    <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
-      7日間のトライアル、お疲れさまでした。<br>
-      現在は無料プラン（1日1回）でご利用いただけます。
-    </p>
-    <div style="background:#f0fdf4;border-radius:8px;padding:16px;margin:0 0 16px">
-      <p style="font-size:13px;color:#166534;margin:0 0 8px"><strong>営業スキルは「継続」で伸びます</strong></p>
-      <p style="font-size:13px;color:#374151;line-height:1.6;margin:0">
-        トップ営業マンは毎日の練習を欠かしません。<br>
-        無料プランでも毎日1回の練習を続ければ着実にスコアは上がります。<br>
-        もっと練習したくなったら、いつでもProプランに戻れます。
-      </p>
-    </div>
-    <div style="text-align:center;margin:0 0 16px">
-      <a href="${APP_URL}/roleplay" style="display:inline-block;background:#1B6B5A;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
-        今日のロープレを始める →
-      </a>
-    </div>
-    <div style="text-align:center">
-      <a href="${APP_URL}/pricing" style="font-size:13px;color:#1B6B5A;text-decoration:underline">
-        Proプランに戻る（月額¥2,980）
-      </a>
-    </div>
   </div>
   ${emailFooter(unsubscribeUrl)}
 </div>
@@ -367,7 +191,7 @@ function inactiveReminderEmail(unsubscribeUrl?: string): { subject: string; html
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      無料プランでも1日1回のロープレが可能です
+      Googleログインで累計5回まで無料でロープレできます
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}
@@ -428,7 +252,7 @@ function noRoleplayDay3Email(unsubscribeUrl?: string): { subject: string; html: 
 
 function proWelcomeEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "Proプランへようこそ！無制限ロープレを始めましょう",
+    subject: "Proプランへようこそ！月60回のAIロープレを始めましょう",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -444,7 +268,7 @@ function proWelcomeEmail(unsubscribeUrl?: string): { subject: string; html: stri
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>Proで使える全機能</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>AIロープレ<strong>回数無制限</strong></li>
+        <li>AIロープレ<strong>月60回</strong>まで（毎月1日リセット）</li>
         <li>全5カテゴリの<strong>詳細スコア＆レーダーチャート</strong></li>
         <li>AIによる<strong>改善アドバイス</strong></li>
         <li>全シーン・全ワークシート解放</li>
@@ -459,7 +283,7 @@ function proWelcomeEmail(unsubscribeUrl?: string): { subject: string; html: stri
       </ol>
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
-      Proユーザーは無制限の練習で、<strong>初月からスコアの伸び</strong>を実感されています。<br>
+      Proユーザーは毎日の練習で、<strong>初月からスコアの伸び</strong>を実感されています。<br>
       早速始めましょう！
     </p>
     <div style="text-align:center;margin:0 0 24px">
@@ -677,7 +501,7 @@ function pauseResuming3DaysEmail(unsubscribeUrl?: string): { subject: string; ht
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>再開後に使える機能</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>AIロープレ<strong>回数無制限</strong></li>
+        <li>AIロープレ<strong>月60回</strong>まで（毎月1日リセット）</li>
         <li>全5カテゴリの<strong>詳細スコア</strong></li>
         <li>AI<strong>改善アドバイス</strong></li>
       </ul>
@@ -723,7 +547,7 @@ function paymentFailedDay4Email(unsubscribeUrl?: string): { subject: string; htm
     <div style="background:#fffbeb;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>Proプラン停止で失われるもの</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>無制限ロープレ → <strong>1日1回に制限</strong></li>
+        <li>月60回ロープレ → <strong>累計5回までに制限</strong></li>
         <li>詳細スコア5カテゴリ → <strong>1カテゴリのみ</strong></li>
         <li>AI改善アドバイス → <strong>利用不可</strong></li>
       </ul>
@@ -765,7 +589,7 @@ function paymentFailedDay7Email(unsubscribeUrl?: string): { subject: string; htm
       <p style="font-size:13px;color:#991b1b;margin:0 0 8px"><strong>これが最終のお知らせです</strong></p>
       <p style="font-size:13px;color:#374151;line-height:1.6;margin:0">
         お支払い方法を更新いただければ、Proプランをそのまま継続できます。<br>
-        更新がない場合、無料プラン（1日1回制限）に自動移行します。
+        更新がない場合、無料プラン（累計5回まで）に自動移行します。
       </p>
     </div>
     <div style="text-align:center;margin:0 0 16px">
@@ -842,7 +666,7 @@ function paymentFailedEmail(unsubscribeUrl?: string): { subject: string; html: s
     <div style="background:#fef2f2;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#991b1b;margin:0 0 8px"><strong>このままだとProプランが停止されます</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>ロープレが<strong>1日1回</strong>に制限されます</li>
+        <li>ロープレが<strong>累計5回まで</strong>に制限されます</li>
         <li>全5カテゴリの<strong>詳細スコア</strong>が見られなくなります</li>
         <li>AI改善アドバイスが利用できなくなります</li>
       </ul>
@@ -885,12 +709,12 @@ function subscriptionCanceledEmail(unsubscribeUrl?: string): { subject: string; 
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">Proプランを解約しました</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
       ご利用ありがとうございました。<br>
-      引き続き無料プラン（1日1回）でAIロープレをご利用いただけます。
+      引き続き無料プラン（累計5回まで）でAIロープレをご利用いただけます。
     </p>
     <div style="background:#f0fdf4;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#166534;margin:0 0 8px"><strong>練習を続けることが大切��す</strong></p>
       <p style="font-size:13px;color:#374151;line-height:1.6;margin:0">
-        無料プランでも毎日1回の練習で着実にスキルは上がります。<br>
+        無料の5回でも弱点の把握には十分です。<br>
         もっと練習したくなったら、いつでもProに再登録できます。
       </p>
     </div>
@@ -927,13 +751,13 @@ function winback7DaysEmail(unsubscribeUrl?: string): { subject: string; html: st
     <h1 style="font-size:20px;color:#111;margin:0 0 16px;text-align:center">Pro解約から1週間が経ちました</h1>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 16px">
       無料プランでの営業練習は順調ですか？<br>
-      1日1回の制限で、練習量が足りていない方が多いです。
+      累計5回までの制限で、本気の練習量には届かない方が多いです。
     </p>
     <div style="background:#fffbeb;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>練習量とスコアの関係</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>1日1回 → スコア<strong>維持</strong>がやっと</li>
-        <li>1日3回以上 → スコアが<strong>着実にUP</strong>する傾向</li>
+        <li>無料5回のみ → スコア<strong>把握</strong>がやっと</li>
+        <li>月60回の練習 → スコアが<strong>着実にUP</strong>する傾向</li>
         <li>練習なし → <strong>スキルが徐々に低下</strong></li>
       </ul>
     </div>
@@ -943,7 +767,7 @@ function winback7DaysEmail(unsubscribeUrl?: string): { subject: string; html: st
     </p>
     <div style="text-align:center;margin:0 0 16px">
       <a href="${APP_URL}/pricing" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
-        Proプランに戻る（月額¥2,980）→
+        Proプランに戻る（月額¥1,980）→
       </a>
     </div>
     <div style="text-align:center">
@@ -984,7 +808,7 @@ function winback30DaysEmail(unsubscribeUrl?: string): { subject: string; html: s
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
       営業は毎日の練習がモノを言います。<br>
-      月額¥2,980 — 営業研修1回分の<strong>1/20以下</strong>のコストで、毎日AIと練習できます。
+      月額¥1,980 — 営業研修1回分の<strong>1/30以下</strong>のコストで、毎日AIと練習できます。
     </p>
     <div style="text-align:center;margin:0 0 16px">
       <a href="${APP_URL}/pricing" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
@@ -1031,15 +855,15 @@ function powerUserUpgradeEmail(unsubscribeUrl?: string): { subject: string; html
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
       毎日練習する習慣がすでにあるあなたなら、Proの効果を<strong>最大限</strong>引き出せます。<br>
-      7日間無料で試してみませんか？
+      月60回のロープレで本気の練習を始めませんか？
     </p>
     <div style="text-align:center;margin:0 0 16px">
       <a href="${APP_URL}/pricing" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
-        7日間無料でProを試す →
+        Proにアップグレード →
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      7日間完全無料 → ¥2,980/月 ・ いつでも解約OK
+      ¥1,980/月 ・ Freeで5回お試し可能 ・ いつでも解約OK
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}
@@ -1053,7 +877,7 @@ function powerUserUpgradeEmail(unsubscribeUrl?: string): { subject: string; html
 
 function checkoutAbandonedEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "チェックアウトがお済みでないようです — 7日間無料トライアルを始めませんか？",
+    subject: "チェックアウトがお済みでないようです — Proで営業力を本気で伸ばしませんか？",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -1069,31 +893,31 @@ function checkoutAbandonedEmail(unsubscribeUrl?: string): { subject: string; htm
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>Proプランに含まれるもの</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>AIロープレ<strong>回数無制限</strong></li>
+        <li>AIロープレ<strong>月60回</strong>まで（毎月1日リセット）</li>
         <li>全5カテゴリの<strong>詳細スコア</strong></li>
         <li>AI<strong>改善アドバイス</strong></li>
-        <li><strong>7日間完全無料</strong>で試せます</li>
+        <li>全22レッスン・全シーン・全ワークシート解放</li>
       </ul>
     </div>
     <div style="background:#f0fdf4;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#166534;margin:0 0 8px"><strong>安心ポイント</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.6;margin:0;padding-left:16px">
-        <li>7日間は<strong>完全無料</strong> — 課金は8日目から</li>
+        <li><strong>Freeで5回お試し可能</strong> — 累計5回まで無料でAIロープレを体験</li>
         <li>いつでも<strong>ワンクリックで解約</strong>OK</li>
         <li>クレジットカード情報は<strong>Stripeが安全に管理</strong></li>
       </ul>
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
-      まずは無料で7日間、無制限にAIロープレを体験してみてください。
+      Proで毎日AIロープレ練習して、営業力を一気に伸ばしませんか？
     </p>
     <div style="text-align:center;margin:0 0 16px">
       <a href="${APP_URL}/pricing" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
-        7日間無料でProを試す →
+        Proにアップグレード →
       </a>
     </div>
     <div style="text-align:center">
       <a href="${APP_URL}/roleplay" style="font-size:13px;color:#6b7280;text-decoration:underline">
-        まず無料ロープレを試してみる
+        まず無料の累計5回で試してみる
       </a>
     </div>
   </div>
@@ -1137,7 +961,7 @@ function referralNudgeEmail(unsubscribeUrl?: string): { subject: string; html: s
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      紹介された方には7日間の無料トライアルが付きます
+      紹介された方もGoogleログインで累計5回まで無料でお試しいただけます
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}
@@ -1493,13 +1317,13 @@ function monthlyToAnnualEmail(unsubscribeUrl?: string): { subject: string; html:
     </p>
     <div style="background:#fff7ed;border-radius:12px;padding:20px;margin:0 0 24px;text-align:center">
       <div style="margin:0 0 8px">
-        <span style="font-size:14px;color:#9ca3af;text-decoration:line-through">月額 ¥2,980 × 12ヶ月 = ¥35,760</span>
+        <span style="font-size:14px;color:#9ca3af;text-decoration:line-through">月額 ¥1,980 × 12ヶ月 = ¥23,760</span>
       </div>
       <div style="font-size:28px;font-weight:bold;color:#f97316;margin:0 0 4px">
-        ¥29,800<span style="font-size:14px;color:#374151;font-weight:normal">/年</span>
+        ¥19,800<span style="font-size:14px;color:#374151;font-weight:normal">/年</span>
       </div>
       <div style="font-size:13px;color:#f97316;font-weight:bold">
-        ¥5,960お得（約2ヶ月分無料）
+        ¥3,960お得（約2ヶ月分無料）
       </div>
     </div>
     <div style="text-align:center;margin:0 0 24px">
@@ -1585,7 +1409,6 @@ function programPurchasedEmail(unsubscribeUrl?: string): { subject: string; html
 
 export type OnboardingEmailType = "welcome" | "first_roleplay" | "third_roleplay";
 export type TransactionalEmailType = "payment_failed" | "payment_failed_day4" | "payment_failed_day7" | "subscription_canceled" | "pro_welcome" | "pro_onboarding_day1" | "pro_onboarding_day3" | "pro_onboarding_day7" | "pause_resuming_3days" | "referral_reward" | "winback_7days" | "winback_30days" | "checkout_abandoned" | "weekly_digest" | "program_purchased";
-export type TrialEmailType = "trial_expiring_3days" | "trial_expiring_1day" | "trial_expiring_6days" | "trial_expired";
 export type EngagementEmailType = "inactive_reminder" | "no_roleplay_day3" | "power_user_upgrade" | "referral_nudge" | "nps_survey" | "at_risk_intervention" | "monthly_to_annual" | "predictive_churn" | "streak_milestone";
 
 const EMAIL_TEMPLATES: Record<OnboardingEmailType, (unsubscribeUrl?: string) => { subject: string; html: string }> = {
@@ -1610,13 +1433,6 @@ const TRANSACTIONAL_TEMPLATES: Record<TransactionalEmailType, (unsubscribeUrl?: 
   checkout_abandoned: checkoutAbandonedEmail,
   weekly_digest: weeklyDigestEmail,
   program_purchased: programPurchasedEmail,
-};
-
-const TRIAL_TEMPLATES: Record<TrialEmailType, (unsubscribeUrl?: string) => { subject: string; html: string }> = {
-  trial_expiring_3days: trialExpiring3DaysEmail,
-  trial_expiring_1day: trialExpiring1DayEmail,
-  trial_expiring_6days: trialExpiring6DaysEmail,
-  trial_expired: trialExpiredEmail,
 };
 
 const ENGAGEMENT_TEMPLATES: Record<EngagementEmailType, (unsubscribeUrl?: string) => { subject: string; html: string }> = {
@@ -1681,33 +1497,6 @@ export async function sendTransactionalEmail(
 
     const unsubscribeUrl = userId ? getUnsubscribeUrl(userId) : undefined;
     const template = TRANSACTIONAL_TEMPLATES[emailType](unsubscribeUrl);
-    await resend.emails.send({
-      from: FROM_EMAIL,
-      to,
-      subject: template.subject,
-      html: template.html,
-    });
-    return true;
-  } catch (err) {
-    console.error(`[email] Failed to send ${emailType} to ${to}:`, err);
-    return false;
-  }
-}
-
-/**
- * Send a trial-related email. Fire-and-forget — never throws.
- */
-export async function sendTrialEmail(
-  to: string,
-  emailType: TrialEmailType,
-  userId?: string
-): Promise<boolean> {
-  try {
-    const resend = getResend();
-    if (!resend) return false;
-
-    const unsubscribeUrl = userId ? getUnsubscribeUrl(userId) : undefined;
-    const template = TRIAL_TEMPLATES[emailType](unsubscribeUrl);
     await resend.emails.send({
       from: FROM_EMAIL,
       to,
@@ -1788,7 +1577,7 @@ export async function sendAdminEmail(
  */
 export async function sendEmailWithABVariant(
   to: string,
-  emailType: EngagementEmailType | TransactionalEmailType | TrialEmailType,
+  emailType: EngagementEmailType | TransactionalEmailType,
   userId?: string,
   abSubjectOverride?: string
 ): Promise<boolean> {
@@ -1804,8 +1593,6 @@ export async function sendEmailWithABVariant(
       template = ENGAGEMENT_TEMPLATES[emailType as EngagementEmailType](unsubscribeUrl);
     } else if (emailType in TRANSACTIONAL_TEMPLATES) {
       template = TRANSACTIONAL_TEMPLATES[emailType as TransactionalEmailType](unsubscribeUrl);
-    } else if (emailType in TRIAL_TEMPLATES) {
-      template = TRIAL_TEMPLATES[emailType as TrialEmailType](unsubscribeUrl);
     }
 
     if (!template) return false;

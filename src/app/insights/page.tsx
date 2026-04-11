@@ -141,7 +141,8 @@ export default function InsightsPage() {
     setViewedIds((prev) => new Set(prev).add(id));
   }, []);
 
-  const isPro = usage?.plan === "pro";
+  const isPro =
+    usage?.plan === "starter" || usage?.plan === "pro" || usage?.plan === "master";
   const freeLimit = usage?.limit || 3;
 
   // Split insights

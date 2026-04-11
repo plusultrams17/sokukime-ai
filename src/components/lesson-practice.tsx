@@ -79,7 +79,7 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
   const [phase, setPhase] = useState<Phase>("ready");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
-  const [plan, setPlan] = useState<"free" | "pro" | undefined>(undefined);
+  const [plan, setPlan] = useState<"free" | "starter" | "pro" | "master" | undefined>(undefined);
   const [score, setScore] = useState<ScoreResult | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [usingProfile, setUsingProfile] = useState(false);
@@ -118,7 +118,7 @@ export function LessonPractice({ slug, lesson, color, practiceHighlight }: Lesso
     supabase.auth.getUser().then(({ data: { user } }) => {
       setIsLoggedIn(!!user);
       setAuthChecked(true);
-      // Fetch plan for Pro users to unlock unlimited rallies
+      // Fetch plan for paid users to unlock unlimited rallies per session
       if (user) {
         fetch("/api/usage")
           .then((r) => r.json())

@@ -13,46 +13,12 @@ export interface Promotion {
 
 /**
  * Hardcoded seasonal campaigns.
- * Add new campaigns here as needed.
+ *
+ * 現在アクティブなキャンペーンはありません。
+ * この配列に Promotion オブジェクトを追加すると PromoBanner / pricing page /
+ * Stripe checkout の自動クーポン適用が有効化されます。
  */
-const CAMPAIGNS: Promotion[] = [
-  {
-    id: "launch2026",
-    name: "ローンチ記念キャンペーン",
-    message: "先着100名限定！Proプランが初月¥980（67%OFF）",
-    discountPrice: 980,
-    originalPrice: 2980,
-    startDate: "2026-04-10",
-    endDate: "2026-05-10",
-    ctaText: "初月¥980で始める",
-    ctaUrl: "/pricing",
-    stripeCouponId: "launch2026_67off",
-  },
-  {
-    id: "spring2026",
-    name: "春の営業力UPキャンペーン",
-    message: "4月限定！Proプランが初月¥1,980",
-    discountPrice: 1980,
-    originalPrice: 2980,
-    startDate: "2026-04-01",
-    endDate: "2026-04-30",
-    ctaText: "キャンペーン価格で始める",
-    ctaUrl: "/pricing",
-    stripeCouponId: "spring2026_1000off",
-  },
-  {
-    id: "summer2026",
-    name: "夏の集中トレーニングキャンペーン",
-    message: "7月限定！Proプランが初月¥1,980",
-    discountPrice: 1980,
-    originalPrice: 2980,
-    startDate: "2026-07-01",
-    endDate: "2026-07-31",
-    ctaText: "夏の特別価格で始める",
-    ctaUrl: "/pricing",
-    stripeCouponId: "summer2026_1000off",
-  },
-];
+const CAMPAIGNS: Promotion[] = [];
 
 /**
  * Get the currently active promotion, if any.

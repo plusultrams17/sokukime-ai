@@ -169,10 +169,10 @@ const comparisons = [
   },
   {
     method: "成約コーチAI",
-    price: "¥0〜¥2,980/月",
+    price: "¥0〜¥4,980/月",
     timing: "24時間365日",
     pace: "自分のペース",
-    practice: "AI無制限",
+    practice: "AI 月30〜200回",
     measurement: "スコア可視化",
     highlight: true,
   },

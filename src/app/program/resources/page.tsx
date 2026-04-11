@@ -191,10 +191,10 @@ export default function ProgramResourcesPage() {
                 <h3 className="mb-2 text-lg font-bold text-foreground">AIロープレを始める</h3>
                 <p className="mb-4 text-sm text-muted leading-relaxed">
                   あなたの商材・業種に合わせたリアルな営業シミュレーション。
-                  Proプランに含まれる無制限ロープレ、全5カテゴリの詳細スコア、AI改善アドバイスが利用可能です。
+                  買い切りプログラム購入者（グランドファザリング）・Proプラン相当の月60回ロープレ、全5カテゴリの詳細スコア、AI改善アドバイスが利用可能です。
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <ProBadge>無制限ロープレ</ProBadge>
+                  <ProBadge>月60回ロープレ</ProBadge>
                   <ProBadge>詳細スコア</ProBadge>
                   <ProBadge>AI改善アドバイス</ProBadge>
                 </div>

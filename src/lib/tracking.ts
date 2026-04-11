@@ -154,10 +154,18 @@ export function trackUpgradeModalShown(
   });
 }
 
-export function trackCheckoutStarted() {
+const TIER_PRICE: Record<string, number> = {
+  starter: 990,
+  pro: 1980,
+  master: 4980,
+};
+
+export function trackCheckoutStarted(
+  plan: "starter" | "pro" | "master" = "pro"
+) {
   pushEvent("checkout_started", {
-    plan: "pro",
-    price: 2980,
+    plan,
+    price: TIER_PRICE[plan] ?? TIER_PRICE.pro,
     currency: "JPY",
   });
 }

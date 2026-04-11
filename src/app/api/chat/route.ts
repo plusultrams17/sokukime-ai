@@ -67,12 +67,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check daily usage limit (server-side gate)
+    // Check usage limit (server-side gate)
+    //  - Free: 累計5回（生涯）
+    //  - Starter/Pro/Master: 月30/60/200回（JST 暦月リセット）
     const { getUsageStatus } = await import("@/lib/usage");
     const usage = await getUsageStatus(supabase, user.id);
-    if (!usage.canStart && usage.plan === "free") {
+    if (!usage.canStart) {
+      const errorMessage =
+        usage.plan === "free"
+          ? "無料プランのロープレ累計上限に達しました。上位プランでもっと練習できます。"
+          : `今月のロープレ上限（${usage.limit}回）に達しました。来月1日にリセットされます。`;
       return NextResponse.json(
-        { error: "本日のロープレ上限に達しました。Proプランで無制限に練習できます。", limitReached: true },
+        { error: errorMessage, limitReached: true },
         { status: 403 }
       );
     }

@@ -49,7 +49,7 @@ export default function PrivacyPage() {
         <ul className="list-disc pl-6 space-y-1">
           <li>アカウントの作成・認証・管理</li>
           <li>AIロープレ・コーチング・スコアリング機能の提供</li>
-          <li>利用状況の把握（無料プランの日次制限管理等）</li>
+          <li>利用状況の把握（無料プランの累計利用上限管理等）</li>
           <li>サブスクリプションの決済処理</li>
           <li>サービスの改善・新機能の開発</li>
           <li>お問い合わせへの対応</li>

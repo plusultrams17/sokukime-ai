@@ -12,12 +12,12 @@ export function ProgramUpsellCTA() {
         Proプランで22レッスン全解放
       </h3>
       <p className="mb-4 text-sm text-muted leading-relaxed">
-        22レッスンで営業の「型」を体系的に習得。AIロープレ無制限・PDF教材・反論切り返し30パターンすべて使い放題。
+        22レッスンで営業の「型」を体系的に習得。AIロープレ月60回・PDF教材・反論切り返し30パターンすべて使い放題。
       </p>
       <div className="mb-4 flex items-center justify-center gap-2">
-        <span className="text-2xl font-bold text-accent">¥2,980</span>
+        <span className="text-2xl font-bold text-accent">¥1,980</span>
         <span className="text-xs text-muted">/月（税込）</span>
-        <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">7日間無料</span>
+        <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">Freeで5回お試し可能</span>
       </div>
       <Link
         href="/pricing"
@@ -44,7 +44,7 @@ export function ToolUpsellCTA() {
         <p className="mb-5 text-sm text-muted">
           AIロープレなら、弱点をピンポイントで練習できます。
           <br className="hidden sm:block" />
-          Proプランなら回数無制限。7日間無料でお試しいただけます。
+          Proプランなら月60回まで。¥1,980/月でいつでも解約OK。
         </p>
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link
@@ -57,11 +57,11 @@ export function ToolUpsellCTA() {
             href="/pricing"
             className="inline-flex h-11 items-center justify-center rounded-xl border border-accent/30 bg-white px-7 text-sm font-bold text-accent transition hover:bg-accent/5"
           >
-            Pro 7日間無料トライアル
+            Proプランを見る
           </Link>
         </div>
         <p className="mt-3 text-xs text-muted">
-          &#10003; 登録不要で体験OK &#10003; Pro: ¥2,980/月 &#10003; いつでも解約可能
+          &#10003; 登録不要で体験OK &#10003; Starter ¥990〜 / Pro ¥1,980 &#10003; いつでも解約可能
         </p>
       </div>
     </div>

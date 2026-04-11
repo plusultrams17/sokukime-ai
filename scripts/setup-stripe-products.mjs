@@ -4,8 +4,10 @@
  * 使い方:
  *   1. .env.local に STRIPE_SECRET_KEY が設定されていることを確認
  *   2. node scripts/setup-stripe-products.mjs
- *   3. 出力された Price ID を .env.local の STRIPE_PRO_PRICE_ID / STRIPE_PRO_ANNUAL_PRICE_ID 等にコピー
+ *   3. 出力された Price ID を .env.local の
+ *      STRIPE_STARTER_PRICE_ID / STRIPE_PRO_PRICE_ID / STRIPE_MASTER_PRICE_ID にコピー
  *
+ * 2026-04-11: 4プラン構成 (Free / Starter ¥990 / Pro ¥1,980 / Master ¥4,980)
  * 冪等性: 同じ商品名が既にある場合はスキップします。
  */
 
@@ -48,44 +50,48 @@ console.log(`\n🔑 Stripe mode: ${isTestMode ? "TEST" : "LIVE ⚠️"}\n`);
 
 const stripe = new Stripe(STRIPE_SECRET_KEY, { timeout: 60000 });
 
-// ── 作成する商品定義 ──
+// ── 作成する商品定義 (2026-04-11: 4プラン構成) ──
+// Free / Starter ¥990 月30回 / Pro ¥1,980 月60回 / Master ¥4,980 月200回
 const PRODUCTS = [
   {
-    envKey: "STRIPE_PRO_PRICE_ID",
-    productName: "成約コーチ AI Proプラン（月額）",
-    productDescription: "無制限ロープレ、履歴保存、コーチモード、詳細スコア分析",
+    envKey: "STRIPE_STARTER_PRICE_ID",
+    productName: "成約コーチAI スタータープラン",
+    productDescription:
+      "AIロープレ月30回、学習コース全22レッスン、業種別トークスクリプト、切り返し話法30パターン、成約スコア全5カテゴリ",
     prices: [
       {
-        unitAmount: 2980,
+        unitAmount: 990,
         currency: "jpy",
         recurring: { interval: "month" },
-        nickname: "Pro月額 ¥2,980",
+        nickname: "Starter月額 ¥990",
       },
     ],
   },
   {
-    envKey: "STRIPE_PRO_ANNUAL_PRICE_ID",
-    productName: "成約コーチ AI Proプラン（年額）",
-    productDescription: "無制限ロープレ、履歴保存、コーチモード、詳細スコア分析（年額で2ヶ月分お得）",
+    envKey: "STRIPE_PRO_PRICE_ID",
+    productName: "成約コーチAI プロプラン",
+    productDescription:
+      "AIロープレ月60回、学習コース全22レッスン、業種別トークスクリプト、切り返し話法30パターン、成約スコア全5カテゴリ",
     prices: [
       {
-        unitAmount: 29800,
+        unitAmount: 1980,
         currency: "jpy",
-        recurring: { interval: "year" },
-        nickname: "Pro年額 ¥29,800",
+        recurring: { interval: "month" },
+        nickname: "Pro月額 ¥1,980",
       },
     ],
   },
   {
-    envKey: "STRIPE_PROGRAM_PRICE_ID",
-    productName: "成約コーチ AI 教育プログラム",
-    productDescription: "5ステップメソッド22レッスン動画 + ワークシート + ロープレ3ヶ月無制限",
+    envKey: "STRIPE_MASTER_PRICE_ID",
+    productName: "成約コーチAI マスタープラン",
+    productDescription:
+      "AIロープレ月200回、学習コース全22レッスン、業種別トークスクリプト、切り返し話法30パターン、成約スコア全5カテゴリ、優先サポート",
     prices: [
       {
-        unitAmount: 49800,
+        unitAmount: 4980,
         currency: "jpy",
-        recurring: null, // 買い切り
-        nickname: "教育プログラム ¥49,800",
+        recurring: { interval: "month" },
+        nickname: "Master月額 ¥4,980",
       },
     ],
   },

@@ -26,8 +26,11 @@ const navLinksLoggedIn = [
 export function Header() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [plan, setPlan] = useState<"free" | "pro">("free");
+  const [plan, setPlan] = useState<"free" | "starter" | "pro" | "master">("free");
   const [email, setEmail] = useState<string | null>(null);
+
+  const isPaid = plan === "starter" || plan === "pro" || plan === "master";
+  const planLabel = plan === "master" ? "Master" : plan === "pro" ? "Pro" : plan === "starter" ? "Starter" : "";
   const [open, setOpen] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
 
@@ -47,7 +50,11 @@ export function Header() {
             if (error) {
               console.warn("[header] profiles query failed:", error.message);
             }
-            const dbPlan = (data?.plan as "free" | "pro") || "free";
+            const rawPlan = data?.plan;
+            const dbPlan: "free" | "starter" | "pro" | "master" =
+              rawPlan === "starter" || rawPlan === "pro" || rawPlan === "master"
+                ? rawPlan
+                : "free";
             setPlan(dbPlan);
 
             // Fallback: DBがfreeでもStripeにサブスクがある可能性（Webhook遅延等）
@@ -55,7 +62,10 @@ export function Header() {
               fetch("/api/stripe/sync", { method: "POST" })
                 .then((r) => r.json())
                 .then((syncData) => {
-                  if (syncData?.plan === "pro") setPlan("pro");
+                  const syncPlan = syncData?.plan;
+                  if (syncPlan === "starter" || syncPlan === "pro" || syncPlan === "master") {
+                    setPlan(syncPlan);
+                  }
                 })
                 .catch(() => {});
             }
@@ -117,9 +127,9 @@ export function Header() {
           {isLoggedIn ? (
             <>
               <UserMenu />
-              {plan === "free" ? (
+              {!isPaid ? (
                 <Link href="/pricing" className="nav-btn" onClick={() => trackCTAClick("header_upgrade", "header", "/pricing")}>
-                  <span>Proにアップグレード</span>
+                  <span>プランを見る</span>
                 </Link>
               ) : (
                 <Link href="/roleplay" className="nav-btn" onClick={() => trackCTAClick("header_roleplay", "header", "/roleplay")}>
@@ -163,8 +173,8 @@ export function Header() {
             <div className="px-1 pb-2">
               <div className="text-xs text-muted truncate">{email}</div>
               <div className="mt-0.5 text-xs font-medium">
-                {plan === "pro" ? (
-                  <span className="text-accent">Pro プラン</span>
+                {isPaid ? (
+                  <span className="text-accent">{planLabel} プラン</span>
                 ) : (
                   <span className="text-muted">無料プラン</span>
                 )}
@@ -221,7 +231,7 @@ export function Header() {
               >
                 更新情報
               </Link>
-              {plan === "pro" && (
+              {isPaid && (
                 <button
                   onClick={() => {
                     setOpen(false);
@@ -240,13 +250,13 @@ export function Header() {
           {/* CTA / Auth actions */}
           {isLoggedIn ? (
             <>
-              {plan === "free" ? (
+              {!isPaid ? (
                 <Link
                   href="/pricing"
                   className="nav-btn mobile-menu__cta"
                   onClick={() => { setOpen(false); trackCTAClick("header_upgrade_mobile", "mobile_menu", "/pricing"); }}
                 >
-                  <span>Proにアップグレード</span>
+                  <span>プランを見る</span>
                 </Link>
               ) : (
                 <Link

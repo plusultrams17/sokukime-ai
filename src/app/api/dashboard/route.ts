@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getStreak } from "@/lib/usage";
+import { getStreak, type PlanTier } from "@/lib/usage";
 
 export async function GET() {
   try {
@@ -27,14 +27,18 @@ export async function GET() {
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id);
 
-    // Fetch plan + trial info, then streak with plan info for Streak Shield
-    const profileResult = await supabase.from("profiles").select("plan, trial_ends_at, stripe_subscription_id, is_tester, tester_expires_at").eq("id", user.id).single();
+    // Fetch plan info, then streak with plan info for Streak Shield
+    const profileResult = await supabase.from("profiles").select("plan").eq("id", user.id).single();
     if (profileResult.error) {
       console.error("Profile query failed (dashboard):", profileResult.error);
       return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
     }
     const profile = profileResult.data;
-    const plan = (profile?.plan || "free") as "free" | "pro";
+    const rawPlan = profile?.plan;
+    const plan: PlanTier =
+      rawPlan === "starter" || rawPlan === "pro" || rawPlan === "master"
+        ? rawPlan
+        : "free";
     const streak = await getStreak(supabase, user.id, plan);
 
     const scoreList = scores || [];
@@ -66,19 +70,9 @@ export async function GET() {
       }))
       .reverse();
 
-    // Active tester = unlimited Pro — do NOT show trial banner
-    const testerExpiresAt = profile?.tester_expires_at as string | null;
-    const isTesterActive =
-      profile?.is_tester === true &&
-      (testerExpiresAt === null || (testerExpiresAt && new Date(testerExpiresAt) > new Date()));
-
-    // Calculate reverse trial days remaining (skip for active testers)
-    let trialDaysRemaining: number | null = null;
-    if (!isTesterActive && profile?.trial_ends_at && !profile?.stripe_subscription_id) {
-      const trialEnd = new Date(profile.trial_ends_at);
-      const remaining = Math.ceil((trialEnd.getTime() - Date.now()) / 86400000);
-      if (remaining > 0) trialDaysRemaining = remaining;
-    }
+    // trial_ends_at は auth/callback で first-time 判定用 sentinel (1970-01-01) として
+    // 使われているだけなので、残日数は常に null。
+    const trialDaysRemaining: number | null = null;
 
     return NextResponse.json({
       totalSessions: totalSessions || 0,
@@ -90,7 +84,7 @@ export async function GET() {
       firstScore,
       weakestCategory,
       history,
-      plan: profile?.plan || "free",
+      plan,
       streak,
       trialDaysRemaining,
     });

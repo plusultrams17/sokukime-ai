@@ -45,7 +45,9 @@ export function useProCheck(): boolean | null {
       })
       .then((data) => {
         if (!data) return;
-        const pro = data.plan === "pro";
+        // 有料プラン (Starter / Pro / Master) はすべて「Pro 以上」扱い
+        const pro =
+          data.plan === "starter" || data.plan === "pro" || data.plan === "master";
         setIsPro(pro);
         try {
           sessionStorage.setItem(

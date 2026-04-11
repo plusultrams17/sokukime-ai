@@ -127,7 +127,7 @@ export default function TryRoleplayPage() {
                 ゲスト体験は1回までです
               </p>
               <p className="mb-4 text-sm text-muted leading-relaxed">
-                無料登録すると毎日1回、Proなら無制限でロープレできます
+                無料登録すると累計5回まで、Proなら月60回ロープレできます
               </p>
               <div className="flex flex-col items-center gap-3">
                 <Link

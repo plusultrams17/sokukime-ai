@@ -59,10 +59,10 @@ interface ChatUIProps {
   hideLessonDrawer?: boolean;
   /** Auto-select this lesson in the drawer (e.g. when launched from a lesson page) */
   lessonSlug?: string;
-  /** Subscription plan — "pro" gets unlimited rallies per session, "free"/undefined keeps the 10-turn cap */
-  plan?: "free" | "pro";
+  /** Subscription plan — 有料プラン (starter/pro/master) は1セッション内のラリー無制限、free/undefined は 10-turn cap */
+  plan?: "free" | "starter" | "pro" | "master";
   /**
-   * 上限到達 (Free 累計5回到達) で /api/usage/record が 403 を返した時に親へ通知する。
+   * 上限到達 (Free 累計5回到達 / 有料プラン 月次クレジット到達) で /api/usage/record が 403 を返した時に親へ通知する。
    * 親側で upgrade modal を開いてもらう用。
    * 2026-04-11: カウントは「最初のメッセージ送信時」に行うため。
    */
@@ -71,7 +71,14 @@ interface ChatUIProps {
    * /api/usage/record の成功後に新しい usage ステータスを親へ通知する。
    * Setup 画面の残り回数表示を最新化したいときに使う。
    */
-  onUsageRecorded?: (status: { used: number; limit: number; canStart: boolean; plan: "free" | "pro" }) => void;
+  onUsageRecorded?: (status: {
+    used: number;
+    limit: number;
+    canStart: boolean;
+    plan: "free" | "starter" | "pro" | "master";
+    resetUnit: "lifetime" | "month" | "unlimited";
+    monthStart: string | null;
+  }) => void;
   /**
    * レッスン復習用のプリセット開始状態。渡された場合、AIお客さんの openingMessage を
    * 初期メッセージとして注入し、アプローチから始めずに指定されたステップ（例：反論処理）から開始する。
@@ -111,8 +118,9 @@ const STEP_LESSON_MAP: Record<number, { slug: string; label: string }> = {
 export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus, scoringFocus, onFinish, isGuest, onAuthGate, chatEndpoint = "/api/chat", scoreEndpoint = "/api/score", hideLessonDrawer, lessonSlug, plan, onUsageLimitReached, onUsageRecorded, initialAssistantMessage }: ChatUIProps) {
   const isGuestMode = chatEndpoint.includes("guest");
   const showLesson = !isGuestMode && !hideLessonDrawer;
-  // Pro ユーザーは1セッション内のラリー数を無制限にする。ゲストは常に Free 扱い。
-  const isUnlimitedRally = plan === "pro" && !isGuestMode;
+  // 有料プラン (Starter / Pro / Master) は1セッション内のラリー数を無制限にする。ゲストは常に Free 扱い。
+  const isPaidPlan = plan === "starter" || plan === "pro" || plan === "master";
+  const isUnlimitedRally = isPaidPlan && !isGuestMode;
   const [messages, setMessages] = useState<Message[]>(() =>
     initialAssistantMessage
       ? [{ role: "assistant", content: initialAssistantMessage.openingMessage }]
@@ -186,7 +194,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
       const res = await fetch("/api/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene, difficulty, productContext, customerContext, lessonFocus }),
+        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene, difficulty, productContext, customerContext, lessonFocus, scoringFocus }),
       });
       if (!res.ok) return; // Keep previous coach data (e.g. guest gets 401)
       const data = await res.json();

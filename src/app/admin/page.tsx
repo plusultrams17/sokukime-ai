@@ -49,10 +49,6 @@ function MetricCard({ label, value, sub, color }: { label: string; value: string
 function EmailRow({ type, count }: { type: string; count: number }) {
   const labels: Record<string, string> = {
     pro_welcome: "Pro Welcome",
-    trial_expiring_3days: "トライアル残3日",
-    trial_expiring_1day: "トライアル残1日",
-    trial_expiring_6days: "トライアル最終日",
-    trial_expired: "トライアル終了",
     inactive_reminder: "非アクティブ",
     no_roleplay_day3: "未ロープレDay3",
     power_user_upgrade: "パワーユーザー",

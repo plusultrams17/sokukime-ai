@@ -5,7 +5,7 @@
 CREATE TABLE public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
-  plan TEXT NOT NULL DEFAULT 'free' CHECK (plan IN ('free', 'pro')),
+  plan TEXT NOT NULL DEFAULT 'free' CHECK (plan IN ('free', 'starter', 'pro', 'master')),
   stripe_customer_id TEXT UNIQUE,
   stripe_subscription_id TEXT,
   subscription_status TEXT DEFAULT 'none',
@@ -755,3 +755,22 @@ BEGIN
   ORDER BY avg_score ASC;
 END;
 $$;
+
+-- =============================================
+-- 2026-04-11 マイグレーション: 4-tier プラン対応
+-- =============================================
+-- profiles.plan CHECK 制約を 'free' / 'pro' の 2 値から
+-- 'free' / 'starter' / 'pro' / 'master' の 4 値に拡張する。
+-- 既存 DB に対しては以下を実行:
+--
+--   ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_plan_check;
+--   ALTER TABLE public.profiles
+--     ADD CONSTRAINT profiles_plan_check
+--     CHECK (plan IN ('free', 'starter', 'pro', 'master'));
+--
+-- 既存の plan='pro' ユーザーはそのまま新 Pro tier (月60回) として扱う。
+-- starter / master は新規契約者から利用される。
+--
+-- 月次クレジット管理のため、usage_records は既存の used_date (DATE) を
+-- そのまま使い、usage.ts 側で「当月初日 JST 以降のレコード数」で
+-- 月次カウントを算出する。新しいカラムは追加不要。

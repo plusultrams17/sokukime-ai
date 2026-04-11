@@ -106,7 +106,7 @@ const industries = ["不動産", "保険", "SaaS", "人材", "教育", "物販"]
 const lpFaqs = [
   {
     q: "本当に無料で使えますか？",
-    a: "はい。登録不要で今すぐロープレを体験できます。無料アカウントで1日1回AIロープレが可能です。もっと練習したい方にはProプラン（月額¥2,980）をご用意しています。",
+    a: "はい。Googleアカウントでログインすれば無料プランでAIロープレを累計5回まで（生涯の上限）お試しいただけます。クレジットカード不要。継続して練習したい方には Starter（¥990/月30回）、Pro（¥1,980/月60回）、Master（¥4,980/月200回）の3プランをご用意しています。",
   },
   {
     q: "どんな業種・商材でも使えますか？",
@@ -459,14 +459,14 @@ export default function RoleplayLP() {
             price: "0",
             priceCurrency: "JPY",
             name: "無料プラン",
-            description: "1日1回AIロープレ",
+            description: "累計5回まで無料でAIロープレ体験",
           },
           {
             "@type": "Offer",
-            price: "2980",
+            price: "1980",
             priceCurrency: "JPY",
             name: "Proプラン",
-            description: "AIロープレ無制限・リアルタイムコーチング",
+            description: "AIロープレ月60回・リアルタイムコーチング",
           },
         ],
       },
@@ -744,7 +744,7 @@ export default function RoleplayLP() {
               <ul className="space-y-3 text-sm text-muted">
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>
-                  AIロープレ 1日1回
+                  AIロープレ 累計5回まで
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>
@@ -770,13 +770,13 @@ export default function RoleplayLP() {
               </span>
               <p className="mb-1 text-sm font-medium text-muted">Proプラン</p>
               <p className="mb-1 text-3xl font-bold text-foreground">
-                ¥2,980<span className="text-base font-normal text-muted">/月</span>
+                ¥1,980<span className="text-base font-normal text-muted">/月</span>
               </p>
-              <p className="mb-4 text-xs text-muted">1日あたり約99円</p>
+              <p className="mb-4 text-xs text-muted">1回あたり約33円（月60回）</p>
               <ul className="space-y-3 text-sm text-muted">
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>
-                  AIロープレ <strong className="text-foreground">無制限</strong>
+                  AIロープレ <strong className="text-foreground">月60回</strong>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>

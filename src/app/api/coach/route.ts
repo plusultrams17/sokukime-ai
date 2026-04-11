@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { messages, industry, product, customerType, scene, difficulty, productContext, customerContext, lessonFocus } = await request.json();
+  const { messages, industry, product, customerType, scene, difficulty, productContext, customerContext, lessonFocus, scoringFocus } = await request.json();
   try {
     const client = getOpenAIClient();
     if (!client) {
@@ -120,7 +120,8 @@ export async function POST(request: NextRequest) {
 ${personaHint ? `${personaHint}\n` : ""}${isB2B ? `- 取引タイプ: B2B（法人取引）\n※ B2B営業では「同業他社の導入事例」「コスト削減効果」「事業へのインパクト」の訴求が特に有効です` : ""}
 ${productContext ? `\n【商材の詳細情報】\n${productContext}` : ""}
 ${customerContext ? `\n【お客さんのペルソナ詳細】\n${customerContext}` : ""}
-${lessonFocus ? `\n【レッスン別フォーカス】\n以下のレッスンで学んだテクニックに基づいてアドバイスしてください。nextTipとexamplePhraseはこのレッスンのテクニックを優先してください。\n${lessonFocus}` : ""}`;
+${scoringFocus ? `\n【★重要★ このロープレのコーチング重点】\n${scoringFocus}\n\n※ 上記が今回のレッスンで練習している技術です。nextTipとexamplePhraseは、必ずこの重点技術に直結する具体的なアドバイスとフレーズを返してください。汎用的な一般論は避けてください。` : ""}
+${lessonFocus ? `\n【お客さん役の行動指示（参考情報）】\n${lessonFocus}` : ""}`;
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",

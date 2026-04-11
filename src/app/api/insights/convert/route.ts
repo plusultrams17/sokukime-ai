@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Pro plan only
+    // 有料プラン限定（Starter / Pro / Master）
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("plan")
@@ -35,8 +35,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
     }
 
-    if (profile?.plan !== "pro") {
-      return NextResponse.json({ error: "Pro plan required" }, { status: 403 });
+    const isPaid =
+      profile?.plan === "starter" ||
+      profile?.plan === "pro" ||
+      profile?.plan === "master";
+
+    if (!isPaid) {
+      return NextResponse.json(
+        { error: "有料プラン（Starter ¥990〜）へのアップグレードが必要です" },
+        { status: 403 }
+      );
     }
 
     const { insightId, industry, product } = await request.json();

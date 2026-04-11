@@ -26,25 +26,29 @@ export async function GET(request: NextRequest) {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
   const now = new Date();
 
-  // ── User Counts ──
-  const [totalResult, proResult, trialResult, freeResult, canceledResult] = await Promise.all([
+  // ── User Counts (4-tier: Free / Starter ¥990 / Pro ¥1,980 / Master ¥4,980) ──
+  const [totalResult, starterResult, proResult, masterResult, trialResult, freeResult, canceledResult] = await Promise.all([
     supabase.from("profiles").select("id", { count: "exact", head: true }),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("plan", "starter"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("plan", "pro"),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("plan", "master"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("subscription_status", "trialing"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("plan", "free"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("subscription_status", "canceled"),
   ]);
 
   const totalUsers = totalResult.count || 0;
+  const starterUsers = starterResult.count || 0;
   const proUsers = proResult.count || 0;
+  const masterUsers = masterResult.count || 0;
+  const paidUsers = starterUsers + proUsers + masterUsers;
   const trialUsers = trialResult.count || 0;
   const freeUsers = freeResult.count || 0;
   const canceledUsers = canceledResult.count || 0;
 
-  // ── MRR Calculation ──
-  // Monthly Pro: ¥2,980, Annual Pro: ¥29,800/12 = ¥2,483/mo
-  // For simplicity, estimate all Pro as monthly since we don't store billing interval
-  const monthlyMRR = proUsers * 2980;
+  // ── MRR Calculation (4-tier) ──
+  // Starter ¥990 / Pro ¥1,980 / Master ¥4,980 月額。年額は未対応（全て月次想定）
+  const monthlyMRR = starterUsers * 990 + proUsers * 1980 + masterUsers * 4980;
 
   // ── Active Users (last 7 days) ──
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -88,8 +92,8 @@ export async function GET(request: NextRequest) {
     .eq("email_type", "subscription_canceled")
     .gte("created_at", thirtyDaysAgo.toISOString());
 
-  const churnRate = proUsers > 0
-    ? Math.round(((recentCancellations || 0) / (proUsers + (recentCancellations || 0))) * 100)
+  const churnRate = paidUsers > 0
+    ? Math.round(((recentCancellations || 0) / (paidUsers + (recentCancellations || 0))) * 100)
     : 0;
 
   // ── Payment Failure Rate ──
@@ -154,13 +158,16 @@ export async function GET(request: NextRequest) {
 
   // ── Revenue Projections ──
   const annualProjection = monthlyMRR * 12;
-  const revenuePerUser = proUsers > 0 ? Math.round(monthlyMRR / proUsers) : 0;
+  const revenuePerUser = paidUsers > 0 ? Math.round(monthlyMRR / paidUsers) : 0;
 
   return NextResponse.json({
     timestamp: now.toISOString(),
     users: {
       total: totalUsers,
+      starter: starterUsers,
       pro: proUsers,
+      master: masterUsers,
+      paid: paidUsers,
       trial: trialUsers,
       free: freeUsers,
       canceled: canceledUsers,

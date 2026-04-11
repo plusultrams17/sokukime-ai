@@ -361,7 +361,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                       }}
                     >
                       このカテゴリを重点的に練習することで、全体スコアの底上げが期待できます。
-                      無料登録すると毎日1回のロープレで継続的に改善できます。
+                      無料登録すると累計5回までロープレが使えます。本格的に継続練習したい方はProプラン（月額¥1,980・月60回）がおすすめです。
                     </p>
                   </div>
                 );
@@ -386,7 +386,7 @@ function GuestScoreScreen({ score }: { score: ScoreResult }) {
                   marginBottom: "0.6em",
                 }}
               >
-                無料登録で毎日ロープレ練習できます
+                無料登録で累計5回までロープレできます
               </div>
 
               <Link

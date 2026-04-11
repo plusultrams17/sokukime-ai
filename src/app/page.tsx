@@ -53,16 +53,34 @@ export default function Home() {
             priceCurrency: "JPY",
             name: "無料プラン",
             description:
-              "基本3レッスン・業種別トークスクリプト一部・AIロープレ1日1回・成約スコア1カテゴリ",
+              "基本3レッスン・業種別トークスクリプト一部・AIロープレ累計5回まで・成約スコア1カテゴリ",
             availability: "https://schema.org/InStock",
           },
           {
             "@type": "Offer",
-            price: "2980",
+            price: "990",
+            priceCurrency: "JPY",
+            name: "Starterプラン",
+            description:
+              "22レッスン+認定試験・全業種トークスクリプト・AIロープレ月30回・リアルタイムコーチング",
+            availability: "https://schema.org/InStock",
+          },
+          {
+            "@type": "Offer",
+            price: "1980",
             priceCurrency: "JPY",
             name: "Proプラン",
             description:
-              "22レッスン+認定試験・全業種トークスクリプト・AIロープレ無制限・リアルタイムコーチング",
+              "22レッスン+認定試験・全業種トークスクリプト・AIロープレ月60回・リアルタイムコーチング",
+            availability: "https://schema.org/InStock",
+          },
+          {
+            "@type": "Offer",
+            price: "4980",
+            priceCurrency: "JPY",
+            name: "Masterプラン",
+            description:
+              "22レッスン+認定試験・全業種トークスクリプト・AIロープレ月200回・リアルタイムコーチング・優先サポート",
             availability: "https://schema.org/InStock",
           },
         ],

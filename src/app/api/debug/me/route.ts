@@ -92,7 +92,11 @@ export async function GET() {
         profile?.is_tester === true &&
         (!profile?.tester_expires_at ||
           new Date(profile.tester_expires_at) > new Date()),
-      planIsPro: profile?.plan === "pro",
+      planIsPaid:
+        profile?.plan === "starter" ||
+        profile?.plan === "pro" ||
+        profile?.plan === "master",
+      plan: profile?.plan,
       subscriptionStatus: profile?.subscription_status,
       finalTier: status.tier,
       finalPurchased: status.purchased,

@@ -17,8 +17,6 @@ export type CRMEventType =
   | "user.cancellation"
   | "user.payment_failed"
   | "user.payment_recovered"
-  | "user.trial_started"
-  | "user.trial_expired"
   | "user.at_risk"
   | "user.reactivation"
   | "user.program_purchased";

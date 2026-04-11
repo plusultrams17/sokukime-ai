@@ -6,17 +6,22 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { CancelSaveModal } from "@/components/cancel-save-modal";
 
+type PlanLevel = "free" | "starter" | "pro" | "master";
+
 interface UserMenuProps {
-  initialPlan?: "free" | "pro";
+  initialPlan?: PlanLevel;
 }
 
 export function UserMenu({ initialPlan }: UserMenuProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
-  const [plan, setPlan] = useState<"free" | "pro">(initialPlan || "free");
+  const [plan, setPlan] = useState<PlanLevel>(initialPlan || "free");
   const [showCancelModal, setShowCancelModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const isPaid = plan === "starter" || plan === "pro" || plan === "master";
+  const planLabel = plan === "master" ? "Master" : plan === "pro" ? "Pro" : plan === "starter" ? "Starter" : "";
 
   useEffect(() => {
     const supabase = createClient();
@@ -32,7 +37,10 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
         .select("plan")
         .single()
         .then(({ data }) => {
-          if (data?.plan) setPlan(data.plan as "free" | "pro");
+          const raw = data?.plan;
+          if (raw === "starter" || raw === "pro" || raw === "master" || raw === "free") {
+            setPlan(raw);
+          }
         });
     }
   }, [initialPlan]);
@@ -97,9 +105,9 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
         <span className="max-w-[120px] truncate text-xs text-muted">
           {email}
         </span>
-        {plan === "pro" && (
+        {isPaid && (
           <span className="rounded-full bg-accent/10 px-1.5 py-0.5 text-[10px] font-bold text-accent">
-            Pro
+            {planLabel}
           </span>
         )}
         <span className="text-muted text-xs">▼</span>
@@ -110,8 +118,8 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
           <div className="border-b border-card-border px-3 py-2 mb-1">
             <div className="text-xs text-muted truncate">{email}</div>
             <div className="mt-1 text-xs font-medium">
-              {plan === "pro" ? (
-                <span className="text-accent">Pro プラン</span>
+              {isPaid ? (
+                <span className="text-accent">{planLabel} プラン</span>
               ) : (
                 <span className="text-muted">無料プラン</span>
               )}
@@ -161,7 +169,7 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
             更新情報
           </Link>
 
-          {plan === "pro" && (
+          {isPaid && (
             <button
               onClick={() => {
                 setOpen(false);
