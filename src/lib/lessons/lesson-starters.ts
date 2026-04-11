@@ -1,19 +1,23 @@
 /**
  * Lesson-specific roleplay starter messages.
  *
- * By default, /roleplay starts from approach phase (user speaks first).
- * But for lessons that practice mid- or late-stage techniques
- * (e.g. 技法5「価値の上乗せ」 = handling "高い"), waiting until the
- * customer says "高い" wastes turns and diffuses the practice focus.
+ * Every lesson has a pre-populated "opening customer message" so the user
+ * can practice the exact technique taught in the lesson from turn 1 — no
+ * wasted turns getting into position.
  *
- * This map defines an optional "pre-populated customer message" per
- * lesson. When present, the AI customer opens the conversation at a
- * specific stage (e.g. post-presentation objection) so the user can
- * practice the exact technique taught in the lesson from turn 1.
- *
- * Lessons NOT in this map still start from approach (user first).
- * Early-stage lessons (sales-mindset, praise-technique, premise-setting,
- * mehrabian-rule) intentionally keep the approach-phase start.
+ * - Approach-phase lessons (sales-mindset, praise-technique, premise-setting,
+ *   mehrabian-rule): the customer opens with a mild/dismissive greeting that
+ *   sets up the salesperson's first technique (praise, goal-share, etc.)
+ * - Hearing-phase lessons (drawer-phrases, deepening): customer gives a
+ *   shallow "no problem" answer that demands drawer phrases or deeper probing
+ * - Presentation-phase lessons (benefit-method, comparison-if): customer
+ *   asks "what's the point?" or "how does this compare to X?"
+ * - Closing-phase lessons (closing-intro, social-proof, consistency, quotation,
+ *   positive/negative closing, desire-patterns): customer hesitates after
+ *   presentation
+ * - Rebuttal-phase lessons (rebuttal-basics, rebuttal-pattern, purpose-recall,
+ *   third-party, positive-shower, reframe, value-stacking): customer objects
+ *   (高い/検討します/他も見る/疑心暗鬼)
  */
 
 export interface LessonStarter {
@@ -32,6 +36,134 @@ export interface LessonStarter {
 }
 
 export const LESSON_STARTERS: Partial<Record<string, LessonStarter>> = {
+  // ════════════════════════════════════════════════════
+  // BEGINNER (Lessons 1-8) — アプローチ / ヒアリング / プレゼン
+  // ════════════════════════════════════════════════════
+
+  // ── Lesson 1: 営業マインドセット ──
+  // 心が折れやすいシーン（冷たい第一声）で、マインドセットを保てるかを試す
+  "sales-mindset": {
+    openingMessage:
+      "あー、セールスですか？ちょっと今忙しいんで、興味ないです。他当たってください。",
+    contextLabel: "【アプローチ直後】冷たくあしらわれた場面",
+    userHint:
+      "「興味ない」で心折れず、営業マインドセットで自信を持って切り返しましょう。弱気になったら負けです。",
+    initialStep: 1,
+    initialCoachTip:
+      "NG反応：「すみません」と引き下がる／「お時間ありますか？」と弱気。OK反応：明るく笑顔の言葉選びで、「1分だけ」と堂々とお願いする。マインドが「売り込み」ではなく「お客さんの役に立ちに来た」に切り替わっているかが鍵。",
+    initialExamplePhrase:
+      "お忙しいところ本当に申し訳ございません！ただ、今日○○様に絶対にお得な話をお持ちしたので、1分だけ、本当に1分だけお時間いただけませんか？1分でピンと来なければ潔く帰ります！",
+  },
+
+  // ── Lesson 2: 褒める技術 ──
+  // お客さんがニュートラルな応答をする → 営業マンは開口一番で褒められるか
+  "praise-technique": {
+    openingMessage:
+      "はい、どうぞおかけください。今日はどのようなご用件でしょうか？",
+    contextLabel: "【アプローチ】応接室に通された直後の場面",
+    userHint:
+      "いきなり本題ではなく、まず「2度褒め」で心理的安全を確保しましょう。お客さん・会社・場所など、具体的なポイントを褒めます。",
+    initialStep: 1,
+    initialCoachTip:
+      "ありがちなNG：「お時間ありがとうございます、早速ですが商材のご紹介を…」と本題へ急ぐ。OK：まず相手や会社を具体的に褒める＋2度目はもっと具体的に褒める。抽象的な「素敵ですね」では響かないので、1点に絞って深掘り褒めを。",
+    initialExamplePhrase:
+      "ありがとうございます！それにしても、本当に素敵な会社ですね…入り口からオフィスの雰囲気まで、今まで○社お伺いしましたが、ダントツで活気がある空気感です。特にスタッフの皆さんの表情が明るくて、○○様が作られた雰囲気なんでしょうね。",
+  },
+
+  // ── Lesson 3: 先回り（前提設定） ──
+  // 「聞くだけ」とジャブを打たれた状態 → ゴール共有で主導権を取り戻す
+  "premise-setting": {
+    openingMessage:
+      "じゃあ簡単に話聞かせてもらいますね。とりあえず聞くだけですけどね。買う気は正直ないんで、そこは先に言っておきますね。",
+    contextLabel: "【アプローチ後半】「聞くだけ」スタンスを取られた場面",
+    userHint:
+      "「聞くだけ」というフレームを、最初のゴール共有で崩しましょう。「気に入らなかったら断ってOK、気に入ったら始める」で決断の土俵を作ります。",
+    initialStep: 1,
+    initialCoachTip:
+      "「聞くだけ」を受け入れたら、最後に必ず「検討します」で終わります。ゴール共有で「今日この場で気に入るか気に入らないかを決めてほしい」を明確にするのが先回りの本質。笑顔で、押し付けずに、でも言い切ること。",
+    initialExamplePhrase:
+      "ありがとうございます！一つだけお願いがあって——もし今日お話を聞いて「いいな」と思っていただけたらぜひ始めていただきたいですし、逆に「ちょっと違うな」と思われたら全然遠慮なく断ってください。僕も○○様にとって必要なければ無理にお勧めしませんので。そのスタンスで聞いていただいて大丈夫ですか？",
+  },
+
+  // ── Lesson 4: メラビアンの法則 ──
+  // 反応が薄い相手 → 言葉選びとトーンで温度を上げられるか
+  "mehrabian-rule": {
+    openingMessage:
+      "…はい、どうも。ええと、何の話でしたっけ？",
+    contextLabel: "【アプローチ】反応が薄く冷めた空気の場面",
+    userHint:
+      "メラビアンの法則：言葉の内容より「トーン・表情・振る舞い」が伝わる情報の9割以上。テキストでも「短く歯切れ良く・明るく・自信のある言葉選び」で温度を上げましょう。",
+    initialStep: 1,
+    initialCoachTip:
+      "長いダラダラした言葉はNG。短く・区切って・元気よく。語尾は「です」「ます」で言い切り、「〜かなぁと…」「〜かもしれません」のような弱い語尾を完全排除。明るい形容詞（素敵、すごい、嬉しい）を多めに。",
+    initialExamplePhrase:
+      "あ、ありがとうございます！今日は○○様に、本当にお得な話を持ってきました！短く、ポイントだけお伝えしますね。3分だけお時間ください、絶対に後悔させません！",
+  },
+
+  // ── Lesson 5: 引き出しフレーズ ──
+  // ヒアリングで「特に困ってない」と返された場面 → 引き出しフレーズで悩みを引き出す
+  "drawer-phrases": {
+    openingMessage:
+      "いや、今は特に困ってることはないですね。まあ普通にやれてますし、現状で満足してますよ。",
+    contextLabel: "【ヒアリング】「困っていない」と返された場面",
+    userHint:
+      "「困ってない」で諦めず、引き出しフレーズ（例えば／仮に／もし〜だったら）で潜在ニーズを浮き彫りにしましょう。",
+    initialStep: 2,
+    initialCoachTip:
+      "ダメな引き下がり：「そうですか、では失礼します」。引き出しフレーズの型：「例えば○○な場面ってありませんか？」「仮に今より○○になったらどうですか？」「もし○○が解決できるとしたら嬉しいですか？」の3パターンを使い分け。",
+    initialExamplePhrase:
+      "そうでございますか、今は順調なんですね！それは何よりです。ただ一つだけ聞かせていただきたくて——例えばですが、今より○○がラクになったら嬉しいなとか、もし○○の時間が減らせたら他のことに回せるなとか、そういう「理想」ってありますか？",
+  },
+
+  // ── Lesson 6: 深掘りの技術 ──
+  // 表面的な答えを返された場面 → 具体化＋いつからで深掘り
+  "deepening": {
+    openingMessage:
+      "まあ、強いて言えば最近ちょっと忙しいくらいですかね。でも普通ですよ、どこも同じだと思いますし。",
+    contextLabel: "【ヒアリング】表面的な答えで流された場面",
+    userHint:
+      "「具体的には？」「いつから？」「それによって何が困ってる？」で深掘りし、本当の課題を引き出しましょう。",
+    initialStep: 2,
+    initialCoachTip:
+      "深掘りの3段階：①具体化（どんな風に忙しい？）→ ②時期（いつから？きっかけは？）→ ③影響（それによって何が犠牲になってる？）。1回の質問で終わらず、答えが出たら必ずもう一段掘る。",
+    initialExamplePhrase:
+      "ありがとうございます！最近お忙しいとのことですが、具体的にはどんな部分が一番お忙しいですか？それっていつ頃からでしょう？——なるほど、それによって例えば家族との時間とか、趣味の時間って減ってしまったりしてないですか？",
+  },
+
+  // ── Lesson 7: 利点話法（ベネフィット変換） ──
+  // 「で、何がいいの？」と聞かれた場面 → SP→ベネフィットで答える
+  "benefit-method": {
+    openingMessage:
+      "うーん、話はわかったんですけど…結局、これの何がいいんですか？他の商品と何が違うんでしょう？",
+    contextLabel: "【プレゼン中盤】「何がいいの？」と聞かれた場面",
+    userHint:
+      "SP（商品の特徴）だけで答えず、必ず「SP → だから → ベネフィット（お客さんにとっての価値）」の型で答えましょう。",
+    initialStep: 3,
+    initialCoachTip:
+      "NG：「この商品は○○機能があります」で止まる（特徴だけ）。OK：「○○機能があります、だから○○様にとっては○○の時間が減って、結果的に○○が手に入るんです」とベネフィットまで繋げる。自分語りではなくお客さん主語で。",
+    initialExamplePhrase:
+      "ありがとうございます、すごくいい質問です！この商品の一番の特徴は○○なんです。だから何がいいかというと——○○様にとって、今まで○○に使っていた時間が半分になって、その分を家族や自分の時間に使えるようになるんです。単なる機能じゃなくて、○○様の生活そのものが変わります。",
+  },
+
+  // ── Lesson 8: 比較話法・IF活用 ──
+  // 他社比較をされた場面 → 比較話法＋IFで差別化
+  "comparison-if": {
+    openingMessage:
+      "他の会社の商品とどう違うんですか？正直、他社のほうが安いところもあるって聞いたんですけど。",
+    contextLabel: "【プレゼン〜クロージング手前】他社比較を持ち出された場面",
+    userHint:
+      "比較話法で「安い商品との違い」を明確化し、IF話法で「もし安い方を選んだらどうなるか」を想像させましょう。",
+    initialStep: 3,
+    initialCoachTip:
+      "NG：他社を直接けなす。OK：比較軸を変える（「価格だけで見れば確かに安いです。ただ○○の観点だとどうでしょう？」）＋IF話法で失敗シナリオを想像させる（「もし3年後○○になったら？」）。",
+    initialExamplePhrase:
+      "いい質問ありがとうございます！確かに価格だけで見れば他社さんの方が安いところもあります。ただ一つだけ想像してみてほしくて——もし3年後、安いのを選んで○○のトラブルが起きたらどう感じますか？うちの商品は○○な点で、長期で見ると結果的にお得になるんです。",
+  },
+
+  // ════════════════════════════════════════════════════
+  // ADVANCED (Lesson 22) — 反論処理
+  // ════════════════════════════════════════════════════
+
   // ── Lesson 22: 技法5 価値の上乗せ ──
   // 「高い」反論への対応を直接練習できるよう、プレゼン終了直後に
   // お客さんが「高い」と言う状態からスタートする。
