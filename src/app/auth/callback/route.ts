@@ -95,20 +95,24 @@ export async function GET(request: NextRequest) {
             }
           }
 
-          // Activate reverse trial — 7-day free Pro access
-          // Use upsert to handle race condition where profile row may not exist yet
+          // Reverse trial removed — first-time users start on the Free plan.
+          // Pro access is granted only via Stripe checkout (7-day Stripe trial)
+          // or campaign codes redeemed on /activate.
+          // We still upsert the profile row (without plan/trial_ends_at) so
+          // that the "first-time" detection via trial_ends_at above remains
+          // reliable on subsequent logins: we mark trial_ends_at with a
+          // sentinel past timestamp to flip isFirstTime to false next time.
           if (supabaseUrl && supabaseServiceKey) {
             try {
               const admin = createAdminClient(supabaseUrl, supabaseServiceKey);
-              const trialEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
               await admin.from("profiles").upsert({
                 id: user.id,
                 ...(user.email ? { email: user.email } : {}),
-                plan: "pro",
-                trial_ends_at: trialEnd,
+                plan: "free",
+                trial_ends_at: new Date(0).toISOString(),
               }, { onConflict: "id" });
             } catch (err) {
-              console.error("[auth/callback] Reverse trial activation failed:", err);
+              console.error("[auth/callback] First-time profile upsert failed:", err);
             }
           }
 

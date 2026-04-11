@@ -225,9 +225,9 @@ function ActivateForm() {
             <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 text-3xl">
               🎟️
             </div>
-            <h1 className="mb-2 text-2xl font-bold">テスター招待コード</h1>
+            <h1 className="mb-2 text-2xl font-bold">キャンペーンコード</h1>
             <p className="text-sm text-muted">
-              コードを使って、Pro機能をテスト利用できます
+              コードを入力して、Proプランの全機能を期間限定で解放できます
             </p>
           </div>
 
@@ -241,7 +241,7 @@ function ActivateForm() {
             <div className="space-y-5">
               {codeInfo ? (
                 <div className="rounded-xl border border-accent/30 bg-accent/5 px-4 py-3">
-                  <p className="text-xs text-muted">招待コード</p>
+                  <p className="text-xs text-muted">キャンペーンコード</p>
                   <p className="text-lg font-bold text-accent">{codeInfo.code}</p>
                   <p className="mt-1 text-xs text-foreground">
                     {codeInfo.description}
@@ -256,13 +256,13 @@ function ActivateForm() {
               ) : (
                 <div>
                   <label className="mb-2 block text-xs font-medium text-muted">
-                    招待コード
+                    キャンペーンコード
                   </label>
                   <input
                     type="text"
                     value={codeInput}
                     onChange={(e) => setCodeInput(e.target.value)}
-                    placeholder="例: TESTER14"
+                    placeholder="例: TRIAL14DAY"
                     className="h-12 w-full rounded-xl border border-card-border bg-background px-4 text-base font-bold uppercase tracking-wider text-foreground focus:border-accent focus:outline-none"
                   />
                 </div>
@@ -275,7 +275,7 @@ function ActivateForm() {
               )}
 
               <p className="text-center text-sm text-muted">
-                コードを使うには、まずGoogleログインが必要です
+                キャンペーンコードを使うには、まずGoogleログインが必要です
               </p>
 
               <button
@@ -313,7 +313,7 @@ function ActivateForm() {
             <div className="space-y-5">
               {codeInfo ? (
                 <div className="rounded-xl border border-accent/30 bg-accent/5 px-4 py-3">
-                  <p className="text-xs text-muted">招待コード</p>
+                  <p className="text-xs text-muted">キャンペーンコード</p>
                   <p className="text-lg font-bold text-accent">{codeInfo.code}</p>
                   <p className="mt-1 text-xs text-foreground">
                     {codeInfo.description}
@@ -328,7 +328,7 @@ function ActivateForm() {
               ) : (
                 <div>
                   <label className="mb-2 block text-xs font-medium text-muted">
-                    招待コード
+                    キャンペーンコード
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -337,7 +337,7 @@ function ActivateForm() {
                       onChange={(e) =>
                         setCodeInput(e.target.value.toUpperCase())
                       }
-                      placeholder="例: TESTER14"
+                      placeholder="例: TRIAL14DAY"
                       className="h-12 flex-1 rounded-xl border border-card-border bg-background px-4 text-base font-bold uppercase tracking-wider text-foreground focus:border-accent focus:outline-none"
                     />
                     <button
@@ -361,7 +361,7 @@ function ActivateForm() {
                 disabled={!codeInfo}
                 className="h-12 w-full rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-50"
               >
-                Pro機能を有効化する
+                Proプランを有効化する
               </button>
 
               {!codeInfo && (
@@ -388,7 +388,7 @@ function ActivateForm() {
                 <h2 className="mb-2 text-xl font-bold text-green-500">
                   {status === "already"
                     ? "既に有効化済みです"
-                    : "Pro機能が有効化されました！"}
+                    : "Proプランが有効化されました！"}
                 </h2>
                 <p className="text-sm text-muted">
                   {codeInfo?.description || ""}

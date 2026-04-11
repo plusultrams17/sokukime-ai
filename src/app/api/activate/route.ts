@@ -136,8 +136,13 @@ export async function POST(request: NextRequest) {
         : null;
 
     // 4. Update profile (set tester flag + Pro)
-    // Clear trial_ends_at so the cron's reverse-trial-expiry job doesn't
-    // downgrade testers when their original 7-day reverse trial would have ended.
+    //
+    // We set `trial_ends_at = expiresAt` (not null) so that the reverse-trial
+    // expiry cron in src/app/api/cron/emails/route.ts automatically downgrades
+    // plan='pro' → 'free' when the campaign/tester code expires. This prevents
+    // the plan='pro' residue from granting permanent Pro access after the code
+    // has lapsed. For infinite-duration codes (duration_days=null), expiresAt
+    // is null and the cron correctly leaves the profile untouched.
     //
     // NOTE: `tester_access_tier` column is NOT written here because it doesn't
     // exist in the current DB schema. All active testers get full access via
@@ -151,7 +156,7 @@ export async function POST(request: NextRequest) {
         tester_code: code,
         plan: "pro",
         subscription_status: "active",
-        trial_ends_at: null,
+        trial_ends_at: expiresAt,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);
@@ -190,7 +195,7 @@ export async function POST(request: NextRequest) {
       description: codeRow.description,
       expiresAt,
       durationDays: codeRow.duration_days,
-      accessTier,
+      accessTier: codeRow.access_tier || "full",
     });
   } catch (error) {
     console.error("[activate] unexpected error:", error);
