@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { SalesTriviaCard } from "@/components/sales-trivia-card";
+import { RadarChart } from "@/components/radar-chart";
 import { getGradeInfo } from "@/lib/grade";
+import { getAllLessons } from "@/lib/lessons";
 
 interface DashboardData {
   totalSessions: number;
@@ -16,9 +18,26 @@ interface DashboardData {
   scoreTrend: number;
   firstScore: number | null;
   weakestCategory: { name: string; score: number } | null;
+  latestCategories: { name: string; score: number }[];
   history: { score: number; date: string; difficulty: string }[];
   plan: "free" | "starter" | "pro" | "master";
   streak: number;
+}
+
+interface ExamResultEntry {
+  date: string;
+  score: number;
+  total: number;
+  passed: boolean;
+  durationMs?: number;
+}
+
+interface LearnProgress {
+  completedLessons: string[];
+  quizScores: Record<string, number>;
+  examResults?: ExamResultEntry[];
+  certified?: boolean;
+  certifiedDate?: string;
 }
 
 function getScoreColor(score: number) {
@@ -231,6 +250,9 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [learnProgress, setLearnProgress] = useState<LearnProgress | null>(null);
+
+  const totalLessons = useMemo(() => getAllLessons().length, []);
 
   useEffect(() => {
     async function loadDashboard() {
@@ -250,6 +272,18 @@ export default function DashboardPage() {
       }
     }
     loadDashboard();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = localStorage.getItem("seiyaku-learn-progress");
+      setLearnProgress(
+        raw ? JSON.parse(raw) : { completedLessons: [], quizScores: {} }
+      );
+    } catch {
+      setLearnProgress({ completedLessons: [], quizScores: {} });
+    }
   }, []);
 
   if (loading) {
@@ -461,6 +495,193 @@ export default function DashboardPage() {
           </div>
         )}
 
+        {/* Lesson Progress Card — 学習進捗 */}
+        {learnProgress && (() => {
+          const completedCount = learnProgress.completedLessons.length;
+          const completionPct = Math.round((completedCount / totalLessons) * 100);
+          const quizValues = Object.values(learnProgress.quizScores);
+          const quizAvg =
+            quizValues.length > 0
+              ? Math.round(
+                  (quizValues.reduce((a, b) => a + b, 0) / quizValues.length) * 10
+                ) / 10
+              : null;
+          const examEligible = completedCount >= totalLessons;
+          const remaining = Math.max(totalLessons - completedCount, 0);
+          return (
+            <div className="mb-6 rounded-xl border border-card-border bg-card p-5">
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className="text-sm font-medium text-muted">レッスン学習進捗</h2>
+                <span className="text-xs font-bold text-accent">
+                  {completedCount} / {totalLessons}
+                </span>
+              </div>
+              <div className="mb-3 h-2 overflow-hidden rounded-full bg-card-border">
+                <div
+                  className="h-full rounded-full bg-accent transition-all duration-700"
+                  style={{ width: `${completionPct}%` }}
+                />
+              </div>
+              <div className="mb-4 grid grid-cols-2 gap-3">
+                <div>
+                  <div className="text-[11px] text-muted mb-0.5">完了率</div>
+                  <div className="text-lg font-bold">{completionPct}%</div>
+                </div>
+                <div>
+                  <div className="text-[11px] text-muted mb-0.5">クイズ平均</div>
+                  <div className={`text-lg font-bold ${quizAvg !== null ? getScoreColor(quizAvg) : ""}`}>
+                    {quizAvg !== null ? `${quizAvg}点` : "—"}
+                  </div>
+                </div>
+              </div>
+              <div
+                className={`mb-4 flex items-center justify-between rounded-lg border px-3 py-2 ${
+                  examEligible
+                    ? "border-accent/40 bg-accent/5"
+                    : "border-card-border bg-background/40"
+                }`}
+              >
+                <span className="text-xs font-medium">
+                  {examEligible ? "認定試験 受験可能" : `認定試験まで残り ${remaining} レッスン`}
+                </span>
+                <span
+                  className={`text-[11px] font-bold ${
+                    examEligible ? "text-accent" : "text-muted"
+                  }`}
+                >
+                  {examEligible ? "OK" : "未達成"}
+                </span>
+              </div>
+              <Link
+                href="/learn"
+                className="inline-flex h-9 items-center justify-center rounded-lg border border-card-border px-4 text-xs font-medium text-muted transition hover:text-foreground"
+              >
+                {completedCount === 0 ? "レッスンを始める" : "レッスンを続ける"}
+              </Link>
+            </div>
+          );
+        })()}
+
+        {/* Exam Card — 認定試験 */}
+        {learnProgress && (() => {
+          const examResults = learnProgress.examResults ?? [];
+          const attempts = examResults.length;
+          const passedCount = examResults.filter((r) => r.passed).length;
+          const latest = examResults[0] ?? null;
+          const bestResult =
+            examResults.length > 0
+              ? examResults.reduce((best, r) =>
+                  r.score / r.total > best.score / best.total ? r : best
+                )
+              : null;
+          const isCertified = learnProgress.certified === true;
+
+          return (
+            <div
+              className={`mb-6 rounded-xl border p-5 ${
+                isCertified
+                  ? "border-accent/40 bg-accent/5"
+                  : "border-card-border bg-card"
+              }`}
+            >
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className={`text-sm font-medium ${isCertified ? "text-accent" : "text-muted"}`}>
+                  認定試験
+                </h2>
+                {isCertified && (
+                  <span className="rounded-full border border-accent/40 bg-accent/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent">
+                    Certified
+                  </span>
+                )}
+              </div>
+
+              {attempts === 0 ? (
+                <>
+                  <div className="mb-1 text-base font-bold">まだ受験していません</div>
+                  <p className="mb-4 text-xs text-muted leading-relaxed">
+                    全{totalLessons}レッスンを完了すると、成約メソッド認定試験を受験できます。
+                  </p>
+                  <Link
+                    href="/learn/exam"
+                    className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
+                  >
+                    試験ページへ
+                  </Link>
+                </>
+              ) : (
+                <>
+                  {isCertified ? (
+                    <div className="mb-4">
+                      <div className="mb-1 text-base font-bold text-foreground">
+                        成約メソッド認定 取得済み
+                      </div>
+                      {learnProgress.certifiedDate && (
+                        <div className="text-[11px] text-muted">
+                          合格日:{" "}
+                          {new Date(learnProgress.certifiedDate).toLocaleDateString("ja-JP")}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="mb-4">
+                      <div className="mb-1 text-base font-bold text-foreground">
+                        もう一息で合格
+                      </div>
+                      <div className="text-[11px] text-muted">
+                        合格ライン 80% — 再挑戦で認定を目指しましょう
+                      </div>
+                    </div>
+                  )}
+
+                  {latest && (
+                    <div className="mb-4 rounded-lg border border-card-border bg-background/40 px-3 py-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-muted">最新結果</span>
+                        <span
+                          className={`text-xs font-bold ${
+                            latest.passed ? "text-green-400" : "text-red-400"
+                          }`}
+                        >
+                          {latest.score}/{latest.total}（
+                          {Math.round((latest.score / latest.total) * 100)}%）
+                          {latest.passed ? " 合格" : " 不合格"}
+                        </span>
+                      </div>
+                      <div className="mt-0.5 text-[10px] text-muted">
+                        {new Date(latest.date).toLocaleDateString("ja-JP")}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mb-4 grid grid-cols-3 gap-2 text-center">
+                    <div className="rounded-lg border border-card-border bg-background/40 py-2">
+                      <div className="text-[10px] text-muted mb-0.5">受験回数</div>
+                      <div className="text-sm font-bold">{attempts}回</div>
+                    </div>
+                    <div className="rounded-lg border border-card-border bg-background/40 py-2">
+                      <div className="text-[10px] text-muted mb-0.5">最高</div>
+                      <div className="text-sm font-bold">
+                        {bestResult ? `${bestResult.score}/${bestResult.total}` : "—"}
+                      </div>
+                    </div>
+                    <div className="rounded-lg border border-card-border bg-background/40 py-2">
+                      <div className="text-[10px] text-muted mb-0.5">合格</div>
+                      <div className="text-sm font-bold">{passedCount}回</div>
+                    </div>
+                  </div>
+
+                  <Link
+                    href="/learn/exam"
+                    className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
+                  >
+                    {isCertified ? "試験ページへ" : "もう一度挑戦する"}
+                  </Link>
+                </>
+              )}
+            </div>
+          );
+        })()}
+
         {/* Score History Chart — compact */}
         {hasScores && data.history.length > 1 && (
           <div className="mb-6 rounded-xl border border-card-border bg-card p-5">
@@ -469,15 +690,25 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Weakest Category — actionable recommendation */}
+        {/* Category Scores — radar chart + weakest category CTA */}
         {hasScores && data.weakestCategory && (
           <div className="mb-6 rounded-xl border border-accent/20 bg-accent/5 p-5">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-sm font-medium text-accent">改善ポイント</h2>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-sm font-medium text-accent">カテゴリ別スコア</h2>
               <span className={`text-sm font-bold ${getScoreColor(data.weakestCategory.score)}`}>
-                {data.weakestCategory.score}点
+                最弱 {data.weakestCategory.score}点
               </span>
             </div>
+
+            {data.latestCategories.length > 0 && (
+              <div className="mb-4 flex justify-center">
+                <div className="w-full max-w-[260px]">
+                  <RadarChart categories={data.latestCategories} size={240} />
+                </div>
+              </div>
+            )}
+
+            <div className="mb-2 text-[11px] uppercase tracking-wider text-accent">弱点</div>
             <div className="mb-2 text-base font-bold">{data.weakestCategory.name}</div>
             <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-card-border">
               <div

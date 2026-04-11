@@ -54,10 +54,12 @@ export async function GET() {
 
     // Calculate weakest category from latest score
     let weakestCategory: { name: string; score: number } | null = null;
+    let latestCategories: { name: string; score: number }[] = [];
     if (scoreList.length > 0 && scoreList[0].category_scores) {
       const cats = scoreList[0].category_scores as { name: string; score: number }[];
       if (cats.length > 0) {
         weakestCategory = cats.reduce((min, c) => c.score < min.score ? c : min, cats[0]);
+        latestCategories = cats;
       }
     }
 
@@ -83,6 +85,7 @@ export async function GET() {
       scoreTrend,
       firstScore,
       weakestCategory,
+      latestCategories,
       history,
       plan,
       streak,
