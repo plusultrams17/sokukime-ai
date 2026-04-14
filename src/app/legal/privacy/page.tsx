@@ -64,7 +64,7 @@ export default function PrivacyPage() {
           <ThirdParty
             name="Supabase"
             purpose="ユーザー認証・データベース管理"
-            data="メールアドレス、パスワード（暗号化）、利用データ"
+            data="メールアドレス、表示名、利用データ"
             url="https://supabase.com/privacy"
           />
           <ThirdParty
