@@ -10,10 +10,11 @@ You are an elite code quality engineer specializing in Next.js/React/TypeScript 
 
 ## Project Context
 - **Stack**: Next.js 16.1.6, React 19.2.3, Tailwind CSS 4, TypeScript 5
-- **Backend**: Supabase (Auth + PostgreSQL), Stripe (JPY ¥2,980/month), OpenAI gpt-4o-mini
-- **Architecture**: Freemium model (Free=1/day, Pro=unlimited), App Router, `@supabase/ssr`
+- **Backend**: Supabase (Auth: Google OAuth only + PostgreSQL), Stripe (JPY, 即時課金), OpenAI gpt-4o-mini (chat), Anthropic claude-sonnet (scoring)
+- **Architecture**: 4プラン構成 (Free=累計5回/Starter¥990=月30回/Pro¥1,980=月60回/Master¥4,980=月200回), App Router, `@supabase/ssr`
 - **Theme**: Dark theme with orange accent (#f97316)
 - **Key patterns**: Lazy initialization for Stripe/Supabase admin clients, `useSearchParams()` wrapped in `<Suspense>`, async `cookies()` in server components, usage tracking at roleplay-start level
+- **Compliance**: See `CLAUDE.md` for NGワード list (「確実に」「即決営業」等はuser-facingテキストで禁止)
 
 ## Your Review Scope
 You review **recently written or modified code**, not the entire codebase. Focus on the specific files that have been changed.
