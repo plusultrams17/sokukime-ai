@@ -25,8 +25,8 @@ export interface PlanDefinition {
   tagline: string;
   price: number; // 月額 (税込)
   monthlyCredits: number | null; // null = 累計のみ (Free)
-  baseCredits: number | null; // 通常時のクレジット数 (キャンペーン適用前)
-  bonusPercent: number; // 「今だけお得！」の増量率 (%)
+  baseCredits: number | null; // 累計上限 (Free) / 月額クレジット数 (有料)
+  bonusPercent: number; // 将来のキャンペーン用 (現在は全プラン0)
   recommended: boolean;
   ctaLabel: string;
   features: string[];
@@ -59,9 +59,9 @@ export const PLANS: PlanDefinition[] = [
     name: "スタータープラン",
     tagline: "個人営業マン向け",
     price: 990,
-    monthlyCredits: 30, // 通常20 + 50%
-    baseCredits: 20,
-    bonusPercent: 50,
+    monthlyCredits: 30,
+    baseCredits: 30,
+    bonusPercent: 0,
     recommended: false,
     ctaLabel: "申し込む",
     envKey: "STRIPE_STARTER_PRICE_ID",
@@ -79,9 +79,9 @@ export const PLANS: PlanDefinition[] = [
     name: "プロプラン",
     tagline: "本格的に営業力を伸ばしたい方向け",
     price: 1980,
-    monthlyCredits: 60, // 通常40 + 50%
-    baseCredits: 40,
-    bonusPercent: 50,
+    monthlyCredits: 60,
+    baseCredits: 60,
+    bonusPercent: 0,
     recommended: true,
     ctaLabel: "申し込む",
     envKey: "STRIPE_PRO_PRICE_ID",
@@ -99,9 +99,9 @@ export const PLANS: PlanDefinition[] = [
     name: "マスタープラン",
     tagline: "トップセールス・営業マネージャー向け",
     price: 4980,
-    monthlyCredits: 200, // 通常100 + 100%
-    baseCredits: 100,
-    bonusPercent: 100,
+    monthlyCredits: 200,
+    baseCredits: 200,
+    bonusPercent: 0,
     recommended: false,
     ctaLabel: "申し込む",
     envKey: "STRIPE_MASTER_PRICE_ID",

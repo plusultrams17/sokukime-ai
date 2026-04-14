@@ -197,15 +197,6 @@ export default function PricingPage() {
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-20">
         {/* Pricing Section Title */}
         <div className="mb-10 text-center">
-          {/* Limited-time promotion badge */}
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 text-xs font-bold text-accent sm:text-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
-            </span>
-            期間限定 ・ 全有料プラン +50%以上 回数増量中
-          </div>
-
           <h1 className="mb-3 text-2xl font-bold sm:text-3xl md:text-4xl">
             料金プラン
           </h1>
@@ -253,7 +244,7 @@ export default function PricingPage() {
               >
                 {isRecommended && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#d7000e] px-5 py-1.5 text-xs font-bold text-white shadow-lg shadow-[#d7000e]/40 sm:text-sm">
-                    <span className="mr-1">★</span>人気No.1
+                    <span className="mr-1">★</span>おすすめ
                   </div>
                 )}
 
@@ -277,32 +268,10 @@ export default function PricingPage() {
                   </p>
                 </div>
 
-                {/* Credits / 「今だけお得！」 banner */}
-                {!isFree && plan.baseCredits !== null && plan.monthlyCredits !== null && (
-                  <div className="relative mb-5 overflow-hidden rounded-xl border-2 border-accent/50 bg-gradient-to-br from-accent/15 to-accent/5 px-3 py-4 text-center">
-                    {/* +% ribbon top-right */}
-                    <div className="absolute -right-8 top-2 rotate-45 bg-accent px-8 py-0.5 text-[10px] font-bold text-white shadow-md">
-                      +{plan.bonusPercent}%
-                    </div>
-
-                    <p className="text-[11px] font-bold tracking-wider text-accent">
-                      ⚡ 今だけお得！
-                    </p>
-
-                    <div className="mt-2 flex items-center justify-center gap-2">
-                      <span className="text-xs text-muted line-through decoration-2">
-                        月{plan.baseCredits}回
-                      </span>
-                      <svg
-                        className="h-3 w-3 text-accent"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={3}
-                        aria-hidden="true"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
+                {/* Credits display */}
+                {!isFree && plan.monthlyCredits !== null && (
+                  <div className="mb-5 rounded-xl border border-card-border bg-background/40 px-3 py-4 text-center">
+                    <div className="flex items-center justify-center gap-1">
                       <span className="text-2xl font-bold leading-none text-accent">
                         {plan.monthlyCredits}
                       </span>
@@ -492,7 +461,7 @@ export default function PricingPage() {
               コストで比べると
             </h2>
             <p className="mt-2 text-sm text-muted">
-              同じ成果を、<span className="font-bold text-accent">1/25以下のコスト</span>で
+              ※ 各サービスの提供内容・効果は異なります。価格は一般的な市場相場の目安です
             </p>
           </div>
           <div className="space-y-3">
@@ -507,7 +476,7 @@ export default function PricingPage() {
               >
                 {item.highlight && (
                   <div className="absolute right-0 top-0 rounded-bl-xl bg-accent px-3 py-1 text-[10px] font-bold text-white">
-                    ★ ベストバリュー
+                    ★ おすすめ
                   </div>
                 )}
                 {item.image && (
@@ -534,7 +503,7 @@ export default function PricingPage() {
             ))}
           </div>
           <p className="mt-3 text-center text-xs text-muted">
-            ※ 一般的な市場価格の参考値です
+            ※ 各サービスの提供内容・効果は異なります。価格は一般的な市場相場の目安です
           </p>
         </div>
 
@@ -571,7 +540,7 @@ export default function PricingPage() {
           <div className="mt-16">
             <div className="mx-auto max-w-2xl rounded-2xl border-2 border-[#d7000e]/40 bg-gradient-to-br from-[#d7000e]/10 via-card to-card p-6 text-center shadow-xl shadow-[#d7000e]/10 sm:p-10">
               <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#d7000e] px-3 py-1 text-[10px] font-bold text-white sm:text-xs">
-                <span className="text-base leading-none">★</span> 人気No.1
+                <span className="text-base leading-none">★</span> おすすめ
               </div>
               <h3 className="mb-2 text-xl font-bold text-foreground sm:text-2xl">
                 迷ったらプロプラン

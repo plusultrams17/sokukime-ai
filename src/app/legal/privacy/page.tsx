@@ -10,7 +10,7 @@ export default function PrivacyPage() {
   return (
     <article className="prose-custom">
       <h1 className="mb-8 text-3xl font-bold">プライバシーポリシー</h1>
-      <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月15日</p>
+      <p className="mb-6 text-sm text-muted">最終更新日: 2026年4月14日</p>
 
       <p className="mb-6 text-sm leading-relaxed text-muted">
         成約コーチAI（以下「当サービス」）は、ユーザーの個人情報の保護を重要視しています。
@@ -23,8 +23,7 @@ export default function PrivacyPage() {
           (1) ユーザーが直接提供する情報
         </h3>
         <ul className="list-disc pl-6 space-y-1 mb-4">
-          <li>メールアドレス（アカウント登録時）</li>
-          <li>パスワード（暗号化して保存）</li>
+          <li>Googleアカウント情報（メールアドレス、表示名、プロフィール画像 — Google OAuth認証経由）</li>
           <li>ロープレ中の入力テキスト（営業練習内容）</li>
         </ul>
 
@@ -75,8 +74,14 @@ export default function PrivacyPage() {
             url="https://stripe.com/jp/privacy"
           />
           <ThirdParty
+            name="OpenAI"
+            purpose="AIロープレ（会話生成）・リアルタイムコーチング"
+            data="ロープレ中の会話テキスト（匿名化された状態で送信）"
+            url="https://openai.com/policies/privacy-policy"
+          />
+          <ThirdParty
             name="Anthropic"
-            purpose="AIロープレ・コーチング・スコアリング"
+            purpose="AIスコアリング・インサイト分析・ワークシート生成"
             data="ロープレ中の会話テキスト（匿名化された状態で送信）"
             url="https://www.anthropic.com/privacy"
           />
@@ -159,7 +164,7 @@ export default function PrivacyPage() {
       <Section title="7. セキュリティ対策">
         <ul className="list-disc pl-6 space-y-1">
           <li>SSL/TLS暗号化通信</li>
-          <li>パスワードのハッシュ化保存</li>
+          <li>Google OAuth認証による安全なログイン</li>
           <li>アクセス制御（認証・認可）</li>
           <li>
             決済情報のPCI DSS準拠（Stripe社が管理）

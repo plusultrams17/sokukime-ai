@@ -744,7 +744,7 @@ export const intermediateLessons: Lesson[] = [
 
 <!-- DIAGRAM:ideal-ratio -->
 <h3>ネガティブ80%・ポジティブ20%の配分</h3>
-<p>迷ったら原則<strong>ネガティブを使った方がよい</strong>。即決営業では、<strong>ネガティブ80%、ポジティブ20%の割合</strong>です。</p>
+<p>迷ったら原則<strong>ネガティブを使った方がよい</strong>。成約メソッドでは、<strong>ネガティブ80%、ポジティブ20%の割合</strong>が推奨されています。</p>
 
 <!-- WORKSHEET -->
 `,
@@ -803,7 +803,7 @@ export const intermediateLessons: Lesson[] = [
         ],
         answer: 2,
         explanation:
-          "即決営業では、ネガティブ80%、ポジティブ20%の割合です。迷ったら原則ネガティブを使った方がよいとされています。",
+          "成約メソッドでは、ネガティブ80%、ポジティブ20%の割合が推奨されています。迷ったら原則ネガティブを使った方がよいとされています。",
       },
       {
         question: "ネガティブシングルの流れで「最も伝えたい」要素はどれですか？",

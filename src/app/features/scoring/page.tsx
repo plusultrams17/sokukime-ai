@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 const grades = [
-  { grade: "S", range: "90-100", color: "text-green-400", desc: "成約メソッドマスター。確実に成約できる実力です。" },
+  { grade: "S", range: "90-100", color: "text-green-400", desc: "成約メソッドマスター。トップレベルの営業力です。" },
   { grade: "A", range: "80-89", color: "text-green-400", desc: "高い営業力。あと少しでマスターレベル。" },
   { grade: "B", range: "60-79", color: "text-yellow-400", desc: "基本は身についている。応用力を磨きましょう。" },
   { grade: "C", range: "40-59", color: "text-orange-400", desc: "伸びしろ大。特定のステップを重点練習。" },

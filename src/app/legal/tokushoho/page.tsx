@@ -10,7 +10,7 @@ export default function TokushohoPage() {
   return (
     <article>
       <h1 className="mb-8 text-3xl font-bold">特定商取引法に基づく表記</h1>
-      <p className="mb-8 text-sm text-muted">最終更新日: 2026年4月10日</p>
+      <p className="mb-8 text-sm text-muted">最終更新日: 2026年4月14日</p>
 
       <div className="overflow-hidden rounded-2xl border border-card-border">
         <table className="w-full">
@@ -41,7 +41,9 @@ export default function TokushohoPage() {
               value={
                 <>
                   <div>無料プラン: 0円</div>
-                  <div>Proプラン: 月額2,980円（税込）</div>
+                  <div>スタータープラン: 月額990円（税込）</div>
+                  <div>プロプラン: 月額1,980円（税込）</div>
+                  <div>マスタープラン: 月額4,980円（税込）</div>
                   <div className="text-xs mt-1">※ 価格は予告なく変更される場合があります。</div>
                 </>
               }
@@ -60,7 +62,7 @@ export default function TokushohoPage() {
             />
             <Row
               label="支払い時期"
-              value="Proプランお申込み時に初回課金。以降は毎月自動更新時に課金されます。"
+              value="有料プラン（スターター/プロ/マスター）お申込み時に初回課金。以降は毎月自動更新時に課金されます。"
             />
             <Row
               label="サービス提供時期"
@@ -77,7 +79,7 @@ export default function TokushohoPage() {
                     日割りでの返金は行っておりません。
                   </div>
                   <div className="mt-3">
-                    デジタルコンテンツの性質上、ご購入後の返金は原則として承っておりません。Freeプラン（Googleログインで累計5回まで無料）で十分にAIロープレをお試しいただけますので、内容にご納得いただいたうえでProプランをお申し込みください。
+                    デジタルコンテンツの性質上、ご購入後の返金は原則として承っておりません。Freeプラン（Googleログインで累計5回まで無料）で十分にAIロープレをお試しいただけますので、内容にご納得いただいたうえで有料プランをお申し込みください。
                   </div>
                   <div className="mt-1 text-xs">
                     ※ デジタルコンテンツの性質上、特定商取引法第15条の4に基づくクーリングオフの対象外です。

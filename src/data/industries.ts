@@ -1601,7 +1601,7 @@ export const industries: Industry[] = [
     stats: {
       avgDealCycle: "即日〜1ヶ月",
       commonPainPoint: "フェア来場からの成約率",
-      improvementPotential: "即決クロージングに改善余地",
+      improvementPotential: "クロージングに改善余地",
     },
   },
 

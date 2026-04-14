@@ -10,7 +10,7 @@ export default function TermsPage() {
   return (
     <article className="prose-custom">
       <h1 className="mb-8 text-3xl font-bold">利用規約</h1>
-      <p className="mb-6 text-sm text-muted">最終更新日: 2026年3月15日</p>
+      <p className="mb-6 text-sm text-muted">最終更新日: 2026年4月14日</p>
 
       <p className="mb-6 text-sm leading-relaxed text-muted">
         この利用規約（以下「本規約」）は、成約コーチAI（以下「当サービス」）の利用条件を定めるものです。
@@ -42,10 +42,10 @@ export default function TermsPage() {
       <Section title="第3条（料金・支払い）">
         <ol className="list-decimal pl-6 space-y-2">
           <li>
-            当サービスには無料プランと有料プラン（Proプラン）があります。
+            当サービスには無料プランと有料プラン（スタータープラン・プロプラン・マスタープラン）があります。
           </li>
           <li>
-            Proプランの料金は月額2,980円（税込）です。
+            各有料プランの料金は以下のとおりです。スタータープラン: 月額990円（税込）、プロプラン: 月額1,980円（税込）、マスタープラン: 月額4,980円（税込）。
           </li>
           <li>
             支払いはクレジットカード（Visa、Mastercard、JCB、American Express）による月額自動課金です。
@@ -54,7 +54,7 @@ export default function TermsPage() {
             決済処理にはStripe社のサービスを利用します。
           </li>
           <li>
-            Proプランは月単位の自動更新となり、解約手続きを行うまで自動的に更新されます。
+            有料プランは月単位の自動更新となり、解約手続きを行うまで自動的に更新されます。
           </li>
           <li>
             解約はいつでも可能です。解約後も現在の請求期間の終了までサービスをご利用いただけます。
