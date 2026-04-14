@@ -35,12 +35,7 @@ export async function POST(request: NextRequest) {
         .eq("id", user.id)
         .single();
       const rawPlan = profile?.plan;
-      if (
-        rawPlan === "starter" ||
-        rawPlan === "pro" ||
-        rawPlan === "master" ||
-        profile?.subscription_status === "active"
-      ) {
+      if (rawPlan === "starter" || rawPlan === "pro" || rawPlan === "master") {
         isPaidPlan = true;
       }
     } catch {

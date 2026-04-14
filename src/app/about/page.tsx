@@ -317,7 +317,7 @@ export default function AboutPage() {
             営業力を鍛える、新しい方法を試してみませんか？
           </h2>
           <p className="mb-8 text-sm text-muted">
-            無料で体験できます。登録不要で今すぐお試しください。
+            Googleログインだけで、無料でお試しいただけます。
           </p>
           <Link
             href="/roleplay"

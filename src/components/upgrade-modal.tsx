@@ -126,7 +126,7 @@ export function UpgradeModal({
             <p className="mb-5 text-center text-sm text-muted">
               今つかんだ感覚を、そのまま伸ばしませんか？
               <br />
-              <span className="font-medium text-foreground">Proなら月60回まで練習を続けられます。</span>
+              <span className="font-medium text-foreground">有料プランなら月30〜200回まで練習を続けられます。</span>
             </p>
           </>
         )}
@@ -214,6 +214,12 @@ export function UpgradeModal({
           <div className="text-center text-[11px] text-muted">
             ¥1,980/月 ・ いつでも解約OK ・ 経費精算OK
           </div>
+          <Link
+            href="/pricing"
+            className="text-center text-[11px] text-accent hover:underline"
+          >
+            Starter ¥990/月〜 他プランも見る
+          </Link>
           <button
             onClick={onClose}
             className="text-sm text-muted transition hover:text-foreground"

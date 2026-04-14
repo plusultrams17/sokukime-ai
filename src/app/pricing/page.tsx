@@ -29,7 +29,7 @@ const faqItems = [
   {
     question: "プランの違いは？",
     answer:
-      "無料プランは累計5回まで体験用。スタータープラン（¥990）は月30回まで・全22レッスン利用可能。プロプラン（¥1,980）は月60回まで・AI詳細フィードバック付き。マスタープラン（¥4,980）は月200回まで・24/7専用サポート付きです。",
+      "無料プランは累計5回まで体験用。スタータープラン（¥990）は月30回まで・全22レッスン利用可能。プロプラン（¥1,980）は月60回まで・AI詳細フィードバック付き。マスタープラン（¥4,980）は月200回まで・優先メールサポート付きです。",
   },
   {
     question: "いつでも解約できますか？",
@@ -535,7 +535,7 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* Bottom CTA — 人気No.1のプロプランへ誘導 */}
+        {/* Bottom CTA — おすすめのプロプランへ誘導 */}
         {currentPlan !== "pro" && currentPlan !== "master" && (
           <div className="mt-16">
             <div className="mx-auto max-w-2xl rounded-2xl border-2 border-[#d7000e]/40 bg-gradient-to-br from-[#d7000e]/10 via-card to-card p-6 text-center shadow-xl shadow-[#d7000e]/10 sm:p-10">

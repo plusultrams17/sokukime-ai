@@ -61,7 +61,10 @@ export async function POST(request: NextRequest) {
   const supabaseAdmin = getSupabaseAdmin();
 
   const body = await request.text();
-  const signature = request.headers.get("stripe-signature")!;
+  const signature = request.headers.get("stripe-signature");
+  if (!signature) {
+    return NextResponse.json({ error: "Missing stripe-signature header" }, { status: 400 });
+  }
 
   let event: Stripe.Event;
   try {
@@ -82,7 +85,11 @@ export async function POST(request: NextRequest) {
 
       // ── One-time program purchase ──
       if (session.mode === "payment" && session.metadata?.product_type === "program") {
-        const userId = session.metadata.supabase_user_id;
+        const userId = session.metadata?.supabase_user_id;
+        if (!userId) {
+          console.error("[webhook] CRITICAL: supabase_user_id missing from session metadata", { sessionId: session.id });
+          break;
+        }
         const programSlug = session.metadata.program_slug || "five-step-master";
         const paymentIntentId = session.payment_intent as string;
 

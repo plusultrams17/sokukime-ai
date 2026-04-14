@@ -10,8 +10,8 @@ import { getRecentCronLogs, getLastCronStatus } from "@/lib/cron-logger";
  * GET /api/admin/cron-logs?secret=ADMIN_SECRET&status=true — Get current status summary
  */
 export async function GET(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get("secret");
-  if (!secret || secret !== process.env.ADMIN_SECRET) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader || authHeader !== `Bearer ${process.env.ADMIN_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

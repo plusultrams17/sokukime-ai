@@ -295,7 +295,7 @@ export default function LearnPage() {
             今学んだ技術を、AIロープレで実践しよう
           </h2>
           <p className="text-sm text-muted mb-6">
-            知識だけでは商談は変わりません。AIが本番さながらのお客さん役を演じます。無料・登録不要で今すぐ体験。
+            知識だけでは商談は変わりません。AIが本番さながらのお客さん役を演じます。Googleログイン（無料）で今すぐ体験。
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link

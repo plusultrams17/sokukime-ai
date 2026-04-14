@@ -177,7 +177,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { industry, phase, productInfo, targetInfo } = await request.json();
+    // Rate limit: 5 requests/min (Anthropic API is expensive)
+    const { checkRateLimit } = await import("@/lib/rate-limit");
+    const rl = checkRateLimit(`worksheet-phase:${user.id}`, 5);
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: "リクエストが多すぎます。しばらくお待ちください。" },
+        { status: 429, headers: { "Retry-After": String(Math.ceil(rl.resetMs / 1000)) } }
+      );
+    }
+
+    const rawBody = await request.json();
+
+    // Input length validation
+    const sanitizeStr = (val: unknown, max = 2000): string => {
+      if (typeof val !== "string") return "";
+      return val.slice(0, max);
+    };
+    const sanitizeObj = (val: unknown): Record<string, string> | null => {
+      if (!val || typeof val !== "object") return null;
+      const result: Record<string, string> = {};
+      for (const [k, v] of Object.entries(val as Record<string, unknown>)) {
+        result[k] = typeof v === "string" ? v.slice(0, 500) : "";
+      }
+      return result;
+    };
+    const industry = sanitizeStr(rawBody.industry, 100);
+    const phase = rawBody.phase;
+    const productInfo = sanitizeObj(rawBody.productInfo);
+    const targetInfo = sanitizeObj(rawBody.targetInfo);
 
     if (!industry || phase === undefined || !PHASE_PROMPTS[phase]) {
       return NextResponse.json(

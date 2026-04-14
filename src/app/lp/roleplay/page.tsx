@@ -13,7 +13,7 @@ import { SalesAnalyzer } from "@/components/sales-analyzer";
 export const metadata: Metadata = {
   title: "AI営業分析ツール｜URLを入れるだけで営業トーク・競合分析を自動生成",
   description:
-    "URLまたは商材名を入力するだけでAIがセリングポイント分析・競合分析・成約トークスクリプトを自動生成。営業ロープレ練習アプリ。無料・登録不要で今すぐ使える。",
+    "URLまたは商材名を入力するだけでAIがセリングポイント分析・競合分析・成約トークスクリプトを自動生成。営業ロープレ練習アプリ。Googleログインで無料体験。",
   alternates: { canonical: "/lp/roleplay" },
   openGraph: {
     title: "AI営業分析ツール｜10秒であなたの商材を営業武器に変える",
@@ -733,10 +733,10 @@ export default function RoleplayLP() {
             シンプルな料金プラン
           </h2>
           <p className="mb-12 text-center text-sm text-muted sm:text-base">
-            まずは無料で体験。もっと練習したくなったらProへ。
+            まずは無料で体験。本格利用はStarter ¥990/月〜。
           </p>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {/* Free Plan */}
             <div className="rounded-2xl border border-card-border bg-white p-8">
               <p className="mb-1 text-sm font-medium text-muted">無料プラン</p>
@@ -752,7 +752,7 @@ export default function RoleplayLP() {
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>
-                  登録不要で今すぐ開始
+                  Googleログインで即開始
                 </li>
               </ul>
               <Link
@@ -760,6 +760,35 @@ export default function RoleplayLP() {
                 className="mt-6 flex h-12 w-full items-center justify-center rounded-xl border-2 border-accent text-base font-bold text-accent transition hover:bg-accent hover:text-white"
               >
                 無料で始める
+              </Link>
+            </div>
+
+            {/* Starter Plan */}
+            <div className="rounded-2xl border border-card-border bg-white p-8">
+              <p className="mb-1 text-sm font-medium text-muted">Starterプラン</p>
+              <p className="mb-1 text-3xl font-bold text-foreground">
+                ¥990<span className="text-base font-normal text-muted">/月</span>
+              </p>
+              <p className="mb-4 text-xs text-muted">1回あたり約33円（月30回）</p>
+              <ul className="space-y-3 text-sm text-muted">
+                <li className="flex items-center gap-2">
+                  <span className="text-accent"><CheckIcon /></span>
+                  AIロープレ <strong className="text-foreground">月30回</strong>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-accent"><CheckIcon /></span>
+                  全22レッスン
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-accent"><CheckIcon /></span>
+                  5カテゴリ詳細スコア
+                </li>
+              </ul>
+              <Link
+                href="/pricing"
+                className="mt-6 flex h-12 w-full items-center justify-center rounded-xl border-2 border-accent text-base font-bold text-accent transition hover:bg-accent hover:text-white"
+              >
+                プランを見る
               </Link>
             </div>
 
@@ -780,7 +809,7 @@ export default function RoleplayLP() {
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>
-                  5カテゴリ詳細スコア
+                  全22レッスン
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>

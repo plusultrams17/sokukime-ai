@@ -8,8 +8,8 @@ import { getCRMWebhookLogs } from "@/lib/crm-webhook";
  * GET /api/admin/crm-logs?secret=ADMIN_SECRET — View recent CRM webhook event logs
  */
 export async function GET(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get("secret");
-  if (!secret || secret !== process.env.ADMIN_SECRET) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader || authHeader !== `Bearer ${process.env.ADMIN_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

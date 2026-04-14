@@ -9,7 +9,10 @@ import { checkRateLimit } from "@/lib/rate-limit";
 
 function getClientIP(request: NextRequest): string {
   const xff = request.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
+  if (xff) {
+    const parts = xff.split(",").map(s => s.trim());
+    return parts[parts.length - 1] || "unknown";
+  }
   const real = request.headers.get("x-real-ip");
   if (real) return real.trim();
   return "unknown";

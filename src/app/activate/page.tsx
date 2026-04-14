@@ -30,26 +30,26 @@ const TIER_FEATURES: Record<
   { label: string; items: string[] }
 > = {
   basic: {
-    label: "ベーシックプラン",
+    label: "Starterプラン",
     items: [
-      "AIロープレ無制限",
-      "学習コース: 初級1〜3（3レッスン）",
+      "AIロープレ無制限（テスター特典）",
+      "学習コース: 基本3レッスン",
       "スコア・AI改善アドバイス",
     ],
   },
   intermediate: {
-    label: "プロプラン",
+    label: "Proプラン",
     items: [
-      "AIロープレ無制限",
-      "学習コース: 初級1〜8 + 中級1〜7（15レッスン）",
+      "AIロープレ無制限（テスター特典）",
+      "全22レッスンの学習コース",
       "全5カテゴリの詳細スコア",
       "AI改善アドバイス + テンプレート",
     ],
   },
   full: {
-    label: "プラチナプラン",
+    label: "Masterプラン",
     items: [
-      "AIロープレ無制限",
+      "AIロープレ無制限（テスター特典）",
       "全22レッスンの学習コース（初級・中級・上級）",
       "全5カテゴリの詳細スコア",
       "AI改善アドバイス + テンプレート30パターン",
@@ -227,7 +227,7 @@ function ActivateForm() {
             </div>
             <h1 className="mb-2 text-2xl font-bold">キャンペーンコード</h1>
             <p className="text-sm text-muted">
-              コードを入力して、Proプランの全機能を期間限定で解放できます
+              コードを入力して、有料プランの全機能を解放できます
             </p>
           </div>
 

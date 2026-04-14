@@ -18,8 +18,8 @@ function getSupabase() {
 }
 
 function authorize(request: NextRequest): boolean {
-  const secret = request.nextUrl.searchParams.get("secret");
-  return !!secret && secret === process.env.ADMIN_SECRET;
+  const authHeader = request.headers.get("authorization");
+  return !!authHeader && authHeader === `Bearer ${process.env.ADMIN_SECRET}`;
 }
 
 export async function GET(request: NextRequest) {

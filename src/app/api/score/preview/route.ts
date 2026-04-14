@@ -4,7 +4,8 @@ import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   // IPベースのレート制限（1分あたり5回）
-  const ip = request.headers.get("x-forwarded-for") || "unknown";
+  const xff = request.headers.get("x-forwarded-for");
+  const ip = xff ? xff.split(",").map(s => s.trim()).pop() || "unknown" : "unknown";
   const rl = checkRateLimit(`score-preview:${ip}`, 5);
   if (!rl.success) {
     return NextResponse.json(

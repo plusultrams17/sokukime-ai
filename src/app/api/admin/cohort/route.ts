@@ -3,8 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { getCohortRetention } from "@/lib/kpi-calculation";
 
 export async function GET(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get("secret");
-  if (!secret || secret !== process.env.ADMIN_SECRET) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader || authHeader !== `Bearer ${process.env.ADMIN_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

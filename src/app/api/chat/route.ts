@@ -83,8 +83,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { messages, industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus } =
-      await request.json();
+    const rawBody = await request.json();
+
+    // Input length validation to prevent cost attacks
+    const sanitize = (val: unknown, max = 2000): string => {
+      if (typeof val !== "string") return "";
+      return val.slice(0, max);
+    };
+    const industry = sanitize(rawBody.industry, 100);
+    const product = sanitize(rawBody.product, 200);
+    const difficulty = rawBody.difficulty;
+    const scene = sanitize(rawBody.scene, 100);
+    const customerType = sanitize(rawBody.customerType, 100);
+    const productContext = sanitize(rawBody.productContext);
+    const customerContext = sanitize(rawBody.customerContext);
+    const lessonFocus = sanitize(rawBody.lessonFocus);
+
+    if (!Array.isArray(rawBody.messages) || rawBody.messages.length > 50) {
+      return NextResponse.json({ error: "Invalid messages" }, { status: 400 });
+    }
+    const messages = rawBody.messages.map((m: { role: string; content: string }) => ({
+      role: m.role,
+      content: String(m.content).slice(0, 2000),
+    }));
 
     const client = getOpenAIClient();
     if (!client) {

@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const email = body.email?.trim()?.toLowerCase();
-    if (!email) {
-      return NextResponse.json({ error: "メールアドレスは必須です" }, { status: 400 });
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({ error: "有効なメールアドレスを入力してください" }, { status: 400 });
     }
 
     // Find the user's org where they are owner or admin
