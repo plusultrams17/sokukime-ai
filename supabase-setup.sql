@@ -99,7 +99,8 @@ ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS engagement_score INTEGER DEFAULT 0,
   ADD COLUMN IF NOT EXISTS email_unsubscribed BOOLEAN DEFAULT FALSE,
   ADD COLUMN IF NOT EXISTS email_notifications BOOLEAN DEFAULT TRUE,
-  ADD COLUMN IF NOT EXISTS trial_ends_at TIMESTAMPTZ;
+  ADD COLUMN IF NOT EXISTS trial_ends_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS trial_used_at TIMESTAMPTZ;
 
 -- 解約理由ログ（分析・改善用）
 CREATE TABLE public.cancel_reasons (
@@ -248,6 +249,7 @@ CREATE POLICY "Users read own feedback" ON feedback FOR SELECT USING (auth.uid()
 CREATE TABLE public.beta_signups (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email TEXT NOT NULL UNIQUE,
+  source TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 CREATE INDEX idx_beta_signups_email ON beta_signups(email);
@@ -553,9 +555,21 @@ CREATE TABLE IF NOT EXISTS public.organizations (
   stripe_customer_id TEXT,
   stripe_subscription_id TEXT,
   plan_type TEXT DEFAULT 'team' CHECK (plan_type IN ('team')),
+  team_plan_tier TEXT CHECK (team_plan_tier IN ('team_5', 'team_10', 'team_30', 'team_50')),
   max_members INTEGER DEFAULT 5,
+  trial_ends_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+
+-- B2B チームプラン拡張マイグレーション (既存テーブルがある場合)
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'organizations' AND column_name = 'team_plan_tier') THEN
+    ALTER TABLE public.organizations ADD COLUMN team_plan_tier TEXT CHECK (team_plan_tier IN ('team_5', 'team_10', 'team_30', 'team_50'));
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'organizations' AND column_name = 'trial_ends_at') THEN
+    ALTER TABLE public.organizations ADD COLUMN trial_ends_at TIMESTAMPTZ;
+  END IF;
+END $$;
 
 -- チームメンバー
 CREATE TABLE IF NOT EXISTS public.team_members (
@@ -774,3 +788,22 @@ $$;
 -- 月次クレジット管理のため、usage_records は既存の used_date (DATE) を
 -- そのまま使い、usage.ts 側で「当月初日 JST 以降のレコード数」で
 -- 月次カウントを算出する。新しいカラムは追加不要。
+
+-- =============================================
+-- 2026-04-15: DM営業用テスターコード追加
+-- =============================================
+-- 既存の tester_codes テーブルに新コードを INSERT する。
+-- Supabase SQL Editor で実行してください。
+--
+-- INSERT INTO public.tester_codes (code, description, duration_days, max_uses, current_uses, active, access_tier)
+-- VALUES
+--   ('DM14',        'DM営業用 14日間Pro体験',        14,  100, 0, true, 'full'),
+--   ('COMMUNITY30', 'コミュニティ投稿用 30日間Pro体験', 30,   50, 0, true, 'full'),
+--   ('EVENT7',      'イベント名刺交換用 7日間Pro体験',  7,  200, 0, true, 'full');
+
+-- =============================================
+-- 2026-04-15: リファラルボーナスクレジット用カラム
+-- =============================================
+-- profiles テーブルに bonus_credits カラムを追加。
+-- 紹介報酬としてボーナスロープレ回数を付与するために使う。
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS bonus_credits INTEGER DEFAULT 0;

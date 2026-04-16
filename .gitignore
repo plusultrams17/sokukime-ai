@@ -30,7 +30,15 @@ video/node_modules
 .agent/
 .agents/
 .claude/skills/
+.claude/agent-memory/
 skills-lock.json
+
+# local artifacts
+test-results/
+tests/screenshots/
+manual_*.txt
+video/
+*.drawio
 
 # video project deps
 video/node_modules
