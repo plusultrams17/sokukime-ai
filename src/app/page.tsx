@@ -4,25 +4,38 @@ import { Header } from "@/components/header";
 import { JsonLd } from "@/components/json-ld";
 import { HomepageCTATracker } from "@/components/homepage-cta-tracker";
 import { SalesTriviaPopup } from "@/components/sales-trivia-popup";
+import { UserReviews } from "@/components/user-reviews";
+import { ReferralTracker } from "@/components/referral-tracker";
+import { MiniDiagnosis } from "@/components/mini-diagnosis";
+import { LPHeroAB } from "@/components/lp-hero-ab";
 
 /* ─── Reusable CTA Buttons ─── */
 
+/**
+ * メインCTA: 無料ロープレへ誘導（Freeプラン=累計5回）
+ * Phase 2A改修: `/diagnose` から `/roleplay` に変更し、選択肢のパラドックス回避のため
+ * 体験→診断の順に整理。Heroではこれが主導線。
+ */
 function CTAButton({ className = "" }: { className?: string }) {
   return (
-    <Link href="/diagnose" scroll={true} className={`lp-cta-btn ${className}`}>
-      30秒で営業力を診断する（無料）
+    <Link href="/roleplay" scroll={true} className={`lp-cta-btn ${className}`}>
+      無料で試す（5回まで）
     </Link>
   );
 }
 
+/**
+ * サブCTA: 60秒の簡易診断 → `/diagnosis`
+ * 「まだ試すのは早い」層の受け皿。Heroと最終CTAでのみ併置。
+ */
 function SecondaryCTA({ className = "" }: { className?: string }) {
   return (
     <Link
-      href="/roleplay"
+      href="/diagnosis"
       scroll={true}
       className={`lp-cta-secondary ${className}`}
     >
-      AIロープレをすぐ試す →
+      まず60秒で診断する →
     </Link>
   );
 }
@@ -110,7 +123,7 @@ export default function Home() {
 
       {/* SEO */}
       <h1 className="sr-only">
-        業種別営業学習プログラム — 成約5ステップメソッドで営業の「型」を習得
+        業種別営業学習プログラム — 弱点を可視化し、伸びしろを見つけて営業力を底上げ
       </h1>
       <p className="sr-only">
         成約コーチAIは、営業心理学に基づく「成約5ステップメソッド」を22レッスンで体系的に学べる業種別営業学習プログラムです。アプローチ・ヒアリング・プレゼン・クロージング・反論処理の5ステップを、業種別のトークスクリプトと切り返し話法で実践的に習得。学んだ技術はAIロープレで即実践練習できます。
@@ -148,48 +161,91 @@ export default function Home() {
           style={{ minHeight: "100dvh" }}
         >
           <div className="mx-auto w-full max-w-3xl text-center">
-            {/* Tag line */}
+            {/* Tag line — Phase 2A改修: 狭いセグメント限定表記を撤廃し、
+                3ペルソナ（新人/中堅/経営者）を包含する表現に */}
             <p
               className="mb-4 text-xs font-bold tracking-[0.2em] uppercase sm:mb-5 sm:text-sm"
               style={{ color: "#f97316" }}
             >
-              訪販・保険・不動産 入社1〜3年目の営業パーソン向け
+              個人の練習から、チーム全体の底上げまで
             </p>
 
-            {/* Main heading */}
-            <p
-              className="lp-heading mb-5 leading-[1.3] text-white sm:mb-7"
-              style={{
-                fontSize: "clamp(26px, 6vw, 52px)",
-                textShadow: "0 2px 20px rgba(0,0,0,0.3)",
-              }}
+            {/* Main heading + Sub heading (A/B testable) */}
+            <LPHeroAB />
+
+            {/* Score card preview — Phase 2A改修: S/A/B/C/Dランクの可視化で
+                「何が得られるか」を一目で理解させる（funnel-architect推奨） */}
+            <div
+              className="mx-auto mb-8 max-w-md rounded-xl border border-white/15 bg-white/5 px-4 py-4 backdrop-blur-sm sm:mb-10 sm:px-5 sm:py-5"
+              aria-label="スコアカード プレビュー"
             >
-              あなたの営業力、何点？
-              <br />
-              <span className="lp-highlight-hero">弱点がわかれば、売れる。</span>
-            </p>
-
-            {/* Sub heading */}
-            <p
-              className="mx-auto mb-10 max-w-lg text-sm leading-relaxed sm:mb-12 sm:text-base lg:text-lg"
-              style={{
-                color: "rgba(255,255,255,0.85)",
-                textShadow: "0 1px 8px rgba(0,0,0,0.2)",
-              }}
-            >
-              30秒の診断で弱点を特定。
-              <br />
-              22レッスンで「型」を習得 → AIロープレで実践。
-            </p>
-
-            {/* CTA */}
-            <div className="mb-3 flex flex-col items-center gap-3">
-              <CTAButton className="hero-cta-btn" />
+              <div className="mb-2 flex items-center justify-between text-[10px] tracking-widest uppercase sm:text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
+                <span>成約スコア</span>
+                <span>Sample</span>
+              </div>
+              <div className="flex items-stretch gap-1.5 sm:gap-2">
+                {[
+                  { rank: "S", label: "達人", active: false },
+                  { rank: "A", label: "上級", active: true },
+                  { rank: "B", label: "中級", active: false },
+                  { rank: "C", label: "初級", active: false },
+                  { rank: "D", label: "入門", active: false },
+                ].map((item) => (
+                  <div
+                    key={item.rank}
+                    className="flex-1 rounded-md px-1 py-2 text-center sm:py-2.5"
+                    style={{
+                      background: item.active ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.06)",
+                      borderWidth: item.active ? "1px" : "1px",
+                      borderStyle: "solid",
+                      borderColor: item.active ? "#f97316" : "rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    <div
+                      className="text-base font-extrabold sm:text-lg"
+                      style={{ color: item.active ? "#f97316" : "rgba(255,255,255,0.5)" }}
+                    >
+                      {item.rank}
+                    </div>
+                    <div
+                      className="text-[9px] sm:text-[10px]"
+                      style={{ color: item.active ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.4)" }}
+                    >
+                      {item.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-2.5 text-[10px] leading-relaxed sm:text-xs" style={{ color: "rgba(255,255,255,0.65)" }}>
+                5カテゴリ（アプローチ/ヒアリング/プレゼン/クロージング/反論処理）を
+                <span style={{ color: "#f97316" }}>Sランクまで</span>可視化
+              </p>
             </div>
 
+            {/* CTA — Phase 2A改修: メイン(ロープレ体験) + サブ(診断) の2つに集約 */}
+            <div className="mb-3 flex flex-col items-center gap-3">
+              <CTAButton className="hero-cta-btn" />
+              <SecondaryCTA className="lp-cta-secondary--hero" />
+            </div>
+
+            {/* ペルソナC対応 — 個人〜法人利用への裾野を明示 */}
+            <p
+              className="mt-5 text-xs sm:text-sm"
+              style={{ color: "rgba(255,255,255,0.75)" }}
+            >
+              個人の自主練から、法人・チーム導入まで対応 ／
+              <Link
+                href="/enterprise"
+                className="ml-1 underline underline-offset-2 transition hover:text-white"
+                style={{ color: "#f97316" }}
+              >
+                法人向け詳細
+              </Link>
+            </p>
+
             {/* Trust signals */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
-              {["22レッスン収録", "クレカ不要", "いつでも退会OK"].map((text) => (
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:mt-6 sm:gap-x-6">
+              {["クレカ不要で開始", "Googleログインのみ", "いつでも退会OK"].map((text) => (
                 <span
                   key={text}
                   className="inline-flex items-center gap-1.5 text-xs sm:text-sm"
@@ -328,6 +384,54 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
+          2.6 悩み共感 — 承認格差の文脈
+      ═══════════════════════════════════════════════ */}
+      <section className="border-t border-card-border bg-background py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <p className="lp-heading mb-8 text-center">
+            営業で一番つらいのは、<br className="sm:hidden" /><span className="lp-highlight">給料じゃない</span>
+          </p>
+          <div className="space-y-4">
+            {[
+              {
+                q: "「なんで売れないんだろう」と、自分を責めてしまう",
+                a: "売れない原因が見えないから苦しい。スコアで弱点を可視化すると、努力の方向が定まります。",
+              },
+              {
+                q: "先輩の「普通にやればいいじゃん」が一番キツい",
+                a: "「普通」は人によって違います。22レッスンの型があれば、自分だけの基準で成長を測れます。",
+              },
+              {
+                q: "お客さんに必要とされている実感がない",
+                a: "営業スキルが上がると、お客さんから「あなたに相談してよかった」と言われる瞬間が来ます。",
+              },
+            ].map((item, i) => (
+              <div key={i} className="rounded-xl border border-card-border bg-card p-5">
+                <p className="mb-2 text-sm font-bold text-foreground">{item.q}</p>
+                <p className="text-xs text-muted leading-relaxed">{item.a}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <p className="mb-4 text-xs text-muted">
+              まずは今の営業力を客観的に把握するところから。
+            </p>
+            <CTAButton />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          2.7 ミニ診断1問 — エンゲージメントフック
+      ═══════════════════════════════════════════════ */}
+      <MiniDiagnosis />
+
+      {/* ═══════════════════════════════════════════════
+          2.7 ユーザーレビュー（0件時は自動非表示）
+      ═══════════════════════════════════════════════ */}
+      <UserReviews />
+
+      {/* ═══════════════════════════════════════════════
           3. 最終CTA
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-card-border bg-white">
@@ -375,6 +479,7 @@ export default function Home() {
 
       <HomepageCTATracker />
       <SalesTriviaPopup />
+      <ReferralTracker />
     </div>
   );
 }

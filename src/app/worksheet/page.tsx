@@ -30,6 +30,39 @@ import {
 } from "@/lib/tracking";
 import { loadCompanyContext, hasCompanyContext } from "@/lib/company-context";
 import { loadTargetContext, hasTargetContext } from "@/lib/target-context";
+import { createClient } from "@/lib/supabase/client";
+
+/* ─── Worksheet Paywall Overlay ─────────────────── */
+// Shown on phases 1–4 when the user is on Free plan.
+function WorksheetPaywall() {
+  return (
+    <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[14px]">
+      <div className="text-center px-6">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent, #f97316)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+        </div>
+        <p className="mb-1 text-sm font-bold text-[#1E293B]">
+          残り4フェーズはStarterプラン以上で利用可能
+        </p>
+        <p className="mb-4 text-xs text-[#6B7280]">
+          ヒアリング・プレゼン・クロージング・反論処理のワークシートに加え、AIトークスクリプト生成もフルアクセス
+        </p>
+        <Link
+          href="/pricing"
+          className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-[#ea6d0e]"
+        >
+          プランを見る（月額¥990〜）
+        </Link>
+        <p className="mt-2 text-[11px] text-[#9CA3AF]">
+          いつでも解約OK・違約金なし
+        </p>
+      </div>
+    </div>
+  );
+}
 
 /* ─── Industry presets ──────────────────────────── */
 
@@ -66,6 +99,25 @@ export default function WorksheetPage() {
   const [showWelcome, setShowWelcome] = useState(false);
   const prevPhaseProgress = useRef<number[]>([0, 0, 0, 0, 0]);
   const progressInitialized = useRef(false);
+
+  // Auth + plan state for paywall (null = loading, don't show blur until loaded)
+  const [userPlan, setUserPlan] = useState<string | null>(null);
+  const isPaid = userPlan === "starter" || userPlan === "pro" || userPlan === "master";
+  const showPaywall = userPlan !== null && !isPaid;
+
+  useEffect(() => {
+    const supabase = createClient();
+    if (!supabase) return;
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      fetch("/api/usage")
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.plan) setUserPlan(data.plan);
+        })
+        .catch(() => {});
+    });
+  }, []);
 
   /* Determine welcome state after hydration */
   useEffect(() => {
@@ -388,10 +440,19 @@ export default function WorksheetPage() {
           {/* Phase Content */}
           <div className="relative">
             {activePhase === 0 && <Phase0Approach {...phaseProps} />}
-            {activePhase === 1 && <Phase1Hearing {...phaseProps} />}
-            {activePhase === 2 && <Phase2Presentation {...phaseProps} />}
-            {activePhase === 3 && <Phase3Closing {...phaseProps} />}
-            {activePhase === 4 && <Phase4Objection {...phaseProps} />}
+
+            {/* Phases 1–4: blurred + paywall for Free users */}
+            {activePhase >= 1 && (
+              <div className="relative">
+                <div className={showPaywall ? "pointer-events-none select-none blur-[3px]" : undefined}>
+                  {activePhase === 1 && <Phase1Hearing {...phaseProps} />}
+                  {activePhase === 2 && <Phase2Presentation {...phaseProps} />}
+                  {activePhase === 3 && <Phase3Closing {...phaseProps} />}
+                  {activePhase === 4 && <Phase4Objection {...phaseProps} />}
+                </div>
+                {showPaywall && <WorksheetPaywall />}
+              </div>
+            )}
 
             {/* Phase Completion Celebration */}
             {celebratingPhase === activePhase && celebratingPhase !== null && (
@@ -426,10 +487,10 @@ export default function WorksheetPage() {
           </p>
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link
-              href="/roleplay"
+              href={`/roleplay?from=worksheet${industry ? `&product=${encodeURIComponent(industry)}` : ""}`}
               className="inline-flex h-12 items-center justify-center rounded-xl bg-accent px-8 font-bold text-white transition hover:bg-accent-hover"
             >
-              ロープレを始める
+              {industry ? `${industry}のロープレを始める` : "ロープレを始める"}
             </Link>
             <Link
               href="/features"

@@ -98,6 +98,7 @@ export async function POST(request: NextRequest) {
     const productContext = sanitize(rawBody.productContext);
     const customerContext = sanitize(rawBody.customerContext);
     const lessonFocus = sanitize(rawBody.lessonFocus);
+    const bossPromptExtra = sanitize(rawBody.bossPromptExtra, 3000);
 
     if (!Array.isArray(rawBody.messages) || rawBody.messages.length > 50) {
       return NextResponse.json({ error: "Invalid messages" }, { status: 400 });
@@ -146,11 +147,12 @@ export async function POST(request: NextRequest) {
     const productInfo = productContext ? `\n\n## 営業マンの商材の詳細情報\n${productContext}` : "";
     const customerInfo = customerContext ? `\n\n## お客さんのペルソナ詳細\n以下の情報を踏まえてお客さんを演じてください:\n${customerContext}` : "";
     const lessonFocusInfo = lessonFocus ? `\n\n${lessonFocus}` : "";
+    const bossExtra = bossPromptExtra ? `\n\n${bossPromptExtra}` : "";
 
     const personaInstructions = persona ? `\n\n${persona.systemPromptInstructions}` : "";
 
     const systemContent = `${SYSTEM_PROMPT}${personaInstructions}
-${b2bContext}${productInfo}${customerInfo}${lessonFocusInfo}
+${b2bContext}${productInfo}${customerInfo}${lessonFocusInfo}${bossExtra}
 
 ## 今回のシナリオ
 - お客さんの属性: ${customerTypeMap[customerType] || "個人のお客さん"}

@@ -833,7 +833,7 @@ function ResultScreen({
       >
         {overall >= 80 ? (
           <>
-            <Link href="/roleplay" className="lp-cta-btn w-full text-center">
+            <Link href={`/roleplay?from=diagnosis&weakest=${encodeURIComponent(SKILLS[minIndex].name)}`} className="lp-cta-btn w-full text-center">
               Sランクの実力、AIロープレで証明する
             </Link>
             <Link
@@ -845,7 +845,7 @@ function ResultScreen({
           </>
         ) : overall >= 60 ? (
           <>
-            <Link href="/roleplay" className="lp-cta-btn w-full text-center">
+            <Link href={`/roleplay?from=diagnosis&weakest=${encodeURIComponent(SKILLS[minIndex].name)}`} className="lp-cta-btn w-full text-center">
               AIロープレで{SKILLS[minIndex].name}を克服する
             </Link>
             <p className="text-xs text-muted">
@@ -864,7 +864,7 @@ function ResultScreen({
               まず{SKILLS[minIndex].name}の「型」を学ぶ
             </Link>
             <Link
-              href="/roleplay"
+              href={`/roleplay?from=diagnosis&weakest=${encodeURIComponent(SKILLS[minIndex].name)}`}
               className="flex h-12 w-full items-center justify-center rounded border border-card-border bg-card text-sm font-medium text-muted transition hover:border-foreground/20 hover:text-foreground"
             >
               AIロープレを試してみる
@@ -879,10 +879,54 @@ function ResultScreen({
         </button>
       </div>
 
-      {/* SNS Share */}
+      {/* Plan recommendation based on diagnosis result */}
       <div
         className="diagnosis-fade-in mt-10 w-full max-w-sm"
         style={{ animationDelay: "2s" }}
+      >
+        <div className="rounded-2xl border border-card-border bg-card p-5">
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted text-center">
+            あなたにおすすめのプラン
+          </p>
+          {overall >= 70 ? (
+            <>
+              <p className="text-sm font-bold text-center mb-1">Proプラン</p>
+              <p className="text-xs text-muted text-center leading-relaxed mb-3">
+                高スコアを維持・向上させるには、月60回の集中練習と全5カテゴリのAI改善アドバイスが効果的です。
+              </p>
+              <div className="text-center text-lg font-bold text-accent mb-1">¥1,980<span className="text-xs text-muted font-normal">/月</span></div>
+            </>
+          ) : overall >= 40 ? (
+            <>
+              <p className="text-sm font-bold text-center mb-1">Starterプラン</p>
+              <p className="text-xs text-muted text-center leading-relaxed mb-3">
+                まずは月30回のロープレで基礎を固めましょう。全22レッスンで弱点の「型」を体系的に学べます。
+              </p>
+              <div className="text-center text-lg font-bold text-accent mb-1">¥990<span className="text-xs text-muted font-normal">/月</span></div>
+            </>
+          ) : (
+            <>
+              <p className="text-sm font-bold text-center mb-1">まずは無料で体験</p>
+              <p className="text-xs text-muted text-center leading-relaxed mb-3">
+                AIロープレを5回無料でお試しいただけます。基本3レッスンで営業の型を学んでからロープレに挑戦するのがおすすめです。
+              </p>
+            </>
+          )}
+          <div className="text-center">
+            <Link
+              href="/pricing"
+              className="inline-flex h-9 items-center rounded-lg border border-accent/30 px-5 text-xs font-bold text-accent transition hover:bg-accent/5"
+            >
+              プランの詳細を見る →
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* SNS Share */}
+      <div
+        className="diagnosis-fade-in mt-6 w-full max-w-sm"
+        style={{ animationDelay: "2.2s" }}
       >
         <p className="mb-3 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-muted">
           結果をシェアする

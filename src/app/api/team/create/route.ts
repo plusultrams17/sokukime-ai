@@ -16,6 +16,8 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const orgName = body.name?.trim();
+    const memberCount = Math.max(5, Math.min(200, parseInt(body.memberCount) || 5));
+    const billing: "monthly" | "annual" = body.billing === "annual" ? "annual" : "monthly";
     if (!orgName) {
       return NextResponse.json({ error: "チーム名は必須です" }, { status: 400 });
     }
@@ -41,6 +43,7 @@ export async function POST(request: NextRequest) {
       .insert({
         name: orgName,
         owner_id: user.id,
+        max_members: memberCount,
       })
       .select("id")
       .single();
@@ -77,13 +80,27 @@ export async function POST(request: NextRequest) {
       .single();
 
     // Create Stripe checkout session for team plan
-    const { session, customerId } = await createTeamCheckoutSession({
-      orgId: org.id,
-      orgName,
-      userId: user.id,
-      email: profile?.email || user.email!,
-      customerId: profile?.stripe_customer_id || undefined,
-    });
+    let session, customerId;
+    try {
+      ({ session, customerId } = await createTeamCheckoutSession({
+        orgId: org.id,
+        orgName,
+        userId: user.id,
+        email: profile?.email || user.email!,
+        memberCount,
+        billing,
+        customerId: profile?.stripe_customer_id || undefined,
+      }));
+    } catch (stripeError) {
+      // Clean up orphan org + member if Stripe checkout fails
+      console.error("Stripe checkout error, cleaning up org:", stripeError);
+      await supabase.from("team_members").delete().eq("org_id", org.id);
+      await supabase.from("organizations").delete().eq("id", org.id);
+      return NextResponse.json(
+        { error: "決済セッションの作成に失敗しました" },
+        { status: 500 }
+      );
+    }
 
     // Update org with Stripe customer ID
     await supabase

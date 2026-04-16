@@ -48,6 +48,12 @@ interface ChatUIProps {
   lessonFocus?: string;
   /** Lesson-specific scoring emphasis for the score API */
   scoringFocus?: string;
+  /** Boss customer system prompt extra (Dark Souls mode) */
+  bossPromptExtra?: string;
+  /** Boss customer display name for intro banner */
+  bossName?: string;
+  /** Boss customer description for intro banner */
+  bossDescription?: string;
   onFinish: (score: ScoreResult & { scoreId?: string | null }) => void;
   isGuest?: boolean;
   onAuthGate?: (messages: Message[], previewScore?: ScoreResult) => void;
@@ -78,6 +84,7 @@ interface ChatUIProps {
     plan: "free" | "starter" | "pro" | "master";
     resetUnit: "lifetime" | "month" | "unlimited";
     monthStart: string | null;
+    bonusCredits?: number;
   }) => void;
   /**
    * レッスン復習用のプリセット開始状態。渡された場合、AIお客さんの openingMessage を
@@ -115,7 +122,7 @@ const STEP_LESSON_MAP: Record<number, { slug: string; label: string }> = {
   5: { slug: "rebuttal-pattern", label: "切り返しの型（共通フレームワーク）" },
 };
 
-export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus, scoringFocus, onFinish, isGuest, onAuthGate, chatEndpoint = "/api/chat", scoreEndpoint = "/api/score", hideLessonDrawer, lessonSlug, plan, onUsageLimitReached, onUsageRecorded, initialAssistantMessage }: ChatUIProps) {
+export function ChatUI({ industry, product, difficulty, scene, customerType, productContext, customerContext, lessonFocus, scoringFocus, bossPromptExtra, bossName, bossDescription, onFinish, isGuest, onAuthGate, chatEndpoint = "/api/chat", scoreEndpoint = "/api/score", hideLessonDrawer, lessonSlug, plan, onUsageLimitReached, onUsageRecorded, initialAssistantMessage }: ChatUIProps) {
   const isGuestMode = chatEndpoint.includes("guest");
   const showLesson = !isGuestMode && !hideLessonDrawer;
   // 有料プラン (Starter / Pro / Master) は1セッション内のラリー数を無制限にする。ゲストは常に Free 扱い。
@@ -194,7 +201,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
       const res = await fetch("/api/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene, difficulty, productContext, customerContext, lessonFocus, scoringFocus }),
+        body: JSON.stringify({ messages: allMessages, industry, product, customerType, scene, difficulty, productContext, customerContext, lessonFocus, scoringFocus, bossPromptExtra }),
       });
       if (!res.ok) return; // Keep previous coach data (e.g. guest gets 401)
       const data = await res.json();
@@ -272,6 +279,7 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
           productContext,
           customerContext,
           lessonFocus,
+          bossPromptExtra,
           isFirstMessage: false,
         }),
       }).then((r) => r.json()).catch(() => ({ message: "（通信エラー）" })),
@@ -446,6 +454,23 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
               </div>
             )}
 
+            {/* Boss Customer intro banner */}
+            {bossName && messages.length === 0 && !isLoading && (
+              <div className="animate-fade-in-up rounded-xl border border-red-500/40 bg-red-500/5 px-4 py-4 text-center">
+                <div className="mb-2 text-xs font-bold uppercase tracking-widest text-red-400/70">
+                  BOSS BATTLE
+                </div>
+                <div className="mb-1 text-lg sm:text-xl font-black text-red-400">
+                  {bossName}
+                </div>
+                {bossDescription && (
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    {bossDescription}
+                  </p>
+                )}
+              </div>
+            )}
+
             {/* First turn guide — user starts the conversation (no lesson starter) */}
             {!initialAssistantMessage && messages.length === 0 && !isLoading && (
               <div className="animate-fade-in-up space-y-4 sm:space-y-5">
@@ -466,8 +491,12 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
 
             {/* Scenario intro (after user's first message) */}
             {turnCount > 0 && (
-              <div className="animate-fade-in-up rounded-xl border border-card-border bg-card/50 px-3 py-2 sm:px-4 sm:py-3 text-center text-[11px] sm:text-xs text-muted">
-                {sceneLabels[scene] || ""} ロープレ中 ─ <span className="font-bold text-accent">営業マン</span> vs <span className="font-bold text-blue-400">{industry || "お客さん"}</span>
+              <div className={`animate-fade-in-up rounded-xl border px-3 py-2 sm:px-4 sm:py-3 text-center text-[11px] sm:text-xs text-muted ${bossName ? "border-red-500/30 bg-red-500/5" : "border-card-border bg-card/50"}`}>
+                {bossName ? (
+                  <>BOSS BATTLE ─ <span className="font-bold text-accent">営業マン</span> vs <span className="font-bold text-red-400">{bossName}</span></>
+                ) : (
+                  <>{sceneLabels[scene] || ""} ロープレ中 ─ <span className="font-bold text-accent">営業マン</span> vs <span className="font-bold text-blue-400">{industry || "お客さん"}</span></>
+                )}
               </div>
             )}
 
@@ -483,6 +512,8 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                   className={`flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-full text-xs sm:text-sm ${
                     msg.role === "user"
                       ? "bg-accent/20 text-accent"
+                      : bossName
+                      ? "bg-red-500/20 text-red-400"
                       : "bg-blue-500/20 text-blue-400"
                   }`}
                 >
@@ -493,15 +524,17 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
                 <div className={`max-w-[80%] sm:max-w-[75%] ${msg.role === "user" ? "text-right" : "text-left"}`}>
                   <div
                     className={`mb-1 text-[11px] sm:text-xs font-bold ${
-                      msg.role === "user" ? "text-accent" : "text-blue-400"
+                      msg.role === "user" ? "text-accent" : bossName ? "text-red-400" : "text-blue-400"
                     }`}
                   >
-                    {msg.role === "user" ? "あなた（営業マン）" : "お客さん"}
+                    {msg.role === "user" ? "あなた（営業マン）" : bossName || "お客さん"}
                   </div>
                   <div
                     className={`inline-block rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm leading-relaxed ${
                       msg.role === "user"
                         ? "bg-accent text-white"
+                        : bossName
+                        ? "border border-red-500/30 bg-red-500/5 text-foreground"
                         : "border border-card-border bg-card text-foreground"
                     }`}
                   >
@@ -513,12 +546,12 @@ export function ChatUI({ industry, product, difficulty, scene, customerType, pro
 
             {isLoading && (
               <div className="flex animate-fade-in-up gap-2 sm:gap-3">
-                <div className="flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-xs sm:text-sm text-blue-400">
+                <div className={`flex h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0 items-center justify-center rounded-full text-xs sm:text-sm ${bossName ? "bg-red-500/20 text-red-400" : "bg-blue-500/20 text-blue-400"}`}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
                 <div>
-                  <div className="mb-1 text-[11px] sm:text-xs font-bold text-blue-400">
-                    お客さん
+                  <div className={`mb-1 text-[11px] sm:text-xs font-bold ${bossName ? "text-red-400" : "text-blue-400"}`}>
+                    {bossName || "お客さん"}
                   </div>
                   <div className="inline-block rounded-2xl border border-card-border bg-card px-3 py-2.5 sm:px-4 sm:py-3">
                     <div className="flex gap-1.5">

@@ -536,14 +536,14 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // ── 10. Weekly progress digest for Pro users ──
-  // Sent once per week to active Pro users who have done at least 1 roleplay
+  // ── 10. Weekly progress digest for paid users (Starter/Pro/Master) ──
+  // Sent once per week to active paid users who have done at least 1 roleplay
   const sixDaysAgo = new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000);
 
   const { data: activeProUsers } = await supabase
     .from("profiles")
     .select("id, email, plan, email_unsubscribed")
-    .eq("plan", "pro")
+    .in("plan", ["starter", "pro", "master"])
     .not("email", "is", null);
 
   if (activeProUsers) {

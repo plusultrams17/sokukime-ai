@@ -22,7 +22,7 @@ export async function GET() {
     .eq("user_id", user.id)
     .single();
 
-  let code: string;
+  let code: string | undefined;
 
   if (existing) {
     code = existing.code;
@@ -41,7 +41,7 @@ export async function GET() {
       }
       attempts++;
     }
-    if (!code!) {
+    if (!code) {
       return NextResponse.json(
         { error: "Failed to generate code" },
         { status: 500 }
@@ -49,9 +49,18 @@ export async function GET() {
     }
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sokukime.ai";
-  const shareUrl = `${appUrl}/signup?ref=${code}`;
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app";
+  const shareUrl = `${appUrl}/?ref=${code}`;
   const stats = await getReferralStats(supabase, user.id);
 
-  return NextResponse.json({ code, shareUrl, stats });
+  // bonus_credits を取得
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("bonus_credits")
+    .eq("id", user.id)
+    .single();
+  const bonusCredits = profile?.bonus_credits || 0;
+
+  return NextResponse.json({ code, shareUrl, stats, bonusCredits });
 }

@@ -24,6 +24,7 @@ export async function POST(request: Request) {
 
     const { error } = await supabase.from("beta_signups").insert({
       email: email.toLowerCase().trim(),
+      ...(source && typeof source === "string" ? { source: source.slice(0, 200) } : {}),
     });
 
     if (error) {

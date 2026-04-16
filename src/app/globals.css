@@ -117,6 +117,12 @@ body {
 
 /* ── LP (BizReach-style) ── */
 
+/* LP page only: orange CTA (pricing keeps red for future A/B test) */
+.lp-page {
+  --lp-cta: #f97316;
+  --lp-cta-hover: #ea580c;
+}
+
 @keyframes lp-shine {
   0% { left: -100%; }
   20% { left: 100%; }

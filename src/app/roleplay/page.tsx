@@ -143,6 +143,30 @@ function ShowScoreCheck({ onShowScore }: { onShowScore: () => void }) {
   return null;
 }
 
+function DiagnosisContextCheck({ onDiagnosisContext }: { onDiagnosisContext: (weakest: string) => void }) {
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const from = searchParams.get("from");
+    const weakest = searchParams.get("weakest");
+    if (from === "diagnosis" && weakest) {
+      onDiagnosisContext(weakest);
+    }
+  }, [searchParams, onDiagnosisContext]);
+  return null;
+}
+
+function WorksheetContextCheck({ onWorksheetProduct }: { onWorksheetProduct: (product: string) => void }) {
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const from = searchParams.get("from");
+    const product = searchParams.get("product");
+    if (from === "worksheet" && product) {
+      onWorksheetProduct(product);
+    }
+  }, [searchParams, onWorksheetProduct]);
+  return null;
+}
+
 const customerTypes = [
   { value: "individual", label: "個人のお客さん" },
   { value: "owner", label: "会社オーナー・社長" },
@@ -180,6 +204,7 @@ const customerScenes = [
 // Customer personas imported from shared definition
 import { CUSTOMER_PERSONAS } from "@/lib/personas";
 import { loadPracticeProfile, savePracticeProfile } from "@/lib/practice-profile";
+import { BOSS_CUSTOMERS, type BossCustomer } from "@/lib/soul";
 
 export default function RoleplayPage() {
   const [phase, setPhase] = useState<RoleplayPhase>("setup");
@@ -205,6 +230,8 @@ export default function RoleplayPage() {
   const [previousScore, setPreviousScore] = useState<number | undefined>(undefined);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [diagnosisWeakest, setDiagnosisWeakest] = useState<string | null>(null);
+  const [selectedBoss, setSelectedBoss] = useState<BossCustomer | null>(null);
 
   // Product input modes
   const [productInputMode, setProductInputMode] = useState<InputMode>("text");
@@ -653,6 +680,8 @@ export default function RoleplayPage() {
         <UpgradeToast />
         <WelcomeCheck onWelcome={handleWelcome} />
         <ShowScoreCheck onShowScore={handleShowScore} />
+        <DiagnosisContextCheck onDiagnosisContext={useCallback((weakest: string) => setDiagnosisWeakest(weakest), [])} />
+        <WorksheetContextCheck onWorksheetProduct={useCallback((p: string) => { setProduct(p); setSetupMode("detailed"); }, [])} />
       </Suspense>
       <PostPaymentSurvey />
 
@@ -752,6 +781,62 @@ export default function RoleplayPage() {
                 あなたの業種をタップすると、3秒でロープレ開始
               </p>
             </div>
+
+            {/* Diagnosis Context Banner */}
+            {diagnosisWeakest && (
+              <div className="pixar-card" style={{ borderColor: '#f48a58', background: 'linear-gradient(135deg, #fff8f3, #fef5ed)' }}>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full" style={{ background: '#f48a58' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#4d4c4a' }}>
+                      診断結果: {diagnosisWeakest}が弱点
+                    </div>
+                    <div style={{ fontSize: '0.78rem', color: '#6a6560' }}>
+                      下の業種を選んで{diagnosisWeakest}を集中的に練習しましょう
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Quick Re-start: 前回の設定がある場合に表示 */}
+            {(() => {
+              const saved = typeof window !== "undefined" ? loadPracticeProfile() : null;
+              if (!saved || !saved.product) return null;
+              return (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProduct(saved.product);
+                    setCustomerType(saved.customerType);
+                    setCustomerIndustry(saved.industry);
+                    setScene(saved.scene);
+                    setDifficulty(saved.difficulty);
+                    setPendingAutoStart(true);
+                  }}
+                  disabled={isCheckingUsage || (usage !== null && !usage.canStart)}
+                  className="pixar-card w-full text-left transition-transform active:scale-[0.98] hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer border-[#f48a58] bg-gradient-to-r from-[#fff8f3] to-[#fdfaf3] p-4"
+                  style={{ borderWidth: '0.15em' }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ background: '#f48a58' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-base font-extrabold text-[#4d4c4a] leading-snug">
+                        前回の続きですぐ開始
+                      </div>
+                      <div className="text-sm text-[#6a6560] truncate">
+                        {saved.product}
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#f48a58' }} aria-hidden="true">→</span>
+                  </div>
+                </button>
+              );
+            })()}
 
             {/* Phase 1: Industry Templates Grid — モバイル1カラム / タブレット2カラム / PC3カラム */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1290,6 +1375,101 @@ export default function RoleplayPage() {
               </div>
             </div>
 
+            {/* ── Boss Battle (Dark Souls mode) ── */}
+            <div className="pixar-card" style={{ background: '#2a2420', borderColor: '#5c4a3a' }}>
+              <div className="mb-3 flex items-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                <span style={{ fontSize: '0.95em', fontWeight: 800, color: '#e8d5c0' }}>Boss Battle</span>
+                <span style={{ fontSize: '0.65em', color: '#9a8a78', fontWeight: 600 }}>手強いお客さんに挑戦</span>
+              </div>
+              <p style={{ fontSize: '0.75em', color: '#9a8a78', marginBottom: '0.8em', lineHeight: 1.5 }}>
+                5人の強敵ボスに挑戦。スコア80以上で撃破、+500ソウル獲得。
+              </p>
+              <div className="grid grid-cols-1 gap-2">
+                {BOSS_CUSTOMERS.map((boss) => (
+                  <button
+                    key={boss.id}
+                    type="button"
+                    onClick={() => {
+                      if (selectedBoss?.id === boss.id) {
+                        setSelectedBoss(null);
+                      } else {
+                        setSelectedBoss(boss);
+                        setDifficulty(boss.difficulty);
+                        setCustomerType(boss.customerType);
+                      }
+                    }}
+                    className="text-left rounded-xl border px-3 py-3 transition-all"
+                    style={{
+                      background: selectedBoss?.id === boss.id ? '#3d2e22' : '#332a22',
+                      borderColor: selectedBoss?.id === boss.id ? '#ef4444' : '#4a3d32',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+                        style={{
+                          background: selectedBoss?.id === boss.id ? '#ef4444' : '#4a3d32',
+                          transition: 'background 0.2s',
+                        }}
+                      >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={selectedBoss?.id === boss.id ? '#fff' : '#9a8a78'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span style={{ fontSize: '0.95em', fontWeight: 800, color: selectedBoss?.id === boss.id ? '#ef4444' : '#e8d5c0' }}>
+                            {boss.name}
+                          </span>
+                          <span style={{ fontSize: '0.68em', color: '#9a8a78' }}>
+                            {boss.title}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '0.78em', color: '#8a7a68', lineHeight: 1.4, marginTop: '0.2em' }}>
+                          {boss.description}
+                        </div>
+                      </div>
+                      {selectedBoss?.id === boss.id && (
+                        <span style={{ fontSize: '0.72em', fontWeight: 800, color: '#ef4444', flexShrink: 0 }}>
+                          選択中
+                        </span>
+                      )}
+                    </div>
+                    {/* Phase details — shown when selected */}
+                    {selectedBoss?.id === boss.id && (
+                      <div style={{ marginTop: '0.8em', paddingTop: '0.8em', borderTop: '1px solid #4a3d32' }}>
+                        {boss.phases.map((phase, i) => (
+                          <div key={i} style={{ fontSize: '0.72em', color: '#8a7a68', lineHeight: 1.5, marginBottom: '0.3em' }}>
+                            {phase}
+                          </div>
+                        ))}
+                        <div style={{ marginTop: '0.5em', fontSize: '0.72em', fontWeight: 700, color: '#ef4444' }}>
+                          撃破条件: スコア{boss.victoryScore}以上 / 報酬: +{boss.soulReward}ソウル
+                        </div>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+              {selectedBoss && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedBoss(null)}
+                  style={{
+                    marginTop: '0.6em',
+                    fontSize: '0.75em',
+                    color: '#9a8a78',
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  ボス選択を解除して通常モードに戻る
+                </button>
+              )}
+            </div>
+
             {/* Lifetime Limit Banner for Free Users */}
             {usage && usage.plan === "free" && !usage.canStart && (
               <div className="pixar-card" style={{ borderColor: '#f48a58', background: 'linear-gradient(135deg, #fff8f3, #fdf2f2)' }}>
@@ -1349,6 +1529,8 @@ export default function RoleplayPage() {
                 ? usage.plan === "free"
                   ? `累計${usage.limit}回を使い切りました`
                   : `今月の${usage.limit}回を使い切りました`
+                : selectedBoss
+                ? `${selectedBoss.name}に挑む`
                 : "ロープレを開始する"}
             </button>
           </div>
@@ -1365,6 +1547,9 @@ export default function RoleplayPage() {
           customerType={customerType}
           productContext={productContext}
           customerContext={customerContext}
+          bossPromptExtra={selectedBoss?.systemPromptExtra}
+          bossName={selectedBoss?.name}
+          bossDescription={selectedBoss?.description}
           isGuest={isGuest}
           plan={usage?.plan}
           chatEndpoint={isGuest ? "/api/chat/guest" : "/api/chat"}
@@ -1385,6 +1570,7 @@ export default function RoleplayPage() {
               plan: planFromStatus,
               resetUnit: planFromStatus === "free" ? "lifetime" : "month",
               monthStart: null,
+              bonusCredits: 0,
             });
             setPhase("setup");
             setUpgradeModalTrigger("limit");
@@ -1394,7 +1580,7 @@ export default function RoleplayPage() {
           }}
           onUsageRecorded={(newStatus) => {
             // 実際にカウントされたタイミングで setup 表示用の usage を最新化
-            setUsage(newStatus);
+            setUsage({ ...newStatus, bonusCredits: newStatus.bonusCredits ?? 0 });
           }}
           onFinish={(result) => {
             setScore(result);
@@ -1451,6 +1637,7 @@ export default function RoleplayPage() {
           score={score}
           plan={usage?.plan}
           industry={industry}
+          usageStatus={usage ? { used: usage.used, limit: usage.limit, plan: usage.plan, resetUnit: usage.resetUnit } : null}
           onUpgrade={() => {
             setUpgradeModalTrigger("score");
             setShowUpgradeModal(true);

@@ -7,8 +7,80 @@ import { ReferralPrompt } from "@/components/referral-prompt";
 import type { ScoreResult } from "@/lib/scoring";
 import { trackCTAClick, trackUpgradePromptShown, trackUpgradePromptClicked, trackScoreShared } from "@/lib/tracking";
 import { CATEGORY_LESSON_MAP, getCategoryLearnLinks } from "@/lib/lessons/category-lesson-map";
+import { FREE_LESSON_SLUGS } from "@/lib/lessons/access";
 import { getGradeInfo, getGrade } from "@/lib/grade";
 import { getBenchmark } from "@/lib/benchmark";
+import { getBattleResult, getSoulPointsFromScore, getDefeatCause } from "@/lib/soul";
+
+/* ── Lead capture email form ── */
+function LeadCaptureForm({ score, plan }: { score: number; plan?: string }) {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.includes("@") || status === "submitting") return;
+    setStatus("submitting");
+    try {
+      const res = await fetch("/api/lead-capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: `score_report_plan_${plan ?? "unknown"}_score_${score}` }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "done") {
+    return (
+      <div className="mt-6 rounded-2xl border border-green-500/30 bg-green-500/5 p-5 text-center">
+        <p className="text-sm font-bold text-green-400">送信完了しました</p>
+        <p className="mt-1 text-xs text-muted">
+          詳細レポートをお送りします。メールをご確認ください。
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-6 rounded-2xl border border-card-border bg-card p-5">
+      <p className="mb-1 text-sm font-bold">詳細レポートをメールで受け取る</p>
+      <p className="mb-3 text-xs text-muted">
+        スコア分析・弱点改善アドバイスをまとめてお送りします（無料）
+      </p>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:flex-row">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="メールアドレスを入力"
+          required
+          className="flex-1 rounded-lg border border-card-border bg-background px-4 py-2.5 text-sm placeholder:text-muted/50 focus:border-accent focus:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={status === "submitting" || !email.includes("@")}
+          className="h-10 rounded-lg bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
+        >
+          {status === "submitting" ? "送信中..." : "受け取る"}
+        </button>
+      </form>
+      {status === "error" && (
+        <p className="mt-2 text-xs text-red-400">送信に失敗しました。もう一度お試しください。</p>
+      )}
+    </div>
+  );
+}
+
+interface UsageInfo {
+  used: number;
+  limit: number;
+  plan: "free" | "starter" | "pro" | "master";
+  resetUnit: "lifetime" | "month" | "unlimited";
+}
 
 interface ScoreCardProps {
   score: ScoreResult & { scoreId?: string | null; previousScore?: number | null };
@@ -16,6 +88,7 @@ interface ScoreCardProps {
   plan?: "free" | "starter" | "pro" | "master";
   onUpgrade?: () => void;
   industry?: string;
+  usageStatus?: UsageInfo | null;
 }
 
 function getScoreColor(score: number) {
@@ -54,19 +127,24 @@ const CATEGORY_NEXT_STEP: Record<string, { lowTip: string; midTip: string }> = {
 };
 
 
-export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCardProps) {
+export function ScoreCard({ score, onRetry, plan, onUpgrade, industry, usageStatus }: ScoreCardProps) {
   const benchmark = getBenchmark(industry || "");
 
   // Use score-specific share page if scoreId is available (shows OG image with actual score)
-  const scorePageUrl = score.scoreId
+  const scorePageBase = score.scoreId
     ? `https://seiyaku-coach.vercel.app/score-share/${score.scoreId}`
     : "https://seiyaku-coach.vercel.app";
 
+  // UTM params for social share tracking
+  const scorePageUrlX = `${scorePageBase}?utm_source=share&utm_medium=social&utm_campaign=score_share&utm_content=twitter`;
+  const scorePageUrlLine = `${scorePageBase}?utm_source=share&utm_medium=social&utm_campaign=score_share&utm_content=line`;
+  const scorePageUrlLinkedIn = `${scorePageBase}?utm_source=share&utm_medium=social&utm_campaign=score_share&utm_content=linkedin`;
+
   const overallGrade = getGradeInfo(score.overall);
   const shareText = `営業ロープレAIで5ステップ診断したら${score.overall}点（${overallGrade.grade}ランク: ${overallGrade.label}）だった。30項目の行動チェックリストで採点されるから納得感がすごい #成約コーチAI #営業`;
-  const shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(scorePageUrl)}&hashtags=${encodeURIComponent("成約コーチAI,営業,営業力UP")}`;
-  const lineShareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(scorePageUrl)}&text=${encodeURIComponent(`営業ロープレAIでスコア${score.overall}点取った！無料で試せるよ`)}`;
-  const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(scorePageUrl)}`;
+  const shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(scorePageUrlX)}&hashtags=${encodeURIComponent("成約コーチAI,営業,営業力UP")}`;
+  const lineShareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(scorePageUrlLine)}&text=${encodeURIComponent(`営業ロープレAIでスコア${score.overall}点取った！無料で試せるよ`)}`;
+  const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(scorePageUrlLinkedIn)}`;
 
   const isFree = plan === "free";
   const visibleCategories = isFree
@@ -128,7 +206,182 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
           </div>
         )}
 
-        {/* Overall Score — always visible */}
+        {/* Usage Remaining Banner */}
+        {usageStatus && (() => {
+          const remaining = Math.max(0, usageStatus.limit - usageStatus.used);
+          const isFreeUser = usageStatus.plan === "free";
+
+          // Free: 4回目（残り1回）→ 警告
+          if (isFreeUser && remaining === 1) {
+            return (
+              <div role="status" className="mb-4 rounded-2xl border border-yellow-500/30 bg-yellow-500/5 px-5 py-4 text-center animate-fade-in-up">
+                <div className="text-sm font-bold text-yellow-400">
+                  無料ロープレ 残り1回
+                </div>
+                <div className="text-xs text-muted mt-1 leading-relaxed">
+                  次のロープレが最後の無料回です。Starterプランなら毎月30回練習できます。
+                </div>
+                <button
+                  onClick={() => onUpgrade?.()}
+                  className="mt-3 inline-flex h-9 items-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent-hover"
+                >
+                  Starterで練習を続ける
+                </button>
+              </div>
+            );
+          }
+
+          // Free: 5回目（残り0回）→ 成長サマリー + アップグレード導線
+          if (isFreeUser && remaining === 0) {
+            const bestCat = score.categories.length > 0
+              ? [...score.categories].sort((a, b) => b.score - a.score)[0]
+              : null;
+            const weakCat = score.categories.length > 0
+              ? [...score.categories].sort((a, b) => a.score - b.score)[0]
+              : null;
+            const improved = score.previousScore != null && score.overall > score.previousScore;
+
+            return (
+              <div role="alert" className="mb-4 rounded-2xl border border-accent/30 bg-gradient-to-b from-accent/10 to-accent/5 px-5 py-6 animate-fade-in-up">
+                <div className="text-center mb-4">
+                  <div className="text-xs font-bold uppercase tracking-wider text-accent mb-2">5回の練習を完了</div>
+                  <div className="text-lg font-bold text-foreground">
+                    ここまでの成長レポート
+                  </div>
+                </div>
+
+                {/* Score overview */}
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  <div className="rounded-xl border border-card-border bg-card p-3 text-center">
+                    <div className="text-[10px] text-muted mb-0.5">今回のスコア</div>
+                    <div className={`text-2xl font-black ${getScoreColor(score.overall)}`}>{score.overall}</div>
+                    <div className="text-[10px] text-muted">ランク {getGrade(score.overall)}</div>
+                  </div>
+                  <div className="rounded-xl border border-card-border bg-card p-3 text-center">
+                    <div className="text-[10px] text-muted mb-0.5">{improved ? "スコア推移" : "伸びしろ"}</div>
+                    {improved ? (
+                      <div className="text-2xl font-black text-green-500">+{score.overall - (score.previousScore ?? 0)}</div>
+                    ) : (
+                      <div className="text-2xl font-black text-accent">{100 - score.overall}</div>
+                    )}
+                    <div className="text-[10px] text-muted">{improved ? "ポイント向上" : "ポイント"}</div>
+                  </div>
+                </div>
+
+                {/* Strength & Weakness */}
+                {bestCat && weakCat && (
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div className="rounded-lg bg-green-500/5 border border-green-500/20 px-3 py-2">
+                      <div className="text-[10px] text-green-400 font-bold mb-0.5">強み</div>
+                      <div className="text-sm font-bold">{bestCat.name}</div>
+                      <div className="text-xs text-muted">{bestCat.score}点</div>
+                    </div>
+                    <div className="rounded-lg bg-accent/5 border border-accent/20 px-3 py-2">
+                      <div className="text-[10px] text-accent font-bold mb-0.5">伸ばすべき</div>
+                      <div className="text-sm font-bold">{weakCat.name}</div>
+                      <div className="text-xs text-muted">{weakCat.score}点</div>
+                    </div>
+                  </div>
+                )}
+
+                <p className="text-xs text-muted text-center leading-relaxed mb-4">
+                  {improved
+                    ? "練習するほどスコアは上がっています。この成長カーブを止めないために、継続的な練習がおすすめです。"
+                    : "5回の練習でベースラインが見えました。ここから伸ばすには、弱点に集中した反復練習が効果的です。"}
+                </p>
+
+                <div className="text-center">
+                  <button
+                    onClick={() => onUpgrade?.()}
+                    className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
+                  >
+                    月30回練習できるプランを見る
+                  </button>
+                  <div className="mt-2 text-[11px] text-muted">
+                    Starterプラン ¥990/月〜 いつでも解約OK
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          // 有料: 残り5回以下 → 軽い警告
+          if (!isFreeUser && Number.isFinite(usageStatus.limit) && remaining > 0 && remaining <= 5) {
+            return (
+              <div role="status" className="mb-4 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 px-5 py-3 text-center animate-fade-in-up">
+                <div className="text-xs text-yellow-400">
+                  今月のロープレ残り <span className="font-bold text-sm">{remaining}回</span>
+                </div>
+              </div>
+            );
+          }
+
+          // 有料: 残り0回
+          if (!isFreeUser && Number.isFinite(usageStatus.limit) && remaining === 0) {
+            return (
+              <div role="alert" className="mb-4 rounded-2xl border border-red-500/20 bg-red-500/5 px-5 py-3 text-center animate-fade-in-up">
+                <div className="text-sm font-bold text-red-400">
+                  今月のロープレ回数を使い切りました
+                </div>
+                <div className="text-xs text-muted mt-1">
+                  来月1日にリセットされます。{usageStatus.plan !== "master" && "上位プランでクレジットを増やすこともできます。"}
+                </div>
+                {usageStatus.plan !== "master" && (
+                  <button
+                    onClick={() => onUpgrade?.()}
+                    className="mt-3 inline-flex h-9 items-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent-hover"
+                  >
+                    プランをアップグレード
+                  </button>
+                )}
+              </div>
+            );
+          }
+
+          return null;
+        })()}
+
+        {/* Battle Result -- Dark Souls inspired dramatic result */}
+        {(() => {
+          const battle = getBattleResult(score.overall);
+          const souls = getSoulPointsFromScore(score.overall);
+          const defeatCause = battle.result === "defeat" ? getDefeatCause(score.categories) : null;
+
+          return (
+            <div className={`mb-6 rounded-2xl border-2 ${battle.borderClass} ${battle.bgClass} p-6 text-center animate-fade-in-up`}>
+              {/* Battle result title */}
+              <div className={`text-3xl sm:text-4xl font-black tracking-[0.2em] ${battle.colorClass} mb-2`}
+                style={{ textShadow: battle.result === "defeat" ? "0 0 20px rgba(239,68,68,0.3)" : battle.result === "perfect" ? "0 0 20px rgba(74,222,128,0.3)" : "0 0 20px rgba(250,204,21,0.3)" }}>
+                {battle.title}
+              </div>
+              <div className="text-sm text-muted mb-4">
+                {battle.subtitle}
+              </div>
+
+              {/* Defeat cause */}
+              {defeatCause && (
+                <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-left">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-red-400 mb-1">敗因</div>
+                  <div className="text-sm text-foreground font-bold">{defeatCause.category}</div>
+                  <div className="text-xs text-muted mt-0.5">{defeatCause.reason}</div>
+                </div>
+              )}
+
+              {/* Soul points earned */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-4 py-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v12M6 12h12" />
+                </svg>
+                <span className="text-sm font-bold text-accent">
+                  +{souls} ソウル獲得
+                </span>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Overall Score -- always visible */}
         <div className="mb-6 rounded-2xl border border-card-border bg-card p-8 text-center">
           <div className="mb-2 text-sm text-muted">営業スコア</div>
           <div className="flex items-center justify-center gap-4">
@@ -147,10 +400,13 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
         </div>
 
         {/* Tab Navigation */}
-        <div className="mb-6 flex rounded-xl border border-card-border bg-card p-1">
+        <div className="mb-6 flex rounded-xl border border-card-border bg-card p-1" role="tablist" aria-label="スコア詳細">
           {tabs.map((tab) => (
             <button
               key={tab.key}
+              role="tab"
+              aria-selected={activeTab === tab.key}
+              aria-controls={`tabpanel-${tab.key}`}
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 rounded-lg py-2.5 text-sm font-bold transition ${
                 activeTab === tab.key
@@ -165,7 +421,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
 
         {/* ═══ TAB 1: スコア ═══ */}
         {activeTab === "score" && (
-          <div className="space-y-6 animate-fade-in-up">
+          <div id="tabpanel-score" role="tabpanel" className="space-y-6 animate-fade-in-up">
             {/* Industry Benchmark Comparison */}
             <div className="rounded-2xl border border-card-border bg-card p-6">
               <h3 className="mb-4 text-sm font-medium text-muted">{benchmark.label}との比較</h3>
@@ -216,30 +472,91 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
               <RadarChart categories={score.categories} size={220} />
             </div>
 
-            {/* Session Summary */}
-            {visibleCategories.length > 0 && (
-              <div className="rounded-2xl border border-card-border bg-card p-5">
-                <p className="mb-2 text-sm font-bold">今回のセッションまとめ</p>
-                <div className="flex items-start gap-3 mb-2">
-                  <svg className="mt-0.5 flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  <p className="text-sm text-muted">
-                    一番良かったカテゴリ: <span className="font-bold text-foreground">
-                      {[...visibleCategories].sort((a, b) => b.score - a.score)[0]?.name}
-                      （{[...visibleCategories].sort((a, b) => b.score - a.score)[0]?.score}点）
-                    </span>
-                  </p>
-                </div>
-                <p className="text-xs text-muted">
-                  繰り返し練習することで営業の「型」が体に染みつきます。次回は弱点カテゴリを意識して挑戦してみましょう。
-                </p>
-              </div>
-            )}
+            {/* Session Summary + Next Step Recommendation */}
+            {visibleCategories.length > 0 && (() => {
+              const bestCat = [...visibleCategories].sort((a, b) => b.score - a.score)[0];
+              const weakCat = [...visibleCategories].sort((a, b) => a.score - b.score)[0];
+              const nextLesson = weakCat ? getCategoryLearnLinks(weakCat.name, weakCat.score) : null;
+              return (
+                <>
+                  <div className="rounded-2xl border border-card-border bg-card p-5">
+                    <p className="mb-2 text-sm font-bold">今回のセッションまとめ</p>
+                    <div className="flex items-start gap-3 mb-2">
+                      <svg className="mt-0.5 flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <p className="text-sm text-muted">
+                        一番良かったカテゴリ: <span className="font-bold text-foreground">
+                          {bestCat.name}（{bestCat.score}点）
+                        </span>
+                      </p>
+                    </div>
+                    {weakCat && weakCat.score < bestCat.score && (
+                      <div className="flex items-start gap-3 mb-2">
+                        <svg className="mt-0.5 flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        <p className="text-sm text-muted">
+                          伸びしろが大きいカテゴリ: <span className="font-bold text-foreground">
+                            {weakCat.name}（{weakCat.score}点）
+                          </span>
+                        </p>
+                      </div>
+                    )}
+                    <div className="mt-3 rounded-lg border border-blue-500/10 bg-blue-500/5 px-3 py-2">
+                      <p className="text-[10px] font-bold text-blue-400 mb-0.5">スコアの見方</p>
+                      <p className="text-xs text-muted leading-relaxed">
+                        「なんとなく上手くいった」ではなく「なぜ上手くいったか」を特定するのがこのスコアの役割です。繰り返し練習して、成果の再現性を高めましょう。
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Next Step: Lesson recommendation based on weakest category */}
+                  {weakCat && weakCat.score < 80 && (
+                    <div className="rounded-2xl border border-accent/20 bg-accent/5 p-5">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-accent mb-2">おすすめの次のステップ</div>
+                      <div className="flex items-start gap-3">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">1</div>
+                        <div className="flex-1 min-w-0">
+                          {nextLesson ? (
+                            <>
+                              <Link
+                                href={`/learn/${nextLesson.slug}`}
+                                className="text-sm font-bold text-foreground hover:text-accent transition"
+                              >
+                                「{nextLesson.title}」で{weakCat.name}の型を学ぶ →
+                              </Link>
+                              <p className="text-xs text-muted mt-0.5">レッスンで理論を把握 → ロープレで実践が最も効率的です</p>
+                            </>
+                          ) : (
+                            <>
+                              <Link href="/learn" className="text-sm font-bold text-foreground hover:text-accent transition">
+                                レッスンで{weakCat.name}の型を学ぶ →
+                              </Link>
+                              <p className="text-xs text-muted mt-0.5">型を知ってからロープレすると、スコアが伸びやすくなります</p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 mt-3">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">2</div>
+                        <div className="flex-1 min-w-0">
+                          <button
+                            onClick={onRetry}
+                            className="text-sm font-bold text-foreground hover:text-accent transition text-left"
+                          >
+                            {weakCat.name}を意識してもう1回ロープレ →
+                          </button>
+                          <p className="text-xs text-muted mt-0.5">繰り返すほど「型」が定着します</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         )}
 
         {/* ═══ TAB 2: 分析 ═══ */}
         {activeTab === "analysis" && (
-          <div className="space-y-6 animate-fade-in-up">
+          <div id="tabpanel-analysis" role="tabpanel" className="space-y-6 animate-fade-in-up">
             {/* Category Scores - visible */}
             <div className="rounded-2xl border border-card-border bg-card p-6">
               <h3 className="mb-4 text-sm font-medium text-muted">カテゴリ別スコア</h3>
@@ -342,10 +659,10 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
                         残り{lockedCategories.length}カテゴリの詳細スコアとAI改善アドバイス
                       </p>
                       <p className="mb-4 text-xs text-muted">
-                        弱点を特定して集中的に改善 — Proで全開放
+                        弱点を特定して集中的に改善
                       </p>
                       <span className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition group-hover:bg-accent-hover">
-                        Proで全スコアを見る
+                        有料プランで全スコアを見る
                       </span>
                     </div>
                   </div>
@@ -398,7 +715,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
                 </div>
                 <div className="absolute inset-0 flex items-end justify-center pb-4">
                   <span className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card/90 px-4 py-2 text-xs font-medium text-muted backdrop-blur-sm transition group-hover:border-accent group-hover:text-accent">
-                    タップしてProプランで詳細フィードバックを見る
+                    タップして詳細フィードバックを見る
                   </span>
                 </div>
               </div>
@@ -431,7 +748,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
 
         {/* ═══ TAB 3: アドバイス ═══ */}
         {activeTab === "advice" && (
-          <div className="space-y-6 animate-fade-in-up">
+          <div id="tabpanel-advice" role="tabpanel" className="space-y-6 animate-fade-in-up">
             {/* Summary / AI Advice */}
             {isFree ? (
               <div
@@ -456,7 +773,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
                   </div>
                   <div className="absolute inset-x-0 bottom-0 h-24 flex items-end justify-center rounded-b-2xl bg-gradient-to-t from-card via-card/80 to-transparent pb-4">
                     <span className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-white transition group-hover:bg-accent-hover">
-                      続きを読む（Proプラン）
+                      続きを読む（有料プラン）
                     </span>
                   </div>
                 </div>
@@ -495,12 +812,12 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
                               onClick={() => handleLockedClick("customer_voice")}
                               className="rounded-lg bg-accent px-4 py-2 text-xs font-bold text-white transition hover:bg-accent-hover"
                             >
-                              Proプランで全文を読む
+                              有料プランで全文を読む
                             </button>
                           </div>
                         </div>
                         <p className="mt-2 text-[10px] text-muted/60">
-                          リアルの営業では絶対に聞けない、お客さんの本音フィードバック
+                          リアルの営業ではなかなか聞けない、お客さんの本音フィードバック
                         </p>
                       </>
                     ) : (
@@ -511,7 +828,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
                           </p>
                         </div>
                         <p className="mt-2 text-[10px] text-muted/60">
-                          リアルの営業では絶対に聞けない、お客さんの本音フィードバック
+                          リアルの営業ではなかなか聞けない、お客さんの本音フィードバック
                         </p>
                       </>
                     )}
@@ -520,10 +837,15 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
               </div>
             )}
 
-            {/* Weakest Category Focus */}
-            {score.categories.length > 1 && (() => {
+            {/* Weakest Category Focus + Learning Roadmap */}
+            {score.categories.length > 0 && (() => {
               const weakest = [...score.categories].sort((a, b) => a.score - b.score)[0];
-              return weakest && weakest.score < 70 ? (
+              if (!weakest || weakest.score >= 70) return null;
+              const roadmapLessons = CATEGORY_LESSON_MAP[weakest.name] || [];
+              const recommended = getCategoryLearnLinks(weakest.name, weakest.score);
+
+
+              return (
                 <div className="rounded-2xl border border-accent/20 bg-accent/5 p-5">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="inline-block h-3 w-3 rounded-full bg-accent flex-shrink-0" />
@@ -537,28 +859,162 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
                       {weakest.score < 60 ? CATEGORY_NEXT_STEP[weakest.name].lowTip : CATEGORY_NEXT_STEP[weakest.name].midTip}
                     </p>
                   )}
-                  {(() => {
-                    const link = getCategoryLearnLinks(weakest.name, weakest.score);
-                    return link ? (
-                      <Link
-                        href={`/learn/${link.slug}`}
-                        className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:underline"
-                      >
-                        <span className="inline-flex h-4 items-center rounded bg-accent/10 px-1.5 text-[10px] font-bold text-accent">
-                          {link.label}
-                        </span>
-                        「{link.title}」レッスンで復習 →
-                      </Link>
-                    ) : null;
-                  })()}
+
+                  {/* Learning Roadmap */}
+                  {roadmapLessons.length > 0 && (
+                    <div className="mt-4 border-t border-accent/10 pt-4">
+                      <p className="text-xs font-bold text-foreground mb-3">
+                        「{weakest.name}」の学習ロードマップ
+                      </p>
+                      <div className="space-y-2">
+                        {roadmapLessons.map((lesson, idx) => {
+                          const isRecommended = recommended?.slug === lesson.slug;
+                          const isAccessible = !isFree || FREE_LESSON_SLUGS.includes(lesson.slug);
+                          const stepNum = idx + 1;
+
+                          return (
+                            <div key={lesson.slug} className="flex items-center gap-3">
+                              {/* Step indicator line */}
+                              <div className="flex flex-col items-center">
+                                <div className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                                  isRecommended
+                                    ? "bg-accent text-white"
+                                    : "border border-card-border text-muted"
+                                }`}>
+                                  {stepNum}
+                                </div>
+                                {idx < roadmapLessons.length - 1 && (
+                                  <div className="h-2 w-px bg-card-border" />
+                                )}
+                              </div>
+
+                              {/* Lesson link or locked state */}
+                              {isAccessible ? (
+                                <Link
+                                  href={`/learn/${lesson.slug}`}
+                                  className={`flex-1 rounded-lg px-3 py-1.5 text-xs transition ${
+                                    isRecommended
+                                      ? "bg-accent/10 font-bold text-accent hover:bg-accent/20"
+                                      : "text-foreground hover:bg-card-border/30"
+                                  }`}
+                                >
+                                  {lesson.title}
+                                  {isRecommended && recommended && (
+                                    <span className="ml-2 inline-flex h-4 items-center rounded bg-accent/20 px-1.5 text-[10px] font-bold text-accent">
+                                      {recommended.label}
+                                    </span>
+                                  )}
+                                </Link>
+                              ) : (
+                                <button
+                                  onClick={() => handleLockedClick("roadmap_lesson_locked")}
+                                  className="flex-1 flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs text-muted/60 hover:text-muted transition"
+                                  aria-label={`${lesson.title} - 有料プランで利用可能`}
+                                >
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                  {lesson.title}
+                                  {isRecommended && recommended && (
+                                    <span className="ml-1 inline-flex h-4 items-center rounded bg-accent/10 px-1.5 text-[10px] font-bold text-accent/60">
+                                      {recommended.label}
+                                    </span>
+                                  )}
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Free user upgrade nudge */}
+                      {isFree && roadmapLessons.some(l => !FREE_LESSON_SLUGS.includes(l.slug)) && (
+                        <button
+                          onClick={() => handleLockedClick("roadmap_upgrade")}
+                          className="mt-3 w-full rounded-lg border border-accent/20 py-2 text-xs text-accent transition hover:bg-accent/5"
+                        >
+                          Starterプランで全レッスンを開放 →
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
-              ) : null;
+              );
             })()}
           </div>
         )}
 
-        {/* ═══ Always visible: Actions + Share + Upgrade ═══ */}
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        {/* ═══ Always visible: Share + Actions + Challenge ═══ */}
+
+        {/* Share buttons — prominent placement above actions */}
+        <div className="mt-8 rounded-2xl border-2 border-accent/30 bg-gradient-to-br from-accent/10 to-accent/5 p-6 text-center">
+          <p className="mb-1 text-base font-bold">このスコアをシェアしよう</p>
+          <p className="mb-4 text-xs text-muted">仲間と競い合うとモチベーションが続きやすくなります</p>
+          <div className="flex items-center justify-center gap-3">
+            <a
+              href={shareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackScoreShared({ platform: "twitter", score: score.overall, scoreId: score.scoreId || undefined })}
+              className="flex h-11 flex-1 max-w-[140px] items-center justify-center gap-2 rounded-xl bg-black text-sm font-bold text-white transition hover:bg-black/80"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+              シェア
+            </a>
+            <a
+              href={lineShareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackScoreShared({ platform: "line", score: score.overall, scoreId: score.scoreId || undefined })}
+              className="flex h-11 flex-1 max-w-[140px] items-center justify-center rounded-xl bg-[#06C755] text-sm font-bold text-white transition hover:bg-[#05b34c]"
+            >
+              LINE
+            </a>
+            <a
+              href={linkedInShareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackScoreShared({ platform: "linkedin", score: score.overall, scoreId: score.scoreId || undefined })}
+              className="flex h-11 flex-1 max-w-[140px] items-center justify-center rounded-xl bg-[#0077B5] text-sm font-bold text-white transition hover:bg-[#006399]"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+
+        {/* 60秒チャレンジ提案 — 弱点カテゴリに焦点を当てた再挑戦 */}
+        {(() => {
+          const weakest = [...score.categories].sort((a, b) => a.score - b.score)[0];
+          if (!weakest || weakest.score >= 80) return null;
+          const tip = CATEGORY_NEXT_STEP[weakest.name];
+          return (
+            <div className="mt-6 rounded-2xl border border-card-border bg-card p-5">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-bold mb-1">
+                    {weakest.name}を集中練習してみませんか？
+                  </div>
+                  <div className="text-xs text-muted mb-3 leading-relaxed">
+                    {tip ? (weakest.score < 50 ? tip.lowTip : tip.midTip) : `${weakest.name}が${weakest.score}点 — もう一度挑戦するとスコアUPが期待できます`}
+                  </div>
+                  <button
+                    onClick={() => {
+                      trackCTAClick("scorecard_challenge", "score_card", "/roleplay");
+                      onRetry();
+                    }}
+                    className="inline-flex h-9 items-center rounded-lg bg-accent px-5 text-xs font-bold text-white transition hover:bg-accent-hover"
+                  >
+                    {weakest.name}を意識してもう1回 →
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Action buttons */}
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <button
             onClick={() => {
               trackCTAClick("scorecard_retry", "score_card", "/roleplay");
@@ -566,7 +1022,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
             }}
             className="flex h-12 flex-1 items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover"
           >
-            もう一度ロープレする
+            {score.overall < 60 ? "もう一度挑む" : "もう一度ロープレする"}
           </button>
           {(() => {
             const weakest = [...score.categories].sort((a, b) => a.score - b.score)[0];
@@ -583,40 +1039,8 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
           })()}
         </div>
 
-        {/* Share buttons */}
-        <div className="mt-6 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-5 text-center">
-          <p className="mb-1 text-sm font-bold">スコアをシェアして仲間と競おう</p>
-          <p className="mb-3 text-xs text-muted">仲間と一緒に練習するとモチベーションが続きやすくなります</p>
-          <div className="flex items-center justify-center gap-3">
-            <a
-              href={shareUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackScoreShared({ platform: "twitter", score: score.overall, scoreId: score.scoreId || undefined })}
-              className="flex h-10 items-center justify-center rounded-lg bg-black px-5 text-sm font-bold text-white transition hover:bg-black/80"
-            >
-              𝕏 でシェア
-            </a>
-            <a
-              href={lineShareUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackScoreShared({ platform: "line", score: score.overall, scoreId: score.scoreId || undefined })}
-              className="flex h-10 items-center justify-center rounded-lg bg-[#06C755] px-5 text-sm font-bold text-white transition hover:bg-[#05b34c]"
-            >
-              LINE
-            </a>
-            <a
-              href={linkedInShareUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackScoreShared({ platform: "linkedin", score: score.overall, scoreId: score.scoreId || undefined })}
-              className="flex h-10 items-center justify-center rounded-lg bg-[#0077B5] px-5 text-sm font-bold text-white transition hover:bg-[#006399]"
-            >
-              LinkedIn
-            </a>
-          </div>
-        </div>
+        {/* Lead capture — email report (free users only) */}
+        {isFree && <LeadCaptureForm score={score.overall} plan={plan} />}
 
         {/* Upgrade CTA for free users */}
         {isFree && (
@@ -625,7 +1049,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
               全カテゴリの詳細スコアと改善アドバイスを見ませんか？
             </p>
             <p className="mb-4 text-xs text-muted">
-              プロプランなら月60回ロープレ + 全5カテゴリの詳細フィードバック
+              有料プランなら全5カテゴリの詳細フィードバック + 月30回以上のロープレ
             </p>
             <button
               onClick={() => {
@@ -634,25 +1058,25 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry }: ScoreCa
               }}
               className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-accent-hover"
             >
-              Proにアップグレード
+              プランを選ぶ
             </button>
             <p className="mt-2 text-[11px] text-muted">
               Freeで5回お試し可能・いつでも解約OK・違約金なし
             </p>
           </div>
         )}
+
+        {/* レビュー投稿（70点以上のユーザーに表示） */}
+        {score.overall >= 70 && !isFree && (
+          <ReviewPrompt roleplayScore={score.overall} />
+        )}
+
+        {/* フィードバックフォーム */}
+        <FeedbackForm roleplayScore={score.overall} />
+
+        {/* 紹介プロンプト（スコア70点以上で表示） */}
+        <ReferralPrompt score={score.overall} />
       </div>
-
-      {/* レビュー投稿（70点以上のユーザーに表示） */}
-      {score.overall >= 70 && !isFree && (
-        <ReviewPrompt roleplayScore={score.overall} />
-      )}
-
-      {/* フィードバックフォーム */}
-      <FeedbackForm roleplayScore={score.overall} />
-
-      {/* 紹介プロンプト（スコア70点以上で表示） */}
-      <ReferralPrompt score={score.overall} />
     </div>
   );
 }
@@ -760,7 +1184,7 @@ function FeedbackForm({ roleplayScore }: { roleplayScore: number }) {
   );
 }
 
-/* ── レビュー投稿プロンプト（70点以上のProユーザーに表示） ── */
+/* ── レビュー投稿プロンプト（70点以上の有料ユーザーに表示） ── */
 
 function ReviewPrompt({ roleplayScore }: { roleplayScore: number }) {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,20 +1,28 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import type { TeamPlanTier } from "@/lib/plans";
 
 export interface TeamMembership {
   orgId: string;
   orgName: string;
   role: "owner" | "admin" | "member";
   maxMembers: number;
+  /** チームプランのティア (team_5/team_10/team_30/team_50)。未設定時は null */
+  teamPlanTier: TeamPlanTier | null;
+  /** トライアル中かどうか */
+  isTrial: boolean;
+  /** トライアル終了日 */
+  trialEndsAt: string | null;
 }
 
 /**
- * Check if a user belongs to an active team (with Stripe subscription).
+ * Check if a user belongs to an active team (with Stripe subscription or active trial).
  * Returns the team info if they are a member, null otherwise.
  */
 export async function getTeamMembership(
   supabase: SupabaseClient,
   userId: string
 ): Promise<TeamMembership | null> {
+  // First try: team with active Stripe subscription
   const { data } = await supabase
     .from("team_members")
     .select(`
@@ -24,11 +32,12 @@ export async function getTeamMembership(
         id,
         name,
         max_members,
-        stripe_subscription_id
+        stripe_subscription_id,
+        team_plan_tier,
+        trial_ends_at
       )
     `)
     .eq("user_id", userId)
-    .not("organizations.stripe_subscription_id", "is", null)
     .limit(1)
     .maybeSingle();
 
@@ -36,11 +45,23 @@ export async function getTeamMembership(
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const org = (data as any).organizations;
+
+  // Team must have either an active subscription or an active trial
+  const now = new Date();
+  const trialEndsAt = org.trial_ends_at ? new Date(org.trial_ends_at) : null;
+  const isTrial = !org.stripe_subscription_id && trialEndsAt !== null && trialEndsAt > now;
+  const hasAccess = !!org.stripe_subscription_id || isTrial;
+
+  if (!hasAccess) return null;
+
   return {
     orgId: org.id,
     orgName: org.name,
     role: data.role as "owner" | "admin" | "member",
     maxMembers: org.max_members,
+    teamPlanTier: org.team_plan_tier || null,
+    isTrial,
+    trialEndsAt: org.trial_ends_at || null,
   };
 }
 

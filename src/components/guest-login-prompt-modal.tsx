@@ -38,6 +38,12 @@ export function GuestLoginPromptModal({
     const callbackUrl = new URL("/auth/callback", window.location.origin);
     callbackUrl.searchParams.set("redirect", redirectTo);
 
+    // localStorage から紹介コードを引き継ぐ
+    const storedRef = localStorage.getItem("referral_code");
+    if (storedRef) {
+      callbackUrl.searchParams.set("ref", storedRef);
+    }
+
     const { error: signInError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {

@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { getTeamMembership } from "@/lib/team";
+import { getTeamPlan, type TeamPlanTier } from "@/lib/plans";
 
 /**
  * プラン tier（src/lib/plans.ts の PlanTier と同期）
@@ -38,6 +39,8 @@ export interface UsageStatus {
   monthStart: string | null;
   totalSessions?: number;
   streak?: number;
+  /** 紹介ボーナスクレジット（limit に加算済み） */
+  bonusCredits: number;
 }
 
 /**
@@ -71,6 +74,16 @@ function normalizePlan(raw: unknown): PlanTier {
   return "free";
 }
 
+/**
+ * チームプランティアに基づく1人あたりの月次クレジットを返す。
+ * tier が null (レガシーチーム) の場合は Pro 相当の 60 回。
+ */
+function getTeamMemberCredits(tier: TeamPlanTier | null): number {
+  if (!tier) return 60; // legacy team fallback
+  const plan = getTeamPlan(tier);
+  return plan.creditsPerUser;
+}
+
 export async function getUsageStatus(
   supabase: SupabaseClient,
   userId: string
@@ -81,7 +94,7 @@ export async function getUsageStatus(
   const [profileResult, lifetimeResult, monthResult] = await Promise.all([
     supabase
       .from("profiles")
-      .select("plan, subscription_status, is_tester, tester_expires_at")
+      .select("plan, subscription_status, is_tester, tester_expires_at, bonus_credits")
       .eq("id", userId)
       .single(),
     // Free 判定で使う: user_id の全期間の合計件数
@@ -102,6 +115,7 @@ export async function getUsageStatus(
   const monthUsed = monthResult.count || 0;
   const isTester = profileResult.data?.is_tester === true;
   const testerExpiresAt = profileResult.data?.tester_expires_at as string | null;
+  const bonusCredits = (profileResult.data?.bonus_credits as number) || 0;
 
   // Tester access: tester flag set + (no expiry OR expiry in future) = unlimited
   const isTesterActive =
@@ -115,26 +129,41 @@ export async function getUsageStatus(
       plan: plan === "free" ? "pro" : plan,
       resetUnit: "unlimited",
       monthStart: null,
+      bonusCredits,
     };
   }
 
-  // Team members get Pro-equivalent access (unlimited for B2B)
+  // Team members: credits based on the team's plan tier
   if (plan === "free") {
     const team = await getTeamMembership(supabase, userId);
     if (team) {
+      const teamCredits = getTeamMemberCredits(team.teamPlanTier);
+      if (teamCredits === Infinity) {
+        return {
+          used: monthUsed,
+          limit: Infinity,
+          canStart: true,
+          plan: "pro",
+          resetUnit: "unlimited",
+          monthStart: null,
+          bonusCredits,
+        };
+      }
       return {
         used: monthUsed,
-        limit: Infinity,
-        canStart: true,
+        limit: teamCredits + bonusCredits,
+        canStart: monthUsed < teamCredits + bonusCredits,
         plan: "pro",
-        resetUnit: "unlimited",
-        monthStart: null,
+        resetUnit: "month",
+        monthStart,
+        bonusCredits,
       };
     }
   }
 
   if (plan === "starter" || plan === "pro" || plan === "master") {
-    const limit = TIER_MONTHLY_CREDITS[plan];
+    const baseLimit = TIER_MONTHLY_CREDITS[plan];
+    const limit = baseLimit + bonusCredits;
     return {
       used: monthUsed,
       limit,
@@ -142,17 +171,20 @@ export async function getUsageStatus(
       plan,
       resetUnit: "month",
       monthStart,
+      bonusCredits,
     };
   }
 
-  // Free プラン: 累計 FREE_LIFETIME_LIMIT 回まで
+  // Free プラン: 累計 FREE_LIFETIME_LIMIT + bonusCredits 回まで
+  const freeLimit = FREE_LIFETIME_LIMIT + bonusCredits;
   return {
     used: lifetimeUsed,
-    limit: FREE_LIFETIME_LIMIT,
-    canStart: lifetimeUsed < FREE_LIFETIME_LIMIT,
+    limit: freeLimit,
+    canStart: lifetimeUsed < freeLimit,
     plan: "free",
     resetUnit: "lifetime",
     monthStart: null,
+    bonusCredits,
   };
 }
 

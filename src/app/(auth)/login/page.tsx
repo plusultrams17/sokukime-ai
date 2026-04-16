@@ -18,11 +18,22 @@ function GoogleIcon() {
 function LoginForm() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/roleplay";
-  const refCode = searchParams.get("ref") || "";
+  const refCodeFromUrl = searchParams.get("ref") || "";
 
   const [error, setError] = useState(searchParams.get("error") || "");
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [stats, setStats] = useState<{ totalUsers: number; totalSessions: number } | null>(null);
+  const [refCode, setRefCode] = useState(refCodeFromUrl);
+
+  // localStorage から紹介コードを読み込む（URLにない場合のフォールバック）
+  useEffect(() => {
+    if (!refCode) {
+      const stored = localStorage.getItem("referral_code");
+      if (stored) {
+        setRefCode(stored);
+      }
+    }
+  }, [refCode]);
 
   useEffect(() => {
     fetch("/api/stats")

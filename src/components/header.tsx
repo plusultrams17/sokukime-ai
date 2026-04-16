@@ -9,18 +9,22 @@ import { Logo } from "@/components/logo";
 import { trackCTAClick } from "@/lib/tracking";
 import { CancelSaveModal } from "@/components/cancel-save-modal";
 
+// Phase 2A改修: 3ペルソナ対応のため、ログイン前ナビに「法人向け」を追加
+// （ペルソナC=経営者/マネージャー向けの導線確保）。
+// ログイン後ユーザーには既にプランがあるため追加しない。
 const navLinksPublic = [
-  { href: "/learn", label: "学習コース" },
   { href: "/roleplay", label: "AIロープレ" },
-  { href: "/challenge", label: "チャレンジ" },
+  { href: "/learn", label: "学習コース" },
+  { href: "/tools", label: "ツール" },
   { href: "/pricing", label: "料金プラン" },
+  { href: "/enterprise", label: "法人向け" },
 ];
 
 const navLinksLoggedIn = [
   { href: "/roleplay", label: "AIロープレ" },
   { href: "/dashboard", label: "ダッシュボード" },
   { href: "/learn", label: "学習コース" },
-  { href: "/challenge", label: "チャレンジ" },
+  { href: "/tools", label: "ツール" },
 ];
 
 export function Header() {

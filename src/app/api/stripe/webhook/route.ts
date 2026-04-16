@@ -157,12 +157,27 @@ export async function POST(request: NextRequest) {
       if (session.metadata?.plan_type === "team" && session.metadata?.org_id) {
         const orgId = session.metadata.org_id;
         const subscriptionId = session.subscription as string;
+        const teamPlanTier = session.metadata.plan_tier || "team_5";
+
+        // Retrieve subscription to get member_count from metadata
+        let memberCount = 5;
+        if (subscriptionId) {
+          try {
+            const sub = await stripe.subscriptions.retrieve(subscriptionId);
+            memberCount = parseInt(sub.metadata?.member_count || "5", 10);
+          } catch {
+            // fallback to 5
+          }
+        }
 
         await supabaseAdmin
           .from("organizations")
           .update({
             stripe_customer_id: customerId,
             stripe_subscription_id: subscriptionId,
+            team_plan_tier: teamPlanTier,
+            max_members: memberCount,
+            trial_ends_at: null, // Clear trial on paid conversion
           })
           .eq("id", orgId);
 

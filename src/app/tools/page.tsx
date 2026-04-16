@@ -96,6 +96,16 @@ const tools = [
     keywords: ["3D ロープレ", "バーチャル 商談"],
     time: "約5分",
   },
+  {
+    slug: "dm-generator",
+    name: "営業DM自動生成",
+    description:
+      "業種・チャネル・関係性を入力するだけで、パーソナライズされた営業DM文面を3パターン自動生成。X DM・Instagram DM・LinkedIn・メールに対応。",
+    icon: "",
+    image: "",
+    keywords: ["営業DM", "DM テンプレート"],
+    time: "約1分",
+  },
 ];
 
 const SITE_URL =
@@ -144,7 +154,7 @@ export default function ToolsPage() {
             営業力を鍛える<span className="text-accent">無料ツール</span>
           </h1>
           <p className="mx-auto max-w-2xl text-base text-white/70 leading-relaxed sm:text-lg">
-            今すぐ使える8つの営業支援ツール。
+            今すぐ使える9つの営業支援ツール。
             <br className="hidden sm:block" />
             診断・生成・学習・分析で、あなたの営業スキルを底上げします。
           </p>

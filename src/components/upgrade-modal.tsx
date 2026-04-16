@@ -27,6 +27,7 @@ export function UpgradeModal({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [billing] = useState<"monthly" | "annual">("monthly");
+  const [selectedTier, setSelectedTier] = useState<"starter" | "pro" | "master">("pro");
   const [stats, setStats] = useState<{ totalUsers: number; totalSessions: number } | null>(null);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export function UpgradeModal({
   async function handleUpgrade() {
     setIsLoading(true);
     setErrorMsg("");
-    trackCTAClick("upgrade_modal_pro", "upgrade_modal", "/api/stripe/checkout");
+    trackCTAClick(`upgrade_modal_${selectedTier}`, "upgrade_modal", "/api/stripe/checkout");
     trackCheckoutStarted();
 
     // Client-side auth check
@@ -60,7 +61,7 @@ export function UpgradeModal({
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ billing, utm: getStoredUTM() }),
+        body: JSON.stringify({ billing, tier: selectedTier, utm: getStoredUTM() }),
       });
       const data = await res.json();
       if (data.url) {
@@ -153,38 +154,43 @@ export function UpgradeModal({
           </>
         )}
 
-        {/* Pro features */}
-        <div className="mb-5 space-y-2">
-          <div className="flex items-center gap-2 text-sm">
-            <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>ロープレ<span className="font-bold text-accent">月60回</span>（毎月1日リセット）</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>全5カテゴリの<span className="font-bold text-accent">詳細スコア</span></span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>AI<span className="font-bold text-accent">改善アドバイス</span></span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <svg className="h-4 w-4 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>全ワークシート・全シーン</span>
-          </div>
+        {/* 3-plan comparison */}
+        <div className="mb-4 grid grid-cols-3 gap-2">
+          {([
+            { tier: "starter" as const, label: "Starter", price: 990, credits: 30 },
+            { tier: "pro" as const, label: "Pro", price: 1980, credits: 60, recommended: true },
+            { tier: "master" as const, label: "Master", price: 4980, credits: 200 },
+          ]).map((p) => (
+            <button
+              key={p.tier}
+              onClick={() => setSelectedTier(p.tier)}
+              className={`relative rounded-xl border p-3 text-left transition ${
+                selectedTier === p.tier
+                  ? "border-accent bg-accent/5"
+                  : "border-card-border hover:border-accent/30"
+              }`}
+            >
+              {p.recommended && (
+                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent px-2 py-0.5 text-[9px] font-bold text-white">
+                  人気
+                </span>
+              )}
+              <div className="mb-1 text-[10px] font-bold text-muted">{p.label}</div>
+              <div className="text-sm font-bold text-accent">&yen;{p.price.toLocaleString()}</div>
+              <div className="text-[10px] text-muted">/月</div>
+              <div className="mt-1.5 text-[10px] text-muted">月{p.credits}回</div>
+            </button>
+          ))}
         </div>
 
-        {/* Price comparison */}
-        <div className="mb-4 rounded-xl border border-accent/30 bg-accent/5 p-4">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm text-muted">営業研修1回</span>
-            <span className="text-sm text-muted line-through">¥50,000〜</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-accent">成約コーチAI Pro</span>
-            <span className="text-lg font-bold text-accent">
-              ¥1,980<span className="text-xs font-normal text-muted">/月</span>
-            </span>
-          </div>
+        {/* Shared features */}
+        <div className="mb-4 space-y-1.5">
+          {["全5カテゴリ詳細スコア", "AI改善アドバイス", "全22レッスン・全シーン"].map((f) => (
+            <div key={f} className="flex items-center gap-2 text-xs">
+              <svg className="h-3.5 w-3.5 flex-shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>{f}</span>
+            </div>
+          ))}
         </div>
 
         <div className="mb-3 text-center text-xs text-muted">
@@ -204,27 +210,18 @@ export function UpgradeModal({
             disabled={isLoading}
             className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
           >
-            {isLoading ? "処理中..." : "Proにアップグレード"}
+            {isLoading ? "処理中..." : `${selectedTier === "master" ? "Master" : selectedTier === "starter" ? "Starter" : "Pro"}にアップグレード`}
           </button>
           {errorMsg && (
             <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400 text-center">
               {errorMsg}
             </div>
           )}
-          <div className="text-center text-[11px] text-muted">
-            ¥1,980/月 ・ いつでも解約OK ・ 経費精算OK
-          </div>
-          <Link
-            href="/pricing"
-            className="text-center text-[11px] text-accent hover:underline"
-          >
-            Starter ¥990/月〜 他プランも見る
-          </Link>
           <button
             onClick={onClose}
             className="text-sm text-muted transition hover:text-foreground"
           >
-            {trigger === "limit" ? "今はスキップ" : "今はスキップ"}
+            今はスキップ
           </button>
           <Link
             href="/pricing"

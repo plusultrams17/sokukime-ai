@@ -151,7 +151,7 @@ export default async function ScoreSharePage(
             無料で営業力を診断する
           </Link>
           <p className="mt-3 text-[11px] text-muted">
-            Googleログインで累計5回まで無料 ・ Proなら月60回
+            Googleログインで累計5回まで無料 ・ 有料プランなら月30回以上
           </p>
         </div>
       </div>

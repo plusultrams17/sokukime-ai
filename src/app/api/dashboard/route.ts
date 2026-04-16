@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getStreak, type PlanTier } from "@/lib/usage";
+import { getSoulPointsFromScore, getSoulLevelInfo, countBonfires, calcParryRate } from "@/lib/soul";
 
 export async function GET() {
   try {
@@ -76,6 +77,22 @@ export async function GET() {
     // 使われているだけなので、残日数は常に null。
     const trialDaysRemaining: number | null = null;
 
+    // Soul System calculations
+    const totalSouls = overallScores.reduce((sum, s) => sum + getSoulPointsFromScore(s), 0);
+    const soulLevelInfo = getSoulLevelInfo(totalSouls);
+    const bonfireCount = countBonfires(overallScores);
+
+    // Parry rate: average 反論処理 score across all sessions
+    const objectionScores = scoreList
+      .filter((s) => s.category_scores)
+      .map((s) => {
+        const cats = s.category_scores as { name: string; score: number }[];
+        const objection = cats.find((c) => c.name === "反論処理");
+        return objection?.score;
+      })
+      .filter((s): s is number => s != null);
+    const parryRate = calcParryRate(objectionScores);
+
     return NextResponse.json({
       totalSessions: totalSessions || 0,
       totalScored: scoreList.length,
@@ -90,6 +107,13 @@ export async function GET() {
       plan,
       streak,
       trialDaysRemaining,
+      // Soul System
+      soulLevel: soulLevelInfo.level,
+      totalSouls,
+      soulsToNext: soulLevelInfo.soulsToNext,
+      soulProgress: soulLevelInfo.progress,
+      bonfireCount,
+      parryRate,
     });
   } catch (error) {
     console.error("Dashboard API error:", error);

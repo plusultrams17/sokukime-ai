@@ -81,14 +81,32 @@ export async function GET(request: NextRequest) {
 
               if (referralCode && referralCode.user_id !== user.id) {
                 // ignoreDuplicates prevents regressing status if user already converted
-                await adminForRef.from("referral_conversions").upsert(
+                const { data: upsertResult } = await adminForRef.from("referral_conversions").upsert(
                   {
                     referrer_id: referralCode.user_id,
                     referee_id: user.id,
                     status: "signed_up",
                   },
                   { onConflict: "referrer_id,referee_id", ignoreDuplicates: true }
-                );
+                ).select("id");
+
+                // 新規コンバージョンの場合のみ紹介者にボーナスクレジット +5 を付与
+                if (upsertResult && upsertResult.length > 0) {
+                  try {
+                    const { data: referrerProfile } = await adminForRef
+                      .from("profiles")
+                      .select("bonus_credits")
+                      .eq("id", referralCode.user_id)
+                      .single();
+                    const currentBonus = referrerProfile?.bonus_credits || 0;
+                    await adminForRef
+                      .from("profiles")
+                      .update({ bonus_credits: currentBonus + 5 })
+                      .eq("id", referralCode.user_id);
+                  } catch (bonusErr) {
+                    console.error("[auth/callback] Bonus credit grant failed:", bonusErr);
+                  }
+                }
               }
             } catch (err) {
               console.error("[auth/callback] Referral tracking failed:", err);
