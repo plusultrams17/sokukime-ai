@@ -27,9 +27,9 @@ const faqItems = [
       "はい。Googleアカウントでログインすると、無料プランでAIロープレを累計5回まで体験できます。クレジットカード不要で、いつでも有料プランにアップグレードできます。",
   },
   {
-    question: "プランの違いは？",
+    question: "プランの違いは？どれを選ぶべき？",
     answer:
-      "無料プランは累計5回まで体験用。スタータープラン（¥990）は月30回まで・全22レッスン利用可能。プロプラン（¥1,980）は月60回まで・AI詳細フィードバック付き。マスタープラン（¥4,980）は月200回まで・優先メールサポート付きです。",
+      "【無料プラン】まず試したい方向け。累計5回まで体験可能。\n【スタータープラン ¥990】週1-2回練習したい若手営業向け。月30回・全22レッスン。\n【プロプラン ¥1,980】毎日練習したい・商談前に必ず復習したい中堅営業向け。月60回・AI詳細フィードバック。迷ったらこれ。\n【マスタープラン ¥4,980】営業チームで使いたい・徹底的に伸ばしたい方向け。月200回・優先メールサポート。",
   },
   {
     question: "いつでも解約できますか？",
@@ -238,12 +238,12 @@ export default function PricingPage() {
                 key={plan.tier}
                 className={`relative flex flex-col rounded-2xl p-5 sm:p-6 ${
                   isRecommended
-                    ? "border-2 border-[#d7000e] bg-gradient-to-b from-[#d7000e]/15 via-card to-card shadow-2xl shadow-[#d7000e]/20 lg:-my-4 lg:scale-[1.04] lg:z-10"
+                    ? "border-2 border-[#f97316] bg-gradient-to-b from-[#f97316]/15 via-card to-card shadow-2xl shadow-[#f97316]/20 lg:-my-4 lg:scale-[1.04] lg:z-10"
                     : "border border-card-border bg-card"
                 }`}
               >
                 {isRecommended && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#d7000e] px-5 py-1.5 text-xs font-bold text-white shadow-lg shadow-[#d7000e]/40 sm:text-sm">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#f97316] px-5 py-1.5 text-xs font-bold text-white shadow-lg shadow-[#f97316]/40 sm:text-sm">
                     <span className="mr-1">★</span>おすすめ
                   </div>
                 )}
@@ -321,7 +321,7 @@ export default function PricingPage() {
                     disabled={isLoading}
                     className={`group flex w-full items-center justify-center gap-2 rounded-xl text-sm font-bold transition disabled:opacity-60 ${
                       isRecommended
-                        ? "h-14 bg-[#d7000e] text-white shadow-lg shadow-[#d7000e]/30 hover:bg-[#b5000b] hover:shadow-xl hover:shadow-[#d7000e]/40"
+                        ? "h-14 bg-[#f97316] text-white shadow-lg shadow-[#f97316]/30 hover:bg-[#ea580c] hover:shadow-xl hover:shadow-[#f97316]/40"
                         : "h-12 border border-accent/60 text-accent hover:bg-accent/10"
                     }`}
                   >
@@ -538,24 +538,28 @@ export default function PricingPage() {
         {/* Bottom CTA — おすすめのプロプランへ誘導 */}
         {currentPlan !== "pro" && currentPlan !== "master" && (
           <div className="mt-16">
-            <div className="mx-auto max-w-2xl rounded-2xl border-2 border-[#d7000e]/40 bg-gradient-to-br from-[#d7000e]/10 via-card to-card p-6 text-center shadow-xl shadow-[#d7000e]/10 sm:p-10">
-              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#d7000e] px-3 py-1 text-[10px] font-bold text-white sm:text-xs">
+            <div className="mx-auto max-w-2xl rounded-2xl border-2 border-[#f97316]/40 bg-gradient-to-br from-[#f97316]/10 via-card to-card p-6 text-center shadow-xl shadow-[#f97316]/10 sm:p-10">
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#f97316] px-3 py-1 text-[10px] font-bold text-white sm:text-xs">
                 <span className="text-base leading-none">★</span> おすすめ
               </div>
               <h3 className="mb-2 text-xl font-bold text-foreground sm:text-2xl">
                 迷ったらプロプラン
               </h3>
-              <p className="mb-5 text-sm text-muted sm:text-base">
+              <p className="mb-3 text-sm text-muted sm:text-base">
                 <span className="font-bold text-foreground">月60回のAIロープレ＋全22レッスン</span>
                 <br />
                 <span className="text-xs sm:text-sm">
                   無料5回お試し ・ いつでも解約OK ・ クレカ不要でスタート
                 </span>
               </p>
+              <div className="mb-5 rounded-lg border border-card-border bg-background/40 px-4 py-3 text-left text-xs text-muted sm:text-sm">
+                <p className="mb-1.5 font-bold text-foreground">スタータープランとの違い</p>
+                <p>練習回数が<span className="text-accent font-bold">2倍（月30→60回）</span>、AI詳細フィードバックが付き、商談前の最終チェックにも使える余裕があります。</p>
+              </div>
               <button
                 onClick={() => handleUpgrade("pro")}
                 disabled={isLoading}
-                className="group inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[#d7000e] px-10 text-base font-bold text-white shadow-lg shadow-[#d7000e]/30 transition hover:bg-[#b5000b] hover:shadow-xl hover:shadow-[#d7000e]/40 disabled:opacity-60 sm:min-w-[280px]"
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[#f97316] px-10 text-base font-bold text-white shadow-lg shadow-[#f97316]/30 transition hover:bg-[#ea580c] hover:shadow-xl hover:shadow-[#f97316]/40 disabled:opacity-60 sm:min-w-[280px]"
               >
                 {isLoading ? (
                   "処理中..."

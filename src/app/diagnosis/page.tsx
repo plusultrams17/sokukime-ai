@@ -890,34 +890,46 @@ function ResultScreen({
           </p>
           {overall >= 70 ? (
             <>
+              <div className="mb-2 flex items-center justify-center gap-1.5">
+                <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[9px] font-bold text-accent">診断結果に基づく推奨</span>
+              </div>
               <p className="text-sm font-bold text-center mb-1">Proプラン</p>
               <p className="text-xs text-muted text-center leading-relaxed mb-3">
-                高スコアを維持・向上させるには、月60回の集中練習と全5カテゴリのAI改善アドバイスが効果的です。
+                スコア{overall}点のあなたは既に基礎ができています。<span className="text-foreground font-semibold">商談前の最終リハ</span>と<span className="text-foreground font-semibold">弱点カテゴリの徹底練習</span>で、A/Sランクを目指す段階です。月60回で毎日積み上げられます。
               </p>
               <div className="text-center text-lg font-bold text-accent mb-1">¥1,980<span className="text-xs text-muted font-normal">/月</span></div>
+              <p className="text-[10px] text-muted text-center mb-2">1日あたり約66円・いつでも解約可</p>
             </>
           ) : overall >= 40 ? (
             <>
+              <div className="mb-2 flex items-center justify-center gap-1.5">
+                <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[9px] font-bold text-accent">診断結果に基づく推奨</span>
+              </div>
               <p className="text-sm font-bold text-center mb-1">Starterプラン</p>
               <p className="text-xs text-muted text-center leading-relaxed mb-3">
-                まずは月30回のロープレで基礎を固めましょう。全22レッスンで弱点の「型」を体系的に学べます。
+                スコア{overall}点のあなたは、<span className="text-foreground font-semibold">型を固めれば一気に伸びる</span>段階です。全22レッスンで弱点の「型」を学び、月30回のロープレで身体に染み込ませましょう。
               </p>
               <div className="text-center text-lg font-bold text-accent mb-1">¥990<span className="text-xs text-muted font-normal">/月</span></div>
+              <p className="text-[10px] text-muted text-center mb-2">1日あたり約33円・いつでも解約可</p>
             </>
           ) : (
             <>
-              <p className="text-sm font-bold text-center mb-1">まずは無料で体験</p>
+              <div className="mb-2 flex items-center justify-center gap-1.5">
+                <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[9px] font-bold text-accent">まずは無料で</span>
+              </div>
+              <p className="text-sm font-bold text-center mb-1">無料プランから始めよう</p>
               <p className="text-xs text-muted text-center leading-relaxed mb-3">
-                AIロープレを5回無料でお試しいただけます。基本3レッスンで営業の型を学んでからロープレに挑戦するのがおすすめです。
+                AIロープレを<span className="text-foreground font-semibold">累計5回まで無料</span>でお試しいただけます。基本3レッスンで営業の型を学んでから、実戦形式のロープレに挑戦しましょう。
               </p>
+              <p className="text-[10px] text-muted text-center mb-2">クレジットカード登録不要</p>
             </>
           )}
           <div className="text-center">
             <Link
               href="/pricing"
-              className="inline-flex h-9 items-center rounded-lg border border-accent/30 px-5 text-xs font-bold text-accent transition hover:bg-accent/5"
+              className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-accent px-5 text-xs font-bold text-background transition hover:opacity-90"
             >
-              プランの詳細を見る →
+              {overall >= 40 ? "プランを見て続きを始める →" : "プランの詳細を見る →"}
             </Link>
           </div>
         </div>

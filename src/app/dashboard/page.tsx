@@ -620,21 +620,36 @@ export default function DashboardPage() {
               : "3分のAIロープレであなたの営業力が5段階でわかります"}
           </p>
           {/* Usage remaining badge */}
-          {usage && Number.isFinite(usage.limit) && (
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-card-border bg-card px-4 py-1.5">
-              <span className="text-xs text-muted">
-                {usage.plan === "free" ? "残り" : "今月残り"}
-              </span>
-              <span className={`text-sm font-bold ${usage.canStart ? "text-accent" : "text-red-500"}`}>
-                {Math.max(0, usage.limit - usage.used)}/{usage.limit}回
-              </span>
-              {usage.plan !== "free" && (
-                <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-bold text-accent">
-                  {usage.plan === "master" ? "Master" : usage.plan === "pro" ? "Pro" : "Starter"}
-                </span>
-              )}
-            </div>
-          )}
+          {usage && Number.isFinite(usage.limit) && (() => {
+            const remaining = Math.max(0, usage.limit - usage.used);
+            const lowCredit = usage.plan === "starter" && remaining <= 5 && remaining > 0;
+            const canUpgrade = usage.plan === "starter" && remaining <= 10;
+            return (
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card px-4 py-1.5">
+                  <span className="text-xs text-muted">
+                    {usage.plan === "free" ? "残り" : "今月残り"}
+                  </span>
+                  <span className={`text-sm font-bold ${lowCredit ? "text-amber-400" : usage.canStart ? "text-accent" : "text-red-500"}`}>
+                    {remaining}/{usage.limit}回
+                  </span>
+                  {usage.plan !== "free" && (
+                    <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-bold text-accent">
+                      {usage.plan === "master" ? "Master" : usage.plan === "pro" ? "Pro" : "Starter"}
+                    </span>
+                  )}
+                </div>
+                {canUpgrade && (
+                  <Link
+                    href="/pricing"
+                    className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/5 px-3 py-1.5 text-[11px] font-bold text-accent transition hover:bg-accent/10"
+                  >
+                    Proに増量（月60回）→
+                  </Link>
+                )}
+              </div>
+            );
+          })()}
 
           {!hasScores ? (
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -1046,13 +1061,31 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Paid CTA — 既存フリーユーザーのみ、控えめ表示 */}
+        {/* Paid CTA — Freeユーザー向け、スコア実績に基づくパーソナライズ */}
         {data.plan === "free" && hasScores && (
-          <div className="mb-6 text-center text-sm text-muted">
-            有料プランなら月30回〜のロープレ + AIコーチ
-            <Link href="/pricing" className="ml-1 text-accent hover:underline font-medium">
-              詳しく見る →
-            </Link>
+          <div className="mb-6 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-5">
+            <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold text-accent">
+              あなたの伸びしろ
+            </div>
+            <h3 className="mb-1.5 text-base font-bold text-foreground">
+              {data.avgScore >= 60
+                ? `スコア${data.avgScore}点 — もう一段伸ばすなら`
+                : data.weakestCategory
+                  ? `${data.weakestCategory.name}を集中練習して底上げ`
+                  : "練習量を増やして型を固める"}
+            </h3>
+            <p className="mb-3 text-xs leading-relaxed text-muted">
+              有料プランなら<span className="font-semibold text-foreground">月30〜200回</span>のロープレ、<span className="font-semibold text-foreground">全5カテゴリのAIフィードバック</span>、全22レッスンが使えます。商談前の最終リハにも。
+            </p>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <Link
+                href="/pricing"
+                className="inline-flex h-10 items-center justify-center rounded-lg bg-accent px-4 text-xs font-bold text-white transition hover:bg-accent-hover"
+              >
+                プランを見る →
+              </Link>
+              <span className="text-[11px] text-muted">Starter ¥990〜 / 1日あたり約33円</span>
+            </div>
           </div>
         )}
 
