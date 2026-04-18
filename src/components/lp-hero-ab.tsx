@@ -40,9 +40,8 @@ const VARIANTS: Record<string, HeroVariant> = {
   variant_b: {
     headline: (
       <>
-        <span className="lp-highlight-hero">AIが営業トークを5カテゴリで採点。</span>
-        <br />
-        弱点が見えれば、伸びしろになる。
+        <span className="block whitespace-nowrap"><span className="lp-highlight-hero">AIが営業トークを5カテゴリで採点。</span></span>
+        <span className="block whitespace-nowrap">弱点が見えれば、伸びしろになる。</span>
       </>
     ),
     subheadline: (
@@ -86,7 +85,7 @@ export function LPHeroAB() {
       <p
         className={`lp-heading mb-5 leading-[1.3] text-white sm:mb-7 transition-opacity duration-300 ${ready ? "opacity-100" : "opacity-0"}`}
         style={{
-          fontSize: "clamp(26px, 6vw, 52px)",
+          fontSize: "clamp(16px, 5.5vw, 52px)",
           textShadow: "0 2px 20px rgba(0,0,0,0.3)",
         }}
       >
