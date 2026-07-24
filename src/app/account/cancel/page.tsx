@@ -131,8 +131,20 @@ export default function CancelPage() {
 
     switch (offer.ctaAction) {
       case "downgrade": {
-        // Redirect to pricing page for plan change
-        router.push("/pricing");
+        // 既契約者のプラン変更は Stripe ポータルで行う（/pricing は既契約者を弾いて行き止まりになるため）
+        setIsProcessing(true);
+        try {
+          const res = await fetch("/api/stripe/portal", { method: "POST" });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.url) {
+            window.location.href = data.url;
+            return;
+          }
+          setErrorMsg(data.error || "プラン変更ページを開けませんでした。時間をおいて再度お試しください。");
+        } catch {
+          setErrorMsg("プラン変更ページを開けませんでした。時間をおいて再度お試しください。");
+        }
+        setIsProcessing(false);
         return;
       }
       case "pause": {
