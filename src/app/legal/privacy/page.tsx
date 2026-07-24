@@ -195,7 +195,7 @@ export default function PrivacyPage() {
 
       <div className="mt-12 rounded-xl border border-card-border bg-card p-6 text-sm text-muted">
         <p>成約コーチAI 個人情報保護担当</p>
-        <p>メール: seiyaku.coach.ai@gmail.com</p>
+        <p>メール: info@hakuso.dev</p>
       </div>
     </article>
   );

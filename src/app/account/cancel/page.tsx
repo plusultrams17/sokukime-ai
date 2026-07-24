@@ -210,7 +210,7 @@ export default function CancelPage() {
       }
 
       setErrorMsg(
-        "解約処理を開始できませんでした。時間をおいて再度お試しください。問題が続く場合は seiyaku.coach.ai@gmail.com までご連絡ください。"
+        "解約処理を開始できませんでした。時間をおいて再度お試しください。問題が続く場合は info@hakuso.dev までご連絡ください。"
       );
     } catch {
       setErrorMsg(
@@ -562,10 +562,10 @@ export default function CancelPage() {
             <p className="mt-4 text-xs text-muted">
               ご不明点がございましたら{" "}
               <a
-                href="mailto:seiyaku.coach.ai@gmail.com"
+                href="mailto:info@hakuso.dev"
                 className="text-accent underline decoration-accent/30 underline-offset-2 transition hover:decoration-accent"
               >
-                seiyaku.coach.ai@gmail.com
+                info@hakuso.dev
               </a>{" "}
               までお問い合わせください。
             </p>

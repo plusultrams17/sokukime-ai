@@ -138,10 +138,10 @@ export function SuccessContent({ status }: { status: VerifyStatus }) {
             <p className="text-xs text-red-600">
               ページを再読み込みしてください。問題が続く場合は{" "}
               <a
-                href="mailto:seiyaku.coach.ai@gmail.com"
+                href="mailto:info@hakuso.dev"
                 className="underline"
               >
-                seiyaku.coach.ai@gmail.com
+                info@hakuso.dev
               </a>{" "}
               までお問い合わせください。
             </p>

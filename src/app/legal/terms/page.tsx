@@ -155,7 +155,7 @@ export default function TermsPage() {
       </Section>
 
       <div className="mt-12 rounded-xl border border-card-border bg-card p-6 text-sm text-muted">
-        <p>お問い合わせ: seiyaku.coach.ai@gmail.com</p>
+        <p>お問い合わせ: info@hakuso.dev</p>
       </div>
     </article>
   );

@@ -104,7 +104,7 @@ export default function RootLayout({
                 },
                 contactPoint: {
                   "@type": "ContactPoint",
-                  email: "seiyaku.coach.ai@gmail.com",
+                  email: "info@hakuso.dev",
                   contactType: "customer support",
                   availableLanguage: "Japanese",
                 },

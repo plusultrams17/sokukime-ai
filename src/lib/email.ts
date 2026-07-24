@@ -292,7 +292,7 @@ function proWelcomeEmail(unsubscribeUrl?: string): { subject: string; html: stri
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      ご不明な点があれば seiyaku.coach.ai@gmail.com までお気軽にお問い合わせください
+      ご不明な点があれば info@hakuso.dev までお気軽にお問い合わせください
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}
@@ -561,7 +561,7 @@ function paymentFailedDay4Email(unsubscribeUrl?: string): { subject: string; htm
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      ご不明な点は seiyaku.coach.ai@gmail.com までお問い合わせください
+      ご不明な点は info@hakuso.dev までお問い合わせください
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}
@@ -686,7 +686,7 @@ function paymentFailedEmail(unsubscribeUrl?: string): { subject: string; html: s
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      ご不明な点は seiyaku.coach.ai@gmail.com までお問い合わせください
+      ご不明な点は info@hakuso.dev までお問い合わせください
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}

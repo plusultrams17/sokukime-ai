@@ -258,10 +258,10 @@ export function EnterpriseLeadForm() {
       <p className="mt-3 text-center text-xs text-muted">
         お急ぎの場合は{" "}
         <a
-          href="mailto:seiyaku.coach.ai@gmail.com"
+          href="mailto:info@hakuso.dev"
           className="text-accent underline decoration-accent/30 underline-offset-2 transition hover:decoration-accent"
         >
-          seiyaku.coach.ai@gmail.com
+          info@hakuso.dev
         </a>{" "}
         まで直接ご連絡ください。
       </p>

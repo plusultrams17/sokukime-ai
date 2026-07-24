@@ -98,7 +98,7 @@ export function Header() {
       }
       console.error("[header] stripe portal failed:", res.status, data);
       alert(
-        "サブスクリプション管理画面を開けませんでした。時間をおいて再度お試しください。\n問題が続く場合は seiyaku.coach.ai@gmail.com までご連絡ください。"
+        "サブスクリプション管理画面を開けませんでした。時間をおいて再度お試しください。\n問題が続く場合は info@hakuso.dev までご連絡ください。"
       );
     } catch (err) {
       console.error("[header] stripe portal error:", err);

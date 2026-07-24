@@ -30,7 +30,7 @@ export default function TokushohoPage() {
             />
             <Row
               label="メールアドレス"
-              value="seiyaku.coach.ai@gmail.com"
+              value="info@hakuso.dev"
             />
             <Row
               label="販売URL"
@@ -85,7 +85,7 @@ export default function TokushohoPage() {
                     ※ デジタルコンテンツの性質上、特定商取引法第15条の4に基づくクーリングオフの対象外です。
                   </div>
                   <div className="mt-1 text-xs">
-                    ※ 当社の責に帰すべき事由（システム障害により長期間サービスが提供されなかった場合等）がある場合は、個別に対応いたします。seiyaku.coach.ai@gmail.com までご連絡ください。
+                    ※ 当社の責に帰すべき事由（システム障害により長期間サービスが提供されなかった場合等）がある場合は、個別に対応いたします。info@hakuso.dev までご連絡ください。
                   </div>
                 </>
               }
@@ -122,7 +122,7 @@ export default function TokushohoPage() {
         </p>
         <p>
           個人事業主のため、住所・電話番号・代表者名は、ご請求いただければ遅滞なく開示いたします。
-          開示をご希望の方は、seiyaku.coach.ai@gmail.com までメールでご連絡ください。
+          開示をご希望の方は、info@hakuso.dev までメールでご連絡ください。
         </p>
       </div>
     </article>
