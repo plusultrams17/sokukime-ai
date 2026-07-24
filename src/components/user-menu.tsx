@@ -74,7 +74,7 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
       }
       console.error("[user-menu] stripe portal failed:", res.status, data);
       alert(
-        "サブスクリプション管理画面を開けませんでした。時間をおいて再度お試しください。\n問題が続く場合は support@seiyaku-coach.com までご連絡ください。"
+        "サブスクリプション管理画面を開けませんでした。時間をおいて再度お試しください。\n問題が続く場合は seiyaku.coach.ai@gmail.com までご連絡ください。"
       );
     } catch (err) {
       console.error("[user-menu] stripe portal error:", err);

@@ -58,7 +58,7 @@ function NPSContent() {
             )}
             {category === "detractor" && (
               <a
-                href="mailto:support@seiyaku-coach.com?subject=サービス改善のご要望"
+                href="mailto:seiyaku.coach.ai@gmail.com?subject=サービス改善のご要望"
                 className="block w-full rounded-xl border border-card-border bg-card px-6 py-4 text-sm transition hover:border-accent/30"
               >
                 <div className="font-bold">サポートに直接相談する</div>

@@ -210,7 +210,7 @@ export default function CancelPage() {
       }
 
       setErrorMsg(
-        "解約処理を開始できませんでした。時間をおいて再度お試しください。問題が続く場合は support@seiyaku-coach.com までご連絡ください。"
+        "解約処理を開始できませんでした。時間をおいて再度お試しください。問題が続く場合は seiyaku.coach.ai@gmail.com までご連絡ください。"
       );
     } catch {
       setErrorMsg(
@@ -562,10 +562,10 @@ export default function CancelPage() {
             <p className="mt-4 text-xs text-muted">
               ご不明点がございましたら{" "}
               <a
-                href="mailto:support@seiyaku-coach.com"
+                href="mailto:seiyaku.coach.ai@gmail.com"
                 className="text-accent underline decoration-accent/30 underline-offset-2 transition hover:decoration-accent"
               >
-                support@seiyaku-coach.com
+                seiyaku.coach.ai@gmail.com
               </a>{" "}
               までお問い合わせください。
             </p>

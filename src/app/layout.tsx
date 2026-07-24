@@ -104,7 +104,7 @@ export default function RootLayout({
                 },
                 contactPoint: {
                   "@type": "ContactPoint",
-                  email: "support@seiyaku-coach.com",
+                  email: "seiyaku.coach.ai@gmail.com",
                   contactType: "customer support",
                   availableLanguage: "Japanese",
                 },
