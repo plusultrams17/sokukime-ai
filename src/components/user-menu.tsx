@@ -21,7 +21,7 @@ export function UserMenu({ initialPlan }: UserMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const isPaid = plan === "starter" || plan === "pro" || plan === "master";
-  const planLabel = plan === "master" ? "Master" : plan === "pro" ? "Pro" : plan === "starter" ? "Starter" : "";
+  const planLabel = plan === "master" ? "無制限" : plan === "pro" ? "プロ" : plan === "starter" ? "ライト" : "";
 
   useEffect(() => {
     const supabase = createClient();

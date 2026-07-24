@@ -750,7 +750,7 @@ export default function RoleplayPage() {
                   style={isPixarPhase ? { border: '0.12em solid #4d4c4a', borderRadius: '2em', padding: '0.2em 0.6em', fontSize: '0.72em', fontWeight: 800, background: '#f48a58', color: '#fff', boxShadow: '0.08em 0.08em 0 #c4693d' } : undefined}
                   className={isPixarPhase ? '' : 'rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent'}
                 >
-                  {usage.plan === "master" ? "Master" : usage.plan === "pro" ? "Pro" : "Starter"}
+                  {usage.plan === "master" ? "無制限" : usage.plan === "pro" ? "プロ" : "ライト"}
                 </div>
               </div>
             )}

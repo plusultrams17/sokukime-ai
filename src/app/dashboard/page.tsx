@@ -635,7 +635,7 @@ export default function DashboardPage() {
                   </span>
                   {usage.plan !== "free" && (
                     <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-bold text-accent">
-                      {usage.plan === "master" ? "Master" : usage.plan === "pro" ? "Pro" : "Starter"}
+                      {usage.plan === "master" ? "無制限" : usage.plan === "pro" ? "プロ" : "ライト"}
                     </span>
                   )}
                 </div>

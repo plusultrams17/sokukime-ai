@@ -12,7 +12,7 @@ export default function SettingsPage() {
 
   const isPaid = plan === "starter" || plan === "pro" || plan === "master";
   const planLabel =
-    plan === "master" ? "Master" : plan === "pro" ? "Pro" : plan === "starter" ? "Starter" : "Free";
+    plan === "master" ? "無制限" : plan === "pro" ? "プロ" : plan === "starter" ? "ライト" : "無料";
 
   useEffect(() => {
     async function load() {
