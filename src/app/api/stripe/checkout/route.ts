@@ -105,7 +105,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let customerId = profile?.stripe_customer_id;
+    let customerId: string | null = profile?.stripe_customer_id ?? null;
+
+    // 保存済み顧客が現在のStripeモードに存在するか検証。
+    // テスト→本番移行で残った古い cus_（テストモードで作成）を本番キーで使うと
+    // "No such customer" で失敗するため、存在しなければ作り直す（自己修復）。
+    if (customerId) {
+      try {
+        const existing = await stripe.customers.retrieve(customerId);
+        if ("deleted" in existing && existing.deleted) {
+          customerId = null;
+        }
+      } catch {
+        customerId = null;
+      }
+    }
 
     if (!customerId) {
       const customer = await stripe.customers.create({
@@ -116,7 +130,12 @@ export async function POST(request: NextRequest) {
 
       const { error: cidError } = await supabase
         .from("profiles")
-        .update({ stripe_customer_id: customerId })
+        .update({
+          stripe_customer_id: customerId,
+          // 旧テストモード顧客に紐づく古い契約情報が残っていれば一緒にクリア
+          stripe_subscription_id: null,
+          subscription_status: null,
+        })
         .eq("id", user.id);
 
       if (cidError) {
