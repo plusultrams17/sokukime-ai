@@ -734,59 +734,9 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // ── 14. Monthly-to-annual upgrade prompt ──
-  // Pro users on monthly billing for 3+ months, prompt to switch to annual
-  {
-    const { data: monthlyPros } = await supabase
-      .from("profiles")
-      .select("id, email, email_unsubscribed, created_at")
-      .eq("plan", "pro")
-      .eq("subscription_status", "active")
-      .not("email", "is", null);
-
-    if (monthlyPros) {
-      for (const user of monthlyPros) {
-        if (!user.email || user.email_unsubscribed) continue;
-
-        try {
-          // Check if already sent monthly_to_annual email
-          const { data: alreadySent } = await supabase
-            .from("onboarding_emails")
-            .select("id")
-            .eq("user_id", user.id)
-            .eq("email_type", "monthly_to_annual")
-            .limit(1);
-
-          if (alreadySent && alreadySent.length > 0) continue;
-
-          // Check Pro activation date (use pro_welcome email as anchor)
-          const { data: proWelcome } = await supabase
-            .from("onboarding_emails")
-            .select("created_at")
-            .eq("user_id", user.id)
-            .eq("email_type", "pro_welcome")
-            .order("created_at", { ascending: false })
-            .limit(1);
-
-          if (!proWelcome || proWelcome.length === 0) continue;
-
-          const proStart = new Date(proWelcome[0].created_at);
-          const daysSincePro = Math.floor((now.getTime() - proStart.getTime()) / (1000 * 60 * 60 * 24));
-
-          // Send at 90 days (3 months)
-          if (daysSincePro >= 90 && daysSincePro < 120) {
-            const sent = await sendEngagementEmail(user.email, "monthly_to_annual", user.id);
-            if (sent) {
-              await supabase.from("onboarding_emails").insert({ user_id: user.id, email_type: "monthly_to_annual" });
-              results.monthly_to_annual++;
-            }
-          }
-        } catch {
-          results.errors++;
-        }
-      }
-    }
-  }
+  // ── 14. Monthly-to-annual upgrade prompt ──（2026-07-24 年額プラン廃止により無効化）
+  // 個人向け年額プランを廃止したため、月額→年額の案内メールは送信しない。
+  // 将来 年額を再開する場合はこのセクションを復活させる。
 
   // ── 16. Weekly admin revenue report (Mondays only) ──
   const adminEmail = process.env.ADMIN_EMAIL;

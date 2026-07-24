@@ -1,0 +1,29 @@
+
+🔑 Stripe mode: LIVE ⚠️
+
+📦 処理中: 成約コーチAI ライトプラン
+   ✓ 既存商品を使用: prod_UwWQ6pUDMr5NLu
+   ✓ 既存価格を使用: price_1TwdNP1hLF22ViMUFKX1Ut41 (ライト月額 ¥2,980)
+
+📦 処理中: 成約コーチAI プロプラン
+   ✓ 既存商品を使用: prod_UwWQKAadFbPyq6
+   ✓ 既存価格を使用: price_1TwdNQ1hLF22ViMUt08fCOzq (プロ月額 ¥6,980)
+   ✓ 既存価格を使用: price_1TwdNQ1hLF22ViMUPqvfcoR5 (プロ年額 ¥69,800（2ヶ月分お得）)
+
+📦 処理中: 成約コーチAI 無制限プラン
+   ✓ 既存商品を使用: prod_UwWQTLEw2XnDsL
+   ✓ 既存価格を使用: price_1TwdNR1hLF22ViMUyhyCnOCU (無制限月額 ¥14,800)
+
+════════════════════════════════════════════
+✅ セットアップ完了
+════════════════════════════════════════════
+
+以下を .env.local に追加してください:
+
+STRIPE_STARTER_PRICE_ID=price_1TwdNP1hLF22ViMUFKX1Ut41  # ライト月額 ¥2,980
+STRIPE_PRO_PRICE_ID=price_1TwdNQ1hLF22ViMUt08fCOzq  # プロ月額 ¥6,980
+STRIPE_PRO_ANNUAL_PRICE_ID=price_1TwdNQ1hLF22ViMUPqvfcoR5  # プロ年額 ¥69,800（2ヶ月分お得）
+STRIPE_MASTER_PRICE_ID=price_1TwdNR1hLF22ViMUyhyCnOCU  # 無制限月額 ¥14,800
+
+本番環境（Vercel）にも同じ値を設定してください。
+
