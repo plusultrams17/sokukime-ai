@@ -99,8 +99,7 @@ export function resolveTeamPlanTier(
   if (
     tier === "team_5" ||
     tier === "team_10" ||
-    tier === "team_30" ||
-    tier === "team_50"
+    tier === "team_30"
   ) {
     return tier;
   }

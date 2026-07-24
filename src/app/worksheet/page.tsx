@@ -54,7 +54,7 @@ function WorksheetPaywall() {
           href="/pricing"
           className="inline-flex h-10 items-center rounded-lg bg-accent px-6 text-sm font-bold text-white transition hover:bg-[#ea6d0e]"
         >
-          プランを見る（月額¥990〜）
+          プランを見る（月額¥2,980〜）
         </Link>
         <p className="mt-2 text-[11px] text-[#9CA3AF]">
           いつでも解約OK・違約金なし

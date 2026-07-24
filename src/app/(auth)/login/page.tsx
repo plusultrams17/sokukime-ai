@@ -131,7 +131,7 @@ function LoginForm() {
             ))}
           </ul>
           <p className="text-[10px] text-accent/70 pt-1">
-            有料プラン（Starter ¥990/月〜）で全22レッスン・全5カテゴリ詳細スコアに対応
+            有料プラン（ライト ¥2,980/月〜）で全22レッスン・全5カテゴリ詳細スコアに対応
           </p>
         </div>
       </div>

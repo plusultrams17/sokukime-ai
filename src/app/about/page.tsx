@@ -86,7 +86,7 @@ export default function AboutPage() {
       <section className="border-t border-card-border px-4 py-10 sm:px-6 sm:py-12">
         <div className="mx-auto max-w-3xl">
           <p className="text-sm leading-relaxed text-muted">
-            <strong className="text-foreground">成約コーチAI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間ロープレ（Proなら月60回）で解決します。
+            <strong className="text-foreground">成約コーチAI</strong>は、営業心理学の理論と現場経験から体系化された「成約5ステップメソッド」（アプローチ・ヒアリング・プレゼン・クロージング・反論処理）をAI技術で誰でも練習できるようにした営業ロープレコーチングサービスです。「練習相手がいない」「恥ずかしくて練習できない」という営業マンの課題を、AIお客さん役との24時間ロープレ（プロなら月100回）で解決します。
           </p>
         </div>
       </section>

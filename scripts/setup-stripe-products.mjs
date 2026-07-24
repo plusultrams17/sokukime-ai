@@ -5,9 +5,10 @@
  *   1. .env.local に STRIPE_SECRET_KEY が設定されていることを確認
  *   2. node scripts/setup-stripe-products.mjs
  *   3. 出力された Price ID を .env.local の
- *      STRIPE_STARTER_PRICE_ID / STRIPE_PRO_PRICE_ID / STRIPE_MASTER_PRICE_ID にコピー
+ *      STRIPE_STARTER_PRICE_ID / STRIPE_PRO_PRICE_ID / STRIPE_PRO_ANNUAL_PRICE_ID / STRIPE_MASTER_PRICE_ID にコピー
  *
- * 2026-04-11: 4プラン構成 (Free / Starter ¥990 / Pro ¥1,980 / Master ¥4,980)
+ * 2026-07-24 料金リニューアル:
+ *   ライト ¥2,980/月 ・ プロ ¥6,980/月（年払い ¥69,800）・ 無制限 ¥14,800/月
  * 冪等性: 同じ商品名が既にある場合はスキップします。
  */
 
@@ -50,20 +51,21 @@ console.log(`\n🔑 Stripe mode: ${isTestMode ? "TEST" : "LIVE ⚠️"}\n`);
 
 const stripe = new Stripe(STRIPE_SECRET_KEY, { timeout: 60000 });
 
-// ── 作成する商品定義 (2026-04-11: 4プラン構成) ──
-// Free / Starter ¥990 月30回 / Pro ¥1,980 月60回 / Master ¥4,980 月200回
+// ── 作成する商品定義 (2026-07-24: 料金リニューアル) ──
+// ライト ¥2,980 月30回 / プロ ¥6,980 月100回（年払い ¥69,800）/ 無制限 ¥14,800 月300回
 const PRODUCTS = [
   {
     envKey: "STRIPE_STARTER_PRICE_ID",
-    productName: "成約コーチAI スタータープラン",
+    productName: "成約コーチAI ライトプラン",
     productDescription:
       "AIロープレ月30回、学習コース全22レッスン、業種別トークスクリプト、切り返し話法30パターン、成約スコア全5カテゴリ",
     prices: [
       {
-        unitAmount: 990,
+        envKey: "STRIPE_STARTER_PRICE_ID",
+        unitAmount: 2980,
         currency: "jpy",
         recurring: { interval: "month" },
-        nickname: "Starter月額 ¥990",
+        nickname: "ライト月額 ¥2,980",
       },
     ],
   },
@@ -71,27 +73,36 @@ const PRODUCTS = [
     envKey: "STRIPE_PRO_PRICE_ID",
     productName: "成約コーチAI プロプラン",
     productDescription:
-      "AIロープレ月60回、学習コース全22レッスン、業種別トークスクリプト、切り返し話法30パターン、成約スコア全5カテゴリ",
+      "AIロープレ月100回、学習コース全22レッスン、業種別トークスクリプト、切り返し話法30パターン、成約スコア全5カテゴリ",
     prices: [
       {
-        unitAmount: 1980,
+        envKey: "STRIPE_PRO_PRICE_ID",
+        unitAmount: 6980,
         currency: "jpy",
         recurring: { interval: "month" },
-        nickname: "Pro月額 ¥1,980",
+        nickname: "プロ月額 ¥6,980",
+      },
+      {
+        envKey: "STRIPE_PRO_ANNUAL_PRICE_ID",
+        unitAmount: 69800,
+        currency: "jpy",
+        recurring: { interval: "year" },
+        nickname: "プロ年額 ¥69,800（2ヶ月分お得）",
       },
     ],
   },
   {
     envKey: "STRIPE_MASTER_PRICE_ID",
-    productName: "成約コーチAI マスタープラン",
+    productName: "成約コーチAI 無制限プラン",
     productDescription:
-      "AIロープレ月200回、学習コース全22レッスン、業種別トークスクリプト、切り返し話法30パターン、成約スコア全5カテゴリ、優先サポート",
+      "AIロープレ実質無制限（月300回まで）、学習コース全22レッスン、業種別トークスクリプト、切り返し話法30パターン、成約スコア全5カテゴリ、優先サポート",
     prices: [
       {
-        unitAmount: 4980,
+        envKey: "STRIPE_MASTER_PRICE_ID",
+        unitAmount: 14800,
         currency: "jpy",
         recurring: { interval: "month" },
-        nickname: "Master月額 ¥4,980",
+        nickname: "無制限月額 ¥14,800",
       },
     ],
   },
@@ -161,7 +172,7 @@ async function main() {
       }
 
       results.push({
-        envKey: productDef.envKey,
+        envKey: priceDef.envKey || productDef.envKey,
         priceId: price.id,
         nickname: priceDef.nickname,
       });

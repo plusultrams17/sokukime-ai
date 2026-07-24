@@ -390,7 +390,7 @@ export default function KPIDashboard() {
           <KPICard
             label="MRR (月間定期収益)"
             value={`¥${current.mrr.toLocaleString()}`}
-            sub={`有料 ${current.proUsers}人（Starter ¥990 / Pro ¥1,980 / Master ¥4,980）`}
+            sub={`有料 ${current.proUsers}人（ライト ¥2,980 / プロ ¥6,980 / 無制限 ¥14,800）`}
             current={current.mrr}
             previous={previous?.mrr}
           />

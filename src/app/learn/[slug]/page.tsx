@@ -188,7 +188,7 @@ export default function LessonPage() {
                 このレッスンは有料プラン限定です
               </h2>
               <p className="text-sm text-muted mb-6 max-w-md mx-auto">
-                Starter（¥990/月30回）・Pro（¥1,980/月60回）・Master（¥4,980/月200回）のいずれかに登録すると、全22レッスン＋認定試験にアクセスできます。
+                ライト（¥2,980/月30回）・プロ（¥6,980/月100回）・無制限（¥14,800/実質無制限）のいずれかに登録すると、全22レッスン＋認定試験にアクセスできます。
               </p>
               <Link
                 href="/pricing"

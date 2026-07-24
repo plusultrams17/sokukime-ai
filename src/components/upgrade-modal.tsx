@@ -157,9 +157,9 @@ export function UpgradeModal({
         {/* 3-plan comparison */}
         <div className="mb-4 grid grid-cols-3 gap-2">
           {([
-            { tier: "starter" as const, label: "Starter", price: 990, credits: 30 },
-            { tier: "pro" as const, label: "Pro", price: 1980, credits: 60, recommended: true },
-            { tier: "master" as const, label: "Master", price: 4980, credits: 200 },
+            { tier: "starter" as const, label: "ライト", price: 2980, credits: 30 },
+            { tier: "pro" as const, label: "プロ", price: 6980, credits: 100, recommended: true },
+            { tier: "master" as const, label: "無制限", price: 14800, credits: 300 },
           ]).map((p) => (
             <button
               key={p.tier}
@@ -210,7 +210,7 @@ export function UpgradeModal({
             disabled={isLoading}
             className="flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-60"
           >
-            {isLoading ? "処理中..." : `${selectedTier === "master" ? "Master" : selectedTier === "starter" ? "Starter" : "Pro"}にアップグレード`}
+            {isLoading ? "処理中..." : `${selectedTier === "master" ? "無制限" : selectedTier === "starter" ? "ライト" : "プロ"}にアップグレード`}
           </button>
           {errorMsg && (
             <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs text-red-400 text-center">

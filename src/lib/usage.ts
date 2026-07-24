@@ -23,8 +23,8 @@ export const FREE_LIFETIME_LIMIT = 5;
  */
 export const TIER_MONTHLY_CREDITS: Record<Exclude<PlanTier, "free">, number> = {
   starter: 30,
-  pro: 60,
-  master: 200,
+  pro: 100,
+  master: 300,
 };
 
 export interface UsageStatus {

@@ -31,25 +31,28 @@ const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.verce
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "業種別営業学習プログラム | 成約コーチAI - 営業の「型」を体系的に習得",
+    default:
+      "成約コーチAI | 住宅・リフォーム・塗装営業のAIロープレ - 新人が一人で成約の練習ができる",
     template: "%s | 成約コーチAI",
   },
   description:
-    "成約コーチAIは営業心理学に基づく22レッスンとAIロープレで営業スキルを体系的に習得できる無料サービスです",
+    "成約コーチAIは、住宅・リフォーム・塗装営業のためのAIロープレです。お客様役のAIと商談を練習すると、5カテゴリで採点し弱点を可視化。練習相手がいなくても、新人が一人で成約の練習を積めます。無料で5回お試し。",
   openGraph: {
     type: "website",
     locale: "ja_JP",
     url: SITE_URL,
     siteName: "成約コーチAI",
-    title: "業種別営業学習プログラム | 成約コーチAI - 営業の「型」を体系的に習得",
+    title:
+      "成約コーチAI | 住宅・リフォーム・塗装営業のAIロープレ - 新人が一人で成約の練習ができる",
     description:
-      "成約コーチAIは営業心理学に基づく22レッスンとAIロープレで営業スキルを体系的に習得できる無料サービスです",
+      "お客様役のAIと商談を練習すると、5カテゴリで採点し弱点を可視化。練習相手がいなくても、新人が一人で成約の練習を積めます。無料で5回お試し。",
   },
   twitter: {
     card: "summary_large_image",
-    title: "業種別営業学習プログラム | 成約コーチAI - 営業の「型」を体系的に習得",
+    title:
+      "成約コーチAI | 住宅・リフォーム・塗装営業のAIロープレ",
     description:
-      "成約コーチAIは営業心理学に基づく22レッスンとAIロープレで営業スキルを体系的に習得できる無料サービスです",
+      "お客様役のAIと商談を練習すると、5カテゴリで採点し弱点を可視化。新人が一人で成約の練習ができます。無料で5回お試し。",
   },
   robots: {
     index: true,

@@ -6,7 +6,7 @@ export interface TeamMembership {
   orgName: string;
   role: "owner" | "admin" | "member";
   maxMembers: number;
-  /** チームプランのティア (team_5/team_10/team_30/team_50)。未設定時は null */
+  /** チームプランのティア (team_5/team_10/team_30)。未設定時は null */
   teamPlanTier: TeamPlanTier | null;
   /** トライアル中かどうか */
   isTrial: boolean;

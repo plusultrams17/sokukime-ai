@@ -106,7 +106,7 @@ const industries = ["不動産", "保険", "SaaS", "人材", "教育", "物販"]
 const lpFaqs = [
   {
     q: "本当に無料で使えますか？",
-    a: "はい。Googleアカウントでログインすれば無料プランでAIロープレを累計5回まで（生涯の上限）お試しいただけます。クレジットカード不要。継続して練習したい方には Starter（¥990/月30回）、Pro（¥1,980/月60回）、Master（¥4,980/月200回）の3プランをご用意しています。",
+    a: "はい。Googleアカウントでログインすれば無料プランでAIロープレを累計5回まで（生涯の上限）お試しいただけます。クレジットカード不要。継続して練習したい方には ライト（¥2,980/月30回）、プロ（¥6,980/月100回）、無制限（¥14,800/実質無制限）の3プランをご用意しています。",
   },
   {
     q: "どんな業種・商材でも使えますか？",
@@ -463,10 +463,10 @@ export default function RoleplayLP() {
           },
           {
             "@type": "Offer",
-            price: "1980",
+            price: "6980",
             priceCurrency: "JPY",
-            name: "Proプラン",
-            description: "AIロープレ月60回・リアルタイムコーチング",
+            name: "プロプラン",
+            description: "AIロープレ月100回・リアルタイムコーチング",
           },
         ],
       },
@@ -733,7 +733,7 @@ export default function RoleplayLP() {
             シンプルな料金プラン
           </h2>
           <p className="mb-12 text-center text-sm text-muted sm:text-base">
-            まずは無料で体験。本格利用はStarter ¥990/月〜。
+            まずは無料で体験。本格利用はライト ¥2,980/月〜。
           </p>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -765,11 +765,11 @@ export default function RoleplayLP() {
 
             {/* Starter Plan */}
             <div className="rounded-2xl border border-card-border bg-white p-8">
-              <p className="mb-1 text-sm font-medium text-muted">Starterプラン</p>
+              <p className="mb-1 text-sm font-medium text-muted">ライトプラン</p>
               <p className="mb-1 text-3xl font-bold text-foreground">
-                ¥990<span className="text-base font-normal text-muted">/月</span>
+                ¥2,980<span className="text-base font-normal text-muted">/月</span>
               </p>
-              <p className="mb-4 text-xs text-muted">1回あたり約33円（月30回）</p>
+              <p className="mb-4 text-xs text-muted">1回あたり約99円（月30回）</p>
               <ul className="space-y-3 text-sm text-muted">
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>
@@ -797,15 +797,15 @@ export default function RoleplayLP() {
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold text-white">
                 おすすめ
               </span>
-              <p className="mb-1 text-sm font-medium text-muted">Proプラン</p>
+              <p className="mb-1 text-sm font-medium text-muted">プロプラン</p>
               <p className="mb-1 text-3xl font-bold text-foreground">
-                ¥1,980<span className="text-base font-normal text-muted">/月</span>
+                ¥6,980<span className="text-base font-normal text-muted">/月</span>
               </p>
-              <p className="mb-4 text-xs text-muted">1回あたり約33円（月60回）</p>
+              <p className="mb-4 text-xs text-muted">1回あたり約70円（月100回）</p>
               <ul className="space-y-3 text-sm text-muted">
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>
-                  AIロープレ <strong className="text-foreground">月60回</strong>
+                  AIロープレ <strong className="text-foreground">月100回</strong>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-accent"><CheckIcon /></span>

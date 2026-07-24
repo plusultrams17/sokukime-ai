@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
   const now = new Date();
 
-  // ── User Counts (4-tier: Free / Starter ¥990 / Pro ¥1,980 / Master ¥4,980) ──
+  // ── User Counts (4-tier: フリー / ライト ¥2,980 / プロ ¥6,980 / 無制限 ¥14,800) ──
   const [totalResult, starterResult, proResult, masterResult, trialResult, freeResult, canceledResult] = await Promise.all([
     supabase.from("profiles").select("id", { count: "exact", head: true }),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("plan", "starter"),
@@ -47,8 +47,8 @@ export async function GET(request: NextRequest) {
   const canceledUsers = canceledResult.count || 0;
 
   // ── MRR Calculation (4-tier) ──
-  // Starter ¥990 / Pro ¥1,980 / Master ¥4,980 月額。年額は未対応（全て月次想定）
-  const monthlyMRR = starterUsers * 990 + proUsers * 1980 + masterUsers * 4980;
+  // ライト ¥2,980 / プロ ¥6,980 / 無制限 ¥14,800 月額。年額は未対応（全て月次想定）
+  const monthlyMRR = starterUsers * 2980 + proUsers * 6980 + masterUsers * 14800;
 
   // ── Active Users (last 7 days) ──
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);

@@ -86,7 +86,7 @@ function UpgradeToast() {
           Proプランのご利用が開始されました
         </h2>
         <p className="mb-6 text-center text-sm text-muted">
-          月60回ロープレ・全5カテゴリ詳細スコア・AI改善アドバイスが使えます
+          月100回ロープレ・全5カテゴリ詳細スコア・AI改善アドバイスが使えます
         </p>
 
         <div className="mb-6 space-y-3 rounded-xl border border-card-border bg-card p-4">
@@ -1483,7 +1483,7 @@ export default function RoleplayPage() {
                     有料プランなら毎月クレジットがリセットされ継続練習できます。
                   </p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5em', marginBottom: '0.5em', fontSize: '0.72em', color: '#6a6560' }}>
-                    <span>月60回ロープレ (Pro)</span>
+                    <span>月100回ロープレ (プロ)</span>
                     <span>全スコア開放</span>
                     <span>AI改善アドバイス</span>
                   </div>
@@ -1511,7 +1511,7 @@ export default function RoleplayPage() {
                     プランを見る →
                   </a>
                   <p style={{ fontSize: '0.72em', color: '#a09a90', marginTop: '0.5em' }}>
-                    月額¥990〜 ・ いつでも解約OK ・ 経費精算OK
+                    月額¥2,980〜 ・ いつでも解約OK ・ 経費精算OK
                   </p>
                 </div>
               </div>
@@ -1780,7 +1780,7 @@ function AuthGateContent({
                   <li>5カテゴリ別の詳細スコア＆レーダーチャート</li>
                   <li>カテゴリごとの改善ポイント</li>
                   <li>スコア履歴の保存＆推移グラフ</li>
-                  <li>ログイン後は累計5回まで無料（Starter月30回／Pro月60回／Master月200回）</li>
+                  <li>ログイン後は累計5回まで無料（ライト月30回／プロ月100回／無制限 実質無制限）</li>
                 </ul>
               </div>
 

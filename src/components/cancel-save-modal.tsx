@@ -22,7 +22,7 @@ interface CancelSaveModalProps {
   onProceedToCancel: () => void;
 }
 
-const ORIGINAL_PRICE = 1980;
+const ORIGINAL_PRICE = 6980;
 
 export function CancelSaveModal({
   open,

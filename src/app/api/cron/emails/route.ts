@@ -805,7 +805,7 @@ export async function GET(request: NextRequest) {
         .select("id", { count: "exact", head: true })
         .gte("created_at", sevenDaysAgoISO);
 
-      // Paid users by tier (4-tier: Starter ¥990 / Pro ¥1,980 / Master ¥4,980)
+      // Paid users by tier (4-tier: ライト ¥2,980 / プロ ¥6,980 / 無制限 ¥14,800)
       const [
         { count: starterCount },
         { count: proCount },
@@ -830,11 +830,11 @@ export async function GET(request: NextRequest) {
 
       const proUsers = (starterCount || 0) + (proCount || 0) + (masterCount || 0);
 
-      // MRR = Starter * 990 + Pro * 1980 + Master * 4980
+      // MRR = ライト * 2980 + プロ * 6980 + 無制限 * 14800
       const mrr =
-        (starterCount || 0) * 990 +
-        (proCount || 0) * 1980 +
-        (masterCount || 0) * 4980;
+        (starterCount || 0) * 2980 +
+        (proCount || 0) * 6980 +
+        (masterCount || 0) * 14800;
 
       // Total sessions
       const { count: totalSessions } = await supabase
@@ -936,12 +936,12 @@ export async function GET(request: NextRequest) {
       const currentProCount =
         (currentStarter || 0) + (currentPro || 0) + (currentMaster || 0);
 
-      // Estimate last week's MRR by adding back churn at weighted avg (¥1,980 Pro baseline)
+      // Estimate last week's MRR by adding back churn at weighted avg (¥6,980 Pro baseline)
       const currentMRR =
-        (currentStarter || 0) * 990 +
-        (currentPro || 0) * 1980 +
-        (currentMaster || 0) * 4980;
-      const estimatedPreviousMRR = currentMRR + (churnCount || 0) * 1980;
+        (currentStarter || 0) * 2980 +
+        (currentPro || 0) * 6980 +
+        (currentMaster || 0) * 14800;
+      const estimatedPreviousMRR = currentMRR + (churnCount || 0) * 6980;
 
       if (estimatedPreviousMRR > 0) {
         const mrrDropPercent = Math.round(((estimatedPreviousMRR - currentMRR) / estimatedPreviousMRR) * 100);

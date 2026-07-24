@@ -30,11 +30,11 @@ export interface CohortRow {
   retention: number[]; // retention % for month 0, 1, 2, ...
 }
 
-// 4プラン構成 (2026-04-11〜)
+// 4プラン構成 (2026-07-24 料金リニューアル〜)
 const TIER_PRICE = {
-  starter: 990,
-  pro: 1980,
-  master: 4980,
+  starter: 2980,
+  pro: 6980,
+  master: 14800,
 } as const;
 
 /** Calculate all KPIs from live DB data */

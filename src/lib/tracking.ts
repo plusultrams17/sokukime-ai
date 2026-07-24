@@ -155,9 +155,9 @@ export function trackUpgradeModalShown(
 }
 
 const TIER_PRICE: Record<string, number> = {
-  starter: 990,
-  pro: 1980,
-  master: 4980,
+  starter: 2980,
+  pro: 6980,
+  master: 14800,
 };
 
 export function trackCheckoutStarted(

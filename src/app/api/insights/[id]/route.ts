@@ -45,7 +45,7 @@ export async function GET(
 
       if ((count || 0) >= 3) {
         return NextResponse.json(
-          { error: "本日の無料閲覧上限（3件）に達しました。有料プラン（Starter ¥990〜）にアップグレードすると無制限に閲覧できます。" },
+          { error: "本日の無料閲覧上限（3件）に達しました。有料プラン（ライト ¥2,980〜）にアップグレードすると無制限に閲覧できます。" },
           { status: 403 }
         );
       }

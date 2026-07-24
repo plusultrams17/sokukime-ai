@@ -43,7 +43,7 @@ export async function POST() {
 
   // Check usage limit before recording
   //  - Free: 累計5回（生涯）
-  //  - Starter: 月30回 / Pro: 月60回 / Master: 月200回（JST 暦月リセット）
+  //  - Starter: 月30回 / Pro: 月100回 / Master: 月300回（JST 暦月リセット）
   const status = await getUsageStatus(supabase, user.id);
   if (!status.canStart) {
     const planLabel =

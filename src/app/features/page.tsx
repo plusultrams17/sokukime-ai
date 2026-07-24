@@ -91,7 +91,7 @@ export default function FeaturesPage() {
             AI × 成約メソッドで、効率的に営業力を鍛える
           </p>
           <p className="mx-auto mt-6 max-w-3xl text-sm text-muted leading-relaxed text-left">
-            成約コーチAIの主要機能は、(1) <strong className="text-foreground">AIロープレ</strong>（業種・難易度カスタマイズ対応、3営業シーン×4顧客タイプ×3難易度）、(2) <strong className="text-foreground">リアルタイムAIコーチ</strong>（商談中にテクニックを自動分析・提案）、(3) <strong className="text-foreground">成約スコアリング</strong>（5ステップ×20点の100点満点で採点）の3つです。無料プランでは累計5回までAIロープレ練習が可能。有料プラン（Starter ¥990/月30回、Pro ¥1,980/月60回、Master ¥4,980/月200回）なら24時間いつでも本格的に練習できます。
+            成約コーチAIの主要機能は、(1) <strong className="text-foreground">AIロープレ</strong>（業種・難易度カスタマイズ対応、3営業シーン×4顧客タイプ×3難易度）、(2) <strong className="text-foreground">リアルタイムAIコーチ</strong>（商談中にテクニックを自動分析・提案）、(3) <strong className="text-foreground">成約スコアリング</strong>（5ステップ×20点の100点満点で採点）の3つです。無料プランでは累計5回までAIロープレ練習が可能。有料プラン（ライト ¥2,980/月30回、プロ ¥6,980/月100回、無制限 ¥14,800/実質無制限）なら24時間いつでも本格的に練習できます。
           </p>
         </div>
       </section>
@@ -158,9 +158,9 @@ export default function FeaturesPage() {
               <tbody>
                 {[
                   ["練習時間", "相手の都合次第", "24時間いつでも"],
-                  ["練習回数", "週1-2回が限度", "月60回（Pro）"],
+                  ["練習回数", "週1-2回が限度", "月100回（プロ）"],
                   ["フィードバック", "主観的", "AI定量スコア"],
-                  ["コスト", "¥50,000〜/回", "¥1,980〜/月"],
+                  ["コスト", "¥50,000〜/回", "¥2,980〜/月"],
                   ["準備", "日程調整が必要", "すぐに開始"],
                   ["一貫性", "相手によって異なる", "常に同じ基準"],
                 ].map(([label, traditional, ai]) => (

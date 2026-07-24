@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { TEAM_PLANS } from "@/lib/plans";
 import { EnterpriseLeadForm } from "./lead-form";
 
 export const metadata: Metadata = {
   title: "法人プラン | 成約コーチAI - チーム全員の営業力をAIで底上げ",
   description:
-    "成約コーチAIの法人向けチームプラン。チーム管理ダッシュボード、メンバー招待、一括請求書払いに対応。5名から導入可能で、人数に応じたボリュームディスカウントをご用意しています。",
+    "住宅・リフォーム・塗装など現場商談が主戦場の営業チーム向け法人プラン。チーム管理ダッシュボード、メンバー招待、一括請求書払いに対応。1人¥2,980から導入でき、初期設定から月次の活用レポートまで運営が伴走します。",
   openGraph: {
     title: "法人プラン | 成約コーチAI",
     description:
-      "営業チームの実力をAIで可視化し、成約力を底上げ。5名からの法人向けチームプランをご用意。",
+      "営業チームの実力をAIで可視化し、成約力を底上げ。1人¥2,980からの法人向けチームプランをご用意。",
   },
 };
 
@@ -35,6 +34,88 @@ const VALUE_PROPOSITIONS = [
     title: "全員が同じメソッドで学習",
     description:
       "成約5ステップメソッドに基づく全22レッスンとAIロープレで、チーム全体の営業トーク品質を標準化できます。",
+  },
+] as const;
+
+// 法人プランの表示単価（2026-07-24 リニューアル・年払いは月額から20%オフ）
+// 課金ロジックは src/lib/plans.ts の TEAM_PLANS で管理。ここは表示用に独立定義。
+const ENTERPRISE_PLANS = [
+  {
+    key: "team",
+    name: "Team",
+    memberRange: "5〜9名",
+    pricePerUser: 2980,
+    annualPricePerUser: 2384,
+    creditLabel: "月60回/人",
+    recommended: false,
+    features: [
+      "全22レッスン",
+      "AIロープレ 月60回/人",
+      "成約スコア全5カテゴリ",
+      "チーム管理ダッシュボード",
+      "メンバー招待管理",
+      "メールサポート",
+    ],
+  },
+  {
+    key: "business",
+    name: "Business",
+    memberRange: "10〜29名",
+    pricePerUser: 2480,
+    annualPricePerUser: 1984,
+    creditLabel: "月60回/人",
+    recommended: true,
+    features: [
+      "全22レッスン",
+      "AIロープレ 月60回/人",
+      "成約スコア全5カテゴリ",
+      "チーム管理ダッシュボード",
+      "メンバー招待管理",
+      "請求書払い対応",
+      "メールサポート",
+    ],
+  },
+  {
+    key: "enterprise",
+    name: "Enterprise",
+    memberRange: "30名以上",
+    pricePerUser: 1980,
+    annualPricePerUser: 1584,
+    creditLabel: "月100回/人",
+    recommended: false,
+    features: [
+      "全22レッスン",
+      "AIロープレ 月100回/人",
+      "成約スコア全5カテゴリ",
+      "チーム管理ダッシュボード",
+      "メンバー招待管理",
+      "請求書払い対応",
+      "優先サポート",
+      "専任サポート担当",
+    ],
+  },
+] as const;
+
+const ONBOARDING_SUPPORT = [
+  {
+    title: "初期設定を代行します",
+    description:
+      "アカウント発行・チーム設定・初期構成の準備を運営側で行います。管理者は届いた環境を確認するところから始められます。",
+  },
+  {
+    title: "メンバー招待をサポートします",
+    description:
+      "招待手順のご案内と、参加状況の確認をお手伝いします。全員がログインできているかを一緒に確認します。",
+  },
+  {
+    title: "使い方レクチャーを実施します",
+    description:
+      "管理者向け・メンバー向けに操作説明の場を設けます。ロープレの始め方からスコアの見方まで、実際の画面でご案内します。",
+  },
+  {
+    title: "月次で活用レポートをお届けします",
+    description:
+      "利用状況とスコア推移をまとめてお渡しし、翌月に向けた活用のポイントを共有します。導入したまま放置になりにくい体制です。",
   },
 ] as const;
 
@@ -95,10 +176,13 @@ export default function EnterprisePage() {
             <br className="hidden sm:block" />
             成約力を底上げ
           </h1>
-          <p className="mx-auto mb-8 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
+          <p className="mx-auto mb-4 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
             成約コーチAIの法人プランなら、チーム全員が同じメソッドで練習し、
             マネージャーは一画面で全員の成長を把握できます。
-            5名から導入でき、人数に応じたボリュームディスカウントをご用意しています。
+            1人¥2,980から導入でき、人数に応じたボリュームディスカウントをご用意しています。
+          </p>
+          <p className="mx-auto mb-8 max-w-2xl text-sm font-medium text-foreground">
+            住宅・リフォーム・塗装など、現場商談が主戦場の営業チーム向けに設計しています。
           </p>
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <a
@@ -145,6 +229,51 @@ export default function EnterprisePage() {
           </div>
         </section>
 
+        {/* Onboarding Support — 導入して終わりにしません */}
+        <section className="py-16 sm:py-20">
+          <div className="mb-10 text-center sm:mb-12">
+            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-accent">
+              Onboarding Support
+            </p>
+            <h2 className="mb-3 text-xl font-bold sm:text-2xl md:text-3xl">
+              導入して終わりにしません
+            </h2>
+            <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted">
+              ツールを渡して終わりではなく、チームに定着するまで運営が伴走します。
+              初期設定・メンバー招待・使い方レクチャー・月次の活用レポートまで、導入後の運用をサポートします。
+            </p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2">
+            {ONBOARDING_SUPPORT.map((item) => (
+              <div
+                key={item.title}
+                className="flex gap-4 rounded-2xl border border-card-border bg-card p-6 sm:p-8"
+              >
+                <svg
+                  className="mt-0.5 h-5 w-5 shrink-0 text-accent"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.704 5.29a1 1 0 010 1.42l-7.5 7.5a1 1 0 01-1.42 0l-3.5-3.5a1 1 0 011.42-1.42L8.5 12.08l6.79-6.79a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <div>
+                  <h3 className="mb-2 text-base font-bold sm:text-lg">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Pricing Table */}
         <section id="pricing" className="scroll-mt-20 py-16 sm:py-20">
           <div className="mb-10 text-center sm:mb-12">
@@ -158,74 +287,64 @@ export default function EnterprisePage() {
               年間契約で全プラン20%OFF
             </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {TEAM_PLANS.map((plan) => {
-              const memberRange = plan.maxMembers
-                ? `${plan.minMembers}-${plan.maxMembers}名`
-                : `${plan.minMembers}名以上`;
-              const creditLabel =
-                plan.creditsPerUser === Infinity
-                  ? "無制限"
-                  : `月${plan.creditsPerUser}回/人`;
-
-              return (
-                <div
-                  key={plan.tier}
-                  className={`relative flex flex-col rounded-2xl border p-5 sm:p-6 ${
-                    plan.tier === "team_30"
-                      ? "border-2 border-accent bg-gradient-to-b from-accent/10 to-card"
-                      : "border-card-border bg-card"
-                  }`}
-                >
-                  {plan.tier === "team_30" && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent px-4 py-1 text-xs font-bold text-white">
-                      人気
-                    </div>
-                  )}
-                  <h3 className="mb-1 text-lg font-bold">{plan.name}</h3>
-                  <p className="mb-4 text-xs text-muted">{memberRange}</p>
-
-                  {/* Monthly price */}
-                  <div className="mb-1 flex items-baseline gap-1">
-                    <span className="text-2xl font-bold text-accent sm:text-3xl">
-                      &yen;{plan.pricePerUser.toLocaleString()}
-                    </span>
-                    <span className="text-xs text-muted">/人/月</span>
+          <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-3">
+            {ENTERPRISE_PLANS.map((plan) => (
+              <div
+                key={plan.key}
+                className={`relative flex flex-col rounded-2xl border p-5 sm:p-6 ${
+                  plan.recommended
+                    ? "border-2 border-accent bg-gradient-to-b from-accent/10 to-card"
+                    : "border-card-border bg-card"
+                }`}
+              >
+                {plan.recommended && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent px-4 py-1 text-xs font-bold text-white">
+                    人気
                   </div>
-                  <p className="mb-4 text-xs text-muted">
-                    年契: &yen;{plan.annualPricePerUser.toLocaleString()}/人/月
-                    <span className="ml-1 rounded bg-green-600/10 px-1.5 py-0.5 text-[10px] font-bold text-green-600">
-                      20%OFF
-                    </span>
-                  </p>
+                )}
+                <h3 className="mb-1 text-lg font-bold">{plan.name}</h3>
+                <p className="mb-4 text-xs text-muted">{plan.memberRange}</p>
 
-                  <p className="mb-4 text-sm font-medium">
-                    AIロープレ {creditLabel}
-                  </p>
-
-                  {/* Features */}
-                  <ul className="mt-auto space-y-2 text-xs">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <svg
-                          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.704 5.29a1 1 0 010 1.42l-7.5 7.5a1 1 0 01-1.42 0l-3.5-3.5a1 1 0 011.42-1.42L8.5 12.08l6.79-6.79a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <span className="text-muted">{f}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Monthly price */}
+                <div className="mb-1 flex items-baseline gap-1">
+                  <span className="text-2xl font-bold text-accent sm:text-3xl">
+                    &yen;{plan.pricePerUser.toLocaleString()}
+                  </span>
+                  <span className="text-xs text-muted">/人/月</span>
                 </div>
-              );
-            })}
+                <p className="mb-4 text-xs text-muted">
+                  年契: &yen;{plan.annualPricePerUser.toLocaleString()}/人/月
+                  <span className="ml-1 rounded bg-green-600/10 px-1.5 py-0.5 text-[10px] font-bold text-green-600">
+                    20%OFF
+                  </span>
+                </p>
+
+                <p className="mb-4 text-sm font-medium">
+                  AIロープレ {plan.creditLabel}
+                </p>
+
+                {/* Features */}
+                <ul className="mt-auto space-y-2 text-xs">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2">
+                      <svg
+                        className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.704 5.29a1 1 0 010 1.42l-7.5 7.5a1 1 0 01-1.42 0l-3.5-3.5a1 1 0 011.42-1.42L8.5 12.08l6.79-6.79a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-muted">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
 
           {/* Pricing note */}

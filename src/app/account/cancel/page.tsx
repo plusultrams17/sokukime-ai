@@ -41,10 +41,10 @@ interface SaveOffer {
 
 const SAVE_OFFERS: Record<CancelReason, SaveOffer> = {
   price_too_high: {
-    title: "Starterプラン（¥990/月）へのダウングレードはいかがですか？",
+    title: "ライトプラン（¥2,980/月）へのダウングレードはいかがですか？",
     description:
-      "Starterプランでも全22レッスンとAIロープレ月30回をご利用いただけます。現在の学習進捗やスコア履歴はすべて引き継がれます。",
-    ctaLabel: "Starterプランに変更する",
+      "ライトプランでも全22レッスンとAIロープレ月30回をご利用いただけます。現在の学習進捗やスコア履歴はすべて引き継がれます。",
+    ctaLabel: "ライトプランに変更する",
     ctaAction: "downgrade",
   },
   no_time: {

@@ -6,9 +6,9 @@ import type { PlanTier } from "@/lib/plans";
 
 /**
  * Tier → Stripe Price ID env var の解決
- * - starter:  STRIPE_STARTER_PRICE_ID  (¥990)
- * - pro:      STRIPE_PRO_PRICE_ID      (¥1,980)
- * - master:   STRIPE_MASTER_PRICE_ID   (¥4,980)
+ * - starter:  STRIPE_STARTER_PRICE_ID  (ライト ¥2,980)
+ * - pro:      STRIPE_PRO_PRICE_ID      (プロ ¥6,980)
+ * - master:   STRIPE_MASTER_PRICE_ID   (無制限 ¥14,800)
  */
 function resolvePriceId(tier: PlanTier, billing: "monthly" | "annual"): string | null {
   // 年額は現状proのみ対応 (legacy)

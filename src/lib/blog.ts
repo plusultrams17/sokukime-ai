@@ -3177,7 +3177,7 @@ export const blogPosts: BlogPost[] = [
 <p><strong>特徴：</strong>商談即決スキルに基づいたAIロープレツール。AIがリアルなお客さん役を演じ、アプローチからクロージング、反論処理まで実践的に練習できる。ヒアリング力・提案力・クロージング力をスコアリングしてくれるのが強み。</p>
 
 <ul>
-<li><strong>価格：</strong>無料プラン（累計5回まで）/ Starter 月990円・月30回 / Pro 月1,980円・月60回 / Master 月4,980円・月200回</li>
+<li><strong>価格：</strong>無料プラン（累計5回まで）/ ライト 月2,980円・月30回 / プロ 月6,980円・月100回 / 無制限 月14,800円・実質無制限（月300回まで）</li>
 <li><strong>おすすめポイント：</strong>日本語特化、商談即決スキル準拠、24時間練習可能</li>
 <li><strong>こんな人に：</strong>営業トーク力を鍛えたい初心者〜中級者</li>
 </ul>
@@ -4372,7 +4372,7 @@ export const blogPosts: BlogPost[] = [
 <li><strong>シナリオ設計：</strong>ChatGPT=毎回手動 / 営業特化AI=業種別プリセット</li>
 <li><strong>お客さん役の一貫性：</strong>ChatGPT=ブレやすい / 営業特化AI=心理変化を再現</li>
 <li><strong>成長記録：</strong>ChatGPT=なし / 営業特化AI=スコア履歴・グラフ</li>
-<li><strong>料金：</strong>ChatGPT=無料〜月額$20 / 営業特化AI=無料〜月額990円〜4,980円（Starter/Pro/Master）</li>
+<li><strong>料金：</strong>ChatGPT=無料〜月額$20 / 営業特化AI=無料〜月額2,980円〜14,800円（ライト/プロ/無制限）</li>
 </ul>
 
 <h2>ChatGPTを活用するならこの使い方がおすすめ</h2>
@@ -4822,7 +4822,7 @@ export const blogPosts: BlogPost[] = [
 <h2>5つの練習法の比較まとめ</h2>
 
 <ul>
-<li><strong>AIロープレ：</strong>効果★5 / 手軽さ★4 / 費用=無料〜月額990円〜4,980円 / おすすめ度=最高</li>
+<li><strong>AIロープレ：</strong>効果★5 / 手軽さ★4 / 費用=無料〜月額2,980円〜14,800円 / おすすめ度=最高</li>
 <li><strong>録画セルフレビュー：</strong>効果★4 / 手軽さ★4 / 費用=無料 / おすすめ度=高い</li>
 <li><strong>スクリプト暗記：</strong>効果★4 / 手軽さ★5 / 費用=無料 / おすすめ度=高い</li>
 <li><strong>シャドーイング：</strong>効果★3 / 手軽さ★3 / 費用=無料 / おすすめ度=中</li>

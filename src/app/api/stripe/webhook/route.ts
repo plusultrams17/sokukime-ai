@@ -44,7 +44,7 @@ function getSupabaseAdmin() {
 /**
  * Stripe subscription の metadata から plan tier を抽出する。
  * メタデータに plan_tier が無い legacy サブスクは "pro" 扱い
- * (ユーザー合意: 既存 pro 契約は新 Pro = 月60回 にマッピング)。
+ * (ユーザー合意: 既存 pro 契約は新 Pro = 月100回 にマッピング)。
  */
 function resolvePlanTier(
   metadata: Stripe.Metadata | null | undefined

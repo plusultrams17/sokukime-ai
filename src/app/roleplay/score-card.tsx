@@ -298,7 +298,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry, usageStat
                     月30回練習できるプランを見る
                   </button>
                   <div className="mt-2 text-[11px] text-muted">
-                    Starterプラン ¥990/月〜 いつでも解約OK
+                    ライトプラン ¥2,980/月〜 いつでも解約OK
                   </div>
                 </div>
               </div>

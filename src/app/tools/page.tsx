@@ -227,7 +227,7 @@ export default function ToolsPage() {
               ツールで見つけた課題を<span className="text-accent">Proプラン</span>で克服
             </h2>
             <p className="mb-4 text-sm text-muted leading-relaxed">
-              無料ツールでわかった弱点を、月60回のAIロープレで集中練習。
+              無料ツールでわかった弱点を、月100回のAIロープレで集中練習。
               <br className="hidden sm:block" />
               全5カテゴリの詳細スコア＋AIアドバイスで最短でスキルアップ。
             </p>
@@ -238,7 +238,7 @@ export default function ToolsPage() {
               >
                 プランを見る
               </Link>
-              <span className="text-xs text-muted">¥990〜/月 ・ いつでも解約OK</span>
+              <span className="text-xs text-muted">¥2,980〜/月 ・ いつでも解約OK</span>
             </div>
           </div>
         </div>

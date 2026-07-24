@@ -7,19 +7,17 @@ import { SalesTriviaPopup } from "@/components/sales-trivia-popup";
 import { UserReviews } from "@/components/user-reviews";
 import { ReferralTracker } from "@/components/referral-tracker";
 import { MiniDiagnosis } from "@/components/mini-diagnosis";
-import { LPHeroAB } from "@/components/lp-hero-ab";
 
 /* ─── Reusable CTA Buttons ─── */
 
 /**
  * メインCTA: 無料ロープレへ誘導（Freeプラン=累計5回）
- * Phase 2A改修: `/diagnose` から `/roleplay` に変更し、選択肢のパラドックス回避のため
- * 体験→診断の順に整理。Heroではこれが主導線。
+ * Hero・各セクションの主導線。体験（/roleplay）に集約する。
  */
 function CTAButton({ className = "" }: { className?: string }) {
   return (
     <Link href="/roleplay" scroll={true} className={`lp-cta-btn ${className}`}>
-      無料で試す（5回まで）
+      無料で5回試す
     </Link>
   );
 }
@@ -40,6 +38,129 @@ function SecondaryCTA({ className = "" }: { className?: string }) {
   );
 }
 
+/* ─── Static content data ─── */
+
+// 痛み3枚（決定3-2）
+const PAINS = [
+  {
+    title: "練習相手がいない",
+    desc: "先輩は現場に出ずっぱり。ロープレに付き合ってもらう時間が取れず、ぶっつけ本番でお客様の前に立つしかない。",
+  },
+  {
+    title: "教育する時間がない",
+    desc: "新人にじっくり営業を教えたいのに、社長も先輩も自分の案件で手一杯。育成が後回しになっていく。",
+  },
+  {
+    title: "お客様の前で断り文句に凍る",
+    desc: "「高い」「他と比べたい」「今は考えていない」。想定外のひと言に頭が真っ白になり、返す言葉が出てこない。",
+  },
+];
+
+// 3分デモの流れ（決定3-3）
+const DEMO_STEPS = [
+  {
+    step: "01",
+    title: "お客様役のAIと話す",
+    desc: "住宅・リフォーム・塗装のお客様をAIが演じます。実際の商談のように、チャットで会話を進めます。",
+  },
+  {
+    step: "02",
+    title: "終わると5カテゴリで採点",
+    desc: "アプローチ・ヒアリング・プレゼン・クロージング・反論処理の5カテゴリを自動でスコア化します。",
+  },
+  {
+    step: "03",
+    title: "改善アドバイスが届く",
+    desc: "どこでつまずいたか、次にどう言い換えればよかったか。弱点と伸ばし方が具体的に見えます。",
+  },
+];
+
+// 機能（決定3-4）
+const FEATURES = [
+  {
+    value: "5カテゴリ",
+    title: "成約スコア採点",
+    desc: "アプローチからクロージング・反論処理まで、営業の流れを5カテゴリに分けて採点。弱点が数字で見えます。",
+  },
+  {
+    value: "22レッスン",
+    title: "体系的な学習コース",
+    desc: "営業心理学にもとづく成約5ステップメソッドを、22レッスンで順を追って学べます。",
+  },
+  {
+    value: "30パターン",
+    title: "反論の切り返し集",
+    desc: "「高い」「検討します」など、現場で頻出する断り文句への切り返しを30パターン用意しています。",
+  },
+];
+
+// 業界別（決定3-5・住宅/リフォーム/塗装を先頭に）
+const FEATURED_INDUSTRIES = [
+  {
+    slug: "real-estate",
+    name: "住宅・不動産",
+    desc: "注文住宅・建売の商談に特化したシナリオで、高額決断のクロージングを練習。",
+  },
+  {
+    slug: "reform",
+    name: "リフォーム",
+    desc: "水回り・内装リフォームの相見積もり・値引き交渉への切り返しを練習。",
+  },
+  {
+    slug: "exterior-painting",
+    name: "外壁塗装",
+    desc: "訪問・見積もり提示から契約まで、塗装営業ならではの反論処理を練習。",
+  },
+];
+
+// 料金3プラン（決定2・詳細は/pricingへ）
+const PRICING = [
+  {
+    tier: "ライト",
+    price: "2,980",
+    roleplay: "月30回",
+    desc: "個人で営業を学び始めた方に",
+    features: ["学習コース全22レッスン", "成約スコア全5カテゴリ", "反論切り返し30パターン"],
+    recommended: false,
+  },
+  {
+    tier: "プロ",
+    price: "6,980",
+    roleplay: "月100回",
+    desc: "本格的に営業力を伸ばしたい方に",
+    features: ["ライトのすべて", "AI改善アドバイス", "毎日の練習にも余裕の回数"],
+    recommended: true,
+  },
+  {
+    tier: "無制限",
+    price: "14,800",
+    roleplay: "月300回",
+    desc: "トップセールス・毎日練習する方に",
+    features: ["プロのすべて", "実質無制限の練習量", "優先サポート"],
+    recommended: false,
+  },
+];
+
+// FAQ（決定3-7）
+const FAQS = [
+  {
+    q: "無料プランではどこまで使えますか？",
+    a: "AIロープレを累計5回まで、成約スコア診断、基本レッスン3本を無料で利用できます。クレジットカードの登録は不要です。",
+  },
+  {
+    q: "本当に営業が上手くなりますか？",
+    a: "成約を保証するものではありません。練習相手がいなくても何度でもロープレでき、弱点が5カテゴリの採点で見えるよう設計しています。練習量を増やし、改善点を把握することを目的としたサービスです。",
+  },
+  {
+    q: "どんな業種に対応していますか？",
+    a: "住宅・リフォーム・外壁塗装をはじめ、16業種の専用シナリオを用意しています。業種を選んでロープレを始められます。",
+  },
+  {
+    q: "解約はいつでもできますか？",
+    a: "はい、いつでも解約できます。解約後も当月末までは有料機能をご利用いただけます。",
+  },
+];
+
 /* ─── Page ─── */
 
 export default function Home() {
@@ -57,49 +178,58 @@ export default function Home() {
         operatingSystem: "Web",
         url: siteUrl,
         description:
-          "業種別営業学習プログラム。営業心理学に基づく「成約5ステップメソッド」を22レッスンで体系的に習得。業種別トークスクリプト・切り返し話法・AIロープレ練習で営業力を底上げ。",
+          "住宅・リフォーム・塗装営業のためのAIロープレ。お客様役のAIと話すと、成約5ステップメソッドを5カテゴリで採点。新人が一人でも成約の練習ができる営業トレーニングサービス。",
         provider: { "@id": `${siteUrl}/#organization` },
         offers: [
           {
             "@type": "Offer",
             price: "0",
             priceCurrency: "JPY",
-            name: "無料プラン",
+            name: "フリープラン",
             description:
-              "基本3レッスン・業種別トークスクリプト一部・AIロープレ累計5回まで・成約スコア1カテゴリ",
+              "AIロープレ累計5回まで・成約スコア診断・基本3レッスン・クレジットカード不要",
             availability: "https://schema.org/InStock",
           },
           {
             "@type": "Offer",
-            price: "990",
+            price: "2980",
             priceCurrency: "JPY",
-            name: "Starterプラン",
+            name: "ライトプラン",
             description:
-              "22レッスン+認定試験・全業種トークスクリプト・AIロープレ月30回・リアルタイムコーチング",
+              "学習コース全22レッスン・成約スコア全5カテゴリ・反論切り返し30パターン・AIロープレ月30回",
             availability: "https://schema.org/InStock",
           },
           {
             "@type": "Offer",
-            price: "1980",
+            price: "6980",
             priceCurrency: "JPY",
-            name: "Proプラン",
+            name: "プロプラン",
             description:
-              "22レッスン+認定試験・全業種トークスクリプト・AIロープレ月60回・リアルタイムコーチング",
+              "全22レッスン・成約スコア全5カテゴリ+AI改善アドバイス・AIロープレ月100回",
             availability: "https://schema.org/InStock",
           },
           {
             "@type": "Offer",
-            price: "4980",
+            price: "14800",
             priceCurrency: "JPY",
-            name: "Masterプラン",
+            name: "無制限プラン",
             description:
-              "22レッスン+認定試験・全業種トークスクリプト・AIロープレ月200回・リアルタイムコーチング・優先サポート",
+              "全22レッスン・成約スコア全5カテゴリ+AI改善アドバイス・AIロープレ月300回・優先サポート",
             availability: "https://schema.org/InStock",
           },
         ],
         featureList:
-          "22レッスン学習コース, 業種別トークスクリプト, 切り返し話法, AIロープレ練習, 成約スコア分析, リアルタイムコーチング",
+          "AIロープレ練習, 成約スコア5カテゴリ採点, 22レッスン学習コース, 業種別トークスクリプト, 反論切り返し30パターン, AI改善アドバイス",
         inLanguage: "ja",
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${siteUrl}/#faq`,
+        mainEntity: FAQS.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
       },
       {
         "@type": "BreadcrumbList",
@@ -123,10 +253,10 @@ export default function Home() {
 
       {/* SEO */}
       <h1 className="sr-only">
-        業種別営業学習プログラム — 弱点を可視化し、伸びしろを見つけて営業力を底上げ
+        住宅・リフォーム・塗装営業のためのAIロープレ — 新人が一人で、成約の練習ができる
       </h1>
       <p className="sr-only">
-        成約コーチAIは、営業心理学に基づく「成約5ステップメソッド」を22レッスンで体系的に学べる業種別営業学習プログラムです。アプローチ・ヒアリング・プレゼン・クロージング・反論処理の5ステップを、業種別のトークスクリプトと切り返し話法で実践的に習得。学んだ技術はAIロープレで即実践練習できます。
+        成約コーチAIは、お客様役のAIと商談を練習できる営業トレーニングサービスです。ロープレが終わると、アプローチ・ヒアリング・プレゼン・クロージング・反論処理の5カテゴリを自動で採点し、弱点と改善点を可視化します。練習相手がいなくても、新人が一人で成約の練習を積めます。
       </p>
 
       {/* ═══════════════════════════════════════════════
@@ -161,25 +291,49 @@ export default function Home() {
           style={{ minHeight: "100dvh" }}
         >
           <div className="mx-auto w-full max-w-3xl text-center">
-            {/* Tag line — Phase 2A改修: 狭いセグメント限定表記を撤廃し、
-                3ペルソナ（新人/中堅/経営者）を包含する表現に */}
+            {/* Tag line — 住宅・リフォーム・塗装への特化を明示 */}
             <p
               className="mb-4 text-xs font-bold tracking-[0.2em] uppercase sm:mb-5 sm:text-sm"
               style={{ color: "#f97316" }}
             >
-              個人の練習から、チーム全体の底上げまで
+              住宅・リフォーム・塗装営業のためのAIロープレ
             </p>
 
-            {/* Main heading + Sub heading (A/B testable) */}
-            <LPHeroAB />
+            {/* Main heading */}
+            <p
+              className="lp-heading mb-5 leading-[1.3] text-white sm:mb-7"
+              style={{
+                fontSize: "clamp(24px, 6vw, 54px)",
+                textShadow: "0 2px 20px rgba(0,0,0,0.3)",
+              }}
+            >
+              新人が一人で、
+              <br className="sm:hidden" />
+              <span className="lp-highlight-hero">成約の練習</span>ができる。
+            </p>
 
-            {/* Score card preview — Phase 2A改修: S/A/B/C/Dランクの可視化で
-                「何が得られるか」を一目で理解させる（funnel-architect推奨） */}
+            {/* Sub heading */}
+            <p
+              className="mx-auto mb-10 max-w-lg text-sm leading-relaxed sm:mb-12 sm:text-base lg:text-lg"
+              style={{
+                color: "rgba(255,255,255,0.85)",
+                textShadow: "0 1px 8px rgba(0,0,0,0.2)",
+              }}
+            >
+              お客様役のAIと商談を練習。終わると5カテゴリで採点し、
+              <br className="hidden sm:block" />
+              どこでつまずいたか、次にどう言えばいいかが見えます。
+            </p>
+
+            {/* Score card preview — 「何が得られるか」を一目で理解させる */}
             <div
               className="mx-auto mb-8 max-w-md rounded-xl border border-white/15 bg-white/5 px-4 py-4 backdrop-blur-sm sm:mb-10 sm:px-5 sm:py-5"
               aria-label="スコアカード プレビュー"
             >
-              <div className="mb-2 flex items-center justify-between text-[10px] tracking-widest uppercase sm:text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
+              <div
+                className="mb-2 flex items-center justify-between text-[10px] tracking-widest uppercase sm:text-xs"
+                style={{ color: "rgba(255,255,255,0.55)" }}
+              >
                 <span>成約スコア</span>
                 <span>Sample</span>
               </div>
@@ -195,40 +349,53 @@ export default function Home() {
                     key={item.rank}
                     className="flex-1 rounded-md px-1 py-2 text-center sm:py-2.5"
                     style={{
-                      background: item.active ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.06)",
-                      borderWidth: item.active ? "1px" : "1px",
+                      background: item.active
+                        ? "rgba(249,115,22,0.2)"
+                        : "rgba(255,255,255,0.06)",
+                      borderWidth: "1px",
                       borderStyle: "solid",
-                      borderColor: item.active ? "#f97316" : "rgba(255,255,255,0.1)",
+                      borderColor: item.active
+                        ? "#f97316"
+                        : "rgba(255,255,255,0.1)",
                     }}
                   >
                     <div
                       className="text-base font-extrabold sm:text-lg"
-                      style={{ color: item.active ? "#f97316" : "rgba(255,255,255,0.5)" }}
+                      style={{
+                        color: item.active ? "#f97316" : "rgba(255,255,255,0.5)",
+                      }}
                     >
                       {item.rank}
                     </div>
                     <div
                       className="text-[9px] sm:text-[10px]"
-                      style={{ color: item.active ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.4)" }}
+                      style={{
+                        color: item.active
+                          ? "rgba(255,255,255,0.85)"
+                          : "rgba(255,255,255,0.4)",
+                      }}
                     >
                       {item.label}
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="mt-2.5 text-[10px] leading-relaxed sm:text-xs" style={{ color: "rgba(255,255,255,0.65)" }}>
+              <p
+                className="mt-2.5 text-[10px] leading-relaxed sm:text-xs"
+                style={{ color: "rgba(255,255,255,0.65)" }}
+              >
                 5カテゴリ（アプローチ/ヒアリング/プレゼン/クロージング/反論処理）を
                 <span style={{ color: "#f97316" }}>Sランクまで</span>可視化
               </p>
             </div>
 
-            {/* CTA — Phase 2A改修: メイン(ロープレ体験) + サブ(診断) の2つに集約 */}
+            {/* CTA — メイン(ロープレ体験) + サブ(診断) */}
             <div className="mb-3 flex flex-col items-center gap-3">
               <CTAButton className="hero-cta-btn" />
               <SecondaryCTA className="lp-cta-secondary--hero" />
             </div>
 
-            {/* ペルソナC対応 — 個人〜法人利用への裾野を明示 */}
+            {/* 個人〜法人利用への裾野を明示 */}
             <p
               className="mt-5 text-xs sm:text-sm"
               style={{ color: "rgba(255,255,255,0.75)" }}
@@ -245,32 +412,34 @@ export default function Home() {
 
             {/* Trust signals */}
             <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:mt-6 sm:gap-x-6">
-              {["クレカ不要で開始", "Googleログインのみ", "いつでも退会OK"].map((text) => (
-                <span
-                  key={text}
-                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm"
-                  style={{ color: "rgba(255,255,255,0.7)" }}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    className="shrink-0"
-                    aria-hidden="true"
+              {["クレカ不要で開始", "Googleログインのみ", "いつでも退会OK"].map(
+                (text) => (
+                  <span
+                    key={text}
+                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm"
+                    style={{ color: "rgba(255,255,255,0.7)" }}
                   >
-                    <circle cx="7" cy="7" r="7" fill="rgba(249,115,22,0.2)" />
-                    <path
-                      d="M4 7.2L6.2 9.4L10 5"
-                      stroke="#f97316"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  {text}
-                </span>
-              ))}
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      className="shrink-0"
+                      aria-hidden="true"
+                    >
+                      <circle cx="7" cy="7" r="7" fill="rgba(249,115,22,0.2)" />
+                      <path
+                        d="M4 7.2L6.2 9.4L10 5"
+                        stroke="#f97316"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    {text}
+                  </span>
+                )
+              )}
             </div>
           </div>
 
@@ -307,36 +476,37 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          2. ビジュアル証明 — スコア画像
+          2. 痛み3枚 — 現場のリアルな困りごと
       ═══════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: "#f7f8ea" }}>
-        <div className="lp-section pb-0">
-          <p className="lp-heading text-center" style={{ marginBottom: "-30px" }}>
-            5カテゴリの<span className="lp-highlight">スコア</span>で<br className="sm:hidden" />弱点が一目瞭然
+      <section className="border-t border-card-border bg-background py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <p className="lp-heading mb-3 text-center">
+            営業の新人育成、
+            <br className="sm:hidden" />
+            こんな<span className="lp-highlight">壁</span>にぶつかっていませんか
           </p>
-        </div>
-        <div className="relative w-full">
-          <Image
-            src="/step-visual.png"
-            alt="成約5ステップメソッド — アプローチ・ヒアリング・プレゼン・クロージング・反論処理"
-            width={1600}
-            height={900}
-            sizes="100vw"
-            className="w-full"
-          />
-          <div className="absolute top-1 left-1 space-y-1 sm:top-8 sm:left-8 sm:space-y-3 lg:top-12 lg:left-12">
-            {[
-              { value: "5カテゴリ", label: "スコアで弱点を可視化" },
-              { value: "3分", label: "1回のロープレ所要時間" },
-              { value: "22レッスン", label: "体系的な営業メソッド" },
-            ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-1 rounded-md bg-white/85 px-1.5 py-1 shadow-md backdrop-blur-sm sm:gap-2 sm:rounded-lg sm:px-4 sm:py-3">
-                <span className="shrink-0 text-[9px] font-bold sm:text-base lg:text-lg" style={{ color: "var(--lp-cta)" }}>
-                  {stat.value}
-                </span>
-                <p className="text-[8px] leading-snug text-foreground sm:text-sm lg:text-base">
-                  {stat.label}
+          <p className="mb-10 text-center text-sm text-muted sm:mb-12">
+            住宅・リフォーム・塗装の現場で、よく聞く3つの困りごと。
+          </p>
+          <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
+            {PAINS.map((pain, i) => (
+              <div
+                key={pain.title}
+                className="rounded-xl border border-card-border bg-card p-6"
+              >
+                <div
+                  className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold"
+                  style={{
+                    background: "rgba(249,115,22,0.12)",
+                    color: "var(--lp-cta)",
+                  }}
+                >
+                  {i + 1}
+                </div>
+                <p className="mb-2 text-base font-bold text-foreground">
+                  {pain.title}
                 </p>
+                <p className="text-sm leading-relaxed text-muted">{pain.desc}</p>
               </div>
             ))}
           </div>
@@ -344,103 +514,299 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          2.5 ソーシャルプルーフ
+          3. 3分デモの流れ — 使い方3ステップ
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-card-border bg-white py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <p className="lp-heading mb-10 text-center">
-            選ばれる<span className="lp-highlight">理由</span>
+          <p className="lp-heading mb-3 text-center">
+            使い方は、たった<span className="lp-highlight">3分</span>
           </p>
-          {/* 数値実績 */}
-          <div className="mb-12 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4">
-            {[
-              { value: "22", unit: "レッスン", label: "体系的カリキュラム" },
-              { value: "5", unit: "カテゴリ", label: "AIスコア分析" },
-              { value: "30", unit: "パターン", label: "反論切り返しテンプレ" },
-              { value: "24h", unit: "", label: "いつでも練習可能" },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-card-border bg-background p-3 text-center sm:p-4">
-                <div className="text-2xl font-extrabold sm:text-3xl" style={{ color: "var(--lp-cta)" }}>
-                  {stat.value}<span className="text-sm font-bold text-muted">{stat.unit}</span>
-                </div>
-                <div className="mt-1 text-xs text-muted">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-          {/* こんな方に最適 */}
-          <div className="grid gap-3 sm:gap-4 sm:grid-cols-3">
-            {[
-              { title: "入社1〜3年目", desc: "営業の「型」を最短で習得したい若手営業パーソン" },
-              { title: "成約率に伸び悩み", desc: "自己流の限界を感じ、体系的メソッドで突破したい方" },
-              { title: "ロープレが苦手", desc: "人前での練習が苦手で、AIと気軽に何度でも練習したい方" },
-            ].map((item) => (
-              <div key={item.title} className="rounded-xl border border-card-border bg-background p-5">
-                <p className="mb-1 text-sm font-bold text-foreground">{item.title}</p>
-                <p className="text-xs text-muted leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+          <p className="mb-10 text-center text-sm text-muted sm:mb-12">
+            お客様役のAIと話すだけ。練習が終わると、その場で採点とアドバイスが届きます。
+          </p>
 
-      {/* ═══════════════════════════════════════════════
-          2.6 悩み共感 — 承認格差の文脈
-      ═══════════════════════════════════════════════ */}
-      <section className="border-t border-card-border bg-background py-12 sm:py-16 md:py-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6">
-          <p className="lp-heading mb-8 text-center">
-            営業で一番つらいのは、<br className="sm:hidden" /><span className="lp-highlight">給料じゃない</span>
-          </p>
-          <div className="space-y-4">
-            {[
-              {
-                q: "「なんで売れないんだろう」と、自分を責めてしまう",
-                a: "売れない原因が見えないから苦しい。スコアで弱点を可視化すると、努力の方向が定まります。",
-              },
-              {
-                q: "先輩の「普通にやればいいじゃん」が一番キツい",
-                a: "「普通」は人によって違います。22レッスンの型があれば、自分だけの基準で成長を測れます。",
-              },
-              {
-                q: "お客さんに必要とされている実感がない",
-                a: "営業スキルが上がると、お客さんから「あなたに相談してよかった」と言われる瞬間が来ます。",
-              },
-            ].map((item, i) => (
-              <div key={i} className="rounded-xl border border-card-border bg-card p-5">
-                <p className="mb-2 text-sm font-bold text-foreground">{item.q}</p>
-                <p className="text-xs text-muted leading-relaxed">{item.a}</p>
+          {/* スクショ枠 — ロープレ画面のイメージ */}
+          <div className="mb-10 overflow-hidden rounded-2xl border border-card-border shadow-sm sm:mb-12">
+            <Image
+              src="/step-visual.png"
+              alt="AIロープレの画面イメージ — お客様役AIとの会話と5カテゴリ採点"
+              width={1600}
+              height={900}
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="w-full"
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
+            {DEMO_STEPS.map((s) => (
+              <div
+                key={s.step}
+                className="rounded-xl border border-card-border bg-background p-6"
+              >
+                <div
+                  className="mb-3 text-sm font-extrabold"
+                  style={{ color: "var(--lp-cta)" }}
+                >
+                  STEP {s.step}
+                </div>
+                <p className="mb-2 text-base font-bold text-foreground">
+                  {s.title}
+                </p>
+                <p className="text-sm leading-relaxed text-muted">{s.desc}</p>
               </div>
             ))}
           </div>
-          <div className="mt-8 text-center">
-            <p className="mb-4 text-xs text-muted">
-              まずは今の営業力を客観的に把握するところから。
-            </p>
+
+          <div className="mt-10 text-center sm:mt-12">
             <CTAButton />
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════
-          2.7 ミニ診断1問 — エンゲージメントフック
+          4. 機能 — 5カテゴリ採点 / 22レッスン / 反論30パターン
+      ═══════════════════════════════════════════════ */}
+      <section className="border-t border-card-border bg-background py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <p className="lp-heading mb-3 text-center">
+            成約力を鍛える、<span className="lp-highlight">3つの機能</span>
+          </p>
+          <p className="mb-10 text-center text-sm text-muted sm:mb-12">
+            採点で弱点を見つけ、レッスンで型を学び、切り返し集で本番に備える。
+          </p>
+          <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
+            {FEATURES.map((f) => (
+              <div
+                key={f.title}
+                className="rounded-xl border border-card-border bg-card p-6"
+              >
+                <div
+                  className="mb-3 text-2xl font-extrabold sm:text-3xl"
+                  style={{ color: "var(--lp-cta)" }}
+                >
+                  {f.value}
+                </div>
+                <p className="mb-2 text-base font-bold text-foreground">
+                  {f.title}
+                </p>
+                <p className="text-sm leading-relaxed text-muted">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          5. 業界別 — 住宅・リフォーム・塗装を先頭に
+      ═══════════════════════════════════════════════ */}
+      <section className="border-t border-card-border bg-white py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <p className="lp-heading mb-3 text-center">
+            あなたの業種に<span className="lp-highlight">特化</span>したシナリオ
+          </p>
+          <p className="mb-10 text-center text-sm text-muted sm:mb-12">
+            業種ごとに、よくある反論やお客様のタイプに合わせたロープレができます。
+          </p>
+          <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
+            {FEATURED_INDUSTRIES.map((ind) => (
+              <Link
+                key={ind.slug}
+                href={`/industry/${ind.slug}`}
+                className="group flex flex-col rounded-xl border border-card-border bg-background p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-sm"
+              >
+                <p className="mb-2 text-lg font-bold text-foreground transition group-hover:text-accent">
+                  {ind.name}
+                </p>
+                <p className="mb-4 flex-1 text-sm leading-relaxed text-muted">
+                  {ind.desc}
+                </p>
+                <span
+                  className="text-sm font-semibold"
+                  style={{ color: "var(--lp-cta)" }}
+                >
+                  シナリオを見る →
+                </span>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/industry"
+              className="text-sm font-medium text-accent transition hover:underline"
+            >
+              保険・不動産・太陽光など、16業種の一覧を見る →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          6. 料金3プラン — 本命=プロを中央・イチオシ
+      ═══════════════════════════════════════════════ */}
+      <section className="border-t border-card-border bg-background py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <p className="lp-heading mb-3 text-center">
+            <span className="lp-highlight">料金</span>プラン
+          </p>
+          <p className="mb-10 text-center text-sm text-muted sm:mb-12">
+            まずは無料で5回。物足りなくなったら、練習量に合わせて選べます。
+          </p>
+          <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
+            {PRICING.map((plan) => (
+              <div
+                key={plan.tier}
+                className="relative flex flex-col rounded-2xl border bg-card p-6"
+                style={{
+                  borderColor: plan.recommended
+                    ? "var(--lp-cta)"
+                    : "var(--card-border, rgba(0,0,0,0.1))",
+                  borderWidth: plan.recommended ? "2px" : "1px",
+                  boxShadow: plan.recommended
+                    ? "0 8px 30px rgba(249,115,22,0.12)"
+                    : "none",
+                }}
+              >
+                {plan.recommended && (
+                  <span
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-bold text-white"
+                    style={{ background: "var(--lp-cta)" }}
+                  >
+                    イチオシ
+                  </span>
+                )}
+                <p className="mb-1 text-base font-bold text-foreground">
+                  {plan.tier}
+                </p>
+                <p className="mb-3 text-xs text-muted">{plan.desc}</p>
+                <div className="mb-1 flex items-baseline gap-1">
+                  <span
+                    className="text-3xl font-extrabold"
+                    style={{ color: "var(--lp-cta)" }}
+                  >
+                    ¥{plan.price}
+                  </span>
+                  <span className="text-sm text-muted">/月（税込）</span>
+                </div>
+                <p className="mb-4 text-xs text-muted">
+                  AIロープレ {plan.roleplay}
+                </p>
+                <ul className="mb-6 flex-1 space-y-2">
+                  {plan.features.map((feat) => (
+                    <li
+                      key={feat}
+                      className="flex items-start gap-2 text-sm text-foreground"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        className="mt-0.5 shrink-0"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="7"
+                          cy="7"
+                          r="7"
+                          fill="rgba(249,115,22,0.15)"
+                        />
+                        <path
+                          d="M4 7.2L6.2 9.4L10 5"
+                          stroke="#f97316"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/pricing"
+                  className={
+                    plan.recommended
+                      ? "lp-cta-btn w-full text-center"
+                      : "lp-cta-secondary w-full text-center"
+                  }
+                >
+                  詳しく見る
+                </Link>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-sm text-muted">
+            フリープラン（¥0・累計5回まで）はクレジットカード不要ですぐ始められます。
+            <br className="hidden sm:block" />
+            法人・チーム導入は
+            <Link
+              href="/enterprise"
+              className="mx-1 font-medium text-accent transition hover:underline"
+            >
+              法人向けプラン
+            </Link>
+            をご覧ください。
+          </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          6.5 ミニ診断1問 — エンゲージメントフック
       ═══════════════════════════════════════════════ */}
       <MiniDiagnosis />
 
       {/* ═══════════════════════════════════════════════
-          2.7 ユーザーレビュー（0件時は自動非表示）
+          6.6 ユーザーレビュー（0件時は自動非表示）
       ═══════════════════════════════════════════════ */}
       <UserReviews />
 
       {/* ═══════════════════════════════════════════════
-          3. 最終CTA
+          7. FAQ
+      ═══════════════════════════════════════════════ */}
+      <section className="border-t border-card-border bg-background py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <p className="lp-heading mb-10 text-center">
+            よくある<span className="lp-highlight">質問</span>
+          </p>
+          <div className="space-y-3">
+            {FAQS.map((faq) => (
+              <details
+                key={faq.q}
+                className="group rounded-xl border border-card-border bg-card"
+              >
+                <summary className="flex cursor-pointer items-center justify-between px-5 py-4 text-sm font-bold text-foreground list-none [&::-webkit-details-marker]:hidden">
+                  <span>{faq.q}</span>
+                  <svg
+                    className="h-5 w-5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </summary>
+                <div className="border-t border-card-border px-5 pb-5 pt-4 text-sm leading-relaxed text-muted">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          8. 最終CTA
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-card-border bg-white">
         <div className="lp-section text-center">
-          <p className="lp-heading mb-4">
-            まず3分、試してみてください
-          </p>
-          <p className="mx-auto mb-6 max-w-md text-sm text-muted leading-relaxed sm:mb-8">
-            自分の営業トークがどう評価されるのか、スコアで確認できます。
+          <p className="lp-heading mb-4">まず3分、試してみてください</p>
+          <p className="mx-auto mb-6 max-w-md text-sm leading-relaxed text-muted sm:mb-8">
+            自分の営業トークがどう採点されるのか、その場で確認できます。
             登録もクレジットカードも不要です。
           </p>
           <div className="mb-6 flex flex-col items-center gap-3 sm:mb-8">
@@ -449,17 +815,19 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted sm:gap-x-6 sm:text-sm">
             <span>3分で体験完了</span>
-            <span className="hidden sm:inline text-card-border">|</span>
+            <span className="hidden text-card-border sm:inline">|</span>
             <span>クレカ不要</span>
-            <span className="hidden sm:inline text-card-border">|</span>
+            <span className="hidden text-card-border sm:inline">|</span>
             <span>いつでも退会OK</span>
           </div>
           {/* Free-first value prop */}
-          <div className="mt-6 mx-auto max-w-md rounded-lg border border-accent/30 bg-accent/5 px-4 py-3 sm:mt-8 sm:px-6 sm:py-4">
+          <div className="mx-auto mt-6 max-w-md rounded-lg border border-accent/30 bg-accent/5 px-4 py-3 sm:mt-8 sm:px-6 sm:py-4">
             <p className="text-sm font-bold text-foreground">
               無料プランでできること
             </p>
-            <p className="text-xs text-muted mt-1">AIロープレ体験・スコア診断・基本レッスン3本</p>
+            <p className="mt-1 text-xs text-muted">
+              AIロープレ体験・スコア診断・基本レッスン3本
+            </p>
             <p className="text-xs text-muted">すべて無料、登録30秒</p>
           </div>
         </div>
@@ -468,11 +836,21 @@ export default function Home() {
       {/* ── Inline Footer ── */}
       <footer className="border-t border-card-border bg-white px-4 py-8 text-center text-xs text-muted sm:px-6 sm:py-10">
         <nav className="mb-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
-          <Link href="/learn" className="transition hover:text-foreground">学習コース</Link>
-          <Link href="/roleplay" className="transition hover:text-foreground">AIロープレ</Link>
-          <Link href="/pricing" className="transition hover:text-foreground">料金プラン</Link>
-          <Link href="/faq" className="transition hover:text-foreground">FAQ</Link>
-          <Link href="/legal/terms" className="transition hover:text-foreground">利用規約</Link>
+          <Link href="/learn" className="transition hover:text-foreground">
+            学習コース
+          </Link>
+          <Link href="/roleplay" className="transition hover:text-foreground">
+            AIロープレ
+          </Link>
+          <Link href="/pricing" className="transition hover:text-foreground">
+            料金プラン
+          </Link>
+          <Link href="/faq" className="transition hover:text-foreground">
+            FAQ
+          </Link>
+          <Link href="/legal/terms" className="transition hover:text-foreground">
+            利用規約
+          </Link>
         </nav>
         <p>&copy; {new Date().getFullYear()} 成約コーチAI</p>
       </footer>

@@ -243,7 +243,7 @@ export default function ReferralPage() {
                 <div>
                   <div className="font-medium">友達（被紹介者）</div>
                   <div className="text-xs text-muted">
-                    Proプラン初月が ¥1,000 OFF（¥1,980で利用開始）
+                    プロプラン初月が ¥1,000 OFF（¥5,980で利用開始）
                   </div>
                 </div>
               </div>

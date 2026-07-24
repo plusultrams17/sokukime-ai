@@ -137,9 +137,9 @@ function thirdRoleplayEmail(unsubscribeUrl?: string): { subject: string; html: s
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 24px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>有料プランなら</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>Starter <strong>月30回</strong> / Pro <strong>月60回</strong> / Master <strong>月200回</strong>から選べる</li>
+        <li>ライト <strong>月30回</strong> / プロ <strong>月100回</strong> / 無制限 <strong>実質無制限（月300回）</strong>から選べる</li>
         <li>商談前のウォームアップに毎回使える</li>
-        <li>Pro 月¥1,980 — 営業研修1回分の<strong>1/30以下</strong>のコスト</li>
+        <li>プロ 月¥6,980 — 営業研修1回分の<strong>1/7以下</strong>のコスト</li>
       </ul>
     </div>
     <div style="text-align:center;margin:0 0 16px">
@@ -252,7 +252,7 @@ function noRoleplayDay3Email(unsubscribeUrl?: string): { subject: string; html: 
 
 function proWelcomeEmail(unsubscribeUrl?: string): { subject: string; html: string } {
   return {
-    subject: "Proプランへようこそ！月60回のAIロープレを始めましょう",
+    subject: "プロプランへようこそ！月100回のAIロープレを始めましょう",
     html: `
 <!DOCTYPE html>
 <html lang="ja">
@@ -268,7 +268,7 @@ function proWelcomeEmail(unsubscribeUrl?: string): { subject: string; html: stri
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>Proで使える全機能</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>AIロープレ<strong>月60回</strong>まで（毎月1日リセット）</li>
+        <li>AIロープレ<strong>月100回</strong>まで（毎月1日リセット）</li>
         <li>全5カテゴリの<strong>詳細スコア＆レーダーチャート</strong></li>
         <li>AIによる<strong>改善アドバイス</strong></li>
         <li>全シーン・全ワークシート解放</li>
@@ -501,7 +501,7 @@ function pauseResuming3DaysEmail(unsubscribeUrl?: string): { subject: string; ht
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>再開後に使える機能</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>AIロープレ<strong>月60回</strong>まで（毎月1日リセット）</li>
+        <li>AIロープレ<strong>月100回</strong>まで（毎月1日リセット）</li>
         <li>全5カテゴリの<strong>詳細スコア</strong></li>
         <li>AI<strong>改善アドバイス</strong></li>
       </ul>
@@ -547,7 +547,7 @@ function paymentFailedDay4Email(unsubscribeUrl?: string): { subject: string; htm
     <div style="background:#fffbeb;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>Proプラン停止で失われるもの</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>月60回ロープレ → <strong>累計5回までに制限</strong></li>
+        <li>月100回ロープレ → <strong>累計5回までに制限</strong></li>
         <li>詳細スコア5カテゴリ → <strong>1カテゴリのみ</strong></li>
         <li>AI改善アドバイス → <strong>利用不可</strong></li>
       </ul>
@@ -757,7 +757,7 @@ function winback7DaysEmail(unsubscribeUrl?: string): { subject: string; html: st
       <p style="font-size:13px;color:#92400e;margin:0 0 8px"><strong>練習量とスコアの関係</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
         <li>無料5回のみ → スコア<strong>把握</strong>がやっと</li>
-        <li>月60回の練習 → スコアが<strong>着実にUP</strong>する傾向</li>
+        <li>月100回の練習 → スコアが<strong>着実にUP</strong>する傾向</li>
         <li>練習なし → <strong>スキルが徐々に低下</strong></li>
       </ul>
     </div>
@@ -767,7 +767,7 @@ function winback7DaysEmail(unsubscribeUrl?: string): { subject: string; html: st
     </p>
     <div style="text-align:center;margin:0 0 16px">
       <a href="${APP_URL}/pricing" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
-        Proプランに戻る（月額¥1,980）→
+        プロプランに戻る（月額¥6,980）→
       </a>
     </div>
     <div style="text-align:center">
@@ -808,7 +808,7 @@ function winback30DaysEmail(unsubscribeUrl?: string): { subject: string; html: s
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
       営業は毎日の練習がモノを言います。<br>
-      月額¥1,980 — 営業研修1回分の<strong>1/30以下</strong>のコストで、毎日AIと練習できます。
+      月額¥6,980 — 営業研修1回分の<strong>1/7以下</strong>のコストで、毎日AIと練習できます。
     </p>
     <div style="text-align:center;margin:0 0 16px">
       <a href="${APP_URL}/pricing" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
@@ -855,7 +855,7 @@ function powerUserUpgradeEmail(unsubscribeUrl?: string): { subject: string; html
     </div>
     <p style="font-size:14px;color:#374151;line-height:1.8;margin:0 0 24px">
       毎日練習する習慣がすでにあるあなたなら、Proの効果を<strong>最大限</strong>引き出せます。<br>
-      月60回のロープレで本気の練習を始めませんか？
+      月100回のロープレで本気の練習を始めませんか？
     </p>
     <div style="text-align:center;margin:0 0 16px">
       <a href="${APP_URL}/pricing" style="display:inline-block;background:#f97316;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:bold">
@@ -863,7 +863,7 @@ function powerUserUpgradeEmail(unsubscribeUrl?: string): { subject: string; html
       </a>
     </div>
     <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0">
-      ¥1,980/月 ・ Freeで5回お試し可能 ・ いつでも解約OK
+      ¥6,980/月 ・ Freeで5回お試し可能 ・ いつでも解約OK
     </p>
   </div>
   ${emailFooter(unsubscribeUrl)}
@@ -893,7 +893,7 @@ function checkoutAbandonedEmail(unsubscribeUrl?: string): { subject: string; htm
     <div style="background:#f0f9ff;border-radius:8px;padding:16px;margin:0 0 16px">
       <p style="font-size:13px;color:#1e40af;margin:0 0 8px"><strong>Proプランに含まれるもの</strong></p>
       <ul style="font-size:13px;color:#374151;line-height:1.8;margin:0;padding-left:16px">
-        <li>AIロープレ<strong>月60回</strong>まで（毎月1日リセット）</li>
+        <li>AIロープレ<strong>月100回</strong>まで（毎月1日リセット）</li>
         <li>全5カテゴリの<strong>詳細スコア</strong></li>
         <li>AI<strong>改善アドバイス</strong></li>
         <li>全22レッスン・全シーン・全ワークシート解放</li>
@@ -1317,13 +1317,13 @@ function monthlyToAnnualEmail(unsubscribeUrl?: string): { subject: string; html:
     </p>
     <div style="background:#fff7ed;border-radius:12px;padding:20px;margin:0 0 24px;text-align:center">
       <div style="margin:0 0 8px">
-        <span style="font-size:14px;color:#9ca3af;text-decoration:line-through">月額 ¥1,980 × 12ヶ月 = ¥23,760</span>
+        <span style="font-size:14px;color:#9ca3af;text-decoration:line-through">月額 ¥6,980 × 12ヶ月 = ¥83,760</span>
       </div>
       <div style="font-size:28px;font-weight:bold;color:#f97316;margin:0 0 4px">
-        ¥19,800<span style="font-size:14px;color:#374151;font-weight:normal">/年</span>
+        ¥69,800<span style="font-size:14px;color:#374151;font-weight:normal">/年</span>
       </div>
       <div style="font-size:13px;color:#f97316;font-weight:bold">
-        ¥3,960お得（約2ヶ月分無料）
+        ¥13,960お得（約2ヶ月分無料）
       </div>
     </div>
     <div style="text-align:center;margin:0 0 24px">

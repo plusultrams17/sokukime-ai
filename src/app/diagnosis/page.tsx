@@ -893,24 +893,24 @@ function ResultScreen({
               <div className="mb-2 flex items-center justify-center gap-1.5">
                 <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[9px] font-bold text-accent">診断結果に基づく推奨</span>
               </div>
-              <p className="text-sm font-bold text-center mb-1">Proプラン</p>
+              <p className="text-sm font-bold text-center mb-1">プロプラン</p>
               <p className="text-xs text-muted text-center leading-relaxed mb-3">
-                スコア{overall}点のあなたは既に基礎ができています。<span className="text-foreground font-semibold">商談前の最終リハ</span>と<span className="text-foreground font-semibold">弱点カテゴリの徹底練習</span>で、A/Sランクを目指す段階です。月60回で毎日積み上げられます。
+                スコア{overall}点のあなたは既に基礎ができています。<span className="text-foreground font-semibold">商談前の最終リハ</span>と<span className="text-foreground font-semibold">弱点カテゴリの徹底練習</span>で、A/Sランクを目指す段階です。月100回で毎日積み上げられます。
               </p>
-              <div className="text-center text-lg font-bold text-accent mb-1">¥1,980<span className="text-xs text-muted font-normal">/月</span></div>
-              <p className="text-[10px] text-muted text-center mb-2">1日あたり約66円・いつでも解約可</p>
+              <div className="text-center text-lg font-bold text-accent mb-1">¥6,980<span className="text-xs text-muted font-normal">/月</span></div>
+              <p className="text-[10px] text-muted text-center mb-2">1日あたり約230円・いつでも解約可</p>
             </>
           ) : overall >= 40 ? (
             <>
               <div className="mb-2 flex items-center justify-center gap-1.5">
                 <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[9px] font-bold text-accent">診断結果に基づく推奨</span>
               </div>
-              <p className="text-sm font-bold text-center mb-1">Starterプラン</p>
+              <p className="text-sm font-bold text-center mb-1">ライトプラン</p>
               <p className="text-xs text-muted text-center leading-relaxed mb-3">
                 スコア{overall}点のあなたは、<span className="text-foreground font-semibold">型を固めれば一気に伸びる</span>段階です。全22レッスンで弱点の「型」を学び、月30回のロープレで身体に染み込ませましょう。
               </p>
-              <div className="text-center text-lg font-bold text-accent mb-1">¥990<span className="text-xs text-muted font-normal">/月</span></div>
-              <p className="text-[10px] text-muted text-center mb-2">1日あたり約33円・いつでも解約可</p>
+              <div className="text-center text-lg font-bold text-accent mb-1">¥2,980<span className="text-xs text-muted font-normal">/月</span></div>
+              <p className="text-[10px] text-muted text-center mb-2">1日あたり約99円・いつでも解約可</p>
             </>
           ) : (
             <>

@@ -10,7 +10,7 @@ export default function TokushohoPage() {
   return (
     <article>
       <h1 className="mb-8 text-3xl font-bold">特定商取引法に基づく表記</h1>
-      <p className="mb-8 text-sm text-muted">最終更新日: 2026年4月14日</p>
+      <p className="mb-8 text-sm text-muted">最終更新日: 2026年7月24日</p>
 
       <div className="overflow-hidden rounded-2xl border border-card-border">
         <table className="w-full">
@@ -40,10 +40,10 @@ export default function TokushohoPage() {
               label="販売価格"
               value={
                 <>
-                  <div>無料プラン: 0円</div>
-                  <div>スタータープラン: 月額990円（税込）</div>
-                  <div>プロプラン: 月額1,980円（税込）</div>
-                  <div>マスタープラン: 月額4,980円（税込）</div>
+                  <div>フリープラン: 0円</div>
+                  <div>ライトプラン: 月額2,980円（税込）</div>
+                  <div>プロプラン: 月額6,980円（税込）／年額69,800円（税込）</div>
+                  <div>無制限プラン: 月額14,800円（税込）</div>
                   <div className="text-xs mt-1">※ 価格は予告なく変更される場合があります。</div>
                 </>
               }
@@ -62,7 +62,7 @@ export default function TokushohoPage() {
             />
             <Row
               label="支払い時期"
-              value="有料プラン（スターター/プロ/マスター）お申込み時に初回課金。以降は毎月自動更新時に課金されます。"
+              value="有料プラン（ライト/プロ/無制限）お申込み時に初回課金。以降は毎月（プロ年払いは毎年）自動更新時に課金されます。"
             />
             <Row
               label="サービス提供時期"

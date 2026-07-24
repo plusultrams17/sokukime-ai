@@ -16,7 +16,7 @@ import { PLANS, type PlanTier } from "@/lib/plans";
 const comparisons = [
   { name: "営業研修（集合型）", cost: "¥50,000〜", frequency: "月1回", image: "/images/misc/comparison-training.png" },
   { name: "営業コンサルティング", cost: "¥100,000〜", frequency: "月1回", image: "/images/misc/comparison-consulting.png" },
-  { name: "成約コーチAI プロプラン", cost: "¥1,980（税込）", frequency: "月60回・24時間・即開始", image: "/images/misc/comparison-ai-pro.png", highlight: true },
+  { name: "成約コーチAI プロ", cost: "¥6,980（税込）", frequency: "月100回・24時間・即開始", image: "/images/misc/comparison-ai-pro.png", highlight: true },
 ];
 
 
@@ -29,7 +29,7 @@ const faqItems = [
   {
     question: "プランの違いは？どれを選ぶべき？",
     answer:
-      "【無料プラン】まず試したい方向け。累計5回まで体験可能。\n【スタータープラン ¥990】週1-2回練習したい若手営業向け。月30回・全22レッスン。\n【プロプラン ¥1,980】毎日練習したい・商談前に必ず復習したい中堅営業向け。月60回・AI詳細フィードバック。迷ったらこれ。\n【マスタープラン ¥4,980】営業チームで使いたい・徹底的に伸ばしたい方向け。月200回・優先メールサポート。",
+      "【フリー】まず試したい方向け。累計5回まで体験可能。\n【ライト ¥2,980】週1-2回練習したい若手営業向け。月30回・全22レッスン。\n【プロ ¥6,980】毎日練習したい・商談前に必ず復習したい中堅営業向け。月100回・AI詳細フィードバック。迷ったらこれ。\n【無制限 ¥14,800】回数を気にせず徹底的に伸ばしたい方向け。実質無制限（月300回まで）・優先メールサポート。",
   },
   {
     question: "いつでも解約できますか？",
@@ -132,7 +132,7 @@ export default function PricingPage() {
         "@id": `${siteUrl}/pricing#product`,
         name: "成約コーチAI",
         description:
-          "AIロープレで営業スキルを最短で伸ばす。月30回のスタータープラン (¥990) から月200回のマスタープラン (¥4,980) まで、4つのプランから選べる営業トレーニングサービス",
+          "住宅・リフォーム・塗装営業のためのAIロープレ。月30回のライトプラン (¥2,980) から実質無制限の無制限プラン (¥14,800) まで、無料体験＋3つの有料プランから選べる営業トレーニングサービス",
         brand: {
           "@type": "Organization",
           name: "成約コーチAI",
@@ -140,7 +140,7 @@ export default function PricingPage() {
         offers: {
           "@type": "AggregateOffer",
           lowPrice: "0",
-          highPrice: "4980",
+          highPrice: "14800",
           priceCurrency: "JPY",
           offerCount: PLANS.length,
           offers: PLANS.map((p) => ({
@@ -201,7 +201,7 @@ export default function PricingPage() {
             料金プラン
           </h1>
           <p className="mx-auto max-w-xl text-base text-muted sm:text-lg">
-            あなたの営業レベルに合わせた4つのプラン
+            住宅・リフォーム・塗装営業のための、レベルに合わせた3つの有料プラン
             <br className="hidden sm:block" />
             <span className="text-sm sm:text-base">
               無料5回お試し ・ クレカ不要 ・ いつでも解約OK
@@ -225,11 +225,12 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* Pricing Cards — 4 plan grid */}
-        <div className="grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {PLANS.map((plan) => {
+        {/* Pricing Cards — 3 有料プランのアンカリング表示（プロ中央・イチオシ） */}
+        <div className="grid items-stretch gap-6 md:grid-cols-3">
+          {PLANS.filter((p) => p.tier !== "free").map((plan) => {
             const isCurrentPlan = currentPlan === plan.tier;
             const isFree = plan.tier === "free";
+            const isMaster = plan.tier === "master";
             const isRecommended = plan.recommended;
             const isLoadingThis = loadingTier === plan.tier;
 
@@ -271,12 +272,23 @@ export default function PricingPage() {
                 {/* Credits display */}
                 {!isFree && plan.monthlyCredits !== null && (
                   <div className="mb-5 rounded-xl border border-card-border bg-background/40 px-3 py-4 text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <span className="text-2xl font-bold leading-none text-accent">
-                        {plan.monthlyCredits}
-                      </span>
-                      <span className="text-xs font-bold text-accent">回/月</span>
-                    </div>
+                    {isMaster ? (
+                      <div className="flex flex-col items-center justify-center gap-0.5">
+                        <span className="text-xl font-bold leading-none text-accent">
+                          実質無制限
+                        </span>
+                        <span className="text-[11px] font-bold text-accent">
+                          月{plan.monthlyCredits}回まで
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-1">
+                        <span className="text-2xl font-bold leading-none text-accent">
+                          {plan.monthlyCredits}
+                        </span>
+                        <span className="text-xs font-bold text-accent">回/月</span>
+                      </div>
+                    )}
 
                     <p className="mt-2 text-[10px] leading-relaxed text-muted">
                       1回＝AIロープレ1セッション
@@ -370,6 +382,35 @@ export default function PricingPage() {
               </div>
             );
           })}
+        </div>
+
+        {/* Free plan — 下部に小さく */}
+        <div className="mx-auto mt-6 max-w-2xl">
+          <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-card-border bg-card/60 px-5 py-4 text-center sm:flex-row sm:text-left">
+            <div>
+              <p className="text-sm font-bold text-foreground">
+                まずは無料で。フリープラン ¥0
+              </p>
+              <p className="mt-0.5 text-xs text-muted">
+                Googleログインだけで、AIロープレを累計5回まで体験（クレジットカード不要）
+              </p>
+            </div>
+            {currentPlan === "free" ? (
+              <Link
+                href="/roleplay"
+                className="shrink-0 rounded-lg border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-bold text-green-400"
+              >
+                利用中
+              </Link>
+            ) : (
+              <Link
+                href="/login?redirect=/learn"
+                className="shrink-0 rounded-lg border border-card-border px-5 py-2.5 text-sm font-bold text-foreground transition hover:border-accent/50 hover:text-accent"
+              >
+                無料で5回試す
+              </Link>
+            )}
+          </div>
         </div>
 
         {errorMsg && (
@@ -543,18 +584,18 @@ export default function PricingPage() {
                 <span className="text-base leading-none">★</span> おすすめ
               </div>
               <h3 className="mb-2 text-xl font-bold text-foreground sm:text-2xl">
-                迷ったらプロプラン
+                迷ったらプロ
               </h3>
               <p className="mb-3 text-sm text-muted sm:text-base">
-                <span className="font-bold text-foreground">月60回のAIロープレ＋全22レッスン</span>
+                <span className="font-bold text-foreground">月100回のAIロープレ＋全22レッスン</span>
                 <br />
                 <span className="text-xs sm:text-sm">
                   無料5回お試し ・ いつでも解約OK ・ クレカ不要でスタート
                 </span>
               </p>
               <div className="mb-5 rounded-lg border border-card-border bg-background/40 px-4 py-3 text-left text-xs text-muted sm:text-sm">
-                <p className="mb-1.5 font-bold text-foreground">スタータープランとの違い</p>
-                <p>練習回数が<span className="text-accent font-bold">2倍（月30→60回）</span>、AI詳細フィードバックが付き、商談前の最終チェックにも使える余裕があります。</p>
+                <p className="mb-1.5 font-bold text-foreground">ライトとの違い</p>
+                <p>練習回数が<span className="text-accent font-bold">3倍以上（月30→100回）</span>、AI詳細フィードバックが付き、商談前の最終チェックにも使える余裕があります。</p>
               </div>
               <button
                 onClick={() => handleUpgrade("pro")}
@@ -565,7 +606,7 @@ export default function PricingPage() {
                   "処理中..."
                 ) : (
                   <>
-                    プロプランに申し込む
+                    プロに申し込む
                     <svg
                       className="h-5 w-5 transition-transform group-hover:translate-x-0.5"
                       fill="none"
@@ -580,7 +621,7 @@ export default function PricingPage() {
                 )}
               </button>
               <p className="mt-3 text-[11px] text-muted sm:text-xs">
-                ¥1,980 / 月（税込）・Stripe安全決済
+                ¥6,980 / 月（税込）・Stripe安全決済
               </p>
               {errorMsg && (
                 <div className="mx-auto mt-3 max-w-md rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-400">

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 /**
  * 【2026-04-10 廃止】買い切りプログラム (¥9,800) は販売終了。
  *
- * Option B+ 戦略に基づき、サブスクリプション (Starter ¥990 / Pro ¥1,980 / Master ¥4,980) に
+ * Option B+ 戦略に基づき、サブスクリプション (ライト ¥2,980 / プロ ¥6,980 / 無制限 ¥14,800) に
  * 一本化しました。新規購入リクエストは 410 Gone を返し、フロント側で /pricing にリダイレクトします。
  *
  * 既存の購入者 (program_purchases テーブル + profiles.subscription_status='program')
@@ -16,7 +16,7 @@ export async function POST() {
     {
       error: "program_discontinued",
       message:
-        "買い切りプログラムは販売終了しました。月額サブスクリプション（Starter ¥990 / Pro ¥1,980 / Master ¥4,980）にすべての機能が含まれています。",
+        "買い切りプログラムは販売終了しました。月額サブスクリプション（ライト ¥2,980 / プロ ¥6,980 / 無制限 ¥14,800）にすべての機能が含まれています。",
       redirect: "/pricing",
     },
     { status: 410 }, // 410 Gone

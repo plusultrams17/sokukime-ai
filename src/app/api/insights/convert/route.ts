@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     if (!isPaid) {
       return NextResponse.json(
-        { error: "有料プラン（Starter ¥990〜）へのアップグレードが必要です" },
+        { error: "有料プラン（ライト ¥2,980〜）へのアップグレードが必要です" },
         { status: 403 }
       );
     }

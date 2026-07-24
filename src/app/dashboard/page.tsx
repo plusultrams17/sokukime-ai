@@ -644,7 +644,7 @@ export default function DashboardPage() {
                     href="/pricing"
                     className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/5 px-3 py-1.5 text-[11px] font-bold text-accent transition hover:bg-accent/10"
                   >
-                    Proに増量（月60回）→
+                    プロに増量（月100回）→
                   </Link>
                 )}
               </div>
@@ -1084,7 +1084,7 @@ export default function DashboardPage() {
               >
                 プランを見る →
               </Link>
-              <span className="text-[11px] text-muted">Starter ¥990〜 / 1日あたり約33円</span>
+              <span className="text-[11px] text-muted">ライト ¥2,980〜 / 1日あたり約99円</span>
             </div>
           </div>
         )}

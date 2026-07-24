@@ -262,7 +262,7 @@ export default function ExamPage() {
                   認定試験はPro会員限定です
                 </h2>
                 <p className="text-sm text-muted mb-6 max-w-md mx-auto">
-                  有料プラン（Starter ¥990〜）に登録すると、全22レッスン＋認定試験を受験できます。
+                  有料プラン（ライト ¥2,980〜）に登録すると、全22レッスン＋認定試験を受験できます。
                 </p>
                 <Link
                   href="/pricing"
@@ -694,7 +694,7 @@ export default function ExamPage() {
                   </p>
                   <p className="text-xs text-muted mb-4 leading-relaxed">
                     メソッドを学んだ今が、一番伸びるタイミングです。<br />
-                    Proプランなら月60回のAIロープレ＆詳細スコアが使えます。
+                    プロプランなら月100回のAIロープレ＆詳細スコアが使えます。
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Link

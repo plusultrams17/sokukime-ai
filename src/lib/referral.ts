@@ -80,9 +80,9 @@ export async function validateReferralCode(
 
 /** チーム割引ティア */
 export const TEAM_DISCOUNT_TIERS = [
-  { min: 3, max: 5, label: "チーム S", discount: 17, pricePerPerson: 2480 },
-  { min: 6, max: 10, label: "チーム M", discount: 34, pricePerPerson: 1980 },
-  { min: 11, max: Infinity, label: "チーム L", discount: 50, pricePerPerson: 1490 },
+  { min: 3, max: 5, label: "チーム S", discount: 17, pricePerPerson: 5780 },
+  { min: 6, max: 10, label: "チーム M", discount: 34, pricePerPerson: 4580 },
+  { min: 11, max: Infinity, label: "チーム L", discount: 50, pricePerPerson: 3490 },
 ] as const;
 
 export function getTeamDiscount(memberCount: number) {
