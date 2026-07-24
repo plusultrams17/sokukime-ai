@@ -78,7 +78,7 @@ export default function TeamInvitePage() {
                 <p className="mb-2 text-lg font-medium text-accent">{orgName}</p>
               )}
               <p className="mb-6 text-sm text-muted">
-                チームに参加すると、Proプランと同等の全機能が利用できます。
+                チームに参加すると、プロプランと同等の全機能が利用できます。
                 <br />
                 無制限ロープレ・全5カテゴリ詳細スコア・AI改善アドバイス
               </p>

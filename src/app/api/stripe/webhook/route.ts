@@ -449,7 +449,7 @@ export async function POST(request: NextRequest) {
 
       if (status === "active" || status === "trialing") {
         // 有料プランを設定/更新
-        await supabaseAdmin
+        const { error: subActiveErr } = await supabaseAdmin
           .from("profiles")
           .update({
             plan: resolvePlanTier(subscription.metadata),
@@ -458,6 +458,9 @@ export async function POST(request: NextRequest) {
             pause_resume_date: null,
           })
           .eq(subUpdMatch.field, subUpdMatch.value);
+        if (subActiveErr) {
+          console.error("[webhook] CRITICAL: subscription.updated plan set failed:", subActiveErr, { match: subUpdMatch });
+        }
       } else if (status === "past_due" || status === "unpaid") {
         // 支払いリトライ中(dunning)は即降格しない。プランは維持し status のみ更新する。
         // 実際の失効は customer.subscription.deleted で処理する。

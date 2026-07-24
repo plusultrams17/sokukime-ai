@@ -81,13 +81,16 @@ export default function InsightsPage() {
 
   const handleSave = useCallback(async (insight: Insight) => {
     try {
-      await fetch("/api/insights/save", {
+      const res = await fetch("/api/insights/interact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ insightId: insight.id }),
+        body: JSON.stringify({ insightId: insight.id, type: "save" }),
       });
-    } catch {
-      // Silently fail
+      if (!res.ok) {
+        console.error("[insights] save failed:", res.status);
+      }
+    } catch (e) {
+      console.error("[insights] save error:", e);
     }
   }, []);
 

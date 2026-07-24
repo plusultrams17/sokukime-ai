@@ -61,7 +61,7 @@ export function PostPaymentSurvey() {
             <div className="mb-1 text-center">
               <p className="text-2xl"><svg className="mx-auto h-8 w-8 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></p>
               <h3 className="mt-2 text-lg font-bold">
-                Proプランへようこそ！
+                プロプランへようこそ！
               </h3>
               <p className="mt-1 text-sm text-muted">
                 1つだけ教えてください（タップするだけ）

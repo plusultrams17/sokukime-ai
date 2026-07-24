@@ -261,7 +261,7 @@ export function ScriptCompletionPreview({ showCta = true }: Props) {
         {showCta && (
           <div className="mt-10 text-center sm:mt-12">
             <Link href="/pricing" className="lp-cta-secondary">
-              Proプランの詳細を見る →
+              プロプランの詳細を見る →
             </Link>
           </div>
         )}

@@ -224,7 +224,7 @@ export default function ToolsPage() {
         <div className="mx-auto max-w-3xl">
           <div className="rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-8 text-center">
             <h2 className="mb-2 text-xl font-bold text-foreground sm:text-2xl">
-              ツールで見つけた課題を<span className="text-accent">Proプラン</span>で克服
+              ツールで見つけた課題を<span className="text-accent">プロプラン</span>で克服
             </h2>
             <p className="mb-4 text-sm text-muted leading-relaxed">
               無料ツールでわかった弱点を、月100回のAIロープレで集中練習。

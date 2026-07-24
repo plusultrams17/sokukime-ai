@@ -268,7 +268,7 @@ export default function ExamPage() {
                   href="/pricing"
                   className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
                 >
-                  Proプランを見る
+                  プロプランを見る
                 </Link>
               </div>
 
@@ -707,7 +707,7 @@ export default function ExamPage() {
                       href="/pricing"
                       className="inline-block border border-accent/40 text-accent text-sm font-bold px-6 py-2.5 rounded-lg hover:bg-accent/10 transition"
                     >
-                      Proプランを見る
+                      プロプランを見る
                     </Link>
                   </div>
                 </div>

@@ -45,7 +45,7 @@ function WorksheetPaywall() {
           </svg>
         </div>
         <p className="mb-1 text-sm font-bold text-[#1E293B]">
-          残り4フェーズはStarterプラン以上で利用可能
+          残り4フェーズはライトプラン以上で利用可能
         </p>
         <p className="mb-4 text-xs text-[#6B7280]">
           ヒアリング・プレゼン・クロージング・反論処理のワークシートに加え、AIトークスクリプト生成もフルアクセス

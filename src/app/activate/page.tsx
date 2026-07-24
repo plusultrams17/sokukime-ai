@@ -30,7 +30,7 @@ const TIER_FEATURES: Record<
   { label: string; items: string[] }
 > = {
   basic: {
-    label: "Starterプラン",
+    label: "ライトプラン",
     items: [
       "AIロープレ無制限（テスター特典）",
       "学習コース: 基本3レッスン",
@@ -38,7 +38,7 @@ const TIER_FEATURES: Record<
     ],
   },
   intermediate: {
-    label: "Proプラン",
+    label: "プロプラン",
     items: [
       "AIロープレ無制限（テスター特典）",
       "全22レッスンの学習コース",
@@ -47,7 +47,7 @@ const TIER_FEATURES: Record<
     ],
   },
   full: {
-    label: "Masterプラン",
+    label: "無制限プラン",
     items: [
       "AIロープレ無制限（テスター特典）",
       "全22レッスンの学習コース（初級・中級・上級）",
@@ -361,7 +361,7 @@ function ActivateForm() {
                 disabled={!codeInfo}
                 className="h-12 w-full rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover disabled:opacity-50"
               >
-                Proプランを有効化する
+                プロプランを有効化する
               </button>
 
               {!codeInfo && (
@@ -388,7 +388,7 @@ function ActivateForm() {
                 <h2 className="mb-2 text-xl font-bold text-green-500">
                   {status === "already"
                     ? "既に有効化済みです"
-                    : "Proプランが有効化されました！"}
+                    : "プロプランが有効化されました！"}
                 </h2>
                 <p className="text-sm text-muted">
                   {codeInfo?.description || ""}

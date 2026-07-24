@@ -336,7 +336,7 @@ function ExamCard({ progress, purchased }: { progress: Progress; purchased: bool
             href="/pricing"
             className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-hover"
           >
-            Proプランを見る
+            プロプランを見る
           </Link>
         </div>
         <div className="opacity-30 pointer-events-none">

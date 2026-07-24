@@ -1075,7 +1075,7 @@ export default function DashboardPage() {
                   : "練習量を増やして型を固める"}
             </h3>
             <p className="mb-3 text-xs leading-relaxed text-muted">
-              有料プランなら<span className="font-semibold text-foreground">月30〜200回</span>のロープレ、<span className="font-semibold text-foreground">全5カテゴリのAIフィードバック</span>、全22レッスンが使えます。商談前の最終リハにも。
+              有料プランなら<span className="font-semibold text-foreground">月30〜300回</span>のロープレ、<span className="font-semibold text-foreground">全5カテゴリのAIフィードバック</span>、全22レッスンが使えます。商談前の最終リハにも。
             </p>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
               <Link

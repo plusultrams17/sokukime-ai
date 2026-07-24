@@ -219,7 +219,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry, usageStat
                   無料ロープレ 残り1回
                 </div>
                 <div className="text-xs text-muted mt-1 leading-relaxed">
-                  次のロープレが最後の無料回です。Starterプランなら毎月30回練習できます。
+                  次のロープレが最後の無料回です。ライトプランなら毎月30回練習できます。
                 </div>
                 <button
                   onClick={() => onUpgrade?.()}
@@ -931,7 +931,7 @@ export function ScoreCard({ score, onRetry, plan, onUpgrade, industry, usageStat
                           onClick={() => handleLockedClick("roadmap_upgrade")}
                           className="mt-3 w-full rounded-lg border border-accent/20 py-2 text-xs text-accent transition hover:bg-accent/5"
                         >
-                          Starterプランで全レッスンを開放 →
+                          ライトプランで全レッスンを開放 →
                         </button>
                       )}
                     </div>

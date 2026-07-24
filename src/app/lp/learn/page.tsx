@@ -172,7 +172,7 @@ const comparisons = [
     price: "¥0〜¥14,800/月",
     timing: "24時間365日",
     pace: "自分のペース",
-    practice: "AI 月30〜200回",
+    practice: "AI 月30〜300回",
     measurement: "スコア可視化",
     highlight: true,
   },

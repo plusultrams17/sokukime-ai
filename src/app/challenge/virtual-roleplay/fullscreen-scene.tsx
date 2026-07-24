@@ -3221,7 +3221,7 @@ export default function FullscreenScene({ scenarioId }: { scenarioId?: string })
 
             <div className="mt-5 flex flex-col gap-2.5">
               <Link href="/pricing" className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-white transition hover:bg-accent-hover">
-                Proプランで本格練習する
+                プロプランで本格練習する
               </Link>
               <button onClick={handleRetry} className="rounded-xl border border-white/20 px-6 py-3 text-sm font-medium text-white/70 transition hover:bg-white/5">
                 もう一度挑戦する

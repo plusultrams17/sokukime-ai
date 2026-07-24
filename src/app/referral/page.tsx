@@ -232,7 +232,7 @@ export default function ReferralPage() {
                 <div>
                   <div className="font-medium">あなた（紹介者）</div>
                   <div className="text-xs text-muted">
-                    紹介した友達がProプランに登録すると、次月 ¥1,000 OFF
+                    紹介した友達がプロプランに登録すると、次月 ¥1,000 OFF
                   </div>
                 </div>
               </div>

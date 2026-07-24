@@ -127,7 +127,7 @@ export function UpgradeModal({
             <p className="mb-5 text-center text-sm text-muted">
               今つかんだ感覚を、そのまま伸ばしませんか？
               <br />
-              <span className="font-medium text-foreground">有料プランなら月30〜200回まで練習を続けられます。</span>
+              <span className="font-medium text-foreground">有料プランなら月30〜300回まで練習を続けられます。</span>
             </p>
           </>
         )}
@@ -146,10 +146,10 @@ export function UpgradeModal({
         {trigger === "feature" && (
           <>
             <h2 className="mb-2 text-center text-xl font-bold">
-              この機能はProプラン限定です
+              この機能はプロプラン限定です
             </h2>
             <p className="mb-5 text-center text-sm text-muted">
-              Proプランで営業力を最大限に鍛えましょう
+              プロプランで営業力を最大限に鍛えましょう
             </p>
           </>
         )}

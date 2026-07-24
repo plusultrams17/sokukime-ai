@@ -511,7 +511,7 @@ export default function VirtualScene() {
                 </div>
                 <p className="mb-6 text-sm leading-relaxed text-white/60">
                   {userTurns >= 6
-                    ? "しっかりとした商談ができましたね！Proプランなら5カテゴリの詳細スコア＋AIフィードバックで、さらに実力を伸ばせます。"
+                    ? "しっかりとした商談ができましたね！プロプランなら5カテゴリの詳細スコア＋AIフィードバックで、さらに実力を伸ばせます。"
                     : "もう少し会話を深めると効果的です。プロプランで月100回練習して、本番に備えましょう。"}
                 </p>
                 <div className="flex flex-col gap-2.5">
@@ -519,7 +519,7 @@ export default function VirtualScene() {
                     href="/pricing"
                     className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
                   >
-                    Proプランで本格練習する
+                    プロプランで本格練習する
                   </Link>
                   <button
                     onClick={handleRetry}

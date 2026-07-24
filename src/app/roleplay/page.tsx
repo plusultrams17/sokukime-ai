@@ -83,7 +83,7 @@ function UpgradeToast() {
       <div className="mx-4 w-full max-w-md rounded-2xl border border-green-500/30 bg-card p-8 shadow-2xl">
         <div className="mb-4 text-center text-4xl" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:"inline"}}><polyline points="20 6 9 17 4 12"/></svg></div>
         <h2 className="mb-2 text-center text-xl font-bold text-green-400">
-          Proプランのご利用が開始されました
+          プロプランのご利用が開始されました
         </h2>
         <p className="mb-6 text-center text-sm text-muted">
           月100回ロープレ・全5カテゴリ詳細スコア・AI改善アドバイスが使えます

@@ -303,7 +303,7 @@ export default function AboutPage() {
               <Image src="/images/pages/about-link-pricing.png" alt="料金プラン" width={48} height={48} className="rounded-lg flex-shrink-0" />
               <div>
                 <p className="text-sm font-bold">料金プラン</p>
-                <p className="text-xs text-muted">無料プラン・Proプラン比較</p>
+                <p className="text-xs text-muted">無料プラン・プロプラン比較</p>
               </div>
             </Link>
           </div>

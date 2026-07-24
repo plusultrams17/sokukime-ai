@@ -194,7 +194,7 @@ export default function LessonPage() {
                 href="/pricing"
                 className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
               >
-                Proプランを見る
+                プロプランを見る
               </Link>
             </div>
 

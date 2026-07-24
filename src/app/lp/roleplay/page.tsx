@@ -824,7 +824,7 @@ export default function RoleplayLP() {
                 href="/pricing"
                 className="mt-6 flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition hover:bg-accent-hover"
               >
-                Proプランを見る
+                プロプランを見る
               </Link>
             </div>
           </div>
