@@ -447,20 +447,40 @@ export async function POST(request: NextRequest) {
         break;
       }
 
-      const plan =
-        status === "active" || status === "trialing"
-          ? resolvePlanTier(subscription.metadata)
-          : "free";
-
-      await supabaseAdmin
-        .from("profiles")
-        .update({
-          plan,
-          subscription_status: status,
-          pause_start: null,
-          pause_resume_date: null,
-        })
-        .eq(subUpdMatch.field, subUpdMatch.value);
+      if (status === "active" || status === "trialing") {
+        // 有料プランを設定/更新
+        await supabaseAdmin
+          .from("profiles")
+          .update({
+            plan: resolvePlanTier(subscription.metadata),
+            subscription_status: status,
+            pause_start: null,
+            pause_resume_date: null,
+          })
+          .eq(subUpdMatch.field, subUpdMatch.value);
+      } else if (status === "past_due" || status === "unpaid") {
+        // 支払いリトライ中(dunning)は即降格しない。プランは維持し status のみ更新する。
+        // 実際の失効は customer.subscription.deleted で処理する。
+        await supabaseAdmin
+          .from("profiles")
+          .update({
+            subscription_status: status,
+            pause_start: null,
+            pause_resume_date: null,
+          })
+          .eq(subUpdMatch.field, subUpdMatch.value);
+      } else {
+        // canceled / incomplete_expired 等は無料へ降格
+        await supabaseAdmin
+          .from("profiles")
+          .update({
+            plan: "free",
+            subscription_status: status,
+            pause_start: null,
+            pause_resume_date: null,
+          })
+          .eq(subUpdMatch.field, subUpdMatch.value);
+      }
 
       break;
     }
@@ -648,7 +668,7 @@ export async function POST(request: NextRequest) {
       // invoice.paid は既存プランで支払いが成立した通知なので、tier は変えず
       // subscription_status のみ更新するのが原則。ただし subscription.updated
       // が漏れた場合のフォールバックとして tier も同期しておく。
-      let invoicePlanTier: "starter" | "pro" | "master" = "pro";
+      let invoicePlanTier: "starter" | "pro" | "master" | null = null;
       // Stripe v20: invoice.subscription は invoice.parent.subscription_details.subscription に移動
       const subDetails = invoice.parent?.subscription_details;
       const invoiceSubRef = subDetails?.subscription;
@@ -661,9 +681,15 @@ export async function POST(request: NextRequest) {
           const invSub = await stripe.subscriptions.retrieve(invoiceSubId);
           invoicePlanTier = resolvePlanTier(invSub.metadata);
         } catch {
-          // Fall back to default "pro"
+          // tier を解決できないときは plan を変更しない（誤昇格/誤降格を防ぐ）
         }
       }
+      const recoverUpdate: {
+        subscription_status: "active";
+        plan?: "starter" | "pro" | "master";
+      } = invoicePlanTier
+        ? { subscription_status: "active", plan: invoicePlanTier }
+        : { subscription_status: "active" };
 
       // Clear past_due status when payment succeeds (recovery from dunning)
       const { data: wasRecovered } = await supabaseAdmin
@@ -675,7 +701,7 @@ export async function POST(request: NextRequest) {
 
       await supabaseAdmin
         .from("profiles")
-        .update({ subscription_status: "active", plan: invoicePlanTier })
+        .update(recoverUpdate)
         .eq("stripe_customer_id", customerId)
         .eq("subscription_status", "past_due");
 
@@ -683,7 +709,7 @@ export async function POST(request: NextRequest) {
       // (subscription.updated イベントが漏れた場合のセーフティネット)
       await supabaseAdmin
         .from("profiles")
-        .update({ subscription_status: "active", plan: invoicePlanTier })
+        .update(recoverUpdate)
         .eq("stripe_customer_id", customerId)
         .eq("subscription_status", "trialing");
 

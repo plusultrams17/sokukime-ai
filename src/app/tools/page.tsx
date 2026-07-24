@@ -238,7 +238,7 @@ export default function ToolsPage() {
               >
                 プランを見る
               </Link>
-              <span className="text-xs text-muted">¥2,980〜/月 ・ いつでも解約OK</span>
+              <span className="text-xs text-muted">プロ 月¥6,980 ・ いつでも解約OK</span>
             </div>
           </div>
         </div>

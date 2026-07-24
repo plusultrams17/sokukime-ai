@@ -260,8 +260,14 @@ export async function POST(request: NextRequest) {
         },
       ],
       ...discountConfig,
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/roleplay?upgraded=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app"}/roleplay?upgraded=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://seiyaku-coach.vercel.app"}/pricing`,
+      custom_text: {
+        submit: {
+          message:
+            "毎月自動更新されます。マイページからいつでも解約でき、解約後も現在の請求期間の終了日まで利用できます。日割りでの返金はありません。",
+        },
+      },
       locale: "ja",
       subscription_data: {
         metadata: { supabase_user_id: user.id, plan_tier: tier, ...utmParams },
