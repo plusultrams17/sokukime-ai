@@ -16,8 +16,8 @@ import { MiniDiagnosis } from "@/components/mini-diagnosis";
  */
 function CTAButton({ className = "" }: { className?: string }) {
   return (
-    <Link href="/roleplay" scroll={true} className={`lp-cta-btn ${className}`}>
-      無料で5回試す
+    <Link href="/try-roleplay" scroll={true} className={`lp-cta-btn ${className}`}>
+      登録なしで、今すぐ試す
     </Link>
   );
 }
@@ -47,8 +47,8 @@ const PAINS = [
     desc: "先輩は現場に出ずっぱり。ロープレに付き合ってもらう時間が取れず、ぶっつけ本番でお客様の前に立つしかない。",
   },
   {
-    title: "教育する時間がない",
-    desc: "新人にじっくり営業を教えたいのに、社長も先輩も自分の案件で手一杯。育成が後回しになっていく。",
+    title: "ぶっつけ本番しかない",
+    desc: "練習の場がないまま、いきなり本番のお客様の前へ。失敗したくないのに、どう準備すればいいのかも分からない。",
   },
   {
     title: "お客様の前で断り文句に凍る",
@@ -296,7 +296,7 @@ export default function Home() {
               className="mb-4 text-xs font-bold tracking-[0.2em] uppercase sm:mb-5 sm:text-sm"
               style={{ color: "#f97316" }}
             >
-              住宅・リフォーム・塗装営業のためのAIロープレ
+              住宅・リフォーム・塗装の営業マンへ
             </p>
 
             {/* Main heading */}
@@ -307,9 +307,9 @@ export default function Home() {
                 textShadow: "0 2px 20px rgba(0,0,0,0.3)",
               }}
             >
-              新人が一人で、
+              断られるのが、
               <br className="sm:hidden" />
-              <span className="lp-highlight-hero">成約の練習</span>ができる。
+              <span className="lp-highlight-hero">怖くなくなる</span>。
             </p>
 
             {/* Sub heading */}
@@ -320,9 +320,9 @@ export default function Home() {
                 textShadow: "0 1px 8px rgba(0,0,0,0.2)",
               }}
             >
-              お客様役のAIと商談を練習。終わると5カテゴリで採点し、
+              お客様役のAIと、何度でも商談の練習。終わると5項目で採点。
               <br className="hidden sm:block" />
-              どこでつまずいたか、次にどう言えばいいかが見えます。
+              一人でも場数を踏んで、自信を持って本番に立てます。
             </p>
 
             {/* Score card preview — 「何が得られるか」を一目で理解させる */}
@@ -400,19 +400,19 @@ export default function Home() {
               className="mt-5 text-xs sm:text-sm"
               style={{ color: "rgba(255,255,255,0.75)" }}
             >
-              個人の自主練から、法人・チーム導入まで対応 ／
+              まずは一人で、自分のペースで練習できます ／
               <Link
                 href="/enterprise"
                 className="ml-1 underline underline-offset-2 transition hover:text-white"
                 style={{ color: "#f97316" }}
               >
-                法人向け詳細
+                法人・チーム導入
               </Link>
             </p>
 
             {/* Trust signals */}
             <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:mt-6 sm:gap-x-6">
-              {["クレカ不要で開始", "Googleログインのみ", "いつでも退会OK"].map(
+              {["登録なしで体験", "クレカ不要", "いつでも退会OK"].map(
                 (text) => (
                   <span
                     key={text}
