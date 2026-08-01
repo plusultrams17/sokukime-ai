@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic from "@/lib/anthropic-openai-shim";
 import { createClient } from "@/lib/supabase/server";
 
 const EXTRACT_PROMPT = `あなたは営業コンサルタントです。与えられた情報からターゲット企業・担当者の基本情報を抽出してください。
@@ -38,7 +38,7 @@ function extractTextFromHtml(html: string): string {
 
 let anthropicClient: Anthropic | null = null;
 function getAnthropicClient(): Anthropic | null {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
   if (!anthropicClient) {
     anthropicClient = new Anthropic({ apiKey });

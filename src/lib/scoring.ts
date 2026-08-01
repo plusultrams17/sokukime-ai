@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic from "@/lib/anthropic-openai-shim";
 
 export interface ScoreInput {
   messages: { role: string; content: string }[];
@@ -243,7 +243,7 @@ export function generateFallbackScore(): ScoreResult {
 
 let anthropicClient: Anthropic | null = null;
 function getAnthropicClient(): Anthropic | null {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
   if (!anthropicClient) {
     anthropicClient = new Anthropic({ apiKey });

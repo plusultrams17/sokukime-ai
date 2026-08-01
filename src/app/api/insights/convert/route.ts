@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic from "@/lib/anthropic-openai-shim";
 
 let anthropicClient: Anthropic | null = null;
 function getAnthropicClient(): Anthropic | null {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
   if (!anthropicClient) {
     anthropicClient = new Anthropic({ apiKey });

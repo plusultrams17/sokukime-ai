@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { getChallenge } from "@/lib/challenges";
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic from "@/lib/anthropic-openai-shim";
 
 let anthropicClient: Anthropic | null = null;
 function getAnthropicClient(): Anthropic | null {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
   if (!anthropicClient) anthropicClient = new Anthropic({ apiKey });
   return anthropicClient;

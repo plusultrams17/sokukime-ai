@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { INDUSTRIES, GENERAL_SALES_QUERIES } from "./search-queries";
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic from "@/lib/anthropic-openai-shim";
 
 // ── Types ──
 
@@ -128,7 +128,7 @@ export async function fetchSemanticScholar(query: string): Promise<RawArticle[]>
 
 let anthropicClient: Anthropic | null = null;
 function getAnthropicClient(): Anthropic {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) throw new Error("ANTHROPIC_API_KEY not set");
   if (!anthropicClient) {
     anthropicClient = new Anthropic({ apiKey });

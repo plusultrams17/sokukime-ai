@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic from "@/lib/anthropic-openai-shim";
 
 const PHASE_PROMPTS: Record<number, string> = {
   0: `以下の業種の営業マンが使える「信頼構築シート」の内容を生成してください。
@@ -156,7 +156,7 @@ const PHASE_MAX_TOKENS: Record<number, number> = {
 
 let anthropicClient: Anthropic | null = null;
 function getAnthropicClient(): Anthropic | null {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
   if (!anthropicClient) {
     anthropicClient = new Anthropic({ apiKey });
